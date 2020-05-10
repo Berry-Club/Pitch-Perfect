@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "PDP",
+    "SSS"
+  ],
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "D":{
+      "tag": "forge:dyes"
+    }
+  },
+  "result": {
+    "item": "pitchperfect:xylophone"
+  }
+}

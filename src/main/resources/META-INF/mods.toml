@@ -20,7 +20,7 @@ displayName="Pitch Perfect" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 updateJSONURL="http://myurl.me/" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
-displayURL="http://example.com/" #optional
+displayURL="https://github.com/aaronhowser1/Pitch-Perfect" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="logo.png" #optional
 # A text field displayed in the mod UI
@@ -47,6 +47,6 @@ Pitch Perfect adds instruments that change pitch depending on the angle you're a
 [[dependencies.pitchperfect]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.15.2,)"
     ordering="NONE"
     side="BOTH"
