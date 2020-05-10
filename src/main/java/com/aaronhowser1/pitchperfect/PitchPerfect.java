@@ -39,18 +39,16 @@ public class PitchPerfect {
     public static final ItemGroup PITCH_PERFECT = new ItemGroup("pitchperfect") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(BanjoItem::new);
+            return new ItemStack(GuitarItem.ITEMGUITAR);
         }
     };
 
-    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
-    // Event bus for receiving Registry Events)
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
             event.getRegistry().register(new BanjoItem().setRegistryName("banjo"));
-            event.getRegistry().register(new BaseDrumItem().setRegistryName("base_drum"));
+            event.getRegistry().register(new BassDrumItem().setRegistryName("bass_drum"));
             event.getRegistry().register(new BassItem().setRegistryName("bass"));
             event.getRegistry().register(new BitItem().setRegistryName("bit"));
             event.getRegistry().register(new ChimesItem().setRegistryName("chimes"));
@@ -65,9 +63,6 @@ public class PitchPerfect {
             event.getRegistry().register(new SticksItem().setRegistryName("sticks"));
             event.getRegistry().register(new VibraphoneItem().setRegistryName("vibraphone"));
             event.getRegistry().register(new XylophoneItem().setRegistryName("xylophone"));
-        }
-        @SubscribeEvent
-        public static void onSoundsRegistry(final RegistryEvent.Register<SoundEvent> event) {
         }
     }
 }

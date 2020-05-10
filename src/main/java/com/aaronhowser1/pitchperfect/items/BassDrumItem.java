@@ -11,9 +11,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
-public class BaseDrumItem extends Item {
+public class BassDrumItem extends Item {
 
-    public BaseDrumItem() {
+    public BassDrumItem() {
         super(new Item.Properties()
                 .maxStackSize(1)
                 .group(PitchPerfect.PITCH_PERFECT));
