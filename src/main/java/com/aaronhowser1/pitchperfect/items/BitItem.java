@@ -2,6 +2,7 @@ package com.aaronhowser1.pitchperfect.items;
 
 import com.aaronhowser1.pitchperfect.ModConfig;
 import com.aaronhowser1.pitchperfect.PitchPerfect;
+import com.sun.istack.internal.NotNull;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ public class BitItem extends Item {
     }
 
     @Override
+    @NotNull
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
         ItemStack itemstack = player.getHeldItem(handIn);
         float pitch = player.rotationPitch;
@@ -34,6 +36,6 @@ public class BitItem extends Item {
                 pitch
         );
         if (ModConfig.DEBUG_PITCH.get()) {System.out.println(pitch);}
-        return ActionResult.resultSuccess(itemstack);
+        return ActionResult.resultFail(itemstack);  //Stops it from flailing
     }
 }

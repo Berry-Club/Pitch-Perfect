@@ -35,7 +35,7 @@ public class GuitarItem extends Item {
                 pitch
         );
         if (ModConfig.DEBUG_PITCH.get()) {System.out.println(pitch);}
-        return ActionResult.resultSuccess(itemstack);
+        return ActionResult.resultFail(itemstack);  //Stops it from flailing
     }
 
     @ObjectHolder("pitchperfect:guitar")
