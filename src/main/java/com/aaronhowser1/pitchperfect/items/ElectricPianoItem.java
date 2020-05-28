@@ -10,6 +10,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ObjectHolder;
 
 public class ElectricPianoItem extends Item {
 
@@ -36,4 +37,5 @@ public class ElectricPianoItem extends Item {
         if (ModConfig.DEBUG_PITCH.get()) {System.out.println(pitch);}
         return ActionResult.resultFail(itemstack);  //Stops it from flailing
     }
+
 }

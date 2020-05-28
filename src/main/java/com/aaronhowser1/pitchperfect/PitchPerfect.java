@@ -4,7 +4,6 @@ import com.aaronhowser1.pitchperfect.items.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,7 +38,7 @@ public class PitchPerfect {
     public static final ItemGroup PITCH_PERFECT = new ItemGroup("pitchperfect") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(GuitarItem.ITEMGUITAR);
+            return new ItemStack(BassItem.BASS);
         }
     };
 
