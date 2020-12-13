@@ -19,11 +19,16 @@ public class BanjoItem extends Item {
                 .group(PitchPerfect.PITCH_PERFECT));
     }
 
+    public static float map(float value, float min1, float max1, float min2, float max2)
+    {
+        return min2 + (max2 - min2) * ((value - min1) / (max1 - min1));
+    }
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
         ItemStack itemstack = player.getHeldItem(handIn);
         float pitch = player.rotationPitch;
-        pitch = Math.abs(((pitch+90)/90)-2);
+        if (ModConfig.DEBUG_PITCH.get()) {System.out.println("before: "+pitch);}
+        pitch = map(pitch,-90,90,2,0.5F);
         worldIn.playSound(null,
                 player.getPosX(), //poxX
                 player.getPosY(), //posY
@@ -33,7 +38,7 @@ public class BanjoItem extends Item {
                 1.0F,
                 pitch
         );
-        if (ModConfig.DEBUG_PITCH.get()) {System.out.println(pitch);}
+        if (ModConfig.DEBUG_PITCH.get()) {System.out.println("after: "+pitch);}
         return ActionResult.resultFail(itemstack);  //Stops it from flailing
     }
 }
