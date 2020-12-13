@@ -10,7 +10,7 @@ loaderVersion="[35,)" #mandatory This is typically bumped every Minecraft versio
 # A URL to refer people to when problems occur with this mod
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
-license="All rights reserved"
+license="MIT License"
 issueTrackerURL="http://my.issue.tracker/" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
@@ -29,7 +29,7 @@ logoFile="logo.png" #optional
 # A text field displayed in the mod UI
 credits="Durgerking10 for the artwork" #optional
 # A text field displayed in the mod UI
-authors="aaronhowser1" #optional
+authors="aaronhowser1, LatvianModder" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 Pitch Perfect adds instruments that change pitch depending on the angle you're aiming
