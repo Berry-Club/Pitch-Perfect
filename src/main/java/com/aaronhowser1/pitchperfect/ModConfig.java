@@ -18,6 +18,8 @@ public class ModConfig {
 
     public static ForgeConfigSpec.BooleanValue DEBUG_PITCH;
 
+    public static ForgeConfigSpec.IntValue INSTRUMENT_VOLUME;
+
     static {
 
         COMMON_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
@@ -25,6 +27,10 @@ public class ModConfig {
         DEBUG_PITCH = COMMON_BUILDER
                 .comment("\nDisplay in console the pitch?")
                 .define("debug_pitch", false);
+
+        INSTRUMENT_VOLUME = COMMON_BUILDER
+                .comment("\nThe volume of instruments")
+                .defineInRange("instrument_volume",1, 0, Integer.MAX_VALUE);
 
         COMMON_BUILDER.pop();
 

@@ -35,7 +35,7 @@ public class InstrumentItem extends Item {
                 player.getPosZ(), //posZ
                 sound.get(),
                 SoundCategory.PLAYERS,
-                1.0F,
+                ModConfig.INSTRUMENT_VOLUME.get(),
                 pitch
         );
         if (ModConfig.DEBUG_PITCH.get()) {System.out.println("after: "+pitch);}
