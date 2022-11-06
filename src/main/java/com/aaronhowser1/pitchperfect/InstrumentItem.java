@@ -1,44 +1,51 @@
 package com.aaronhowser1.pitchperfect;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.world.World;
-
-import java.util.function.Supplier;
+import net.minecraft.client.resources.sounds.Sound;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.RegistryObject;
 
 public class InstrumentItem extends Item {
 
-    public final Supplier<SoundEvent> sound;
-    public InstrumentItem(Supplier<SoundEvent> s) {
+    public final SoundEvent sound;
+
+    public InstrumentItem(SoundEvent s) {
         super(new Item.Properties()
-                .maxStackSize(1)
-                .group(PitchPerfect.PITCH_PERFECT));
+                .stacksTo(1)
+                .tab(ModCreativeModeTab.MOD_TAB)
+        );
         sound = s;
     }
-    //Thank you to LatvianModder for making this, since I flunked out of math
+
     public static float map(float value, float min1, float max1, float min2, float max2)
     {
         return min2 + (max2 - min2) * ((value - min1) / (max1 - min1));
     }
-    //Also making all instruments one class
+
+
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
-        ItemStack itemstack = player.getHeldItem(handIn);
-        float pitch = player.rotationPitch;
-        if (ModConfig.DEBUG_PITCH.get()) {System.out.println("before: "+pitch);}
-        pitch = map(pitch,-90,90,2,0.5F);
-        worldIn.playSound(null,
-                player.getPosX(), //poxX
-                player.getPosY(), //posY
-                player.getPosZ(), //posZ
-                sound.get(),
-                SoundCategory.PLAYERS,
-                ModConfig.INSTRUMENT_VOLUME.get(),
-                pitch
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+        ItemStack itemStack = player.getItemInHand(interactionHand);
+        float pitch = player.getXRot();
+        pitch = map(pitch, -90,90,2,0.5F);
+        level.playLocalSound(
+                player.getX(),
+                player.getY(),
+                player.getZ(),
+                sound,
+                SoundSource.PLAYERS,
+                1, //Volume
+                pitch,
+                false
         );
-        if (ModConfig.DEBUG_PITCH.get()) {System.out.println("after: "+pitch);}
-        return ActionResult.resultFail(itemstack);  //Stops it from flailing
+        return InteractionResultHolder.fail(itemStack);
     }
 }
