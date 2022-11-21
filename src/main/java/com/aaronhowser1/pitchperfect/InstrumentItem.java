@@ -1,5 +1,7 @@
 package com.aaronhowser1.pitchperfect;
 
+import com.aaronhowser1.pitchperfect.config.ClientConfigs;
+import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.enchantments.HealingBeatEnchantment;
 import com.aaronhowser1.pitchperfect.enchantments.ModEnchantments;
 import com.google.common.collect.HashMultimap;
@@ -46,7 +48,7 @@ public class InstrumentItem extends Item {
         Vec3 lookVector = player.getLookAngle();
         float pitch = (float) lookVector.y();
         pitch = map(pitch, -1,1,0.5F,2);
-        playSound(level, pitch, player.getX(), player.getY(), player.getZ(), 3);
+        playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get());
 
         Vec3 noteVector = lookVector;
         if (interactionHand.equals(InteractionHand.MAIN_HAND)) {
@@ -62,11 +64,12 @@ public class InstrumentItem extends Item {
 
         //Enchantments
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
-            HealingBeatEnchantment.heal(player);
+            HealingBeatEnchantment.heal(player, interactionHand);
             final float newPitch = pitch;
             HealingBeatEnchantment.getTargets(player).forEach(target -> {
                 spawnNote(level, newPitch, target.getX(), target.getEyeY(), target.getZ());
             });
+            player.getCooldowns().addCooldown(this, (int) (HealingBeatEnchantment.getTargets(player).size() * CommonConfigs.HEAL_COOLDOWN_MULT.get()));
         }
 
         return InteractionResultHolder.fail(itemStack);
@@ -74,7 +77,14 @@ public class InstrumentItem extends Item {
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        int randomAmount = (int) Math.floor(Math.random()*8)+2;// [3,10]
+
+        int particleAmountLowerBound = ClientConfigs.MIN_ATTACK_PARTICLES.get();
+        int particleAmountUpperBound = ClientConfigs.MAX_ATTACK_PARTICLES.get();
+
+        if (particleAmountLowerBound > particleAmountUpperBound) return false;
+
+        int randomAmount = (int) (Math.random()*(particleAmountUpperBound-particleAmountLowerBound) + particleAmountLowerBound);
+
         for (int note = 1; note <= randomAmount; note++) {
             float randomPitch = (int) (Math.random() * 180) - 90; //random number [0,180] -> [-90,90]
             randomPitch = map(randomPitch, -90,90,2,0.5F); //from [-90,90] to [2,0.5], high->low bc big number = low pitch
@@ -89,7 +99,7 @@ public class InstrumentItem extends Item {
                     randomPitch,
                     noteX, noteY, noteZ
             );
-            playSound(entity.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max((float) 2/randomAmount, 0.5F));
+            playSound(entity.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max(ClientConfigs.VOLUME.get()/randomAmount, ClientConfigs.MIN_ATTACK_VOLUME.get()));
         }
         return super.onLeftClickEntity(stack, player, entity);
     }
