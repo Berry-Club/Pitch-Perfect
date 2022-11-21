@@ -1,6 +1,5 @@
 package com.aaronhowser1.pitchperfect.enchantments;
 
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -27,6 +26,7 @@ public class HealingBeatEnchantment extends Enchantment {
         getTargets(user).forEach(target -> {
             if (target.getHealth() != target.getMaxHealth()) {
                 target.setHealth(target.getHealth() + 1);
+
             }
         });
     }

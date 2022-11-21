@@ -46,7 +46,7 @@ public class InstrumentItem extends Item {
         Vec3 lookVector = player.getLookAngle();
         float pitch = (float) lookVector.y();
         pitch = map(pitch, -1,1,0.5F,2);
-        playSound(level, pitch, player.getX(), player.getY(), player.getZ());
+        playSound(level, pitch, player.getX(), player.getY(), player.getZ(), 3);
 
         Vec3 noteVector = lookVector;
         if (interactionHand.equals(InteractionHand.MAIN_HAND)) {
@@ -63,6 +63,10 @@ public class InstrumentItem extends Item {
         //Enchantments
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
             HealingBeatEnchantment.heal(player);
+            final float newPitch = pitch;
+            HealingBeatEnchantment.getTargets(player).forEach(target -> {
+                spawnNote(level, newPitch, target.getX(), target.getEyeY(), target.getZ());
+            });
         }
 
         return InteractionResultHolder.fail(itemStack);
@@ -70,11 +74,11 @@ public class InstrumentItem extends Item {
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        float randomPitch = (int) (Math.random() * 180) - 90; //random number [0,180] -> [-90,90]
-        randomPitch = map(randomPitch, -90,90,2,0.5F); //from [-90,90] to [2,0.5], high->low bc big number = low pitch
-        playSound(entity.getLevel(), randomPitch, entity.getX(), entity.getY(), entity.getZ());
         int randomAmount = (int) Math.floor(Math.random()*8)+2;// [3,10]
         for (int note = 1; note <= randomAmount; note++) {
+            float randomPitch = (int) (Math.random() * 180) - 90; //random number [0,180] -> [-90,90]
+            randomPitch = map(randomPitch, -90,90,2,0.5F); //from [-90,90] to [2,0.5], high->low bc big number = low pitch
+
             double entityWidth = entity.getBbWidth();
             double entityHeight = entity.getBbHeight();
             double noteX = entity.getX()+entityWidth*(Math.random()*3-1.5);
@@ -85,6 +89,7 @@ public class InstrumentItem extends Item {
                     randomPitch,
                     noteX, noteY, noteZ
             );
+            playSound(entity.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max((float) 2/randomAmount, 0.5F));
         }
         return super.onLeftClickEntity(stack, player, entity);
     }
@@ -95,20 +100,20 @@ public class InstrumentItem extends Item {
         return min2 + (max2 - min2) * ((value - min1) / (max1 - min1));
     }
 
-    private void playSound(Level level, float pitch, double x, double y, double z) {
+    private void playSound(Level level, float pitch, double x, double y, double z, float volume) {
         level.playLocalSound(
                 x,
                 y,
                 z,
                 sound,
                 SoundSource.PLAYERS,
-                3, //Volume
+                volume,
                 pitch,
                 false
         );
     }
 
-    private void spawnNote(Level level, float pitch, double x, double y, double z) {
+    public void spawnNote(Level level, float pitch, double x, double y, double z) {
         float noteColor = map(pitch, 2, 0.5F, 0, 0.5F) + 0.75F;
         level.addParticle(
                 ParticleTypes.NOTE,

@@ -16,4 +16,7 @@
   "item.pitchperfect.snare_drum": "Snare Drum",
   "item.pitchperfect.sticks": "Drum Sticks",
   "item.pitchperfect.vibraphone": "Vibraphone",
-  "item.pitchperfect.xylophone": "Xylophone"}
+  "item.pitchperfect.xylophone": "Xylophone",
+
+  "enchantment.pitchperfect.healing_beat": "Healing Beat"
+}
