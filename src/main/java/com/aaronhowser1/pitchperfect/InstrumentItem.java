@@ -1,5 +1,7 @@
 package com.aaronhowser1.pitchperfect;
 
+import com.aaronhowser1.pitchperfect.enchantments.HealingBeatEnchantment;
+import com.aaronhowser1.pitchperfect.enchantments.ModEnchantments;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
@@ -17,7 +19,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.Lazy;
 
 import java.util.Map;
@@ -39,10 +43,28 @@ public class InstrumentItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
-        float pitch = player.getXRot();
-        pitch = map(pitch, -90,90,2,0.5F); //from [-90,90] to [2,0.5], high->low bc big number = low pitch
+        Vec3 lookVector = player.getLookAngle();
+        float pitch = (float) lookVector.y();
+        pitch = map(pitch, -1,1,0.5F,2);
         playSound(level, pitch, player.getX(), player.getY(), player.getZ());
-        spawnNote(level, pitch, player.getX()+player.getLookAngle().x(), player.getEyeY()+player.getLookAngle().y(), player.getZ()+player.getLookAngle().z());
+
+        Vec3 noteVector = lookVector;
+        if (interactionHand.equals(InteractionHand.MAIN_HAND)) {
+            noteVector = lookVector.yRot(-0.5F);
+        } else {
+            noteVector = lookVector.yRot(0.5F);
+        }
+        spawnNote(level, pitch,
+                player.getX()+noteVector.x(),
+                player.getEyeY()+noteVector.y(),
+                player.getZ()+noteVector.z()
+        );
+
+        //Enchantments
+        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
+            HealingBeatEnchantment.heal(player);
+        }
+
         return InteractionResultHolder.fail(itemStack);
     }
 
@@ -90,9 +112,6 @@ public class InstrumentItem extends Item {
         float noteColor = map(pitch, 2, 0.5F, 0, 0.5F) + 0.75F;
         level.addParticle(
                 ParticleTypes.NOTE,
-//                entity.getX(),
-//                entity.getEyeY()+entity.getEyeHeight()*0.25,
-//                entity.getZ(),
                 x, y, z,
                 getColor(noteColor, "red"),
                 getColor(noteColor, "green"),
@@ -118,6 +137,11 @@ public class InstrumentItem extends Item {
                     Math.max(0.0F, Mth.sin((pitch + 0.33333334F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F);
             default -> 0;
         };
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        return 8;
     }
 
     //Ok beyond this, I barely understood

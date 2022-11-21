@@ -1,5 +1,6 @@
 package com.aaronhowser1.pitchperfect;
 
+import com.aaronhowser1.pitchperfect.enchantments.ModEnchantments;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,6 +21,7 @@ public class PitchPerfect
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.register(eventBus);
+        ModEnchantments.register(eventBus);
 
         eventBus.addListener(this::setup);
 
