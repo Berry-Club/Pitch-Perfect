@@ -23,6 +23,15 @@ public class ModEnchantments {
                             INSTRUMENT,
                             EquipmentSlot.MAINHAND
                     ));
+
+    public static RegistryObject<Enchantment> BWAAAP =
+            ENCHANTMENTS.register("bwaaap",
+                    () -> new BwaaapEnchantment(
+                            Enchantment.Rarity.COMMON,
+                            INSTRUMENT,
+                            EquipmentSlot.MAINHAND
+                    ));
+
     public static void register(IEventBus eventBus) {
         ENCHANTMENTS.register(eventBus);
 

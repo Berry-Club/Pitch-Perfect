@@ -2,6 +2,7 @@ package com.aaronhowser1.pitchperfect;
 
 import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.enchantments.BwaaapEnchantment;
 import com.aaronhowser1.pitchperfect.enchantments.HealingBeatEnchantment;
 import com.aaronhowser1.pitchperfect.enchantments.ModEnchantments;
 import com.google.common.collect.HashMultimap;
@@ -64,12 +65,16 @@ public class InstrumentItem extends Item {
 
         //Enchantments
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
-            HealingBeatEnchantment.heal(player, interactionHand);
+            HealingBeatEnchantment.heal(player);
             final float newPitch = pitch;
             HealingBeatEnchantment.getTargets(player).forEach(target -> {
                 spawnNote(level, newPitch, target.getX(), target.getEyeY(), target.getZ());
             });
             player.getCooldowns().addCooldown(this, (int) (HealingBeatEnchantment.getTargets(player).size() * CommonConfigs.HEAL_COOLDOWN_MULT.get()));
+        }
+        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
+            BwaaapEnchantment.knockback(player);
+            player.getCooldowns().addCooldown(this, (int) BwaaapEnchantment.getTargets(player).size() * CommonConfigs.BWAAAP_COOLDOWN_MULT.get());
         }
 
         return InteractionResultHolder.fail(itemStack);
