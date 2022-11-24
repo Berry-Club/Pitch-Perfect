@@ -1,4 +1,4 @@
-package com.aaronhowser1.pitchperfect.enchantments;
+package com.aaronhowser1.pitchperfect.enchantment;
 
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import net.minecraft.core.BlockPos;

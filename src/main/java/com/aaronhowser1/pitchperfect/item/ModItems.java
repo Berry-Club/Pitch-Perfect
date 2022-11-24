@@ -1,4 +1,4 @@
-package com.aaronhowser1.pitchperfect.items;
+package com.aaronhowser1.pitchperfect.item;
 
 import com.aaronhowser1.pitchperfect.PitchPerfect;
 import net.minecraft.sounds.SoundEvents;

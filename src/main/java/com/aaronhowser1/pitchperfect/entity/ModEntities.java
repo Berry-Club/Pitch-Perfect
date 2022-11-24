@@ -1,4 +1,4 @@
-package com.aaronhowser1.pitchperfect.entities;
+package com.aaronhowser1.pitchperfect.entity;
 
 public class ModEntities {
 

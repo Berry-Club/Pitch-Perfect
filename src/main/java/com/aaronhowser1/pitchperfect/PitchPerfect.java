@@ -2,8 +2,8 @@ package com.aaronhowser1.pitchperfect;
 
 import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
-import com.aaronhowser1.pitchperfect.enchantments.ModEnchantments;
-import com.aaronhowser1.pitchperfect.items.ModItems;
+import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
+import com.aaronhowser1.pitchperfect.item.ModItems;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;

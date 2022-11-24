@@ -1,6 +1,6 @@
-package com.aaronhowser1.pitchperfect.enchantments;
+package com.aaronhowser1.pitchperfect.enchantment;
 
-import com.aaronhowser1.pitchperfect.items.InstrumentItem;
+import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import com.aaronhowser1.pitchperfect.PitchPerfect;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
