@@ -1,4 +1,4 @@
-package com.aaronhowser1.pitchperfect;
+package com.aaronhowser1.pitchperfect.items;
 
 import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
@@ -16,6 +16,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -81,7 +82,7 @@ public class InstrumentItem extends Item {
     }
 
     @Override
-    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
+    public boolean onLeftClickEntity(ItemStack stack, Player attacker, Entity target) {
 
         int particleAmountLowerBound = ClientConfigs.MIN_ATTACK_PARTICLES.get();
         int particleAmountUpperBound = ClientConfigs.MAX_ATTACK_PARTICLES.get();
@@ -94,19 +95,19 @@ public class InstrumentItem extends Item {
             float randomPitch = (int) (Math.random() * 180) - 90; //random number [0,180] -> [-90,90]
             randomPitch = map(randomPitch, -90,90,2,0.5F); //from [-90,90] to [2,0.5], high->low bc big number = low pitch
 
-            double entityWidth = entity.getBbWidth();
-            double entityHeight = entity.getBbHeight();
-            double noteX = entity.getX()+entityWidth*(Math.random()*3-1.5);
-            double noteZ = entity.getZ()+entityWidth*(Math.random()*3-1.5);
-            double noteY = entity.getY()+entityHeight+(entityHeight*Math.random()*1.5-.75);
+            double entityWidth = target.getBbWidth();
+            double entityHeight = target.getBbHeight();
+            double noteX = target.getX()+entityWidth*(Math.random()*3-1.5);
+            double noteZ = target.getZ()+entityWidth*(Math.random()*3-1.5);
+            double noteY = target.getY()+entityHeight+(entityHeight*Math.random()*1.5-.75);
             spawnNote(
-                    entity.getLevel(),
+                    target.getLevel(),
                     randomPitch,
                     noteX, noteY, noteZ
             );
-            playSound(entity.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max(ClientConfigs.VOLUME.get()/randomAmount, ClientConfigs.MIN_ATTACK_VOLUME.get()));
+            playSound(target.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max(ClientConfigs.VOLUME.get()/randomAmount, ClientConfigs.MIN_ATTACK_VOLUME.get()));
         }
-        return super.onLeftClickEntity(stack, player, entity);
+        return super.onLeftClickEntity(stack, attacker, target);
     }
 
 

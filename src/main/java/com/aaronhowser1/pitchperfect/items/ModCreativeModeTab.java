@@ -1,5 +1,6 @@
-package com.aaronhowser1.pitchperfect;
+package com.aaronhowser1.pitchperfect.items;
 
+import com.aaronhowser1.pitchperfect.items.ModItems;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 

@@ -1,8 +1,8 @@
-package com.aaronhowser1.pitchperfect;
+package com.aaronhowser1.pitchperfect.items;
 
+import com.aaronhowser1.pitchperfect.PitchPerfect;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

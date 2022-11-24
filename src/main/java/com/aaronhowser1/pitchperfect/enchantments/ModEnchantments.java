@@ -1,6 +1,6 @@
 package com.aaronhowser1.pitchperfect.enchantments;
 
-import com.aaronhowser1.pitchperfect.InstrumentItem;
+import com.aaronhowser1.pitchperfect.items.InstrumentItem;
 import com.aaronhowser1.pitchperfect.PitchPerfect;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -21,7 +21,8 @@ public class ModEnchantments {
                     () -> new HealingBeatEnchantment(
                             Enchantment.Rarity.COMMON,
                             INSTRUMENT,
-                            EquipmentSlot.MAINHAND
+                            EquipmentSlot.MAINHAND,
+                            EquipmentSlot.OFFHAND
                     ));
 
     public static RegistryObject<Enchantment> BWAAAP =
@@ -29,8 +30,19 @@ public class ModEnchantments {
                     () -> new BwaaapEnchantment(
                             Enchantment.Rarity.COMMON,
                             INSTRUMENT,
-                            EquipmentSlot.MAINHAND
+                            EquipmentSlot.MAINHAND,
+                            EquipmentSlot.OFFHAND
                     ));
+
+    public static RegistryObject<Enchantment> AND_HIS_MUSIC_WAS_ELECTRIC =
+            ENCHANTMENTS.register("and_his_music_was_electric",
+                    () -> new AndHisMusicWasElectricEnchantment(
+                            Enchantment.Rarity.COMMON,
+                            INSTRUMENT,
+                            EquipmentSlot.MAINHAND,
+                            EquipmentSlot.OFFHAND
+                    )
+            );
 
     public static void register(IEventBus eventBus) {
         ENCHANTMENTS.register(eventBus);
