@@ -4,6 +4,7 @@ import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.item.ModItems;
+import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -32,6 +33,8 @@ public class PitchPerfect
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.SPEC, "pitchperfect-client.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfigs.SPEC, "pitchperfect-common.toml");
+
+        ModPacketHandler.setup();
 
         MinecraftForge.EVENT_BUS.register(this);
     }
