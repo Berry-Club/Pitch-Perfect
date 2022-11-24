@@ -9,6 +9,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -57,16 +58,22 @@ public class InstrumentItem extends Item {
         playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get());
 
         Vec3 noteVector = lookVector;
+
         if (interactionHand.equals(InteractionHand.MAIN_HAND)) {
             noteVector = lookVector.yRot(-0.5F);
         } else {
             noteVector = lookVector.yRot(0.5F);
         }
-        spawnNote(level, pitch,
-                player.getX()+noteVector.x(),
-                player.getEyeY()+noteVector.y(),
-                player.getZ()+noteVector.z()
-        );
+
+        if (!level.isClientSide()) {
+            ServerLevel serverLevel = (ServerLevel) level;
+            spawnNote(serverLevel, pitch,
+                    player.getX() + noteVector.x(),
+                    player.getEyeY() + noteVector.y(),
+                    player.getZ() + noteVector.z()
+            );
+        }
+
 
         //Enchantments
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
@@ -91,7 +98,7 @@ public class InstrumentItem extends Item {
 //        return super.onLeftClickEntity(stack, attacker, target);
 //    }
 
-    public void  attack(Entity target) {
+    public void attack(Entity target) {
 //        int particleAmountLowerBound = ClientConfigs.MIN_ATTACK_PARTICLES.get();
 //        int particleAmountUpperBound = ClientConfigs.MAX_ATTACK_PARTICLES.get();
         int particleAmountLowerBound = 2;
@@ -126,27 +133,31 @@ public class InstrumentItem extends Item {
     }
 
     private void playSound(Level level, float pitch, double x, double y, double z, float volume) {
-        level.playLocalSound(
+        level.playSound(
+                null,
                 x,
                 y,
                 z,
                 this.sound,
                 SoundSource.PLAYERS,
                 volume,
-                pitch,
-                false
+                pitch
         );
     }
 
-    public void spawnNote(Level level, float pitch, double x, double y, double z) {
+    public void spawnNote(ServerLevel serverLevel, float pitch, double x, double y, double z) {
         float noteColor = map(pitch, 2, 0.5F, 0, 0.5F) + 0.75F;
-        level.addParticle(
-                ParticleTypes.NOTE,
-                x, y, z,
-                getColor(noteColor, "red"),
-                getColor(noteColor, "green"),
-                getColor(noteColor, "blue")
+        serverLevel.sendParticles(
+
         );
+//        addParticle(
+//                ParticleTypes.NOTE,
+//                x, y, z,
+//                getColor(noteColor, "red"),
+//                getColor(noteColor, "green"),
+//                getColor(noteColor, "blue")
+//        );
+
         if (false) //set true to debug
             System.out.println("Spawning particle:\nPosition: "+
                     x+","+y+","+z+
