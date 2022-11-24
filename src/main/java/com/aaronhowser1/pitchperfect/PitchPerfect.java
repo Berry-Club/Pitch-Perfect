@@ -29,8 +29,6 @@ public class PitchPerfect
         ModItems.register(eventBus);
         ModEnchantments.register(eventBus);
 
-        eventBus.addListener(this::setup);
-
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.SPEC, "pitchperfect-client.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfigs.SPEC, "pitchperfect-common.toml");
 
@@ -39,7 +37,4 @@ public class PitchPerfect
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-
-    }
 }
