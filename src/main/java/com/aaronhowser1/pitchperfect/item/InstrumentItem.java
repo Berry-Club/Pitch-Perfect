@@ -16,6 +16,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -41,6 +42,10 @@ public class InstrumentItem extends Item {
         );
         this.sound = s;
         attributeModifiers = buildDefaultAttributes();
+    }
+
+    public SoundEvent getSound() {
+        return sound;
     }
 
     @Override
@@ -80,37 +85,42 @@ public class InstrumentItem extends Item {
         return InteractionResultHolder.fail(itemStack);
     }
 
-    @Override
-    public boolean onLeftClickEntity(ItemStack stack, Player attacker, Entity target) {
+//    @Override
+//    public boolean onLeftClickEntity(ItemStack stack, Player attacker, Entity target) {
+//        attack(stack, attacker,target);
+//        return super.onLeftClickEntity(stack, attacker, target);
+//    }
 
-        int particleAmountLowerBound = ClientConfigs.MIN_ATTACK_PARTICLES.get();
-        int particleAmountUpperBound = ClientConfigs.MAX_ATTACK_PARTICLES.get();
+    public void  attack(Entity target) {
+//        int particleAmountLowerBound = ClientConfigs.MIN_ATTACK_PARTICLES.get();
+//        int particleAmountUpperBound = ClientConfigs.MAX_ATTACK_PARTICLES.get();
+        int particleAmountLowerBound = 2;
+        int particleAmountUpperBound = 4;
 
-        if (particleAmountLowerBound > particleAmountUpperBound) return false;
-
-        int randomAmount = (int) (Math.random()*(particleAmountUpperBound-particleAmountLowerBound) + particleAmountLowerBound);
-
-        for (int note = 1; note <= randomAmount; note++) {
-            float randomPitch = (int) (Math.random() * 180) - 90; //random number [0,180] -> [-90,90]
-            randomPitch = map(randomPitch, -90,90,2,0.5F); //from [-90,90] to [2,0.5], high->low bc big number = low pitch
+        if (particleAmountLowerBound < particleAmountUpperBound) {
+            int randomAmount = (int) (Math.random() * (particleAmountUpperBound - particleAmountLowerBound) + particleAmountLowerBound);
 
             double entityWidth = target.getBbWidth();
             double entityHeight = target.getBbHeight();
-            double noteX = target.getX()+entityWidth*(Math.random()*3-1.5);
-            double noteZ = target.getZ()+entityWidth*(Math.random()*3-1.5);
-            double noteY = target.getY()+entityHeight+(entityHeight*Math.random()*1.5-.75);
-            spawnNote(
-                    target.getLevel(),
-                    randomPitch,
-                    noteX, noteY, noteZ
-            );
-            playSound(target.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max(ClientConfigs.VOLUME.get()/randomAmount, ClientConfigs.MIN_ATTACK_VOLUME.get()));
+
+            for (int note = 1; note <= randomAmount; note++) {
+                float randomPitch = (int) (Math.random() * 180) - 90; //random number [0,180] -> [-90,90]
+                randomPitch = map(randomPitch, -90, 90, 2, 0.5F); //from [-90,90] to [2,0.5], high->low bc big number = low pitch
+
+                double noteX = target.getX() + entityWidth * (Math.random() * 3 - 1.5);
+                double noteZ = target.getZ() + entityWidth * (Math.random() * 3 - 1.5);
+                double noteY = target.getY() + entityHeight + (entityHeight * Math.random() * 1.5 - .75);
+                spawnNote(
+                        target.getLevel(),
+                        randomPitch,
+                        noteX, noteY, noteZ
+                );
+                playSound(target.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max(ClientConfigs.VOLUME.get() / randomAmount, ClientConfigs.MIN_ATTACK_VOLUME.get()));
+            }
         }
-        return super.onLeftClickEntity(stack, attacker, target);
     }
 
-
-    public static float map(float value, float min1, float max1, float min2, float max2)
+    public float map(float value, float min1, float max1, float min2, float max2)
     {
         return min2 + (max2 - min2) * ((value - min1) / (max1 - min1));
     }
@@ -120,7 +130,7 @@ public class InstrumentItem extends Item {
                 x,
                 y,
                 z,
-                sound,
+                this.sound,
                 SoundSource.PLAYERS,
                 volume,
                 pitch,
