@@ -26,7 +26,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
     }
 
     //iteration starts at 1
-    public static void damage(Entity originEntity, List<Entity> entitiesHit, int iteration, LivingHurtEvent event) {
+    public static void damage(Entity originEntity, List<Entity> entitiesHit, int iteration, LivingHurtEvent event, InstrumentItem... instrumentItem) {
 
         List<Entity> entities = originEntity.getLevel().getEntities(
                 originEntity,
@@ -68,7 +68,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
                 );
             }
 
-            float damageFactor = CommonConfigs.ELECTRIC_DAMAGE_RETURNS.get() / (float)iteration;
+            float damageFactor = CommonConfigs.ELECTRIC_DAMAGE_RETURNS.get() / iteration;
 
             //Damage
             e.hurt(
@@ -77,9 +77,9 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
             );
         }
 
-//        if (instrumentItem.length != 0) {
-//            instrumentItem[0].attack(e);
-//        }
+        if (instrumentItem.length != 0) {
+            instrumentItem[0].attack(e);
+        }
 
         entitiesHit.add(e);
         final Entity entityHit = e;
@@ -91,7 +91,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
                 Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
             } catch (Exception ignored) {
             }
-                    damage(entityHit, entitiesHit, newIteration, event);
+                    damage(entityHit, entitiesHit, newIteration, event, instrumentItem);
         }
         );
     }
