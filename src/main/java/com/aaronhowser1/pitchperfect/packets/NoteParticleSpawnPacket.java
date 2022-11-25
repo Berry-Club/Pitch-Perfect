@@ -1,16 +1,8 @@
 package com.aaronhowser1.pitchperfect.packets;
 
 import com.aaronhowser1.pitchperfect.client.ClientUtils;
-import com.aaronhowser1.pitchperfect.item.InstrumentItem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;

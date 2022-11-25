@@ -10,17 +10,14 @@ import com.aaronhowser1.pitchperfect.packets.NoteParticleSpawnPacket;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -72,7 +69,7 @@ public class InstrumentItem extends Item {
                     ),
                     (ServerLevel) player.getLevel(),
                     new Vec3(player.getX(), player.getY(), player.getZ()),
-                    64
+                    128
             );
         }
 
@@ -105,17 +102,12 @@ public class InstrumentItem extends Item {
         return InteractionResultHolder.fail(itemStack);
     }
 
-//    @Override
-//    public boolean onLeftClickEntity(ItemStack stack, Player attacker, Entity target) {
-//        attack(stack, attacker,target);
-//        return super.onLeftClickEntity(stack, attacker, target);
-//    }
 
     public void attack(Entity target) {
-//        int particleAmountLowerBound = ClientConfigs.MIN_ATTACK_PARTICLES.get();
-//        int particleAmountUpperBound = ClientConfigs.MAX_ATTACK_PARTICLES.get();
-        int particleAmountLowerBound = 2;
-        int particleAmountUpperBound = 4;
+        int particleAmountLowerBound = CommonConfigs.MIN_ATTACK_PARTICLES.get();
+        int particleAmountUpperBound = CommonConfigs.MAX_ATTACK_PARTICLES.get();
+//        int particleAmountLowerBound = 2;
+//        int particleAmountUpperBound = 4;
 
         if (particleAmountLowerBound < particleAmountUpperBound) {
             int randomAmount = (int) (Math.random() * (particleAmountUpperBound - particleAmountLowerBound) + particleAmountLowerBound);
@@ -138,7 +130,6 @@ public class InstrumentItem extends Item {
                         16
                 );
 
-                //TODO: Find out why this isn't working
                 playSound(target.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max(ClientConfigs.VOLUME.get() / randomAmount, ClientConfigs.MIN_ATTACK_VOLUME.get()));
             }
         }
@@ -150,15 +141,13 @@ public class InstrumentItem extends Item {
     }
 
     private void playSound(Level level, float pitch, double x, double y, double z, float volume) {
-        level.playLocalSound(
-                x,
-                y,
-                z,
+        level.playSound(
+                null,
+                new BlockPos(x, y, z),
                 this.sound,
                 SoundSource.PLAYERS,
                 volume,
-                pitch,
-                false
+                pitch
         );
     }
 
