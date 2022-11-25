@@ -27,9 +27,9 @@ public class ModEvents {
         if (attacker instanceof LivingEntity livingEntity) {
 
             //If attacking with an instrument
-            if (livingEntity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
-                instrumentItem.attack(target);
-            }
+//            if (livingEntity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
+//                instrumentItem.attack(target);
+//            }
 
             //If attacking while an instrument with Electric enchant is in your inventory, regardless of location
             boolean hasElectricEnchant = false;
@@ -55,11 +55,11 @@ public class ModEvents {
                     entitiesHit.add(target);
                     entitiesHit.add(attacker);
 
-                    if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
-                        AndHisMusicWasElectricEnchantment.damage(target, entitiesHit, 1, event, instrumentItem);
-                    } else {
+//                    if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
+//                        AndHisMusicWasElectricEnchantment.damage(target, entitiesHit, 1, event, instrumentItem);
+//                    } else {
                         AndHisMusicWasElectricEnchantment.damage(target, entitiesHit, 1, event);
-                    }
+//                    }
                 }
             }
         }
