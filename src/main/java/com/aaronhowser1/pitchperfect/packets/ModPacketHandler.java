@@ -24,6 +24,7 @@ public class ModPacketHandler {
         int id = 0;
 
         INSTANCE.registerMessage(id++, NoteParticleSpawnPacket.class, NoteParticleSpawnPacket::encode, NoteParticleSpawnPacket::decode, NoteParticleSpawnPacket::receiveMessage);
+        INSTANCE.registerMessage(id++, ElectricParticleSpawnPacket.class, ElectricParticleSpawnPacket::encode, ElectricParticleSpawnPacket::decode, ElectricParticleSpawnPacket::receiveMessage);
     }
 
     public static void messageNearbyPlayers(ModPacket packet, ServerLevel serverLevel, Vec3 origin, double radius) {

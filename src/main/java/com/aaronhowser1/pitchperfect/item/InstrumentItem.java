@@ -1,5 +1,6 @@
 package com.aaronhowser1.pitchperfect.item;
 
+import com.aaronhowser1.pitchperfect.client.ClientUtils;
 import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.enchantment.BwaaapEnchantment;
@@ -106,8 +107,6 @@ public class InstrumentItem extends Item {
     public void attack(Entity target) {
         int particleAmountLowerBound = CommonConfigs.MIN_ATTACK_PARTICLES.get();
         int particleAmountUpperBound = CommonConfigs.MAX_ATTACK_PARTICLES.get();
-//        int particleAmountLowerBound = 2;
-//        int particleAmountUpperBound = 4;
 
         if (particleAmountLowerBound < particleAmountUpperBound) {
             int randomAmount = (int) (Math.random() * (particleAmountUpperBound - particleAmountLowerBound) + particleAmountLowerBound);
