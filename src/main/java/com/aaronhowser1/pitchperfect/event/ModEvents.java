@@ -18,8 +18,8 @@ public class ModEvents {
         LivingEntity target = event.getEntityLiving();
         Entity attacker = event.getSource().getEntity();
 
-        if (attacker instanceof Player player) {
-            if (player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
+        if (attacker instanceof LivingEntity livingEntity) {
+            if (livingEntity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
                 instrumentItem.attack(target);
             }
         }
