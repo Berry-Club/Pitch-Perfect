@@ -16,6 +16,8 @@ public class CommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> BWAAAP_COOLDOWN_MULT;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_RANGE;
+    public static final ForgeConfigSpec.ConfigValue<Float> ELECTRIC_DAMAGE;
+//    public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_COOLDOWN;
 
     static {
         BUILDER.push("Client configs for Pitch Perfect");
@@ -47,6 +49,9 @@ public class CommonConfigs {
         ELECTRIC_RANGE = BUILDER
                 .comment("The range in blocks around the attacked mob that should be effected by the \"And His Music Was Electric\" enchantment.")
                 .define("Electric Range", 5);
+        ELECTRIC_DAMAGE = BUILDER
+                .comment("The damage done to mobs effected by the \"And His Music Was Electric\" enchantment.")
+                .define("Electric Damage", 2F);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

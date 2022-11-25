@@ -12,6 +12,7 @@ import com.aaronhowser1.pitchperfect.packets.NoteParticleSpawnPacket;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -77,7 +78,7 @@ public class ModEvents {
 
                         //Spawn particles
                         int particleAmountLowerBound = 1;
-                        int particleAmountUpperBound = 3;
+                        int particleAmountUpperBound = 2;
                         if (particleAmountLowerBound < particleAmountUpperBound) {
                             int randomAmount = (int) (Math.random() * (particleAmountUpperBound - particleAmountLowerBound) + particleAmountLowerBound);
                             double entityWidth = e.getBbWidth();
@@ -96,7 +97,7 @@ public class ModEvents {
                         }
 
                         //Damage
-
+                        e.hurt(DamageSource.LIGHTNING_BOLT, CommonConfigs.ELECTRIC_DAMAGE.get());
                     }
                 }
             }
