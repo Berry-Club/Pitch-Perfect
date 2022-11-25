@@ -24,6 +24,7 @@ public class HealingBeatEnchantment extends Enchantment {
     }
 
     public static void heal(LivingEntity user) {
+        //TODO: do not heal instanceof Monster
         getTargets(user).forEach(target -> {
             if (target.getHealth() != target.getMaxHealth()) {
                 target.setHealth(target.getHealth() + CommonConfigs.HEAL_AMOUNT.get());

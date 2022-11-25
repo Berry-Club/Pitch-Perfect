@@ -55,6 +55,8 @@ public class ModEvents {
                     entitiesHit.add(target);
                     entitiesHit.add(attacker);
 
+                    //TODO: If instanceof Monster, don't spread to Animal
+
                     if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
                         AndHisMusicWasElectricEnchantment.damage(target, entitiesHit, 1, event, instrumentItem);
                     } else {
