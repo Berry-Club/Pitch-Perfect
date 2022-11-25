@@ -1,6 +1,7 @@
 package com.aaronhowser1.pitchperfect.enchantment;
 
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import com.aaronhowser1.pitchperfect.packets.ElectricParticleSpawnPacket;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
 import net.minecraft.Util;
@@ -21,7 +22,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
     }
 
     //iteration starts at 1
-    public static void damage(Entity originalHit, List<Entity> entities, int iteration, LivingHurtEvent event) {
+    public static void damage(Entity originalHit, List<Entity> entities, int iteration, LivingHurtEvent event, InstrumentItem... instrumentItems) {
 
         if (entities.isEmpty()) return;
         Entity e = entities.get(0);
@@ -59,13 +60,19 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         entities.remove(e);
         final int newIteration = iteration+1;
 
+        if (instrumentItems.length != 0) {
+            instrumentItems[0].attack(e);
+        }
+
+        //TODO: make sure reverting those two commits didn't lose anything
+
         //Wait before continuing
         Util.backgroundExecutor().submit( () -> {
             try {
                 Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
             } catch (Exception ignored) {
             }
-                    damage(originalHit, entities, newIteration, event);
+                    damage(originalHit, entities, newIteration, event, instrumentItems);
         }
         );
     }

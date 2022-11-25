@@ -21,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -76,7 +75,13 @@ public class ModEvents {
                                     && e != target
                             )
                     );
-                    AndHisMusicWasElectricEnchantment.damage(target, nearbyEntities, 1, event);
+
+                    if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
+                        AndHisMusicWasElectricEnchantment.damage(target, nearbyEntities, 1, event, instrumentItem);
+                    } else {
+                        AndHisMusicWasElectricEnchantment.damage(target, nearbyEntities, 1, event);
+                    }
+
                 }
             }
         }
