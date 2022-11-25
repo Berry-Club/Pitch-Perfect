@@ -1,26 +1,14 @@
 package com.aaronhowser1.pitchperfect.event;
 
 import com.aaronhowser1.pitchperfect.PitchPerfect;
-import com.aaronhowser1.pitchperfect.client.ClientUtils;
-import com.aaronhowser1.pitchperfect.config.ClientConfigs;
-import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment;
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
-import com.aaronhowser1.pitchperfect.packets.ElectricParticleSpawnPacket;
-import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
-import com.aaronhowser1.pitchperfect.packets.NoteParticleSpawnPacket;
-import net.minecraft.Util;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
