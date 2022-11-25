@@ -18,6 +18,7 @@ public class CommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_RANGE;
     public static final ForgeConfigSpec.ConfigValue<Float> ELECTRIC_DAMAGE_RETURNS;
     public static final ForgeConfigSpec.ConfigValue<Long> ELECTRIC_JUMPTIME;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_MAX_JUMPS;
 
     static {
         BUILDER.push("Client configs for Pitch Perfect");
@@ -55,6 +56,9 @@ public class CommonConfigs {
         ELECTRIC_JUMPTIME = BUILDER
                 .comment("How many milliseconds before the lightning jumps to the next entity.")
                 .define("Electric Jumptime", 80L);
+        ELECTRIC_MAX_JUMPS = BUILDER
+                .comment("How many times the lightning can jump.\nKeep in mind that, after a certain amount of jumps, it deals less than half a heart.")
+                .defineInRange("Electric Jump Limit", Integer.MAX_VALUE, 0, Integer.MAX_VALUE);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

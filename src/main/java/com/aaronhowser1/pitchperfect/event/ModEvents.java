@@ -25,6 +25,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = PitchPerfect.MOD_ID)
@@ -61,25 +62,15 @@ public class ModEvents {
             }
             if (hasElectricEnchant) {
                 if (!livingEntity.getLevel().isClientSide()) {
-                    List<Entity> nearbyEntities = livingEntity.getLevel().getEntities(
-                            attacker,
-                            new AABB(
-                                    target.getX() - CommonConfigs.ELECTRIC_RANGE.get(),
-                                    target.getY() - CommonConfigs.ELECTRIC_RANGE.get(),
-                                    target.getZ() - CommonConfigs.ELECTRIC_RANGE.get(),
-                                    target.getX() + CommonConfigs.ELECTRIC_RANGE.get(),
-                                    target.getY() + CommonConfigs.ELECTRIC_RANGE.get(),
-                                    target.getZ() + CommonConfigs.ELECTRIC_RANGE.get()
-                            ),
-                            (e) -> (e instanceof LivingEntity
-                                    && e != target
-                            )
-                    );
+
+                    List<Entity> entitiesHit = new ArrayList<>();
+                    entitiesHit.add(target);
+                    entitiesHit.add(attacker);
 
                     if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
-                        AndHisMusicWasElectricEnchantment.damage(target, nearbyEntities, 1, event, instrumentItem);
+                        AndHisMusicWasElectricEnchantment.damage(target, entitiesHit, 1, event, instrumentItem);
                     } else {
-                        AndHisMusicWasElectricEnchantment.damage(target, nearbyEntities, 1, event);
+                        AndHisMusicWasElectricEnchantment.damage(target, entitiesHit, 1, event);
                     }
 
                 }
