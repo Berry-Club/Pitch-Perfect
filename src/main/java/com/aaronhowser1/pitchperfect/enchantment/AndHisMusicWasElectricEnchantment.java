@@ -3,6 +3,7 @@ package com.aaronhowser1.pitchperfect.enchantment;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.packets.ElectricParticleSpawnPacket;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
+import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -19,6 +20,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         super(pRarity, pCategory, pApplicableSlots);
     }
 
+    //iteration starts at 1
     public static void damage(Entity originalHit, List<Entity> entities, int iteration, LivingHurtEvent event) {
 
         if (entities.isEmpty()) return;
@@ -55,7 +57,16 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         }
 
         entities.remove(e);
-        iteration++;
-        damage(originalHit, entities, iteration, event);
+        final int newIteration = iteration+1;
+
+        //Wait before continuing
+        Util.backgroundExecutor().submit( () -> {
+            try {
+                Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
+            } catch (Exception ignored) {
+            }
+                    damage(originalHit, entities, newIteration, event);
+        }
+        );
     }
 }

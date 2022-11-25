@@ -76,57 +76,7 @@ public class ModEvents {
                                     && e != target
                             )
                     );
-                    int entityNumber = 1;
-
-                    AndHisMusicWasElectricEnchantment.damage(target, nearbyEntities, entityNumber, event);
-
-//                    for (Entity e : nearbyEntities) {
-//
-//                        entityNumber++;
-//
-//                        //Spawn particles
-//                        int particleAmountLowerBound = 1;
-//                        int particleAmountUpperBound = 2;
-//                        if (particleAmountLowerBound < particleAmountUpperBound) {
-//                            int randomAmount = (int) (Math.random() * (particleAmountUpperBound - particleAmountLowerBound) + particleAmountLowerBound);
-//                            double entityWidth = e.getBbWidth();
-//                            double entityHeight = e.getBbHeight();
-//                            for (int p = 1; p <= randomAmount; p++) {
-//                                float X = (float) (e.getX() + entityWidth * (Math.random() * .5 - .25));
-//                                float Z = (float) (e.getZ() + entityWidth * (Math.random() * .5 - .25));
-//                                float Y = (float) (e.getY() + entityHeight + (entityHeight * Math.random() * .5 - .25));
-//                                ModPacketHandler.messageNearbyPlayers(
-//                                        new ElectricParticleSpawnPacket(X, Y, Z),
-//                                        (ServerLevel) target.getLevel(),
-//                                        new Vec3(X, Y, Z),
-//                                        16
-//                                );
-//                            }
-//                        }
-//
-//                        float damageFactor = CommonConfigs.ELECTRIC_DAMAGE_RETURNS.get() / entityNumber;
-//
-//                        //Damage
-//                        e.hurt(
-//                                DamageSource.LIGHTNING_BOLT,
-//                                event.getAmount()*damageFactor
-//                        );
-//
-//                        //Wait before repeating
-//                        Util.backgroundExecutor().submit(() -> {
-//                            try {
-//                                Thread.sleep(1000L);
-//                            } catch (Exception ignored) {
-//                            }
-//
-//                            if (e.getLevel() instanceof ServerLevel serverLevel) {
-//                                serverLevel.getServer().submit( () -> {
-//
-//                                        }
-//                                );
-//                            }
-//                        });
-//                    }
+                    AndHisMusicWasElectricEnchantment.damage(target, nearbyEntities, 1, event);
                 }
             }
         }

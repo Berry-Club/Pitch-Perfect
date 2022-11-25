@@ -17,7 +17,7 @@ public class CommonConfigs {
 
     public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_RANGE;
     public static final ForgeConfigSpec.ConfigValue<Float> ELECTRIC_DAMAGE_RETURNS;
-//    public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Long> ELECTRIC_JUMPTIME;
 
     static {
         BUILDER.push("Client configs for Pitch Perfect");
@@ -52,6 +52,9 @@ public class CommonConfigs {
         ELECTRIC_DAMAGE_RETURNS = BUILDER
                 .comment("The rate of diminishing returns on each mob hit, as a percentage of the original. Uses equation\n originalDamage * ( multiplier / entityNumber )\nwhere entityNumber is how many times it's jumped to a new entity")
                 .define("Electric Damage Multiplier", 0.75F);
+        ELECTRIC_JUMPTIME = BUILDER
+                .comment("How many milliseconds before the lightning jumps to the next entity.")
+                .define("Electric Jumptime", 80L);
 
         BUILDER.pop();
         SPEC = BUILDER.build();
