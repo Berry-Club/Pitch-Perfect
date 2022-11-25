@@ -4,11 +4,13 @@ import com.aaronhowser1.pitchperfect.PitchPerfect;
 import com.aaronhowser1.pitchperfect.client.ClientUtils;
 import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment;
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import com.aaronhowser1.pitchperfect.packets.ElectricParticleSpawnPacket;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
 import com.aaronhowser1.pitchperfect.packets.NoteParticleSpawnPacket;
+import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -74,31 +76,57 @@ public class ModEvents {
                                     && e != target
                             )
                     );
-                    for (Entity e : nearbyEntities) {
+                    int entityNumber = 1;
 
-                        //Spawn particles
-                        int particleAmountLowerBound = 1;
-                        int particleAmountUpperBound = 2;
-                        if (particleAmountLowerBound < particleAmountUpperBound) {
-                            int randomAmount = (int) (Math.random() * (particleAmountUpperBound - particleAmountLowerBound) + particleAmountLowerBound);
-                            double entityWidth = e.getBbWidth();
-                            double entityHeight = e.getBbHeight();
-                            for (int p = 1; p <= randomAmount; p++) {
-                                float X = (float) (e.getX() + entityWidth * (Math.random() * .5 - .25));
-                                float Z = (float) (e.getZ() + entityWidth * (Math.random() * .5 - .25));
-                                float Y = (float) (e.getY() + entityHeight + (entityHeight * Math.random() * .5 - .25));
-                                ModPacketHandler.messageNearbyPlayers(
-                                        new ElectricParticleSpawnPacket(X, Y, Z),
-                                        (ServerLevel) target.getLevel(),
-                                        new Vec3(X, Y, Z),
-                                        16
-                                );
-                            }
-                        }
+                    AndHisMusicWasElectricEnchantment.damage(target, nearbyEntities, entityNumber, event);
 
-                        //Damage
-                        e.hurt(DamageSource.LIGHTNING_BOLT, CommonConfigs.ELECTRIC_DAMAGE.get());
-                    }
+//                    for (Entity e : nearbyEntities) {
+//
+//                        entityNumber++;
+//
+//                        //Spawn particles
+//                        int particleAmountLowerBound = 1;
+//                        int particleAmountUpperBound = 2;
+//                        if (particleAmountLowerBound < particleAmountUpperBound) {
+//                            int randomAmount = (int) (Math.random() * (particleAmountUpperBound - particleAmountLowerBound) + particleAmountLowerBound);
+//                            double entityWidth = e.getBbWidth();
+//                            double entityHeight = e.getBbHeight();
+//                            for (int p = 1; p <= randomAmount; p++) {
+//                                float X = (float) (e.getX() + entityWidth * (Math.random() * .5 - .25));
+//                                float Z = (float) (e.getZ() + entityWidth * (Math.random() * .5 - .25));
+//                                float Y = (float) (e.getY() + entityHeight + (entityHeight * Math.random() * .5 - .25));
+//                                ModPacketHandler.messageNearbyPlayers(
+//                                        new ElectricParticleSpawnPacket(X, Y, Z),
+//                                        (ServerLevel) target.getLevel(),
+//                                        new Vec3(X, Y, Z),
+//                                        16
+//                                );
+//                            }
+//                        }
+//
+//                        float damageFactor = CommonConfigs.ELECTRIC_DAMAGE_RETURNS.get() / entityNumber;
+//
+//                        //Damage
+//                        e.hurt(
+//                                DamageSource.LIGHTNING_BOLT,
+//                                event.getAmount()*damageFactor
+//                        );
+//
+//                        //Wait before repeating
+//                        Util.backgroundExecutor().submit(() -> {
+//                            try {
+//                                Thread.sleep(1000L);
+//                            } catch (Exception ignored) {
+//                            }
+//
+//                            if (e.getLevel() instanceof ServerLevel serverLevel) {
+//                                serverLevel.getServer().submit( () -> {
+//
+//                                        }
+//                                );
+//                            }
+//                        });
+//                    }
                 }
             }
         }
