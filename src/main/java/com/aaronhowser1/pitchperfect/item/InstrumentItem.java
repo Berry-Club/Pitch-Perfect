@@ -189,4 +189,7 @@ public class InstrumentItem extends Item {
 
         return super.getAttributeModifiers(slot, stack);
     }
+
+    //TODO: GUI element showing roughly your current pitch, in letters
+    //TODO: Save the most recent X amount of letters
 }

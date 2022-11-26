@@ -96,5 +96,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         );
     }
 
+    //TODO: enchantment durability --- enchantment only has a limited amount of uses, and it removes itself when it's done
+
     //TODO: Make particles in a line between first and next entities, search lat dm for "I suggest including that info in packet"
 }
