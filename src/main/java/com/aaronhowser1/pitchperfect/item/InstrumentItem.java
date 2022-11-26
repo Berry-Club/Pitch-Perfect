@@ -191,5 +191,5 @@ public class InstrumentItem extends Item {
     }
 
     //TODO: GUI element showing roughly your current pitch, in letters
-    //TODO: Save the most recent X amount of letters
+    //TODO: Save the most recent X amount of notes, do things if they're close enough to a song
 }
