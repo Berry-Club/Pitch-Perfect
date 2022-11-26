@@ -11,12 +11,12 @@ public class NoteParticleSpawnPacket implements ModPacket{
 
     private final ResourceLocation soundResourceLocation;
     private final float pitch;
-    private final float x;
-    private final float y;
-    private final float z;
+    private final double x;
+    private final double y;
+    private final double z;
 
 
-    public NoteParticleSpawnPacket(ResourceLocation soundResourceLocation, float pitch, float x, float y, float z) {
+    public NoteParticleSpawnPacket(ResourceLocation soundResourceLocation, float pitch, double x, double y, double z) {
         this.soundResourceLocation = soundResourceLocation;
         this.pitch = pitch;
         this.x = x;
@@ -27,18 +27,18 @@ public class NoteParticleSpawnPacket implements ModPacket{
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(soundResourceLocation);
         buffer.writeFloat(pitch);
-        buffer.writeFloat(x);
-        buffer.writeFloat(y);
-        buffer.writeFloat(z);
+        buffer.writeDouble(x);
+        buffer.writeDouble(y);
+        buffer.writeDouble(z);
     }
 
     public static NoteParticleSpawnPacket decode(FriendlyByteBuf buffer) {
         return new NoteParticleSpawnPacket(
                 buffer.readResourceLocation(),
                 buffer.readFloat(),
-                buffer.readFloat(),
-                buffer.readFloat(),
-                buffer.readFloat()
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readDouble()
         );
     }
 

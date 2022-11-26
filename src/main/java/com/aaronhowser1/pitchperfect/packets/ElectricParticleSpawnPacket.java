@@ -11,28 +11,28 @@ import java.util.function.Supplier;
 
 public class ElectricParticleSpawnPacket implements ModPacket{
 
-    private final float x;
-    private final float y;
-    private final float z;
+    private final double x;
+    private final double y;
+    private final double z;
 
 
-    public ElectricParticleSpawnPacket(float x, float y, float z) {
+    public ElectricParticleSpawnPacket(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
     public void encode(FriendlyByteBuf buffer) {
-        buffer.writeFloat(x);
-        buffer.writeFloat(y);
-        buffer.writeFloat(z);
+        buffer.writeDouble(x);
+        buffer.writeDouble(y);
+        buffer.writeDouble(z);
     }
 
     public static ElectricParticleSpawnPacket decode(FriendlyByteBuf buffer) {
         return new ElectricParticleSpawnPacket(
-                buffer.readFloat(),
-                buffer.readFloat(),
-                buffer.readFloat()
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readDouble()
         );
     }
 

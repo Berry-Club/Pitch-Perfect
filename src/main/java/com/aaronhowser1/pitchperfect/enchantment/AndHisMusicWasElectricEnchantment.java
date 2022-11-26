@@ -55,10 +55,9 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
             double entityWidth = e.getBbWidth();
             double entityHeight = e.getBbHeight();
             for (int p = 1; p <= Math.min(iteration,5); p++) {
-                //TODO: move all XYZ everywhere to Doubles and not Floats, cast individual parts rather than at the end
-                float X = (float) (e.getX() + entityWidth * (Math.random() * .75 - .375));
-                float Z = (float) (e.getZ() + entityWidth * (Math.random() * .75 - .375));
-                float Y = (float) (e.getY() + entityHeight + Math.min(2,(iteration*0.05)));
+                double X = (e.getX() + entityWidth * (Math.random() * .75 - .375));
+                double Z = (e.getZ() + entityWidth * (Math.random() * .75 - .375));
+                double Y = (e.getY() + entityHeight + Math.min(2,(iteration*0.05)));
                 ModPacketHandler.messageNearbyPlayers(
                         new ElectricParticleSpawnPacket(X, Y, Z),
                         (ServerLevel) e.getLevel(),
