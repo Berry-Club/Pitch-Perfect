@@ -1,5 +1,6 @@
 package com.aaronhowser1.pitchperfect.enchantment;
 
+import com.aaronhowser1.pitchperfect.client.ServerUtils;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import com.aaronhowser1.pitchperfect.packets.ElectricParticleSpawnPacket;
@@ -24,32 +25,24 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
     }
 
     //iteration starts at 1
-    public static void damage(Entity originEntity, List<Entity> entitiesHit, int iteration, LivingHurtEvent event,  InstrumentItem... instrumentItems) {
+    public static void damage(LivingEntity originEntity, List<Entity> entitiesHit, int iteration, LivingHurtEvent event,  InstrumentItem... instrumentItems) {
 
-        List<Entity> entities = originEntity.getLevel().getEntities(
-                originEntity,
-                new AABB(
-                        originEntity.getX() - CommonConfigs.ELECTRIC_RANGE.get(),
-                        originEntity.getY() - CommonConfigs.ELECTRIC_RANGE.get(),
-                        originEntity.getZ() - CommonConfigs.ELECTRIC_RANGE.get(),
-                        originEntity.getX() + CommonConfigs.ELECTRIC_RANGE.get(),
-                        originEntity.getY() + CommonConfigs.ELECTRIC_RANGE.get(),
-                        originEntity.getZ() + CommonConfigs.ELECTRIC_RANGE.get()
-                ),
-                (e) -> (e instanceof LivingEntity
-                        && !entitiesHit.contains(e)
-                )
-        );
+        List<LivingEntity> entities = ServerUtils.getNearbyLivingEntities(originEntity);
 
         if (entities.isEmpty()) return;
         if (iteration > CommonConfigs.ELECTRIC_MAX_JUMPS.get()) return;
         Entity e = entities.get(0);
-
-        for (Entity e2 : entities) {
-            if (e2.distanceTo(originEntity) < e.distanceTo(originEntity)) {
-                e = e2;
-            }
+        entitiesHit.add(e);
+        if (entitiesHit.contains(e)) {
+            entities.remove(e);
+            e = entities.get(0);
         }
+
+//        for (LivingEntity e2 : entities) {
+//            if (e2.distanceTo(originEntity) < e.distanceTo(originEntity)) {
+//                e = e2;
+//            }
+//        }
 
         if (e.isAlive()) {
             double entityWidth = e.getBbWidth();
@@ -75,7 +68,6 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
             );
         }
 
-        entitiesHit.add(e);
         final Entity entityHit = e;
 
         final int newIteration = iteration+1;
