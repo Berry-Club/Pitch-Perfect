@@ -7,6 +7,7 @@ import com.aaronhowser1.pitchperfect.packets.SpawnElectricParticlePacket;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
 import com.aaronhowser1.pitchperfect.packets.SpawnElectricPathPacket;
 import net.minecraft.Util;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -92,6 +93,11 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
             if (entities.isEmpty()) return;
             LivingEntity nextTarget = ServerUtils.getNearestEntity(entities, originEntity);
             if (nextTarget == null) return;
+//            nextTarget.getServer().getPlayerList().getPlayers().get(0).sendMessage(new TextComponent(
+//                    "\n\n\n\n\n\n\n\n\nOriginal:\n"+e.toString()+
+//                            "\n\nAll:\n"+entities.toString()+
+//                            "\n\nChosen:\n"+nextTarget
+//            ),null);
 
             damage(e, nextTarget, entitiesHit, iteration+1, event, instrumentItems);
         });
