@@ -27,54 +27,43 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
     //iteration starts at 1
     public static void damage(LivingEntity originEntity, List<Entity> entitiesHit, int iteration, LivingHurtEvent event,  InstrumentItem... instrumentItems) {
 
-        List<LivingEntity> entities = ServerUtils.getNearbyLivingEntities(originEntity);
+        List<LivingEntity> entities = ServerUtils.getNearbyLivingEntities(originEntity, CommonConfigs.ELECTRIC_RANGE.get());
+        entities.removeAll(entitiesHit);
 
         if (entities.isEmpty()) return;
         if (iteration > CommonConfigs.ELECTRIC_MAX_JUMPS.get()) return;
-        Entity e = entities.get(0);
-        entitiesHit.add(e);
-        if (entitiesHit.contains(e)) {
-            entities.remove(e);
-            e = entities.get(0);
-        }
 
-//        for (LivingEntity e2 : entities) {
-//            if (e2.distanceTo(originEntity) < e.distanceTo(originEntity)) {
-//                e = e2;
-//            }
-//        }
+        Entity e = ServerUtils.getNearestEntity(entities, originEntity);
+        if (!e.isAlive()) return;
 
-        if (e.isAlive()) {
-            double entityWidth = e.getBbWidth();
-            double entityHeight = e.getBbHeight();
-            for (int p = 1; p <= Math.min(iteration,5); p++) {
-                double X = (e.getX() + entityWidth * (Math.random() * .75 - .375));
-                double Z = (e.getZ() + entityWidth * (Math.random() * .75 - .375));
-                double Y = (e.getY() + entityHeight + Math.min(2,(iteration*0.05)));
-                ModPacketHandler.messageNearbyPlayers(
-                        new ElectricParticleSpawnPacket(X, Y, Z),
-                        (ServerLevel) e.getLevel(),
-                        new Vec3(X, Y, Z),
-                        16
-                );
-            }
-
-            float damageFactor = CommonConfigs.ELECTRIC_DAMAGE_RETURNS.get() / iteration;
-
-            //Damage
-            e.hurt(
-                    DamageSource.LIGHTNING_BOLT,
-                    event.getAmount()*damageFactor
+        //Spawn Particles
+        double entityWidth = e.getBbWidth();
+        double entityHeight = e.getBbHeight();
+        for (int p = 1; p <= Math.min(iteration,5); p++) {
+            double X = (e.getX() + entityWidth * (Math.random() * .75 - .375));
+            double Z = (e.getZ() + entityWidth * (Math.random() * .75 - .375));
+            double Y = (e.getY() + entityHeight + Math.min(2,(iteration*0.05)));
+            ModPacketHandler.messageNearbyPlayers(
+                    new ElectricParticleSpawnPacket(X, Y, Z),
+                    (ServerLevel) e.getLevel(),
+                    new Vec3(X, Y, Z),
+                    16
             );
         }
 
-        final Entity entityHit = e;
-
-        final int newIteration = iteration+1;
-
+        //Damage
+        float damageFactor = CommonConfigs.ELECTRIC_DAMAGE_RETURNS.get() / iteration;
+        e.hurt(
+                DamageSource.LIGHTNING_BOLT,
+                event.getAmount()*damageFactor
+        );
         if (instrumentItems.length != 0) {
             instrumentItems[0].attack(e);
         }
+        entitiesHit.add(e);
+
+        final Entity entityHit = e;
+        final int newIteration = iteration+1;
 
         //Wait before continuing
         Util.backgroundExecutor().submit( () -> {
