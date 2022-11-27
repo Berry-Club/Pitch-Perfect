@@ -54,8 +54,8 @@ public class CommonConfigs {
                 .comment("The rate of diminishing returns on each mob hit, as a percentage of the original. Uses equation\n originalDamage * ( multiplier / entityNumber )\nwhere entityNumber is how many times it's jumped to a new entity")
                 .define("Electric Damage Multiplier", 0.75F);
         ELECTRIC_JUMPTIME = BUILDER
-                .comment("How many milliseconds before the lightning jumps to the next entity.")
-                .define("Electric Jumptime", 3000);
+                .comment("How many ticks before the lightning jumps to the next entity.")
+                .define("Electric Jumptime", 20);
         ELECTRIC_MAX_JUMPS = BUILDER
                 .comment("How many times the lightning can jump.\nKeep in mind that, after a certain amount of jumps, it deals less than half a heart.")
                 .defineInRange("Electric Jump Limit", Integer.MAX_VALUE, 0, Integer.MAX_VALUE);

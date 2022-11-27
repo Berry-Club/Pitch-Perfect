@@ -6,13 +6,9 @@ import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import com.aaronhowser1.pitchperfect.packets.SpawnElectricParticlePacket;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
-import com.aaronhowser1.pitchperfect.packets.SpawnElectricPathPacket;
-import com.ibm.icu.util.TimeUnit;
-import net.minecraft.Util;
-import net.minecraft.network.chat.TextComponent;
+import java.util.concurrent.TimeUnit;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -20,8 +16,6 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AndHisMusicWasElectricEnchantment extends Enchantment {
@@ -80,22 +74,10 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
                             (ServerLevel) e.getLevel()
                     );
 
-                    //Wait before continuing
-                    ModScheduler.scheduleAsyncTask(
-                            damage(e, nextEntity, entitiesHit, iteration+1, event, instrumentItems),
-                            CommonConfigs.ELECTRIC_JUMPTIME.get(),
-                            TimeUnit.MILLISECOND
+                    ModScheduler.scheduleSynchronisedTask(
+                            () -> {damage(e, nextEntity, entitiesHit, iteration+1, event, instrumentItems);},
+                            CommonConfigs.ELECTRIC_JUMPTIME.get()
                     );
-//                    Util.backgroundExecutor().submit( () -> {
-//                        try {
-//                            Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
-//                        } catch (Exception ignored) {
-//                        }
-//
-//                        if (nextEntity == null) return;
-//
-//                        damage(e, nextEntity, entitiesHit, iteration+1, event, instrumentItems);
-//                    });
                 }
             }
         }

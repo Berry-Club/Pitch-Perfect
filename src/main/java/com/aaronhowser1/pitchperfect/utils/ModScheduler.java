@@ -10,11 +10,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class ModScheduler {
-
     private static ScheduledExecutorService scheduler = null;
     private static final HashMultimap<Integer, Runnable> scheduledSynchTasks = HashMultimap.<Integer, Runnable>create();
 
-    public static void scheduleSyncronisedTask(Runnable run, int ticks) {
+    public static void scheduleSynchronisedTask(Runnable run, int ticks) {
         scheduledSynchTasks.put(ModEvents.tick + ticks, run);
     }
 

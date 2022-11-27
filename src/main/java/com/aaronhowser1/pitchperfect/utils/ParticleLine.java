@@ -15,7 +15,7 @@ public class ParticleLine {
     private final SimpleParticleType particleType;
     private int iteration;
     private final int particlesPerBlock;
-    private final long totalTravelTime;
+    private final int totalTravelTime;
 
     public ParticleLine(Vec3 originPositionVec, Vec3 destinationPositionVec, SimpleParticleType particleType) {
         this.originPositionVec = originPositionVec;
@@ -37,37 +37,31 @@ public class ParticleLine {
                 pathUnitVector.y()*distanceBetween,
                 pathUnitVector.z()*distanceBetween
         );
-        long timePerParticle = totalTravelTime/totalParticleCount;
+        int timePerParticle = totalTravelTime/totalParticleCount;
 
         System.out.println("Path Size:\n"+pathSize+"\nDistance Between:\n"+distanceBetween+"\nParticle Count:\n"+totalParticleCount);
 
         spawnNextParticle(totalParticleCount, pathDeltaVector, originPositionVec, distanceBetween, timePerParticle);
     }
 
-    public class spawnNextParticle(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween, long timePerParticle) implements Runnable {
-        @Override
-        public void run() {
-            if (iteration <= totalParticleCount) {
-                Vec3 particlePositionVector = newOriginVec.add(deltaVector);
+    public void spawnNextParticle(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween, int ticksPerParticle) {
+        if (iteration <= totalParticleCount) {
+            Vec3 particlePositionVector = newOriginVec.add(deltaVector);
 
-                ClientUtils.spawnParticle(
-                        particleType,
-                        particlePositionVector.x(),
-                        particlePositionVector.y(),
-                        particlePositionVector.z(),
-                        1,1,1
-                );
+            ClientUtils.spawnParticle(
+                    particleType,
+                    particlePositionVector.x(),
+                    particlePositionVector.y(),
+                    particlePositionVector.z(),
+                    1,1,1
+            );
 
-                .iteration++;
+            this.iteration++;
 
-//            Util.backgroundExecutor().submit( () -> {
-//                try {
-//                    Thread.sleep(timePerParticle);
-//                } catch (Exception ignored) {
-//                }
-//                spawnNextParticle(totalParticleCount, deltaVector, particlePositionVector, distanceBetween,timePerParticle);
-//            });
-            }
+            ModScheduler.scheduleSynchronisedTask(
+                    () -> spawnNextParticle(totalParticleCount, deltaVector, particlePositionVector, distanceBetween,ticksPerParticle),
+                    ticksPerParticle
+            );
         }
     }
 
