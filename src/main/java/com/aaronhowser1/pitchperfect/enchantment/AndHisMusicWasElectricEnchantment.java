@@ -70,14 +70,10 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
                 if (iteration <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {
                     LivingEntity nextEntity = ServerUtils.getNearestEntity(nextEntities, originEntity);
                     if (nextEntity.isAlive()) {
-                        ModPacketHandler.messageNearbyPlayers(
-                                new SpawnElectricPathPacket(
-                                        e.getX(),e.getY(),e.getZ(),
-                                        nextEntity.getX(),nextEntity.getY(),nextEntity.getZ()
-                                ),
-                                (ServerLevel) e.getLevel(),
+                        spawnParticleLine(
                                 new Vec3(e.getX(),e.getY(),e.getZ()),
-                                64
+                                new Vec3(nextEntity.getX(),nextEntity.getY(),nextEntity.getZ()),
+                                (ServerLevel) e.getLevel()
                         );
                     }
                 }
@@ -96,6 +92,18 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
             }
             damage(entityHit, entitiesHit, newIteration, event, instrumentItems);
         });
+    }
+
+    private static void spawnParticleLine(Vec3 origin, Vec3 destination, ServerLevel serverLevel) {
+        ModPacketHandler.messageNearbyPlayers(
+                new SpawnElectricPathPacket(
+                        origin.x(),origin.y(),origin.z(),
+                        destination.x(),destination.y(),destination.z()
+                ),
+                serverLevel,
+                new Vec3(origin.x(),origin.y(),origin.z()),
+                64
+        );
     }
 
     //TODO: enchantment durability --- enchantment only has a limited amount of uses, and it removes itself when it's done

@@ -22,12 +22,11 @@ public class ModEvents {
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
         LivingEntity target = event.getEntityLiving();
-        Entity attacker = event.getSource().getEntity();
 
-        if (attacker instanceof LivingEntity livingEntity) {
+        if (event.getSource().getEntity() instanceof LivingEntity attacker) {
 
             //If attacking with an instrument
-            if (livingEntity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
+            if (attacker.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
                 instrumentItem.attack(target);
             }
 
@@ -49,7 +48,7 @@ public class ModEvents {
                 }
             }
             if (hasElectricEnchant) {
-                if (!livingEntity.getLevel().isClientSide()) {
+                if (!attacker.getLevel().isClientSide()) {
 
                     List<Entity> entitiesHit = new ArrayList<>();
                     entitiesHit.add(target);
