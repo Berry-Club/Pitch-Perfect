@@ -25,7 +25,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
     }
 
     //iteration starts at 1
-    public static void damage(LivingEntity originEntity, List<Entity> entitiesHit, int iteration, LivingHurtEvent event,  InstrumentItem... instrumentItems) {
+    public static void damage(LivingEntity originEntity, List<LivingEntity> entitiesHit, int iteration, LivingHurtEvent event,  InstrumentItem... instrumentItems) {
 
         List<LivingEntity> entities = ServerUtils.getNearbyLivingEntities(originEntity, CommonConfigs.ELECTRIC_RANGE.get());
         entities.removeAll(entitiesHit);
@@ -70,7 +70,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
                 if (iteration <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {
                     LivingEntity nextEntity = ServerUtils.getNearestEntity(nextEntities, originEntity);
                     if (nextEntity.isAlive()) {
-                        ServerUtils.spawnParticleLine(
+                        ServerUtils.spawnElectricParticleLine(
                                 new Vec3(e.getX(),e.getY(),e.getZ()),
                                 new Vec3(nextEntity.getX(),nextEntity.getY(),nextEntity.getZ()),
                                 (ServerLevel) e.getLevel()

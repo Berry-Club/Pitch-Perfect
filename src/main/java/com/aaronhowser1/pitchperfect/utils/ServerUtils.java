@@ -54,7 +54,7 @@ public class ServerUtils {
         return nearestEntity;
     }
 
-    public static void spawnParticleLine(Vec3 origin, Vec3 destination, ServerLevel serverLevel) {
+    public static void spawnElectricParticleLine(Vec3 origin, Vec3 destination, ServerLevel serverLevel) {
         ModPacketHandler.messageNearbyPlayers(
                 new SpawnElectricPathPacket(
                         origin.x(),origin.y(),origin.z(),
