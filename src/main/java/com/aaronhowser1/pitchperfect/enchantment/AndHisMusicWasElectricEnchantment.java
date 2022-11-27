@@ -93,7 +93,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
             LivingEntity nextTarget = ServerUtils.getNearestEntity(entities, originEntity);
             if (nextTarget == null) return;
 
-            damage(nextTarget, e, entitiesHit, iteration+1, event, instrumentItems);
+            damage(e, nextTarget, entitiesHit, iteration+1, event, instrumentItems);
         });
     }
 
