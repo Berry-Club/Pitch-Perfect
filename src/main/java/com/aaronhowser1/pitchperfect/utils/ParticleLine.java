@@ -35,30 +35,33 @@ public class ParticleLine {
         Vec3 pathUnitVector = pathVector.normalize();
         long timePerParticle = totalTravelTime/totalParticleCount;
 
-        spawnNextParticle(totalParticleCount, pathUnitVector, distanceBetween, timePerParticle);
+        spawnNextParticle(totalParticleCount, pathUnitVector, originVec, distanceBetween, timePerParticle);
     }
 
-    public void spawnNextParticle(int totalParticleCount, Vec3 pathUnitVector, float distanceBetween, long timePerParticle) {
+    public void spawnNextParticle(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween, long timePerParticle) {
         if (iteration <= totalParticleCount) {
-            Vec3 particleVector = originVec.add(
-                    pathUnitVector.x()*distanceBetween*iteration,
-                    pathUnitVector.y()*distanceBetween*iteration,
-                    pathUnitVector.z()*distanceBetween*iteration
+            Vec3 particlePositionVector = newOriginVec.add(
+                    deltaVector.x()*distanceBetween,
+                    deltaVector.y()*distanceBetween,
+                    deltaVector.z()*distanceBetween
             );
+
             ClientUtils.spawnParticle(
                     particleType,
-                    particleVector.x(),
-                    particleVector.y(),
-                    particleVector.z(),
+                    particlePositionVector.x(),
+                    particlePositionVector.y(),
+                    particlePositionVector.z(),
                     1,1,1
             );
+
             this.iteration++;
+
             Util.backgroundExecutor().submit( () -> {
                 try {
                     Thread.sleep(timePerParticle);
                 } catch (Exception ignored) {
                 }
-                spawnNextParticle(totalParticleCount,pathUnitVector,distanceBetween,timePerParticle);
+                spawnNextParticle(totalParticleCount, deltaVector, particlePositionVector, distanceBetween,timePerParticle);
             });
         }
     }
