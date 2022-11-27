@@ -21,7 +21,7 @@ public class CommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_MAX_JUMPS;
 
     static {
-        BUILDER.push("Client configs for Pitch Perfect");
+        BUILDER.push("Common configs for Pitch Perfect");
 
         MIN_ATTACK_PARTICLES = BUILDER
                 .comment("The minimum amount of notes to spawn, when attacking.")
@@ -55,7 +55,7 @@ public class CommonConfigs {
                 .define("Electric Damage Multiplier", 0.75F);
         ELECTRIC_JUMPTIME = BUILDER
                 .comment("How many milliseconds before the lightning jumps to the next entity.")
-                .define("Electric Jumptime", 80L);
+                .define("Electric Jumptime", 1000L);
         ELECTRIC_MAX_JUMPS = BUILDER
                 .comment("How many times the lightning can jump.\nKeep in mind that, after a certain amount of jumps, it deals less than half a heart.")
                 .defineInRange("Electric Jump Limit", Integer.MAX_VALUE, 0, Integer.MAX_VALUE);

@@ -5,6 +5,7 @@ import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import com.aaronhowser1.pitchperfect.packets.SpawnElectricParticlePacket;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
+import com.aaronhowser1.pitchperfect.packets.SpawnElectricPathPacket;
 import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -61,18 +62,40 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         }
         entitiesHit.add(e);
 
-        final LivingEntity entityHit = e;
-        final int newIteration = iteration+1;
+        //Spawn particle line
+            List<LivingEntity> nextEntities = ServerUtils.getNearbyLivingEntities(originEntity, CommonConfigs.ELECTRIC_RANGE.get());
+            nextEntities.removeAll(entitiesHit);
+            nextEntities.remove(e);
+            if (!nextEntities.isEmpty()){
+                if (iteration <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {
+                    LivingEntity nextEntity = ServerUtils.getNearestEntity(nextEntities, originEntity);
+                    if (nextEntity.isAlive()) {
+                        ModPacketHandler.messageNearbyPlayers(
+                                new SpawnElectricPathPacket(
+                                        e.getX(),e.getY(),e.getZ(),
+                                        nextEntity.getX(),nextEntity.getY(),nextEntity.getZ()
+                                ),
+                                (ServerLevel) e.getLevel(),
+                                new Vec3(e.getX(),e.getY(),e.getZ()),
+                                64
+                        );
+                    }
+                }
+            }
+
 
         //Wait before continuing
+
+        //Make final versions of variables so they can be used in submit()
+        final LivingEntity entityHit = e;
+        final int newIteration = iteration+1;
         Util.backgroundExecutor().submit( () -> {
             try {
                 Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
             } catch (Exception ignored) {
             }
-                    damage(entityHit, entitiesHit, newIteration, event, instrumentItems);
-        }
-        );
+            damage(entityHit, entitiesHit, newIteration, event, instrumentItems);
+        });
     }
 
     //TODO: enchantment durability --- enchantment only has a limited amount of uses, and it removes itself when it's done
