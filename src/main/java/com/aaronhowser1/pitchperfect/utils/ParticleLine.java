@@ -27,7 +27,7 @@ public class ParticleLine {
         this.totalTravelTime = CommonConfigs.ELECTRIC_JUMPTIME.get();
     }
 
-    public void spawnNextParticle() {
+    public void spawnLine() {
         Vec3 pathVector = originVec.vectorTo(destinationVec);
         float pathSize = (float) pathVector.length();
         float distanceBetween = pathSize/particlesPerBlock;
@@ -35,6 +35,10 @@ public class ParticleLine {
         Vec3 pathUnitVector = pathVector.normalize();
         long timePerParticle = totalTravelTime/totalParticleCount;
 
+        spawnNextParticle(totalParticleCount, pathUnitVector, distanceBetween, timePerParticle);
+    }
+
+    public void spawnNextParticle(int totalParticleCount, Vec3 pathUnitVector, float distanceBetween, long timePerParticle) {
         if (iteration <= totalParticleCount) {
             Vec3 particleVector = originVec.add(
                     pathUnitVector.x()*distanceBetween*iteration,
@@ -54,7 +58,7 @@ public class ParticleLine {
                     Thread.sleep(timePerParticle);
                 } catch (Exception ignored) {
                 }
-                spawnNextParticle();
+                spawnNextParticle(totalParticleCount,pathUnitVector,distanceBetween,timePerParticle);
             });
         }
     }

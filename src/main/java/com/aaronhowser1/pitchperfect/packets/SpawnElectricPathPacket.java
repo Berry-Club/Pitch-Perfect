@@ -64,8 +64,7 @@ public class SpawnElectricPathPacket implements ModPacket{
 
         ParticleLine particleLine = new ParticleLine(origin, destination, ParticleTypes.ANGRY_VILLAGER);
 
-        particleLine.spawnNextParticle();
-
+        particleLine.spawnLine();
     }
 
 }
