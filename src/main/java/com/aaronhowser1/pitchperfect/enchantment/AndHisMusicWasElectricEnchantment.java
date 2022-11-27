@@ -33,7 +33,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         if (entities.isEmpty()) return;
         if (iteration > CommonConfigs.ELECTRIC_MAX_JUMPS.get()) return;
 
-        Entity e = ServerUtils.getNearestEntity(entities, originEntity);
+        LivingEntity e = ServerUtils.getNearestEntity(entities, originEntity);
         if (!e.isAlive()) return;
 
         //Spawn Particles
@@ -62,7 +62,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         }
         entitiesHit.add(e);
 
-        final Entity entityHit = e;
+        final LivingEntity entityHit = e;
         final int newIteration = iteration+1;
 
         //Wait before continuing
@@ -71,7 +71,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
                 Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
             } catch (Exception ignored) {
             }
-                    damage(originEntity, entitiesHit, newIteration, event, instrumentItems);
+                    damage(entityHit, entitiesHit, newIteration, event, instrumentItems);
         }
         );
     }
