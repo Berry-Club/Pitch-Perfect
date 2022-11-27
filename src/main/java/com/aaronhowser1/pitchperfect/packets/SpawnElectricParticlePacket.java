@@ -1,22 +1,20 @@
 package com.aaronhowser1.pitchperfect.packets;
 
 import com.aaronhowser1.pitchperfect.client.ClientUtils;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ElectricParticleSpawnPacket implements ModPacket{
+public class SpawnElectricParticlePacket implements ModPacket{
 
     private final double x;
     private final double y;
     private final double z;
 
 
-    public ElectricParticleSpawnPacket(double x, double y, double z) {
+    public SpawnElectricParticlePacket(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -28,8 +26,8 @@ public class ElectricParticleSpawnPacket implements ModPacket{
         buffer.writeDouble(z);
     }
 
-    public static ElectricParticleSpawnPacket decode(FriendlyByteBuf buffer) {
-        return new ElectricParticleSpawnPacket(
+    public static SpawnElectricParticlePacket decode(FriendlyByteBuf buffer) {
+        return new SpawnElectricParticlePacket(
                 buffer.readDouble(),
                 buffer.readDouble(),
                 buffer.readDouble()

@@ -7,7 +7,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class NoteParticleSpawnPacket implements ModPacket{
+public class SpawnNoteParticlePacket implements ModPacket{
 
     private final ResourceLocation soundResourceLocation;
     private final float pitch;
@@ -16,7 +16,7 @@ public class NoteParticleSpawnPacket implements ModPacket{
     private final double z;
 
 
-    public NoteParticleSpawnPacket(ResourceLocation soundResourceLocation, float pitch, double x, double y, double z) {
+    public SpawnNoteParticlePacket(ResourceLocation soundResourceLocation, float pitch, double x, double y, double z) {
         this.soundResourceLocation = soundResourceLocation;
         this.pitch = pitch;
         this.x = x;
@@ -32,8 +32,8 @@ public class NoteParticleSpawnPacket implements ModPacket{
         buffer.writeDouble(z);
     }
 
-    public static NoteParticleSpawnPacket decode(FriendlyByteBuf buffer) {
-        return new NoteParticleSpawnPacket(
+    public static SpawnNoteParticlePacket decode(FriendlyByteBuf buffer) {
+        return new SpawnNoteParticlePacket(
                 buffer.readResourceLocation(),
                 buffer.readFloat(),
                 buffer.readDouble(),

@@ -1,13 +1,12 @@
 package com.aaronhowser1.pitchperfect.item;
 
-import com.aaronhowser1.pitchperfect.client.ClientUtils;
 import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.enchantment.BwaaapEnchantment;
 import com.aaronhowser1.pitchperfect.enchantment.HealingBeatEnchantment;
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
-import com.aaronhowser1.pitchperfect.packets.NoteParticleSpawnPacket;
+import com.aaronhowser1.pitchperfect.packets.SpawnNoteParticlePacket;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
@@ -62,7 +61,7 @@ public class InstrumentItem extends Item {
         }
         if (!level.isClientSide()) {
             ModPacketHandler.messageNearbyPlayers(
-                    new NoteParticleSpawnPacket(sound.getLocation(),
+                    new SpawnNoteParticlePacket(sound.getLocation(),
                             pitch,
                             (float) (player.getX()+noteVector.x()),
                             (float) (player.getEyeY()+noteVector.y()),
@@ -81,7 +80,7 @@ public class InstrumentItem extends Item {
             HealingBeatEnchantment.getTargets(player).forEach(target -> {
                 if (!level.isClientSide()) {
                     ModPacketHandler.messageNearbyPlayers(
-                            new NoteParticleSpawnPacket(sound.getLocation(),
+                            new SpawnNoteParticlePacket(sound.getLocation(),
                                     newPitch,
                                     (float) (target.getX()),
                                     (float) (target.getEyeY()),
@@ -123,7 +122,7 @@ public class InstrumentItem extends Item {
                 float noteY = (float) (target.getY() + entityHeight + (entityHeight * Math.random() * 1.5 - .75));
 
                 ModPacketHandler.messageNearbyPlayers(
-                    new NoteParticleSpawnPacket(sound.getLocation(), randomPitch, noteX, noteY, noteZ),
+                    new SpawnNoteParticlePacket(sound.getLocation(), randomPitch, noteX, noteY, noteZ),
                         (ServerLevel) target.getLevel(),
                         new Vec3(noteX, noteY, noteZ),
                         16

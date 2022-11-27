@@ -3,7 +3,7 @@ package com.aaronhowser1.pitchperfect.enchantment;
 import com.aaronhowser1.pitchperfect.client.ServerUtils;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
-import com.aaronhowser1.pitchperfect.packets.ElectricParticleSpawnPacket;
+import com.aaronhowser1.pitchperfect.packets.SpawnElectricParticlePacket;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
 import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +13,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -44,7 +43,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
             double Z = (e.getZ() + entityWidth * (Math.random() * .75 - .375));
             double Y = (e.getY() + entityHeight + Math.min(2,(iteration*0.05)));
             ModPacketHandler.messageNearbyPlayers(
-                    new ElectricParticleSpawnPacket(X, Y, Z),
+                    new SpawnElectricParticlePacket(X, Y, Z),
                     (ServerLevel) e.getLevel(),
                     new Vec3(X, Y, Z),
                     16
@@ -78,5 +77,4 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
 
     //TODO: enchantment durability --- enchantment only has a limited amount of uses, and it removes itself when it's done
 
-    //TODO: Make particles in a line between first and next entities, search lat dm for "I suggest including that info in packet"
 }

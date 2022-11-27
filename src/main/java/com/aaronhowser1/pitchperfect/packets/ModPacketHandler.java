@@ -23,8 +23,8 @@ public class ModPacketHandler {
     public static void setup() {
         int id = 0;
 
-        INSTANCE.registerMessage(id++, NoteParticleSpawnPacket.class, NoteParticleSpawnPacket::encode, NoteParticleSpawnPacket::decode, NoteParticleSpawnPacket::receiveMessage);
-        INSTANCE.registerMessage(id++, ElectricParticleSpawnPacket.class, ElectricParticleSpawnPacket::encode, ElectricParticleSpawnPacket::decode, ElectricParticleSpawnPacket::receiveMessage);
+        INSTANCE.registerMessage(id++, SpawnNoteParticlePacket.class, SpawnNoteParticlePacket::encode, SpawnNoteParticlePacket::decode, SpawnNoteParticlePacket::receiveMessage);
+        INSTANCE.registerMessage(id++, SpawnElectricParticlePacket.class, SpawnElectricParticlePacket::encode, SpawnElectricParticlePacket::decode, SpawnElectricParticlePacket::receiveMessage);
     }
 
     public static void messageNearbyPlayers(ModPacket packet, ServerLevel serverLevel, Vec3 origin, double radius) {
