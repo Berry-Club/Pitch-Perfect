@@ -62,45 +62,37 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         }
         entitiesHit.add(e);
 
+
+
         //Spawn particle line
-            List<LivingEntity> nextEntities = ServerUtils.getNearbyLivingEntities(originEntity, CommonConfigs.ELECTRIC_RANGE.get());
-            nextEntities.removeAll(entitiesHit);
-            nextEntities.remove(e);
-            if (!nextEntities.isEmpty()){
-                if (iteration <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {
-                    LivingEntity nextEntity = ServerUtils.getNearestEntity(nextEntities, originEntity);
-                    if (nextEntity.isAlive()) {
-                        ServerUtils.spawnElectricParticleLine(
-                                new Vec3(e.getX(),e.getY(),e.getZ()),
-                                new Vec3(nextEntity.getX(),nextEntity.getY(),nextEntity.getZ()),
-                                (ServerLevel) e.getLevel()
-                        );
-                    }
+        List<LivingEntity> nextEntities = ServerUtils.getNearbyLivingEntities(e, CommonConfigs.ELECTRIC_RANGE.get());
+        nextEntities.removeAll(entitiesHit);
+        nextEntities.remove(e);
+        if (!nextEntities.isEmpty()){
+            if (iteration <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {
+                LivingEntity nextEntity = ServerUtils.getNearestEntity(nextEntities, e);
+                if (nextEntity.isAlive()) {
+                    ServerUtils.spawnElectricParticleLine(
+                            new Vec3(e.getX(),e.getY(),e.getZ()),
+                            new Vec3(nextEntity.getX(),nextEntity.getY(),nextEntity.getZ()),
+                            (ServerLevel) e.getLevel()
+                    );
+
+                    //Wait before continuing
+                    Util.backgroundExecutor().submit( () -> {
+                        try {
+                            Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
+                        } catch (Exception ignored) {
+                        }
+
+                        if (nextEntity == null) return;
+
+                        damage(e, nextEntity, entitiesHit, iteration+1, event, instrumentItems);
+                    });
                 }
             }
+        }
 
-
-        //Wait before continuing
-        Util.backgroundExecutor().submit( () -> {
-            try {
-                Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
-            } catch (Exception ignored) {
-            }
-
-            List<LivingEntity> entities = ServerUtils.getNearbyLivingEntities(originEntity, CommonConfigs.ELECTRIC_RANGE.get());
-            entities.removeAll(entitiesHit);
-            entities.remove(e);
-            if (entities.isEmpty()) return;
-            LivingEntity nextTarget = ServerUtils.getNearestEntity(entities, originEntity);
-            if (nextTarget == null) return;
-//            nextTarget.getServer().getPlayerList().getPlayers().get(0).sendMessage(new TextComponent(
-//                    "\n\n\n\n\n\n\n\n\nOriginal:\n"+e.toString()+
-//                            "\n\nAll:\n"+entities.toString()+
-//                            "\n\nChosen:\n"+nextTarget
-//            ),null);
-
-            damage(e, nextTarget, entitiesHit, iteration+1, event, instrumentItems);
-        });
     }
 
     //TODO: enchantment durability --- enchantment only has a limited amount of uses, and it removes itself when it's done
