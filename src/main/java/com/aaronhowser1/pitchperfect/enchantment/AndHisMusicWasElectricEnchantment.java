@@ -17,6 +17,8 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AndHisMusicWasElectricEnchantment extends Enchantment {
@@ -25,15 +27,12 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
     }
 
     //iteration starts at 1
-    public static void damage(LivingEntity originEntity, List<LivingEntity> entitiesHit, int iteration, LivingHurtEvent event,  InstrumentItem... instrumentItems) {
+    public static void damage(LivingEntity originEntity, LivingEntity targetEntity, List<LivingEntity> entitiesHit, int iteration, LivingHurtEvent event, InstrumentItem... instrumentItems) {
 
-        List<LivingEntity> entities = ServerUtils.getNearbyLivingEntities(originEntity, CommonConfigs.ELECTRIC_RANGE.get());
-        entities.removeAll(entitiesHit);
+        LivingEntity e = targetEntity;
 
-        if (entities.isEmpty()) return;
         if (iteration > CommonConfigs.ELECTRIC_MAX_JUMPS.get()) return;
 
-        LivingEntity e = ServerUtils.getNearestEntity(entities, originEntity);
         if (!e.isAlive()) return;
 
         //Spawn Particles
@@ -81,16 +80,20 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
 
 
         //Wait before continuing
-
-        //Make final versions of variables so they can be used in submit()
-        final LivingEntity entityHit = e;
-        final int newIteration = iteration+1;
         Util.backgroundExecutor().submit( () -> {
             try {
                 Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
             } catch (Exception ignored) {
             }
-            damage(entityHit, entitiesHit, newIteration, event, instrumentItems);
+
+            List<LivingEntity> entities = ServerUtils.getNearbyLivingEntities(originEntity, CommonConfigs.ELECTRIC_RANGE.get());
+            entities.removeAll(entitiesHit);
+            entities.remove(e);
+            if (entities.isEmpty()) return;
+            LivingEntity nextTarget = ServerUtils.getNearestEntity(entities, originEntity);
+            if (nextTarget == null) return;
+
+            damage(nextTarget, e, entitiesHit, iteration+1, event, instrumentItems);
         });
     }
 

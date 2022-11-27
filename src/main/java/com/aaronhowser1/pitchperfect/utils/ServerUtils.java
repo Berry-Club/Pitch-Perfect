@@ -51,6 +51,7 @@ public class ServerUtils {
                 }
             }
         }
+        if (nearestEntity == originEntity) return null;
         return nearestEntity;
     }
 

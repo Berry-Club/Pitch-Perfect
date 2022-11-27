@@ -6,6 +6,7 @@ import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment;
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
+import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -71,15 +72,21 @@ public class ModEvents {
                                     new Vec3(closestEntity.getX(),closestEntity.getY(), closestEntity.getZ()),
                                     (ServerLevel) closestEntity.getLevel()
                             );
+
+                            //Wait for the particles to reach
+                            Util.backgroundExecutor().submit( () -> {
+                                try {
+                                    Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
+                                } catch (Exception ignored) {
+                                }
+                                if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
+                                    AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event, instrumentItem);
+                                } else {
+                                    AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event);
+                                }
+                            });
                         }
                     }
-
-                    if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
-                        AndHisMusicWasElectricEnchantment.damage(target, entitiesHit, 1, event, instrumentItem);
-                    } else {
-                        AndHisMusicWasElectricEnchantment.damage(target, entitiesHit, 1, event);
-                    }
-
                 }
             }
         }
