@@ -69,7 +69,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         nextEntities.removeAll(entitiesHit);
         nextEntities.remove(e);
         if (!nextEntities.isEmpty()){
-            if (iteration <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {
+            if (iteration+1 <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {
                 LivingEntity nextEntity = ServerUtils.getNearestEntity(nextEntities, e);
                 if (nextEntity.isAlive()) {
                     ServerUtils.spawnElectricParticleLine(
@@ -92,7 +92,6 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
                 }
             }
         }
-
     }
 
     //TODO: enchantment durability --- enchantment only has a limited amount of uses, and it removes itself when it's done
