@@ -44,27 +44,30 @@ public class ParticleLine {
         spawnNextParticle(totalParticleCount, pathDeltaVector, originPositionVec, distanceBetween, timePerParticle);
     }
 
-    public void spawnNextParticle(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween, long timePerParticle) {
-        if (iteration <= totalParticleCount) {
-            Vec3 particlePositionVector = newOriginVec.add(deltaVector);
+    public class spawnNextParticle(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween, long timePerParticle) implements Runnable {
+        @Override
+        public void run() {
+            if (iteration <= totalParticleCount) {
+                Vec3 particlePositionVector = newOriginVec.add(deltaVector);
 
-            ClientUtils.spawnParticle(
-                    particleType,
-                    particlePositionVector.x(),
-                    particlePositionVector.y(),
-                    particlePositionVector.z(),
-                    1,1,1
-            );
+                ClientUtils.spawnParticle(
+                        particleType,
+                        particlePositionVector.x(),
+                        particlePositionVector.y(),
+                        particlePositionVector.z(),
+                        1,1,1
+                );
 
-            this.iteration++;
+                .iteration++;
 
-            Util.backgroundExecutor().submit( () -> {
-                try {
-                    Thread.sleep(timePerParticle);
-                } catch (Exception ignored) {
-                }
-                spawnNextParticle(totalParticleCount, deltaVector, particlePositionVector, distanceBetween,timePerParticle);
-            });
+//            Util.backgroundExecutor().submit( () -> {
+//                try {
+//                    Thread.sleep(timePerParticle);
+//                } catch (Exception ignored) {
+//                }
+//                spawnNextParticle(totalParticleCount, deltaVector, particlePositionVector, distanceBetween,timePerParticle);
+//            });
+            }
         }
     }
 

@@ -1,11 +1,13 @@
 package com.aaronhowser1.pitchperfect.enchantment;
 
+import com.aaronhowser1.pitchperfect.utils.ModScheduler;
 import com.aaronhowser1.pitchperfect.utils.ServerUtils;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import com.aaronhowser1.pitchperfect.packets.SpawnElectricParticlePacket;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
 import com.aaronhowser1.pitchperfect.packets.SpawnElectricPathPacket;
+import com.ibm.icu.util.TimeUnit;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -79,16 +81,21 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
                     );
 
                     //Wait before continuing
-                    Util.backgroundExecutor().submit( () -> {
-                        try {
-                            Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
-                        } catch (Exception ignored) {
-                        }
-
-                        if (nextEntity == null) return;
-
-                        damage(e, nextEntity, entitiesHit, iteration+1, event, instrumentItems);
-                    });
+                    ModScheduler.scheduleAsyncTask(
+                            damage(e, nextEntity, entitiesHit, iteration+1, event, instrumentItems),
+                            CommonConfigs.ELECTRIC_JUMPTIME.get(),
+                            TimeUnit.MILLISECOND
+                    );
+//                    Util.backgroundExecutor().submit( () -> {
+//                        try {
+//                            Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
+//                        } catch (Exception ignored) {
+//                        }
+//
+//                        if (nextEntity == null) return;
+//
+//                        damage(e, nextEntity, entitiesHit, iteration+1, event, instrumentItems);
+//                    });
                 }
             }
         }

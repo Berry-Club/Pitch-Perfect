@@ -1,6 +1,7 @@
 package com.aaronhowser1.pitchperfect.event;
 
 import com.aaronhowser1.pitchperfect.PitchPerfect;
+import com.aaronhowser1.pitchperfect.utils.ModScheduler;
 import com.aaronhowser1.pitchperfect.utils.ServerUtils;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment;
@@ -8,12 +9,12 @@ import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -89,6 +90,17 @@ public class ModEvents {
                     }
                 }
             }
+        }
+    }
+
+    //From Tslat
+    public static int tick;
+    @SubscribeEvent
+    private static void serverTick(final TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            tick++;
+
+            ModScheduler.handleSyncScheduledTasks(tick);
         }
     }
 }
