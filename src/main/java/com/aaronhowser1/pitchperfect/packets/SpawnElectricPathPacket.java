@@ -2,6 +2,7 @@ package com.aaronhowser1.pitchperfect.packets;
 
 import com.aaronhowser1.pitchperfect.utils.ClientUtils;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.utils.ParticleLine;
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
@@ -54,41 +55,17 @@ public class SpawnElectricPathPacket implements ModPacket{
         Vec3 originVec = new Vec3(x1,y1,z1);
         Vec3 destinationVec = new Vec3(x2,y2,z2);
 
-        spawnParticlePath(originVec,destinationVec,1);
+        spawnParticlePath(originVec,destinationVec);
         context.get().setPacketHandled(true);
     }
 
 
-    private static void spawnParticlePath(Vec3 origin, Vec3 destination, int iteration) {
-        int particlesPerBlock = 9;Vec3 pathVector = origin.vectorTo(destination);
-        float pathSize = (float) pathVector.length();
-        float distanceBetween = pathSize/particlesPerBlock;
-        int totalParticleCount = (int) (pathSize * (float) particlesPerBlock);
-        Vec3 pathUnitVector = pathVector.normalize();
-        long totalTravelTime = CommonConfigs.ELECTRIC_JUMPTIME.get();
-        long timePerParticle = totalTravelTime/totalParticleCount;
+    private static void spawnParticlePath(Vec3 origin, Vec3 destination) {
 
-        System.out.println("Amount: "+totalParticleCount+"\nPath Size: "+pathSize+"\nDistance Between Particles: "+distanceBetween);
+        ParticleLine particleLine = new ParticleLine(origin, destination, ParticleTypes.ANGRY_VILLAGER);
+
+        particleLine.spawnNextParticle();
 
     }
 
-    private static void spawnNextParticle(int iteration, double x, double y, double z, long waitTime, int totalParticleCount) {
-        if (iteration <= totalParticleCount) {
-            Vec3 particleVector = origin.add(
-                    pathUnitVector.x()*distanceBetween*iteration,
-                    pathUnitVector.y()*distanceBetween*iteration,
-                    pathUnitVector.z()*distanceBetween*iteration
-            );
-            double particleX = particleVector.x();
-            double particleY = particleVector.y();
-            double particleZ = particleVector.z();
-        }
-        ClientUtils.spawnParticle(ParticleTypes.ANGRY_VILLAGER,z,y,x,1,1,1);
-        Util.backgroundExecutor().submit( () -> {
-            try {
-                Thread.sleep(waitTime);
-            } catch (Exception ignored) {
-            }
-            spawnNextParticle(origin,destination,iteration+1);
-        };
 }
