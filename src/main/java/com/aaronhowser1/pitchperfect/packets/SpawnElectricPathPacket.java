@@ -1,11 +1,10 @@
 package com.aaronhowser1.pitchperfect.packets;
 
-import com.aaronhowser1.pitchperfect.client.ClientUtils;
+import com.aaronhowser1.pitchperfect.utils.ClientUtils;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 

@@ -1,6 +1,8 @@
 package com.aaronhowser1.pitchperfect.event;
 
 import com.aaronhowser1.pitchperfect.PitchPerfect;
+import com.aaronhowser1.pitchperfect.utils.ServerUtils;
+import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment;
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
@@ -55,6 +57,20 @@ public class ModEvents {
                     entitiesHit.add(attacker);
 
                     //TODO: If instanceof Monster, don't spread to Animal
+
+                    //Particle line from initial target to first mob hit by enchant effect
+//                    if (!ServerUtils.getNearbyLivingEntities(target, CommonConfigs.ELECTRIC_RANGE.get()).isEmpty()) {
+//                        List<LivingEntity> nearbyLiving = ServerUtils.getNearbyLivingEntities(target, CommonConfigs.ELECTRIC_RANGE.get());
+//                        nearbyLiving.forEach(e -> {
+//                            if (e instanceof Player || e.equals(target)) {
+//                                nearbyLiving.remove(e);
+//                            }
+//                        });
+//                        if (!nearbyLiving.isEmpty()) {
+//                            LivingEntity closestEntity = ServerUtils.getNearestEntity(nearbyLiving,target);
+//
+//                        }
+//                    }
 
                     if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
                         AndHisMusicWasElectricEnchantment.damage(target, entitiesHit, 1, event, instrumentItem);

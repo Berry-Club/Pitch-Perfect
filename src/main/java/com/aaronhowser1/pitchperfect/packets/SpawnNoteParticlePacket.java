@@ -1,6 +1,6 @@
 package com.aaronhowser1.pitchperfect.packets;
 
-import com.aaronhowser1.pitchperfect.client.ClientUtils;
+import com.aaronhowser1.pitchperfect.utils.ClientUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;

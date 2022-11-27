@@ -1,6 +1,8 @@
-package com.aaronhowser1.pitchperfect.client;
+package com.aaronhowser1.pitchperfect.utils;
 
-import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
+import com.aaronhowser1.pitchperfect.packets.SpawnElectricPathPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
@@ -50,6 +52,18 @@ public class ServerUtils {
             }
         }
         return nearestEntity;
+    }
+
+    public static void spawnParticleLine(Vec3 origin, Vec3 destination, ServerLevel serverLevel) {
+        ModPacketHandler.messageNearbyPlayers(
+                new SpawnElectricPathPacket(
+                        origin.x(),origin.y(),origin.z(),
+                        destination.x(),destination.y(),destination.z()
+                ),
+                serverLevel,
+                new Vec3(origin.x(),origin.y(),origin.z()),
+                64
+        );
     }
 
 }

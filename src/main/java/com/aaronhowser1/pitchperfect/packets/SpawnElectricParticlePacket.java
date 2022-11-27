@@ -1,6 +1,6 @@
 package com.aaronhowser1.pitchperfect.packets;
 
-import com.aaronhowser1.pitchperfect.client.ClientUtils;
+import com.aaronhowser1.pitchperfect.utils.ClientUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
