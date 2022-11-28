@@ -96,7 +96,7 @@ public class ModEvents {
     //From Tslat
     public static int tick;
     @SubscribeEvent
-    private static void serverTick(final TickEvent.ServerTickEvent event) {
+    public static void serverTick(final TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             tick++;
 
