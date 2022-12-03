@@ -151,10 +151,10 @@ public class InstrumentItem extends Item {
         );
     }
 
-//    @Override
-//    public boolean isEnchantable(ItemStack pStack) {
-//        return true;
-//    }
+    @Override
+    public boolean isEnchantable(ItemStack pStack) {
+        return true;
+    }
 
     @Override
     public int getEnchantmentValue() {
