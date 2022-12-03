@@ -8,6 +8,7 @@ import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
 import com.aaronhowser1.pitchperfect.packets.SpawnNoteParticlePacket;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -149,11 +151,23 @@ public class InstrumentItem extends Item {
         );
     }
 
-
+    @Override
+    public boolean isEnchantable(ItemStack pStack) {
+        return true;
+    }
 
     @Override
     public int getEnchantmentValue() {
         return 8;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return super.canApplyAtEnchantingTable(stack, enchantment) || ImmutableSet.of(
+                ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get(),
+                ModEnchantments.BWAAAP.get(),
+                ModEnchantments.HEALING_BEAT.get()
+        ).contains(enchantment);
     }
 
     //Ok beyond this, I barely understood

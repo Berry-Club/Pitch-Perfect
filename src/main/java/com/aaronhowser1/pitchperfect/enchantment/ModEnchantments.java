@@ -37,7 +37,7 @@ public class ModEnchantments {
     public static RegistryObject<Enchantment> AND_HIS_MUSIC_WAS_ELECTRIC =
             ENCHANTMENTS.register("and_his_music_was_electric",
                     () -> new AndHisMusicWasElectricEnchantment(
-                            Enchantment.Rarity.COMMON,
+                            Enchantment.Rarity.VERY_RARE,
                             INSTRUMENT,
                             EquipmentSlot.MAINHAND,
                             EquipmentSlot.OFFHAND
