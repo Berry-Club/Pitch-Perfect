@@ -14,17 +14,10 @@ import java.util.List;
 
 public class BwaaapEnchantment extends Enchantment {
 
-    //Shakes screen and throws away mobs
-    //Cooldown?
-    //Apparently has a shader, https://i.latvian.dev/pc/2022-11-20_12.09.52.mp4, can remove rgb
-
-    //Maybe override the sound and use https://www.youtube.com/watch?v=rZB5BbvrRgA&t=113s, didgeridoo specific
-
-    private static int range;
+    private static int range = CommonConfigs.BWAAAP_RANGE.get();
 
     public BwaaapEnchantment(Enchantment.Rarity pRarity, EnchantmentCategory pCategory, EquipmentSlot... pApplicableSlots) {
-        super(Enchantment.Rarity.COMMON, ModEnchantments.INSTRUMENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND});
-        this.range = 5;
+        super(pRarity, pCategory, pApplicableSlots);
     }
 
     public static List<LivingEntity> getTargets(LivingEntity user) {

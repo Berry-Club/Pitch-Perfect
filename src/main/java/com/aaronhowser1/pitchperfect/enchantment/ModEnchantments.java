@@ -46,6 +46,5 @@ public class ModEnchantments {
 
     public static void register(IEventBus eventBus) {
         ENCHANTMENTS.register(eventBus);
-
     }
 }

@@ -151,10 +151,10 @@ public class InstrumentItem extends Item {
         );
     }
 
-    @Override
-    public boolean isEnchantable(ItemStack pStack) {
-        return true;
-    }
+//    @Override
+//    public boolean isEnchantable(ItemStack pStack) {
+//        return true;
+//    }
 
     @Override
     public int getEnchantmentValue() {
@@ -163,11 +163,7 @@ public class InstrumentItem extends Item {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return super.canApplyAtEnchantingTable(stack, enchantment) || ImmutableSet.of(
-                ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get(),
-                ModEnchantments.BWAAAP.get(),
-                ModEnchantments.HEALING_BEAT.get()
-        ).contains(enchantment);
+        return enchantment.category.equals(ModEnchantments.INSTRUMENT);
     }
 
     //Ok beyond this, I barely understood

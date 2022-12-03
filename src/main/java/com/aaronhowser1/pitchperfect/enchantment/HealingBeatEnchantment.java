@@ -12,7 +12,7 @@ import java.util.List;
 
 public class HealingBeatEnchantment extends Enchantment {
     public HealingBeatEnchantment(Rarity pRarity, EnchantmentCategory pCategory, EquipmentSlot... pApplicableSlots) {
-        super(Rarity.COMMON, ModEnchantments.INSTRUMENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND});
+        super(pRarity, pCategory, pApplicableSlots);
     }
 
     public static List<LivingEntity> getTargets(LivingEntity user) {
