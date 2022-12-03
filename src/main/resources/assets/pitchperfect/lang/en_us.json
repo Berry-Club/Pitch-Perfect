@@ -19,7 +19,10 @@
   "item.pitchperfect.xylophone": "Xylophone",
 
   "enchantment.pitchperfect.healing_beat": "Healing Beat",
+  "enchantment.pitchperfect.healing_beat.desc": "Heals nearby mobs when used",
   "enchantment.pitchperfect.bwaaap": "BWAAAP",
-  "enchantment.pitchperfect.and_his_music_was_electric": "And His Music Was Electric"
+  "enchantment.pitchperfect.bwaaap.desc": "Knocks back nearby mobs when used",
+  "enchantment.pitchperfect.and_his_music_was_electric": "And His Music Was Electric",
+  "enchantment.pitchperfect.and_his_music_was_electric.desc": "When anywhere in your inventory,\ndealing damage will chain to\nother mobs"
 
 }
