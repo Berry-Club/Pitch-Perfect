@@ -22,7 +22,7 @@ public class ParticleLine {
         this.destinationPositionVec = destinationPositionVec;
         this.particleType = particleType;
         this.iteration = 1;
-        this.particlesPerBlock = 9;
+        this.particlesPerBlock = 2;
         this.totalTravelTime = CommonConfigs.ELECTRIC_JUMPTIME.get();
     }
 
@@ -37,7 +37,7 @@ public class ParticleLine {
                 pathUnitVector.y()*distanceBetween,
                 pathUnitVector.z()*distanceBetween
         );
-        int timePerParticle = totalTravelTime/totalParticleCount;
+        int timePerParticle = Math.max(totalTravelTime/totalParticleCount,1);
 
         System.out.println("Path Size:\n"+pathSize+"\nDistance Between:\n"+distanceBetween+"\nParticle Count:\n"+totalParticleCount);
 

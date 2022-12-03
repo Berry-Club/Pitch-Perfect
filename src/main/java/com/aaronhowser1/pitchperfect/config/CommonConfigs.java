@@ -55,7 +55,7 @@ public class CommonConfigs {
                 .define("Electric Damage Multiplier", 0.75F);
         ELECTRIC_JUMPTIME = BUILDER
                 .comment("How many ticks before the lightning jumps to the next entity.")
-                .define("Electric Jumptime", 20);
+                .define("Electric Jumptime", 4);
         ELECTRIC_MAX_JUMPS = BUILDER
                 .comment("How many times the lightning can jump.\nKeep in mind that, after a certain amount of jumps, it deals less than half a heart.")
                 .defineInRange("Electric Jump Limit", Integer.MAX_VALUE, 0, Integer.MAX_VALUE);
