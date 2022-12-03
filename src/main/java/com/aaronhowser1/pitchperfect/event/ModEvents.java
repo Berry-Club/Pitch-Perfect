@@ -75,23 +75,23 @@ public class ModEvents {
                             );
 
                             //Wait for the particles to reach
-                            Util.backgroundExecutor().submit( () -> {
-                                try {
-                                    Thread.sleep(CommonConfigs.ELECTRIC_JUMPTIME.get());
-                                } catch (Exception ignored) {
-                                }
-                                if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
-                                    AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event, instrumentItem);
-                                } else {
-                                    AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event);
-                                }
-                            });
+
+                            ModScheduler.scheduleSynchronisedTask(
+                                    () -> {
+                                        if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
+                                            AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event, instrumentItem);
+                                        } else {
+                                            AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event);
+                                        }
+                                    },
+                                    CommonConfigs.ELECTRIC_JUMPTIME.get()
+                                );
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
     //From Tslat
     public static int tick;

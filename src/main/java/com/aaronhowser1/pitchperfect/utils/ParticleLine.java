@@ -6,7 +6,6 @@ import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.phys.Vec3;
 
-//Probably a really bad way to do this but I am sleep deprived and out of ideas
 public class ParticleLine {
 
     private final Vec3 originPositionVec;
@@ -21,11 +20,14 @@ public class ParticleLine {
         this.destinationPositionVec = destinationPositionVec;
         this.particleType = particleType;
         this.iteration = 1;
-        this.particlesPerBlock = 5;
+        this.particlesPerBlock = CommonConfigs.ELECTRIC_PARTICLE_DENSITY.get();
         this.totalTravelTime = CommonConfigs.ELECTRIC_JUMPTIME.get();
     }
 
     public void spawnWave() {
+
+        if (particlesPerBlock == 0) return;
+
         Vec3 pathVector = originPositionVec.vectorTo(destinationPositionVec);
         float pathSize = (float) pathVector.length();
         int totalParticleCount = (int) (pathSize * (float) particlesPerBlock);
