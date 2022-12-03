@@ -2,7 +2,6 @@ package com.aaronhowser1.pitchperfect.utils;
 
 
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
-import net.minecraft.Util;
 
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.phys.Vec3;
@@ -22,26 +21,37 @@ public class ParticleLine {
         this.destinationPositionVec = destinationPositionVec;
         this.particleType = particleType;
         this.iteration = 1;
-        this.particlesPerBlock = 2;
+        this.particlesPerBlock = 5;
         this.totalTravelTime = CommonConfigs.ELECTRIC_JUMPTIME.get();
     }
 
-    public void spawnLine() {
+    public void spawnWave() {
         Vec3 pathVector = originPositionVec.vectorTo(destinationPositionVec);
         float pathSize = (float) pathVector.length();
-        float distanceBetween = pathSize/particlesPerBlock;
         int totalParticleCount = (int) (pathSize * (float) particlesPerBlock);
+        float distanceBetweenParticles = 1F/(float)particlesPerBlock;
         Vec3 pathUnitVector = pathVector.normalize();
         Vec3 pathDeltaVector = new Vec3(
-                pathUnitVector.x()*distanceBetween,
-                pathUnitVector.y()*distanceBetween,
-                pathUnitVector.z()*distanceBetween
+                pathUnitVector.x()*distanceBetweenParticles,
+                pathUnitVector.y()*distanceBetweenParticles,
+                pathUnitVector.z()*distanceBetweenParticles
         );
+
         int timePerParticle = Math.max(totalTravelTime/totalParticleCount,1);
+        // Unfortunately, as spawning the next particle uses a tick scheduler, there's a maximum of 1 tick per particle
+        // This may cause the particle wave to arrive significantly after the enchantment damages the next mob
 
-        System.out.println("Path Size:\n"+pathSize+"\nDistance Between:\n"+distanceBetween+"\nParticle Count:\n"+totalParticleCount);
+        // 🦆
+        // An example:
+        // A mob at (0,10,0) is it, and the next targeted is at (3,10,0)
+        // pathVector = (3,0,0)
+        // pathSize = 3.0F
+        // totalParticleCount = 3*3 = 9
+        // distanceBetweenParticles = 1/3 = 0.333F
 
-        spawnNextParticle(totalParticleCount, pathDeltaVector, originPositionVec, distanceBetween, timePerParticle);
+        System.out.println("Path Size:\n"+pathSize+"\nDistance Between:\n"+distanceBetweenParticles+"\nParticle Count:\n"+totalParticleCount);
+
+        spawnNextParticle(totalParticleCount, pathDeltaVector, originPositionVec, distanceBetweenParticles, timePerParticle);
     }
 
     public void spawnNextParticle(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween, int ticksPerParticle) {
@@ -59,7 +69,7 @@ public class ParticleLine {
             this.iteration++;
 
             ModScheduler.scheduleSynchronisedTask(
-                    () -> spawnNextParticle(totalParticleCount, deltaVector, particlePositionVector, distanceBetween,ticksPerParticle),
+                    () -> spawnNextParticle(totalParticleCount, deltaVector, particlePositionVector, distanceBetween, ticksPerParticle),
                     ticksPerParticle
             );
         }

@@ -1,9 +1,6 @@
 package com.aaronhowser1.pitchperfect.packets;
 
-import com.aaronhowser1.pitchperfect.utils.ClientUtils;
-import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 import com.aaronhowser1.pitchperfect.utils.ParticleLine;
-import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
@@ -64,7 +61,7 @@ public class SpawnElectricPathPacket implements ModPacket{
 
         ParticleLine particleLine = new ParticleLine(origin, destination, ParticleTypes.ANGRY_VILLAGER);
 
-        particleLine.spawnLine();
+        particleLine.spawnWave();
     }
 
 }
