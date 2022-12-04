@@ -20,6 +20,16 @@ public class BwaaapEnchantment extends Enchantment {
         super(pRarity, pCategory, pApplicableSlots);
     }
 
+    @Override
+    public int getMinCost(int pLevel) {
+        return 5;
+    }
+
+    @Override
+    public int getMaxCost(int pLevel) {
+        return 25;
+    }
+
     public static List<LivingEntity> getTargets(LivingEntity user) {
         BlockPos userLocation = user.blockPosition();
         return user.getLevel().getNearbyEntities(

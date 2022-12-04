@@ -158,7 +158,7 @@ public class InstrumentItem extends Item {
 
     @Override
     public int getEnchantmentValue() {
-        return 8;
+        return 1;
     }
 
     @Override

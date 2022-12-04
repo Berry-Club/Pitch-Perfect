@@ -23,6 +23,16 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         super(pRarity, pCategory, pApplicableSlots);
     }
 
+    @Override
+    public int getMinCost(int pLevel) {
+        return 15;
+    }
+
+    @Override
+    public int getMaxCost(int pLevel) {
+        return 55;
+    }
+
     //iteration starts at 1
     public static void damage(LivingEntity originEntity, LivingEntity targetEntity, List<LivingEntity> entitiesHit, int iteration, LivingHurtEvent event, InstrumentItem... instrumentItems) {
 

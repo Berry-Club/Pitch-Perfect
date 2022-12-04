@@ -15,6 +15,16 @@ public class HealingBeatEnchantment extends Enchantment {
         super(pRarity, pCategory, pApplicableSlots);
     }
 
+    @Override
+    public int getMinCost(int pLevel) {
+        return 1;
+    }
+
+    @Override
+    public int getMaxCost(int pLevel) {
+        return 20;
+    }
+
     public static List<LivingEntity> getTargets(LivingEntity user) {
        return user.getLevel().getNearbyEntities(
                LivingEntity.class,
@@ -31,5 +41,6 @@ public class HealingBeatEnchantment extends Enchantment {
             }
         });
     }
+
 
 }
