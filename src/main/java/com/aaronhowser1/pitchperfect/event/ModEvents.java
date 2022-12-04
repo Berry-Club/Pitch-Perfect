@@ -65,8 +65,8 @@ public class ModEvents {
                     List<LivingEntity> nearbyLiving = ServerUtils.getNearbyLivingEntities(target, CommonConfigs.ELECTRIC_RANGE.get());
                     nearbyLiving.removeAll(entitiesHit);
 
+                    // God forgive me for what I've created
                     List<String> extraWhatevers = new ArrayList<>();
-
                     if (target instanceof Monster) {
                         nearbyLiving.removeIf(livingEntity -> !(livingEntity instanceof Monster));
                         extraWhatevers.add("target = monster");

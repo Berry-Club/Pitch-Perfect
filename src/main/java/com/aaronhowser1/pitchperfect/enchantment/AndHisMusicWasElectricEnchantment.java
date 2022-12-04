@@ -75,6 +75,8 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         nextEntities.removeAll(entitiesHit);
         nextEntities.remove(e);
 
+        //Look, this saves TWO booleans. TWO.
+        //Otherwise, I'd have to include the original nearbyLiving from ModEvents, which would mean it's limited to what's near the ORIGINAL hit mob, and not the most recent.
         extraWhatevers.forEach(s -> {
             switch (s) {
                 case "target = monster": nextEntities.removeIf(livingEntity -> !(livingEntity instanceof Monster));
