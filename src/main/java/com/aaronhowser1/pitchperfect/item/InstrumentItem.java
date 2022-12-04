@@ -55,9 +55,9 @@ public class InstrumentItem extends Item {
         pitch = map(pitch, -1,1,0.5F,2);
 
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
-            playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get()*3F);
+            playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get().floatValue());
         } else {
-            playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get());
+            playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get().floatValue());
         }
 
         Vec3 noteVector = lookVector;
@@ -135,7 +135,7 @@ public class InstrumentItem extends Item {
                         16
                 );
 
-                playSound(target.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max(ClientConfigs.VOLUME.get() / randomAmount, ClientConfigs.MIN_ATTACK_VOLUME.get()));
+                playSound(target.getLevel(), randomPitch, noteX, noteY, noteZ, Math.max(ClientConfigs.VOLUME.get().floatValue() / randomAmount, ClientConfigs.MIN_ATTACK_VOLUME.get().floatValue()));
             }
         }
     }
