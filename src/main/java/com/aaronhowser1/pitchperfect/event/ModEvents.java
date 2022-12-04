@@ -10,6 +10,7 @@ import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -60,38 +61,43 @@ public class ModEvents {
                     entitiesHit.add(target);
                     entitiesHit.add(attacker);
 
-                    //TODO: If instanceof Monster, don't spread to Animal
 
-                    //Particle line from initial target to first mob hit by enchant effect
-                    if (!ServerUtils.getNearbyLivingEntities(target, CommonConfigs.ELECTRIC_RANGE.get()).isEmpty()) {
-                        List<LivingEntity> nearbyLiving = ServerUtils.getNearbyLivingEntities(target, CommonConfigs.ELECTRIC_RANGE.get());
-                        nearbyLiving.removeAll(entitiesHit);
-                        if (!nearbyLiving.isEmpty()) {
-                            LivingEntity closestEntity = ServerUtils.getNearestEntity(nearbyLiving,target);
-                            ServerUtils.spawnElectricParticleLine(
-                                    new Vec3(target.getX(),target.getY(),target.getZ()),
-                                    new Vec3(closestEntity.getX(),closestEntity.getY(), closestEntity.getZ()),
-                                    (ServerLevel) closestEntity.getLevel()
-                            );
+                    List<LivingEntity> nearbyLiving = ServerUtils.getNearbyLivingEntities(target, CommonConfigs.ELECTRIC_RANGE.get());
+                    nearbyLiving.removeAll(entitiesHit);
 
-                            //Wait for the particles to reach
+                    List<String> extraWhatevers = new ArrayList<>();
 
-                            ModScheduler.scheduleSynchronisedTask(
-                                    () -> {
-                                        if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
-                                            AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event, instrumentItem);
-                                        } else {
-                                            AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event);
-                                        }
-                                    },
-                                    CommonConfigs.ELECTRIC_JUMPTIME.get()
-                                );
-                            }
-                        }
+                    if (target instanceof Monster) {
+                        nearbyLiving.removeIf(livingEntity -> !(livingEntity instanceof Monster));
+                        extraWhatevers.add("target = monster");
+                    }
+                    if (attacker instanceof Monster) {
+                        nearbyLiving.removeIf(livingEntity -> livingEntity instanceof Monster);
+                        extraWhatevers.add("attacker = monster");
+                    }
+
+                    if (!nearbyLiving.isEmpty()) {
+                        LivingEntity closestEntity = ServerUtils.getNearestEntity(nearbyLiving,target);
+                        ServerUtils.spawnElectricParticleLine(
+                                new Vec3(target.getX(),target.getY(),target.getZ()),
+                                new Vec3(closestEntity.getX(),closestEntity.getY(), closestEntity.getZ()),
+                                (ServerLevel) closestEntity.getLevel()
+                        );
+                        //Wait for the particles to reach
+                        ModScheduler.scheduleSynchronisedTask(
+                                () -> {
+                                    if (attacker instanceof Player player && player.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem) {
+                                        AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event, extraWhatevers, instrumentItem);
+                                    } else {
+                                        AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event, extraWhatevers);
+                                    }},
+                                CommonConfigs.ELECTRIC_JUMPTIME.get()
+                        );
                     }
                 }
             }
         }
+    }
 
     //From Tslat
     public static int tick;

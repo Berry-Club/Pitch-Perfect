@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.phys.Vec3;
@@ -34,12 +35,11 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
     }
 
     //iteration starts at 1
-    public static void damage(LivingEntity originEntity, LivingEntity targetEntity, List<LivingEntity> entitiesHit, int iteration, LivingHurtEvent event, InstrumentItem... instrumentItems) {
+    public static void damage( LivingEntity originEntity, LivingEntity targetEntity, List<LivingEntity> entitiesHit, int iteration, LivingHurtEvent event, List<String> extraWhatevers, InstrumentItem... instrumentItems) {
 
         LivingEntity e = targetEntity;
 
         if (iteration > CommonConfigs.ELECTRIC_MAX_JUMPS.get()) return;
-
         if (!e.isAlive()) return;
 
         //Spawn Particles
@@ -74,6 +74,14 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         List<LivingEntity> nextEntities = ServerUtils.getNearbyLivingEntities(e, CommonConfigs.ELECTRIC_RANGE.get());
         nextEntities.removeAll(entitiesHit);
         nextEntities.remove(e);
+
+        extraWhatevers.forEach(s -> {
+            switch (s) {
+                case "target = monster": nextEntities.removeIf(livingEntity -> !(livingEntity instanceof Monster));
+                case "attacker = monster": nextEntities.removeIf(livingEntity -> livingEntity instanceof Monster);
+            }
+        });
+
         if (!nextEntities.isEmpty()){
             if (iteration+1 <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {
                 LivingEntity nextEntity = ServerUtils.getNearestEntity(nextEntities, e);
@@ -85,7 +93,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
                     );
 
                     ModScheduler.scheduleSynchronisedTask(
-                            () -> {damage(e, nextEntity, entitiesHit, iteration+1, event, instrumentItems);},
+                            () -> {damage(e, nextEntity, entitiesHit, iteration+1, event, extraWhatevers, instrumentItems);},
                             CommonConfigs.ELECTRIC_JUMPTIME.get()
                     );
                 }
