@@ -34,8 +34,7 @@ credits="Durgerking10 for the artwork" #optional
 authors="aaronhowser1, LatvianModder" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Pitch Perfect adds instruments that change pitch depending on the angle you're aiming
-'''
+Pitch Perfect adds instruments that change pitch depending on the angle you're aiming'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.pitchperfect]] #optional
     # the modid of the dependency

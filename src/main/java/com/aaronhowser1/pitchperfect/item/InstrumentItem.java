@@ -53,7 +53,12 @@ public class InstrumentItem extends Item {
         Vec3 lookVector = player.getLookAngle();
         float pitch = (float) lookVector.y();
         pitch = map(pitch, -1,1,0.5F,2);
-        playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get());
+
+        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
+            playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get()*3F);
+        } else {
+            playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get());
+        }
 
         Vec3 noteVector = lookVector;
         if (interactionHand.equals(InteractionHand.MAIN_HAND)) {
