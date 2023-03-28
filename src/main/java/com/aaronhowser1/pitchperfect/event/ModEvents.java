@@ -28,7 +28,7 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
-        LivingEntity target = event.getEntityLiving();
+        LivingEntity target = event.getEntity();
 
         if (event.getSource().getEntity() instanceof LivingEntity attacker) {
 
