@@ -14,8 +14,6 @@ import java.util.List;
 
 public class BwaaapEnchantment extends Enchantment {
 
-    private static int range = CommonConfigs.BWAAAP_RANGE.get();
-
     public BwaaapEnchantment(Enchantment.Rarity pRarity, EnchantmentCategory pCategory, EquipmentSlot... pApplicableSlots) {
         super(pRarity, pCategory, pApplicableSlots);
     }
@@ -32,6 +30,7 @@ public class BwaaapEnchantment extends Enchantment {
 
     public static List<LivingEntity> getTargets(LivingEntity user) {
         BlockPos userLocation = user.blockPosition();
+        int range = CommonConfigs.BWAAAP_RANGE.get();
         return user.getLevel().getNearbyEntities(
                 LivingEntity.class,
                 TargetingConditions.forCombat(),
@@ -44,7 +43,8 @@ public class BwaaapEnchantment extends Enchantment {
     }
 
     public static void knockback(LivingEntity user) {
-        getTargets(user).forEach(target -> {
+
+        for (LivingEntity target : getTargets(user)) {
             int range = CommonConfigs.BWAAAP_RANGE.get();
             float strength = CommonConfigs.BWAAAP_STRENGTH.get();
 
@@ -66,7 +66,7 @@ public class BwaaapEnchantment extends Enchantment {
                             )
                     )
             );
-        });
+        }
     }
 
 
