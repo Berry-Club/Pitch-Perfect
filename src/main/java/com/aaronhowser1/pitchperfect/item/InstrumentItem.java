@@ -23,6 +23,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -32,6 +33,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.Lazy;
 
+import java.util.List;
 import java.util.Map;
 
 public class InstrumentItem extends Item {
@@ -82,26 +84,33 @@ public class InstrumentItem extends Item {
         }
 
         //Enchantments
-        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
-            HealingBeatEnchantment.heal(player);
-            for (LivingEntity target : HealingBeatEnchantment.getTargets(player)) {
-                if (!level.isClientSide()) {
-                    ModPacketHandler.messageNearbyPlayers(
-                            new SpawnNoteParticlePacket(sound.getLocation(),
-                                    pitch,
-                                    (float) (target.getX()),
-                                    (float) (target.getEyeY()),
-                                    (float) (target.getZ())
-                            ),
-                            (ServerLevel) target.getLevel(),
-                            new Vec3(target.getX(), target.getEyeY(), target.getZ()),
-                            64
-                    );
+        if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
+
+            List<LivingEntity> healTargets = HealingBeatEnchantment.getTargets(player);
+            for (LivingEntity target : healTargets) {
+
+                //This check also tries to heal, but only continues if it succeeds
+                //That way it doesn't spawn particles around mobs that weren't healed, like monsters or already fully healed mobs
+                if (HealingBeatEnchantment.heal(target)) {
+                    if (!level.isClientSide()) {
+                        ModPacketHandler.messageNearbyPlayers(
+                                new SpawnNoteParticlePacket(sound.getLocation(),
+                                        pitch,
+                                        (float) (target.getX()),
+                                        (float) (target.getEyeY()),
+                                        (float) (target.getZ())
+                                ),
+                                (ServerLevel) target.getLevel(),
+                                new Vec3(target.getX(), target.getEyeY(), target.getZ()),
+                                64
+                        );
+                    }
                 }
             }
-            player.getCooldowns().addCooldown(this, (int) (HealingBeatEnchantment.getTargets(player).size() * CommonConfigs.HEAL_COOLDOWN_MULT.get()));
+            player.getCooldowns().addCooldown(this, (int) (healTargets.size() * CommonConfigs.HEAL_COOLDOWN_MULT.get()));
+
         }
-        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
+        if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
             BwaaapEnchantment.knockback(player);
             player.getCooldowns().addCooldown(this, (int) BwaaapEnchantment.getTargets(player).size() * CommonConfigs.BWAAAP_COOLDOWN_MULT.get());
         }

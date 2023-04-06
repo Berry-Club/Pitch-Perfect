@@ -26,20 +26,29 @@ public class HealingBeatEnchantment extends Enchantment {
     }
 
     public static List<LivingEntity> getTargets(LivingEntity user) {
-       return user.getLevel().getNearbyEntities(
+       List<LivingEntity> nearbyMobs = user.getLevel().getNearbyEntities(
                LivingEntity.class,
                TargetingConditions.forCombat(),
                user,
                user.getBoundingBox().inflate(3)
        );
+
+       return nearbyMobs.stream().filter(mob -> !(mob instanceof Monster) && mob.getHealth() < mob.getMaxHealth()).toList();
     }
 
-    public static void heal(LivingEntity user) {
+    public static boolean heal(LivingEntity target) {
+        if (!(target instanceof Monster && target.getHealth() < target.getMaxHealth())) {
+            target.heal(CommonConfigs.HEAL_AMOUNT.get());
+            return true;
+        } else return false;
+    }
+
+    public static void healAround(LivingEntity user) {
         for (LivingEntity target : getTargets(user)) {
             if (!(target instanceof Monster) && target.getHealth() < target.getMaxHealth()) {
-                target.setHealth(target.getHealth() + CommonConfigs.HEAL_AMOUNT.get());
+                target.heal(CommonConfigs.HEAL_AMOUNT.get());
             }
-        };
+        }
     }
 
 
