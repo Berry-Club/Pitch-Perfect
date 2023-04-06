@@ -1,6 +1,7 @@
 package com.aaronhowser1.pitchperfect.enchantment;
 
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.utils.ServerUtils;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -26,30 +27,23 @@ public class HealingBeatEnchantment extends Enchantment {
     }
 
     public static List<LivingEntity> getTargets(LivingEntity user) {
-       List<LivingEntity> nearbyMobs = user.getLevel().getNearbyEntities(
-               LivingEntity.class,
-               TargetingConditions.forCombat(),
-               user,
-               user.getBoundingBox().inflate(3)
-       );
+       List<LivingEntity> nearbyMobs = ServerUtils.getNearbyLivingEntities(user, (int) user.getBoundingBox().getSize());
 
-       return nearbyMobs.stream().filter(mob -> !(mob instanceof Monster) && mob.getHealth() < mob.getMaxHealth()).toList();
+       List<LivingEntity> mobsToHeal = nearbyMobs.stream().filter(mob -> !isMonster(mob) && canBeHealed(mob)).toList();
+
+       return mobsToHeal;
     }
 
-    public static boolean heal(LivingEntity target) {
-        if (!(target instanceof Monster && target.getHealth() < target.getMaxHealth())) {
-            target.heal(CommonConfigs.HEAL_AMOUNT.get());
-            return true;
-        } else return false;
+    public static void heal(LivingEntity target) {
+        target.heal(CommonConfigs.HEAL_AMOUNT.get());
     }
 
-    public static void healAround(LivingEntity user) {
-        for (LivingEntity target : getTargets(user)) {
-            if (!(target instanceof Monster) && target.getHealth() < target.getMaxHealth()) {
-                target.heal(CommonConfigs.HEAL_AMOUNT.get());
-            }
-        }
+    private static boolean canBeHealed(LivingEntity target) {
+        return target.getHealth() < target.getMaxHealth();
     }
 
+    private static boolean isMonster(LivingEntity target) {
+        return target instanceof Monster;
+    }
 
 }

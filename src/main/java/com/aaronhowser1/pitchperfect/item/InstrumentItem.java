@@ -89,22 +89,19 @@ public class InstrumentItem extends Item {
             List<LivingEntity> healTargets = HealingBeatEnchantment.getTargets(player);
             for (LivingEntity target : healTargets) {
 
-                //This check also tries to heal, but only continues if it succeeds
-                //That way it doesn't spawn particles around mobs that weren't healed, like monsters or already fully healed mobs
-                if (HealingBeatEnchantment.heal(target)) {
-                    if (!level.isClientSide()) {
-                        ModPacketHandler.messageNearbyPlayers(
-                                new SpawnNoteParticlePacket(sound.getLocation(),
-                                        pitch,
-                                        (float) (target.getX()),
-                                        (float) (target.getEyeY()),
-                                        (float) (target.getZ())
-                                ),
-                                (ServerLevel) target.getLevel(),
-                                new Vec3(target.getX(), target.getEyeY(), target.getZ()),
-                                64
-                        );
-                    }
+                HealingBeatEnchantment.heal(target);
+                if (!level.isClientSide()) {
+                    ModPacketHandler.messageNearbyPlayers(
+                            new SpawnNoteParticlePacket(sound.getLocation(),
+                                    pitch,
+                                    (float) (target.getX()),
+                                    (float) (target.getEyeY()),
+                                    (float) (target.getZ())
+                            ),
+                            (ServerLevel) target.getLevel(),
+                            new Vec3(target.getX(), target.getEyeY(), target.getZ()),
+                            64
+                    );
                 }
             }
             player.getCooldowns().addCooldown(this, (int) (healTargets.size() * CommonConfigs.HEAL_COOLDOWN_MULT.get()));
