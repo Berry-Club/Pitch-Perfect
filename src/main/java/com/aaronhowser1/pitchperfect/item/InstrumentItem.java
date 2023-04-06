@@ -19,6 +19,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -83,12 +84,11 @@ public class InstrumentItem extends Item {
         //Enchantments
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
             HealingBeatEnchantment.heal(player);
-            final float newPitch = pitch;
-            HealingBeatEnchantment.getTargets(player).forEach(target -> {
+            for (LivingEntity target : HealingBeatEnchantment.getTargets(player)) {
                 if (!level.isClientSide()) {
                     ModPacketHandler.messageNearbyPlayers(
                             new SpawnNoteParticlePacket(sound.getLocation(),
-                                    newPitch,
+                                    pitch,
                                     (float) (target.getX()),
                                     (float) (target.getEyeY()),
                                     (float) (target.getZ())
@@ -98,7 +98,7 @@ public class InstrumentItem extends Item {
                             64
                     );
                 }
-            });
+            }
             player.getCooldowns().addCooldown(this, (int) (HealingBeatEnchantment.getTargets(player).size() * CommonConfigs.HEAL_COOLDOWN_MULT.get()));
         }
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {

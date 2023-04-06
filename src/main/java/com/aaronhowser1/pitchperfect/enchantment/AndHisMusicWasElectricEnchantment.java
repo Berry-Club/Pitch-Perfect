@@ -77,12 +77,12 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
 
         //Look, this saves TWO booleans. TWO.
         //Otherwise, I'd have to include the original nearbyLiving from ModEvents, which would mean it's limited to what's near the ORIGINAL hit mob, and not the most recent.
-        extraWhatevers.forEach(s -> {
+        for (String s : extraWhatevers) {
             switch (s) {
                 case "target = monster": nextEntities.removeIf(livingEntity -> !(livingEntity instanceof Monster));
                 case "attacker = monster": nextEntities.removeIf(livingEntity -> livingEntity instanceof Monster);
             }
-        });
+        }
 
         if (!nextEntities.isEmpty()){
             if (iteration+1 <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {

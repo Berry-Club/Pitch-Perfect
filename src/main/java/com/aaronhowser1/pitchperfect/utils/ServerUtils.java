@@ -34,9 +34,7 @@ public class ServerUtils {
                 (e) -> (e instanceof LivingEntity)
         );
         List<LivingEntity> livingEntities = new ArrayList<>();
-        entities.forEach(entity -> {
-            livingEntities.add((LivingEntity) entity);
-        });
+        for (Entity entity : entities) livingEntities.add((LivingEntity) entity);
         return livingEntities;
     }
 
