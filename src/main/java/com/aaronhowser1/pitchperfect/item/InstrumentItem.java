@@ -8,7 +8,6 @@ import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
 import com.aaronhowser1.pitchperfect.packets.SpawnNoteParticlePacket;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
@@ -23,7 +22,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -108,7 +106,7 @@ public class InstrumentItem extends Item {
 
         }
         if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
-            BwaaapEnchantment.knockback(player);
+            BwaaapEnchantment.knockBack(player);
             player.getCooldowns().addCooldown(this, (int) BwaaapEnchantment.getTargets(player).size() * CommonConfigs.BWAAAP_COOLDOWN_MULT.get());
         }
 

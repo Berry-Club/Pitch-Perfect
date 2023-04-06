@@ -1,13 +1,11 @@
 package com.aaronhowser1.pitchperfect.enchantment;
 
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
-import net.minecraft.core.BlockPos;
+import com.aaronhowser1.pitchperfect.utils.ServerUtils;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -29,20 +27,12 @@ public class BwaaapEnchantment extends Enchantment {
     }
 
     public static List<LivingEntity> getTargets(LivingEntity user) {
-        BlockPos userLocation = user.blockPosition();
         int range = CommonConfigs.BWAAAP_RANGE.get();
-        return user.getLevel().getNearbyEntities(
-                LivingEntity.class,
-                TargetingConditions.forCombat(),
-                user,
-                new AABB(
-                        userLocation.offset(-range,-range,-range),
-                        userLocation.offset(range,range,range)
-                )
-        );
+
+        return ServerUtils.getNearbyLivingEntities(user, range);
     }
 
-    public static void knockback(LivingEntity user) {
+    public static void knockBack(LivingEntity user) {
 
         for (LivingEntity target : getTargets(user)) {
             int range = CommonConfigs.BWAAAP_RANGE.get();
@@ -57,11 +47,13 @@ public class BwaaapEnchantment extends Enchantment {
             double distanceToTarget = userToTargetVector.length();
             double targetPercentageFromRange = Math.abs(distanceToTarget/range - 1);
 
+            float yMult = user.isCrouching() ? 2F : 1F;
+
             target.setDeltaMovement(
                     targetMotion.add(
                             userToTargetVector.multiply(
                                     targetPercentageFromRange*strength,
-                                    targetPercentageFromRange*strength,
+                                    targetPercentageFromRange*strength*yMult,
                                     targetPercentageFromRange*strength
                             )
                     )
