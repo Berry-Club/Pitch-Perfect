@@ -107,7 +107,7 @@ public class InstrumentItem extends Item {
         }
         if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
             BwaaapEnchantment.knockBack(player);
-            player.getCooldowns().addCooldown(this, (int) BwaaapEnchantment.getTargets(player).size() * CommonConfigs.BWAAAP_COOLDOWN_MULT.get());
+            player.getCooldowns().addCooldown(this, BwaaapEnchantment.getCooldown(player));
         }
 
         return InteractionResultHolder.fail(itemStack);

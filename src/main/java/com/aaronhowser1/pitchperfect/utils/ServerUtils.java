@@ -65,4 +65,17 @@ public class ServerUtils {
         );
     }
 
+    public static double distanceBetweenPoints(Vec3 first, Vec3 second) {
+        Vec3 userToTargetVector = vecBetweenPoints(first, second);
+
+        return userToTargetVector.length();
+    }
+
+    public static Vec3 vecBetweenPoints(Vec3 first, Vec3 second) {
+        return new Vec3(
+                second.x()-first.x(),
+                second.y()-first.y(),
+                second.z()-first.z()
+        );
+    }
 }
