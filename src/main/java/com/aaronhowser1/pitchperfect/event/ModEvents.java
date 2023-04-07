@@ -61,16 +61,6 @@ public class ModEvents {
             if (electricItemStack != null) {
                 if (!attacker.getLevel().isClientSide()) {
 
-                    ItemStack finalElectricItemStack = electricItemStack;
-                    electricItemStack.hurtAndBreak(1, attacker, user -> user.getLevel().playSound(
-                            null,
-                            attacker,
-                            ModSounds.GUITAR_SMASH.get(),
-                            SoundSource.PLAYERS,
-                            1F,
-                            1F
-                    ));
-
                     List<LivingEntity> entitiesHit = new ArrayList<>();
                     entitiesHit.add(target);
                     entitiesHit.add(attacker);
@@ -91,6 +81,16 @@ public class ModEvents {
                     }
 
                     if (!nearbyLiving.isEmpty()) {
+
+                        electricItemStack.hurtAndBreak(1, attacker, user -> user.getLevel().playSound(
+                                null,
+                                attacker,
+                                ModSounds.GUITAR_SMASH.get(),
+                                SoundSource.PLAYERS,
+                                1F,
+                                1F
+                        ));
+
                         LivingEntity closestEntity = ServerUtils.getNearestEntity(nearbyLiving,target);
                         ServerUtils.spawnElectricParticleLine(
                                 new Vec3(target.getX(),target.getY(),target.getZ()),
