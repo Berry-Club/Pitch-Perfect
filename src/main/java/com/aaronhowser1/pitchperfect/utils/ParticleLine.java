@@ -86,15 +86,18 @@ public class ParticleLine {
                     Vec3 pathVector = originPositionVec.vectorTo(destinationPositionVec);
                     float pathSize = (float) pathVector.length();
                     int totalParticleCount = (int) (pathSize * (float) particlesPerBlock);
-                    float distanceBetweenParticles = 1F/(float)particlesPerBlock;
 
-                    Vec3 pathUnitVector = pathVector.normalize();
+                    Vec3 deltaVector = pathVector.scale((1F/totalParticleCount));
 
                     for (int i = 1; i <= totalParticleCount; i++) {
 
-                        double dx = pathUnitVector.x()*i;
-                        double dy = pathUnitVector.y()*i;
-                        double dz = pathUnitVector.z()*i;
+                        double dx = deltaVector.x()*i;
+                        double dy = deltaVector.y()*i;
+                        double dz = deltaVector.z()*i;
+
+                        System.out.println(
+                                "Spawning particle " + i +" which is ["+dx+","+dy+","+dz+"] blocks away from the origin"
+                        );
 
                         ClientUtils.spawnParticle(
                                 particleType,
