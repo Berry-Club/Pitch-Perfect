@@ -63,7 +63,7 @@ public class ModEvents {
 
                     ItemStack finalElectricItemStack = electricItemStack;
                     electricItemStack.hurtAndBreak(1, attacker, user -> user.getLevel().playSound(
-                            (Player)null,
+                            null,
                             attacker,
                             ModSounds.GUITAR_SMASH.get(),
                             SoundSource.PLAYERS,
