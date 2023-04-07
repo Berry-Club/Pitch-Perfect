@@ -1,5 +1,6 @@
 package com.aaronhowser1.pitchperfect.event;
 
+import com.aaronhowser1.pitchperfect.ModSounds;
 import com.aaronhowser1.pitchperfect.PitchPerfect;
 import com.aaronhowser1.pitchperfect.utils.ModScheduler;
 import com.aaronhowser1.pitchperfect.utils.ServerUtils;
@@ -9,6 +10,7 @@ import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -60,7 +62,14 @@ public class ModEvents {
                 if (!attacker.getLevel().isClientSide()) {
 
                     ItemStack finalElectricItemStack = electricItemStack;
-                    electricItemStack.hurtAndBreak(1, attacker, user -> user.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                    electricItemStack.hurtAndBreak(1, attacker, user -> user.getLevel().playSound(
+                            (Player)null,
+                            attacker,
+                            ModSounds.GUITAR_SMASH.get(),
+                            SoundSource.PLAYERS,
+                            1F,
+                            1F
+                    ));
 
                     List<LivingEntity> entitiesHit = new ArrayList<>();
                     entitiesHit.add(target);
