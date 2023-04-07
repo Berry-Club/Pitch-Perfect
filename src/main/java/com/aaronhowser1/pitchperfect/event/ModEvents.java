@@ -9,6 +9,7 @@ import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.item.InstrumentItem;
 import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -59,7 +60,7 @@ public class ModEvents {
                 if (!attacker.getLevel().isClientSide()) {
 
                     ItemStack finalElectricItemStack = electricItemStack;
-                    electricItemStack.hurtAndBreak(1, attacker, i -> {i.broadcastBreakEvent(finalElectricItemStack.getEquipmentSlot());});
+                    electricItemStack.hurtAndBreak(1, attacker, user -> user.broadcastBreakEvent(EquipmentSlot.MAINHAND));
 
                     List<LivingEntity> entitiesHit = new ArrayList<>();
                     entitiesHit.add(target);
