@@ -23,6 +23,6 @@
   "enchantment.pitchperfect.bwaaap": "BWAAAP",
   "enchantment.pitchperfect.bwaaap.desc": "Knocks back nearby mobs when used",
   "enchantment.pitchperfect.and_his_music_was_electric": "And His Music Was Electric",
-  "enchantment.pitchperfect.and_his_music_was_electric.desc": "When anywhere in your inventory,\ndealing damage will chain to\nother mobs"
+  "enchantment.pitchperfect.and_his_music_was_electric.desc": "When anywhere in your inventory,\ndealing damage will chain to other mobs\nNOTE: Damages the item"
 
 }

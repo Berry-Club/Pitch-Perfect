@@ -37,25 +37,29 @@ public class ModEvents {
                 instrumentItem.attack(target);
             }
 
-            //If attacking while an instrument with Electric enchant is in your inventory, regardless of location
-            boolean hasElectricEnchant = false;
+
+            //Sets to the first InstrumentItem that has the enchantment in your inventory, or stays null
+            ItemStack electricItemStack = null;
             if (attacker instanceof Player player) {
                 for (ItemStack itemStack : player.getInventory().items) {
                     if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get(), itemStack) != 0) {
-                        hasElectricEnchant = true;
+                        electricItemStack = itemStack;
                         break;
                     }
                 }
             } else {
                 for (ItemStack itemStack : attacker.getAllSlots()) {
                     if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get(), itemStack) != 0) {
-                        hasElectricEnchant = true;
+                        electricItemStack = itemStack;
                         break;
                     }
                 }
             }
-            if (hasElectricEnchant) {
+            if (electricItemStack != null) {
                 if (!attacker.getLevel().isClientSide()) {
+
+                    ItemStack finalElectricItemStack = electricItemStack;
+                    electricItemStack.hurtAndBreak(1, attacker, i -> {i.broadcastBreakEvent(finalElectricItemStack.getEquipmentSlot());});
 
                     List<LivingEntity> entitiesHit = new ArrayList<>();
                     entitiesHit.add(target);

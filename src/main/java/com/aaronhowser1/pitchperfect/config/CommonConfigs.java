@@ -32,7 +32,7 @@ public class CommonConfigs {
                 .define("Maximum Attack Particles Amount", 10);
 
         HEAL_AMOUNT = BUILDER
-                .comment(" \n How much health is healed each time Healing Beat is used.")
+                .comment(" How much health is healed each time Healing Beat is used.")
                 .define("Healing Beat Amount", 0.25F);
         HEAL_COOLDOWN_MULT = BUILDER
                 .comment(" How many ticks to cool down for every mob healed.\n Example: healing 2 mobs has a default cooldown of 3 ticks.")

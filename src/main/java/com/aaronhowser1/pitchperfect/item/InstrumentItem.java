@@ -43,6 +43,7 @@ public class InstrumentItem extends Item {
         super(new Item.Properties()
                 .stacksTo(1)
                 .tab(ModCreativeModeTab.MOD_TAB)
+                .defaultDurability(100)
         );
         this.sound = s;
         attributeModifiers = buildDefaultAttributes();
