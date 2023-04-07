@@ -60,7 +60,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         //Damage
         float damageFactor = CommonConfigs.ELECTRIC_DAMAGE_RETURNS.get() / iteration;
         e.hurt(
-                DamageSource.LIGHTNING_BOLT,
+                event.getSource(),
                 event.getAmount()*damageFactor
         );
         if (instrumentItems.length != 0) {
