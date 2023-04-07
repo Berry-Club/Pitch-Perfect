@@ -29,18 +29,20 @@ public class ParticleLine {
 
         if (particlesPerBlock == 0) return;
 
+        if (totalTravelTime == 0) {
+            spawnEntireLine();
+            return;
+        }
+
         Vec3 pathVector = originPositionVec.vectorTo(destinationPositionVec);
         float pathSize = (float) pathVector.length();
         int totalParticleCount = (int) (pathSize * (float) particlesPerBlock);
+        if (totalParticleCount == 0) return;
         float distanceBetweenParticles = 1F/(float)particlesPerBlock;
-        Vec3 pathUnitVector = pathVector.normalize();
-        Vec3 pathDeltaVector = new Vec3(
-                pathUnitVector.x()*distanceBetweenParticles,
-                pathUnitVector.y()*distanceBetweenParticles,
-                pathUnitVector.z()*distanceBetweenParticles
-        );
 
-        int timePerParticle = Math.max(totalTravelTime/totalParticleCount,1);
+        Vec3 deltaVector = pathVector.scale((1F/totalParticleCount));
+
+        int ticksPerParticle = Math.max(totalTravelTime/totalParticleCount,1);
         // Unfortunately, as spawning the next particle uses a tick scheduler, there's a maximum of 1 tick per particle
         // This may cause the particle wave to arrive significantly after the enchantment damages the next mob
 
@@ -52,30 +54,32 @@ public class ParticleLine {
         // totalParticleCount = 3*3 = 9
         // distanceBetweenParticles = 1/3 = 0.333F
 
-//        System.out.println("Path Size:\n"+pathSize+"\nDistance Between:\n"+distanceBetweenParticles+"\nParticle Count:\n"+totalParticleCount);
+        System.out.println("test");
 
-        spawnNextParticleInWave(totalParticleCount, pathDeltaVector, originPositionVec, distanceBetweenParticles, timePerParticle);
+        spawnNextParticleInWave(deltaVector, ticksPerParticle, totalParticleCount);
     }
 
-    public void spawnNextParticleInWave(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween, int ticksPerParticle) {
-        if (iteration <= totalParticleCount) {
-            Vec3 particlePositionVector = newOriginVec.add(deltaVector);
+    public void spawnNextParticleInWave(Vec3 deltaVector, int ticksPerParticle, int totalParticleCount) {
 
-            ClientUtils.spawnParticle(
-                    particleType,
-                    particlePositionVector.x(),
-                    particlePositionVector.y(),
-                    particlePositionVector.z(),
-                    1,1,1
-            );
+        if (iteration >= totalParticleCount) return;
 
-            this.iteration++;
+        double dx = deltaVector.x()*iteration;
+        double dy = deltaVector.y()*iteration;
+        double dz = deltaVector.z()*iteration;
 
-            ModScheduler.scheduleSynchronisedTask(
-                    () -> spawnNextParticleInWave(totalParticleCount, deltaVector, particlePositionVector, distanceBetween, ticksPerParticle),
-                    ticksPerParticle
-            );
-        }
+        ClientUtils.spawnParticle(
+                particleType,
+                originPositionVec.x()+dx,
+                originPositionVec.y()+dy,
+                originPositionVec.z()+dz,
+                1,1,1
+        );
+
+        iteration++;
+        ModScheduler.scheduleSynchronisedTask(
+                () -> spawnNextParticleInWave(deltaVector, ticksPerParticle, totalParticleCount),
+                ticksPerParticle
+        );
     }
 
     public void spawnEntireLine() {
@@ -87,6 +91,8 @@ public class ParticleLine {
                     float pathSize = (float) pathVector.length();
                     int totalParticleCount = (int) (pathSize * (float) particlesPerBlock);
 
+                    if (totalParticleCount == 0) return;
+
                     Vec3 deltaVector = pathVector.scale((1F/totalParticleCount));
 
                     for (int i = 1; i <= totalParticleCount; i++) {
@@ -95,9 +101,9 @@ public class ParticleLine {
                         double dy = deltaVector.y()*i;
                         double dz = deltaVector.z()*i;
 
-                        System.out.println(
-                                "Spawning particle " + i +" which is ["+dx+","+dy+","+dz+"] blocks away from the origin"
-                        );
+//                        System.out.println(
+//                                "Spawning particle " + i +" which is ["+dx+","+dy+","+dz+"] blocks away from the origin"
+//                        );
 
                         ClientUtils.spawnParticle(
                                 particleType,

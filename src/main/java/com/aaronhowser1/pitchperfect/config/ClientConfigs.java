@@ -20,7 +20,7 @@ public class ClientConfigs {
                 .defineInRange("Instrument Volume", 0.5F, 0F, 3F);
 
         MIN_ATTACK_VOLUME = BUILDER
-                .comment(" The minimum volume each individual note plays at, when attacking.\nUses the equation:\nMath.max( (1.5*instrumentVolume / amountOfParticles), minimumAttackVolume)")
+                .comment(" The minimum volume each individual note plays at, when attacking.\n Uses the equation:\n  Math.max( (1.5*instrumentVolume / amountOfParticles), minimumAttackVolume)")
                 .defineInRange("Attack Volume", 0.5F, 0F, 3F);
 
         ELECTRIC_PARTICLE_DENSITY = BUILDER
@@ -28,7 +28,7 @@ public class ClientConfigs {
                 .defineInRange("Electric Particle Density", 3, 0, Integer.MAX_VALUE);
         ELECTRIC_PARTICLE_ISWAVE = BUILDER
                 .comment(" Should the wave of particles from mob A to mob B be a wave?\n False instead spawns a line, which spawns them all at once.")
-                .define("Electric Particle is wave", false);
+                .define("Electric Particle is wave", true);
 
 
 
