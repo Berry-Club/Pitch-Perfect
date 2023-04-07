@@ -81,19 +81,32 @@ public class ParticleLine {
     public void spawnEntireLine() {
         if (particlesPerBlock == 0) return;
 
-        Vec3 pathVector = originPositionVec.vectorTo(destinationPositionVec);
-        float pathSize = (float) pathVector.length();
-        int totalParticleCount = (int) (pathSize * (float) particlesPerBlock);
-        float distanceBetweenParticles = 1F/(float)particlesPerBlock;
-        Vec3 pathUnitVector = pathVector.normalize();
-        Vec3 pathDeltaVector = new Vec3(
-                pathUnitVector.x()*distanceBetweenParticles,
-                pathUnitVector.y()*distanceBetweenParticles,
-                pathUnitVector.z()*distanceBetweenParticles
+        ModScheduler.scheduleSynchronisedTask(
+                () -> {
+                    Vec3 pathVector = originPositionVec.vectorTo(destinationPositionVec);
+                    float pathSize = (float) pathVector.length();
+                    int totalParticleCount = (int) (pathSize * (float) particlesPerBlock);
+                    float distanceBetweenParticles = 1F/(float)particlesPerBlock;
+
+                    Vec3 pathUnitVector = pathVector.normalize();
+
+                    for (int i = 1; i <= totalParticleCount; i++) {
+
+                        double dx = pathUnitVector.x()*i;
+                        double dy = pathUnitVector.y()*i;
+                        double dz = pathUnitVector.z()*i;
+
+                        ClientUtils.spawnParticle(
+                                particleType,
+                                originPositionVec.x()+dx,
+                                originPositionVec.y()+dy,
+                                originPositionVec.z()+dz,
+                                1,1,1
+                        );
+
+                    }
+                },
+                totalTravelTime
         );
-    }
-
-    public void spawnNextParticleInLine(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween) {
-
     }
 }
