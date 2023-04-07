@@ -1,5 +1,6 @@
 package com.aaronhowser1.pitchperfect.packets;
 
+import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.utils.ParticleLine;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
@@ -61,7 +62,13 @@ public class SpawnElectricPathPacket implements ModPacket{
 
         ParticleLine particleLine = new ParticleLine(origin, destination, ParticleTypes.ANGRY_VILLAGER);
 
-        particleLine.spawnWave();
+        boolean isWave = ClientConfigs.ELECTRIC_PARTICLE_ISWAVE.get();
+
+        if (isWave) {
+            particleLine.spawnWave();
+        } else {
+            particleLine.spawnEntireLine();
+        }
     }
 
 }

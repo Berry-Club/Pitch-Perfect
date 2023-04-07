@@ -1,6 +1,7 @@
 package com.aaronhowser1.pitchperfect.utils;
 
 
+import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 
 import net.minecraft.core.particles.SimpleParticleType;
@@ -20,7 +21,7 @@ public class ParticleLine {
         this.destinationPositionVec = destinationPositionVec;
         this.particleType = particleType;
         this.iteration = 1;
-        this.particlesPerBlock = CommonConfigs.ELECTRIC_PARTICLE_DENSITY.get();
+        this.particlesPerBlock = ClientConfigs.ELECTRIC_PARTICLE_DENSITY.get();
         this.totalTravelTime = CommonConfigs.ELECTRIC_JUMPTIME.get();
     }
 
@@ -53,10 +54,10 @@ public class ParticleLine {
 
 //        System.out.println("Path Size:\n"+pathSize+"\nDistance Between:\n"+distanceBetweenParticles+"\nParticle Count:\n"+totalParticleCount);
 
-        spawnNextParticle(totalParticleCount, pathDeltaVector, originPositionVec, distanceBetweenParticles, timePerParticle);
+        spawnNextParticleInWave(totalParticleCount, pathDeltaVector, originPositionVec, distanceBetweenParticles, timePerParticle);
     }
 
-    public void spawnNextParticle(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween, int ticksPerParticle) {
+    public void spawnNextParticleInWave(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween, int ticksPerParticle) {
         if (iteration <= totalParticleCount) {
             Vec3 particlePositionVector = newOriginVec.add(deltaVector);
 
@@ -71,10 +72,28 @@ public class ParticleLine {
             this.iteration++;
 
             ModScheduler.scheduleSynchronisedTask(
-                    () -> spawnNextParticle(totalParticleCount, deltaVector, particlePositionVector, distanceBetween, ticksPerParticle),
+                    () -> spawnNextParticleInWave(totalParticleCount, deltaVector, particlePositionVector, distanceBetween, ticksPerParticle),
                     ticksPerParticle
             );
         }
     }
 
+    public void spawnEntireLine() {
+        if (particlesPerBlock == 0) return;
+
+        Vec3 pathVector = originPositionVec.vectorTo(destinationPositionVec);
+        float pathSize = (float) pathVector.length();
+        int totalParticleCount = (int) (pathSize * (float) particlesPerBlock);
+        float distanceBetweenParticles = 1F/(float)particlesPerBlock;
+        Vec3 pathUnitVector = pathVector.normalize();
+        Vec3 pathDeltaVector = new Vec3(
+                pathUnitVector.x()*distanceBetweenParticles,
+                pathUnitVector.y()*distanceBetweenParticles,
+                pathUnitVector.z()*distanceBetweenParticles
+        );
+    }
+
+    public void spawnNextParticleInLine(int totalParticleCount, Vec3 deltaVector, Vec3 newOriginVec, float distanceBetween) {
+
+    }
 }
