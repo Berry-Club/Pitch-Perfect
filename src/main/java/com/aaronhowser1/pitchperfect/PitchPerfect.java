@@ -31,6 +31,7 @@ public class PitchPerfect
 
         ModItems.register(eventBus);
         ModEnchantments.register(eventBus);
+        ModSounds.register(eventBus);
 
         ModPacketHandler.setup();
 
