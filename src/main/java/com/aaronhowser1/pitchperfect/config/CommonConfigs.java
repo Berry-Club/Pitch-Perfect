@@ -19,7 +19,7 @@ public class CommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Float> ELECTRIC_DAMAGE_RETURNS;
     public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_JUMPTIME;
     public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_MAX_JUMPS;
-    public static final ForgeConfigSpec.ConfigValue<Integer> ELECTRIC_PARTICLE_DENSITY;
+
 
     static {
         BUILDER.push("Common configs for Pitch Perfect");
@@ -56,13 +56,10 @@ public class CommonConfigs {
                 .define("Electric Damage Multiplier", 0.75F);
         ELECTRIC_JUMPTIME = BUILDER
                 .comment(" How many ticks before the lightning jumps to the next entity.")
-                .define("Electric Jump Time", 4);
+                .defineInRange("Electric Jump Time", 4, 0, Integer.MAX_VALUE);
         ELECTRIC_MAX_JUMPS = BUILDER
                 .comment(" How many times the lightning can jump.\n Keep in mind that, after a certain amount of jumps, it deals less than half a heart.")
                 .defineInRange("Electric Jump Limit", Integer.MAX_VALUE, 0, Integer.MAX_VALUE);
-        ELECTRIC_PARTICLE_DENSITY = BUILDER
-                .comment(" How many particles per block should be spawned along the lightning path.\n There's a minimum of 1 tick per particle, so higher numbers may cause the particles to take longer than the jump time.")
-                .defineInRange("Electric Particle Density", 3, 0, Integer.MAX_VALUE);
 
         BUILDER.pop();
         SPEC = BUILDER.build();
