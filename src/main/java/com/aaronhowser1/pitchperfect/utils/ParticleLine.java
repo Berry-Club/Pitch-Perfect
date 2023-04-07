@@ -54,8 +54,6 @@ public class ParticleLine {
         // totalParticleCount = 3*3 = 9
         // distanceBetweenParticles = 1/3 = 0.333F
 
-        System.out.println("test");
-
         spawnNextParticleInWave(deltaVector, ticksPerParticle, totalParticleCount);
     }
 
