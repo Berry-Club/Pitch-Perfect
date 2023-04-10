@@ -2,6 +2,7 @@ package com.aaronhowser1.pitchperfect;
 
 import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.config.ServerConfigs;
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
 import com.aaronhowser1.pitchperfect.item.ModItems;
 import com.aaronhowser1.pitchperfect.packets.ModPacketHandler;
@@ -26,6 +27,7 @@ public class PitchPerfect
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.SPEC, "pitchperfect-client.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfigs.SPEC, "pitchperfect-common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfigs.SPEC, "pitchperfect-server.toml");
 
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

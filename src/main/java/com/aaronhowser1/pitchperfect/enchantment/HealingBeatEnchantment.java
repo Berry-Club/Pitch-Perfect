@@ -1,13 +1,16 @@
 package com.aaronhowser1.pitchperfect.enchantment;
 
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.config.ServerConfigs;
 import com.aaronhowser1.pitchperfect.utils.ServerUtils;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -27,9 +30,10 @@ public class HealingBeatEnchantment extends Enchantment {
     }
 
     public static List<LivingEntity> getTargets(LivingEntity user) {
+
        List<LivingEntity> nearbyMobs = ServerUtils.getNearbyLivingEntities(user, (int) user.getBoundingBox().getSize());
 
-       List<LivingEntity> mobsToHeal = nearbyMobs.stream().filter(mob -> !isMonster(mob) && canBeHealed(mob)).toList();
+       List<LivingEntity> mobsToHeal = getMobsToHeal(nearbyMobs);
 
        return mobsToHeal;
     }
@@ -44,6 +48,26 @@ public class HealingBeatEnchantment extends Enchantment {
 
     private static boolean isMonster(LivingEntity target) {
         return target instanceof Monster;
+    }
+
+
+    private static List<LivingEntity> getMobsToHeal(List<LivingEntity> livingEntityList) {
+        List<? extends String> whitelist = ServerConfigs.HEALING_BEAT_WHITELIST.get();
+        List<? extends String> blacklist = ServerConfigs.HEALING_BEAT_BLACKLIST.get();
+
+        return livingEntityList.stream().filter(mob -> {
+
+            EntityType<?> entityType = mob.getType();
+            ResourceLocation resourceLocation = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
+
+            assert resourceLocation != null;
+            boolean mobInWhitelist = whitelist.contains(resourceLocation.toString());
+            boolean mobInBlacklist = blacklist.contains(resourceLocation.toString());
+
+            return ((!isMonster(mob) || mobInWhitelist) && !mobInBlacklist && canBeHealed(mob));
+
+        }).toList();
+
     }
 
 }
