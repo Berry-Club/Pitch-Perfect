@@ -29,6 +29,12 @@ public class ServerConfigs {
     static {
         BUILDER.push("Server configs for Pitch Perfect");
 
+        HEAL_AMOUNT = BUILDER
+                .comment(" How much health is healed each time Healing Beat is used.")
+                .define("Healing Beat Amount", 0.25F);
+        HEAL_COOLDOWN_MULT = BUILDER
+                .comment(" How many ticks to cool down for every mob healed.\n Example: healing 2 mobs has a default cooldown of 3 ticks.")
+                .define("Healing Cooldown Multiplier", 1.5F);
         HEALING_BEAT_WHITELIST = BUILDER
                 .comment(" Mobs that Healing Beat can always heal\n Example: [\"minecraft:piglin\"]")
                 .defineListAllowEmpty(List.of("Healing Beat Whitelist"), List::of, Validator::isStringResource);
@@ -37,15 +43,8 @@ public class ServerConfigs {
                 .comment(" Mobs that Healing Beat can never heal\n Example: [\"minecraft:cow\"]")
                 .defineListAllowEmpty(List.of("Healing Beat Blacklist"), List::of, Validator::isStringResource);
 
-        HEAL_AMOUNT = BUILDER
-                .comment(" How much health is healed each time Healing Beat is used.")
-                .define("Healing Beat Amount", 0.25F);
-        HEAL_COOLDOWN_MULT = BUILDER
-                .comment(" How many ticks to cool down for every mob healed.\n Example: healing 2 mobs has a default cooldown of 3 ticks.")
-                .define("Healing Cooldown Multiplier", 1.5F);
-
         BWAAAP_RANGE = BUILDER
-                .comment(" \nThe reach the BWAAAP enchantment has.")
+                .comment(" The reach the BWAAAP enchantment has.")
                 .define("BWAAAP Range", 5);
         BWAAAP_STRENGTH = BUILDER
                 .comment(" The strength the BWAAAP enchantment has. Decreases with distance.\n Uses the equation:\n targetDistancePercentageToRange*strength")
@@ -55,7 +54,7 @@ public class ServerConfigs {
                 .define("BWAAAP Cooldown Multiplier", 10);
 
         ELECTRIC_RANGE = BUILDER
-                .comment(" \nThe range in blocks around the attacked mob that should be effected by the \"And His Music Was Electric\" enchantment.")
+                .comment(" The range in blocks around the attacked mob that should be effected by the \"And His Music Was Electric\" enchantment.")
                 .define("Electric Range", 5);
         ELECTRIC_DAMAGE_RETURNS = BUILDER
                 .comment(" The rate of diminishing returns on each mob hit, as a percentage of the original. Uses equation\n    originalDamage * ( multiplier / entityNumber )\n where entityNumber is how many times it's jumped to a new entity")
