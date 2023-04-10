@@ -42,10 +42,6 @@ public class HealingBeatEnchantment extends Enchantment {
         target.heal(ServerConfigs.HEAL_AMOUNT.get());
     }
 
-    private static boolean canBeHealed(LivingEntity target) {
-        return target.getHealth() < target.getMaxHealth();
-    }
-
     private static boolean isMonster(LivingEntity target) {
         return target instanceof Monster;
     }
@@ -63,8 +59,9 @@ public class HealingBeatEnchantment extends Enchantment {
             assert resourceLocation != null;
             boolean mobInWhitelist = whitelist.contains(resourceLocation.toString());
             boolean mobInBlacklist = blacklist.contains(resourceLocation.toString());
+            boolean canBeHealed = mob.getHealth() < mob.getMaxHealth();
 
-            return ((!isMonster(mob) || mobInWhitelist) && !mobInBlacklist && canBeHealed(mob));
+            return ((!isMonster(mob) || mobInWhitelist) && !mobInBlacklist && canBeHealed);
 
         }).toList();
 
