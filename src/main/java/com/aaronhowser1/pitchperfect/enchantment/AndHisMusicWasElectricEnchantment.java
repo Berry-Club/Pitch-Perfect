@@ -1,5 +1,6 @@
 package com.aaronhowser1.pitchperfect.enchantment;
 
+import com.aaronhowser1.pitchperfect.config.ServerConfigs;
 import com.aaronhowser1.pitchperfect.utils.ModScheduler;
 import com.aaronhowser1.pitchperfect.utils.ServerUtils;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
@@ -39,7 +40,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
 
         LivingEntity e = targetEntity;
 
-        if (iteration > CommonConfigs.ELECTRIC_MAX_JUMPS.get()) return;
+        if (iteration > ServerConfigs.ELECTRIC_MAX_JUMPS.get()) return;
         if (!e.isAlive()) return;
 
         //Spawn Particles
@@ -58,7 +59,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         }
 
         //Damage
-        float damageFactor = CommonConfigs.ELECTRIC_DAMAGE_RETURNS.get() / iteration;
+        float damageFactor = ServerConfigs.ELECTRIC_DAMAGE_RETURNS.get() / iteration;
         e.hurt(
                 event.getSource(),
                 event.getAmount()*damageFactor
@@ -71,7 +72,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
 
 
         //Spawn particle line
-        List<LivingEntity> nextEntities = ServerUtils.getNearbyLivingEntities(e, CommonConfigs.ELECTRIC_RANGE.get());
+        List<LivingEntity> nextEntities = ServerUtils.getNearbyLivingEntities(e, ServerConfigs.ELECTRIC_RANGE.get());
         nextEntities.removeAll(entitiesHit);
         nextEntities.remove(e);
 
@@ -85,7 +86,7 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
         }
 
         if (!nextEntities.isEmpty()){
-            if (iteration+1 <= CommonConfigs.ELECTRIC_MAX_JUMPS.get()) {
+            if (iteration+1 <= ServerConfigs.ELECTRIC_MAX_JUMPS.get()) {
                 LivingEntity nextEntity = ServerUtils.getNearestEntity(nextEntities, e);
                 if (nextEntity.isAlive()) {
                     ServerUtils.spawnElectricParticleLine(
@@ -96,13 +97,11 @@ public class AndHisMusicWasElectricEnchantment extends Enchantment {
 
                     ModScheduler.scheduleSynchronisedTask(
                             () -> {damage(e, nextEntity, entitiesHit, iteration+1, event, extraWhatevers, instrumentItems);},
-                            CommonConfigs.ELECTRIC_JUMPTIME.get()
+                            ServerConfigs.ELECTRIC_JUMPTIME.get()
                     );
                 }
             }
         }
     }
-
-    //TODO: enchantment durability --- enchantment only has a limited amount of uses, and it removes itself when it's done
 
 }

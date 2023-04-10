@@ -2,6 +2,7 @@ package com.aaronhowser1.pitchperfect.item;
 
 import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.config.ServerConfigs;
 import com.aaronhowser1.pitchperfect.enchantment.BwaaapEnchantment;
 import com.aaronhowser1.pitchperfect.enchantment.HealingBeatEnchantment;
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments;
@@ -103,7 +104,7 @@ public class InstrumentItem extends Item {
                     );
                 }
             }
-            player.getCooldowns().addCooldown(this, (int) (healTargets.size() * CommonConfigs.HEAL_COOLDOWN_MULT.get()));
+            player.getCooldowns().addCooldown(this, (int) (healTargets.size() * ServerConfigs.HEAL_COOLDOWN_MULT.get()));
 
         }
         if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {

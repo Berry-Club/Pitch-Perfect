@@ -1,6 +1,7 @@
 package com.aaronhowser1.pitchperfect.enchantment;
 
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
+import com.aaronhowser1.pitchperfect.config.ServerConfigs;
 import com.aaronhowser1.pitchperfect.utils.ServerUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -28,7 +29,7 @@ public class BwaaapEnchantment extends Enchantment {
     }
 
     public static List<LivingEntity> getTargets(LivingEntity user) {
-        int range = CommonConfigs.BWAAAP_RANGE.get();
+        int range = ServerConfigs.BWAAAP_RANGE.get();
 
         return ServerUtils.getNearbyLivingEntities(user, range);
     }
@@ -38,7 +39,7 @@ public class BwaaapEnchantment extends Enchantment {
         float cooldown = 0;
 
         for (LivingEntity target : getTargets(user)) {
-            int range = CommonConfigs.BWAAAP_RANGE.get();
+            int range = ServerConfigs.BWAAAP_RANGE.get();
 
             double distanceToTarget = ServerUtils.distanceBetweenPoints(
                     ServerUtils.entityToVec3(user),
@@ -51,7 +52,7 @@ public class BwaaapEnchantment extends Enchantment {
             cooldown += targetPercentageFromRange;
         }
 
-        cooldown *= CommonConfigs.BWAAAP_COOLDOWN_MULT.get();
+        cooldown *= ServerConfigs.BWAAAP_COOLDOWN_MULT.get();
 
         return Mth.floor(cooldown);
     }
@@ -59,8 +60,8 @@ public class BwaaapEnchantment extends Enchantment {
     public static void knockBack(LivingEntity user) {
 
         for (LivingEntity target : getTargets(user)) {
-            int range = CommonConfigs.BWAAAP_RANGE.get();
-            float strength = CommonConfigs.BWAAAP_STRENGTH.get();
+            int range = ServerConfigs.BWAAAP_RANGE.get();
+            float strength = ServerConfigs.BWAAAP_STRENGTH.get();
 
             Vec3 targetMotion = target.getDeltaMovement();
 

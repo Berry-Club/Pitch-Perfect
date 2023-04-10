@@ -39,7 +39,7 @@ public class HealingBeatEnchantment extends Enchantment {
     }
 
     public static void heal(LivingEntity target) {
-        target.heal(CommonConfigs.HEAL_AMOUNT.get());
+        target.heal(ServerConfigs.HEAL_AMOUNT.get());
     }
 
     private static boolean canBeHealed(LivingEntity target) {

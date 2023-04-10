@@ -2,6 +2,7 @@ package com.aaronhowser1.pitchperfect.event;
 
 import com.aaronhowser1.pitchperfect.ModSounds;
 import com.aaronhowser1.pitchperfect.PitchPerfect;
+import com.aaronhowser1.pitchperfect.config.ServerConfigs;
 import com.aaronhowser1.pitchperfect.utils.ModScheduler;
 import com.aaronhowser1.pitchperfect.utils.ServerUtils;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
@@ -66,7 +67,7 @@ public class ModEvents {
                     entitiesHit.add(attacker);
 
 
-                    List<LivingEntity> nearbyLiving = ServerUtils.getNearbyLivingEntities(target, CommonConfigs.ELECTRIC_RANGE.get());
+                    List<LivingEntity> nearbyLiving = ServerUtils.getNearbyLivingEntities(target, ServerConfigs.ELECTRIC_RANGE.get());
                     nearbyLiving.removeAll(entitiesHit);
 
                     // God forgive me for what I've created
@@ -105,7 +106,7 @@ public class ModEvents {
                                     } else {
                                         AndHisMusicWasElectricEnchantment.damage(target, closestEntity, entitiesHit, 1, event, extraWhatevers);
                                     }},
-                                CommonConfigs.ELECTRIC_JUMPTIME.get()
+                                ServerConfigs.ELECTRIC_JUMPTIME.get()
                         );
                     }
                 }

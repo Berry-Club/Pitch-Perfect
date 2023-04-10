@@ -4,6 +4,7 @@ package com.aaronhowser1.pitchperfect.utils;
 import com.aaronhowser1.pitchperfect.config.ClientConfigs;
 import com.aaronhowser1.pitchperfect.config.CommonConfigs;
 
+import com.aaronhowser1.pitchperfect.config.ServerConfigs;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.phys.Vec3;
 
@@ -22,7 +23,7 @@ public class ParticleLine {
         this.particleType = particleType;
         this.iteration = 1;
         this.particlesPerBlock = ClientConfigs.ELECTRIC_PARTICLE_DENSITY.get();
-        this.totalTravelTime = CommonConfigs.ELECTRIC_JUMPTIME.get();
+        this.totalTravelTime = ServerConfigs.ELECTRIC_JUMPTIME.get();
     }
 
     public void spawnWave() {
