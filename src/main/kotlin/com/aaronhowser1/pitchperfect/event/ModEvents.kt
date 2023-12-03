@@ -1,5 +1,6 @@
 package com.aaronhowser1.pitchperfect.event
 
+import com.aaronhowser1.pitchperfect.ModSounds
 import com.aaronhowser1.pitchperfect.PitchPerfect
 import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
@@ -17,14 +18,12 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.event.TickEvent
 import net.minecraftforge.event.TickEvent.ServerTickEvent
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
-import java.util.function.Consumer
 
 @Mod.EventBusSubscriber(modid = PitchPerfect.MOD_ID)
 object ModEvents {
@@ -68,17 +67,16 @@ object ModEvents {
 
         if (nearbyLiving.isEmpty()) return
 
-        electricItemStack.hurtAndBreak<LivingEntity>(1, attacker,
-            Consumer<LivingEntity> { user: LivingEntity ->
-                user.getLevel().playSound(
-                    null,
-                    attacker,
-                    ModSounds.GUITAR_SMASH.get(),
-                    SoundSource.PLAYERS,
-                    1f,
-                    1f
-                )
-            })
+        electricItemStack.hurtAndBreak(1, attacker) { user: LivingEntity ->
+            user.getLevel().playSound(
+                null,
+                attacker,
+                ModSounds.GUITAR_SMASH.get(),
+                SoundSource.PLAYERS,
+                1f,
+                1f
+            )
+        }
 
         val closestEntity = getNearestEntity(nearbyLiving, target)
         spawnElectricParticleLine(
