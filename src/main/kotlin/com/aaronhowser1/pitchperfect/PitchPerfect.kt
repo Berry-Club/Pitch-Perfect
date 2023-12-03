@@ -23,10 +23,10 @@ object PitchPerfect {
     init {
         LOGGER.log(Level.INFO, "Pitch Perfect loaded!")
 
-//        ModLoadingContext.get().apply {
-//            registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "pitchperfect-client.toml")
-//            registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "pitchperfect-common.toml")
-//            registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC, "pitchperfect-server.toml")
-//        }
+        ModLoadingContext.get().apply {
+            registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "pitchperfect-client.toml")
+            registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "pitchperfect-common.toml")
+            registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC, "pitchperfect-server.toml")
+        }
     }
 }
