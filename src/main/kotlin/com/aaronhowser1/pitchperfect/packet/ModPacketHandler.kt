@@ -8,6 +8,7 @@ import net.minecraftforge.network.NetworkRegistry
 import net.minecraftforge.network.PacketDistributor
 import net.minecraftforge.network.simple.SimpleChannel
 
+@Suppress("INACCESSIBLE_TYPE")  //idk what that means but Silk told me it's impossible to fix, so...
 object ModPacketHandler {
 
     private const val PROTOCOL_VERSION = "1"
