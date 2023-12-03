@@ -18,11 +18,11 @@ object ModScheduler {
         handleSyncScheduledTasks(currentTick)
     }
 
-    fun scheduleSynchronisedTask(run: Runnable, ticks: Int) {
+    fun scheduleSynchronisedTask(ticks: Int, run: Runnable) {
         scheduledSyncTasks.put(currentTick + ticks, run)
     }
 
-    fun scheduleAsyncTask(run: Runnable, time: Int, unit: TimeUnit) {
+    fun scheduleAsyncTask(time: Int, unit: TimeUnit, run: Runnable) {
         if (scheduler == null) serverStartupTasks()
         scheduler!!.schedule(run, time.toLong(), unit)
     }

@@ -2,8 +2,8 @@ package com.aaronhowser1.pitchperfect.utils
 
 import com.aaronhowser1.pitchperfect.config.ClientConfig
 import com.aaronhowser1.pitchperfect.config.ServerConfig
-import com.aaronhowser1.pitchperfect.utils.ClientUtils.spawnParticle
 import com.aaronhowser1.pitchperfect.event.ModScheduler.scheduleSynchronisedTask
+import com.aaronhowser1.pitchperfect.utils.ClientUtils.spawnParticle
 import net.minecraft.core.particles.SimpleParticleType
 import net.minecraft.world.phys.Vec3
 import kotlin.math.max
@@ -60,41 +60,38 @@ class ParticleLine(
             1f, 1f, 1f
         )
         iteration++
-        scheduleSynchronisedTask(
-            { spawnNextParticleInWave(deltaVector, ticksPerParticle, totalParticleCount) },
-            ticksPerParticle
-        )
+        scheduleSynchronisedTask(ticksPerParticle) {
+            spawnNextParticleInWave(
+                deltaVector,
+                ticksPerParticle,
+                totalParticleCount
+            )
+        }
     }
 
     fun spawnEntireLine() {
         if (particlesPerBlock == 0) return
 
-        scheduleSynchronisedTask(
-            {
-                val pathVector = originPositionVec.vectorTo(destinationPositionVec)
-                val pathSize = pathVector.length().toFloat()
-                val totalParticleCount = (pathSize * particlesPerBlock.toFloat()).toInt()
-                if (totalParticleCount == 0) return@scheduleSynchronisedTask
-                val deltaVector = pathVector.scale((1f / totalParticleCount).toDouble())
-                for (i in 1..totalParticleCount) {
-                    val dx = deltaVector.x() * i
-                    val dy = deltaVector.y() * i
-                    val dz = deltaVector.z() * i
+        scheduleSynchronisedTask(totalTravelTime) {
+            val pathVector = originPositionVec.vectorTo(destinationPositionVec)
+            val pathSize = pathVector.length().toFloat()
+            val totalParticleCount = (pathSize * particlesPerBlock.toFloat()).toInt()
+            if (totalParticleCount == 0) return@scheduleSynchronisedTask
+            val deltaVector = pathVector.scale((1f / totalParticleCount).toDouble())
+            for (i in 1..totalParticleCount) {
+                val dx = deltaVector.x() * i
+                val dy = deltaVector.y() * i
+                val dz = deltaVector.z() * i
 
-//                        System.out.println(
-//                                "Spawning particle " + i +" which is ["+dx+","+dy+","+dz+"] blocks away from the origin"
-//                        );
-                    spawnParticle(
-                        particleType,
-                        originPositionVec.x() + dx,
-                        originPositionVec.y() + dy,
-                        originPositionVec.z() + dz,
-                        1f, 1f, 1f
-                    )
-                }
-            },
-            totalTravelTime
-        )
+                spawnParticle(
+                    particleType,
+                    originPositionVec.x() + dx,
+                    originPositionVec.y() + dy,
+                    originPositionVec.z() + dz,
+                    1f, 1f, 1f
+                )
+            }
+        }
     }
 
 }

@@ -1,10 +1,10 @@
 package com.aaronhowser1.pitchperfect.enchantment
 
 import com.aaronhowser1.pitchperfect.config.ServerConfig
+import com.aaronhowser1.pitchperfect.event.ModScheduler
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
 import com.aaronhowser1.pitchperfect.packet.SpawnElectricParticlePacket
-import com.aaronhowser1.pitchperfect.event.ModScheduler
 import com.aaronhowser1.pitchperfect.utils.ServerUtils
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.EquipmentSlot
@@ -96,19 +96,16 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                         Vec3(nextEntity.x, nextEntity.y, nextEntity.z),
                         targetEntity.getLevel() as ServerLevel
                     )
-                    ModScheduler.scheduleSynchronisedTask(
-                        {
-                            damage(
-                                nextEntity,
-                                entitiesHit,
-                                iteration + 1,
-                                event,
-                                extraFlags,
-                                instrumentItems
-                            )
-                        },
-                        ServerConfig.ELECTRIC_JUMPTIME.get()
-                    )
+                    ModScheduler.scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMPTIME.get()) {
+                        damage(
+                            nextEntity,
+                            entitiesHit,
+                            iteration + 1,
+                            event,
+                            extraFlags,
+                            instrumentItems
+                        )
+                    }
                 }
             }
         }

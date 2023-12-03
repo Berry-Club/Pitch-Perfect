@@ -98,29 +98,26 @@ object ModEvents {
         )
 
         //Wait for the particles to reach
-        scheduleSynchronisedTask(
-            {
-                if (attacker is Player) {
-                    AndHisMusicWasElectricEnchantment.damage(
-                        closestEntity,
-                        entitiesHit,
-                        1,
-                        event,
-                        extraFlags,
-                        electricItemStack.item as InstrumentItem
-                    )
-                } else {
-                    AndHisMusicWasElectricEnchantment.damage(
-                        closestEntity,
-                        entitiesHit,
-                        1,
-                        event,
-                        extraFlags
-                    )
-                }
-            },
-            ServerConfig.ELECTRIC_JUMPTIME.get()
-        )
+        scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMPTIME.get()) {
+            if (attacker is Player) {
+                AndHisMusicWasElectricEnchantment.damage(
+                    closestEntity,
+                    entitiesHit,
+                    1,
+                    event,
+                    extraFlags,
+                    electricItemStack.item as InstrumentItem
+                )
+            } else {
+                AndHisMusicWasElectricEnchantment.damage(
+                    closestEntity,
+                    entitiesHit,
+                    1,
+                    event,
+                    extraFlags
+                )
+            }
+        }
 
     }
 
