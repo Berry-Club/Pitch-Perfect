@@ -3,6 +3,10 @@ package com.aaronhowser1.pitchperfect.item
 import com.aaronhowser1.pitchperfect.config.ClientConfig
 import com.aaronhowser1.pitchperfect.config.CommonConfig
 import com.aaronhowser1.pitchperfect.config.ServerConfig
+import com.aaronhowser1.pitchperfect.enchantment.HealingBeatEnchantment
+import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
+import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
+import com.aaronhowser1.pitchperfect.packet.SpawnNoteParticlePacket
 import com.aaronhowser1.pitchperfect.utils.CommonUtils
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.ImmutableSetMultimap
@@ -29,7 +33,7 @@ import net.minecraftforge.common.util.Lazy
 import kotlin.math.max
 
 class InstrumentItem(
-    val sound: SoundEvent
+    private val sound: SoundEvent
 ) : Item(
     Properties()
         .stacksTo(1)
@@ -70,13 +74,13 @@ class InstrumentItem(
                 SpawnNoteParticlePacket(
                     sound.location,
                     pitch,
-                    (player.x + noteVector.x()).toFloat(),
-                    (player.eyeY + noteVector.y()).toFloat(),
-                    (player.z + noteVector.z()).toFloat()
+                    (player.x + noteVector.x()),
+                    (player.eyeY + noteVector.y()),
+                    (player.z + noteVector.z())
                 ),
                 player.getLevel() as ServerLevel,
                 Vec3(player.x, player.y, player.z),
-                128
+                128.0
             )
         }
 
@@ -89,16 +93,21 @@ class InstrumentItem(
                     ModPacketHandler.messageNearbyPlayers(
                         SpawnNoteParticlePacket(
                             sound.location,
-                            pitch, target.x.toFloat(), target.eyeY.toFloat(), target.z.toFloat()
+                            pitch,
+                            target.x,
+                            target.eyeY,
+                            target.z
                         ),
                         target.getLevel() as ServerLevel,
                         Vec3(target.x, target.eyeY, target.z),
-                        64
+                        64.0
                     )
                 }
             }
+
             player.cooldowns.addCooldown(this, (healTargets.size * ServerConfig.HEAL_COOLDOWN_MULT.get()).toInt())
         }
+
         if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
             BwaaapEnchantment.knockBack(player)
             player.cooldowns.addCooldown(this, BwaaapEnchantment.getCooldown(player))

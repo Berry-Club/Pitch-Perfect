@@ -8,7 +8,7 @@ import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraftforge.registries.ForgeRegistries
 
-class HealingBeatEnchantment : Enchantment(
+object HealingBeatEnchantment : Enchantment(
     Rarity.COMMON,
     ModEnchantments.INSTRUMENT,
     arrayOf(
