@@ -24,18 +24,18 @@ public class PitchPerfect
     public static final String MOD_ID = "pitchperfect";
 
     public PitchPerfect() {
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.SPEC, "pitchperfect-client.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfigs.SPEC, "pitchperfect-common.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfigs.SPEC, "pitchperfect-server.toml");
-
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        ModItems.register(eventBus);
-        ModEnchantments.register(eventBus);
-        ModSounds.register(eventBus);
-
-        ModPacketHandler.setup();
+//
+//        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigs.SPEC, "pitchperfect-client.toml");
+//        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfigs.SPEC, "pitchperfect-common.toml");
+//        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfigs.SPEC, "pitchperfect-server.toml");
+//
+//        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+//
+//        ModItems.register(eventBus);
+//        ModEnchantments.register(eventBus);
+//        ModSounds.register(eventBus);
+//
+//        ModPacketHandler.setup();
 
         MinecraftForge.EVENT_BUS.register(this);
     }
