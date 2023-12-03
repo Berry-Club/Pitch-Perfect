@@ -8,18 +8,16 @@ import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
-import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraftforge.common.util.Lazy
 
 class InstrumentItem(
-    sound: SoundEvent
+    val sound: SoundEvent
 ) : Item(
     Properties()
         .stacksTo(1)
-        .tab(CreativeModeTab.TAB_MISC)
+        .tab(ModCreativeTab.MOD_TAB)
         .defaultDurability(100)
 ) {
 
