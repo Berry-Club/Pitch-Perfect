@@ -29,17 +29,10 @@ object ServerUtils {
         ).filterIsInstance<LivingEntity>()
     }
 
-    fun getNearestEntity(entities: List<LivingEntity>, originEntity: LivingEntity): LivingEntity? {
-        if (entities.isEmpty()) return null
-        var nearestEntity = entities[0]
-        for (checkedEntity in entities) {
-            if (checkedEntity !== originEntity) {
-                if (originEntity.distanceTo(nearestEntity) > originEntity.distanceTo(checkedEntity)) {
-                    nearestEntity = checkedEntity
-                }
-            }
-        }
-        return if (nearestEntity === originEntity) null else nearestEntity
+    fun getNearestEntityInList(entities: List<LivingEntity>, originEntity: LivingEntity): LivingEntity? {
+        return entities
+            .filter { it != originEntity && it.isAlive }
+            .minByOrNull { originEntity.distanceToSqr(it) }
     }
 
     fun spawnElectricParticleLine(origin: Vec3, destination: Vec3, serverLevel: ServerLevel) {

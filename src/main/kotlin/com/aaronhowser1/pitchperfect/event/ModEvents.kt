@@ -5,11 +5,11 @@ import com.aaronhowser1.pitchperfect.PitchPerfect
 import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
+import com.aaronhowser1.pitchperfect.event.ModScheduler.scheduleSynchronisedTask
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.hasEnchantment
-import com.aaronhowser1.pitchperfect.event.ModScheduler.scheduleSynchronisedTask
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearbyLivingEntities
-import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearestEntity
+import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearestEntityInList
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.spawnElectricParticleLine
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
@@ -45,6 +45,8 @@ object ModEvents {
         val target = event.entity
         val attacker: LivingEntity = event.source.entity as? LivingEntity ?: return
 
+        if (attacker in AndHisMusicWasElectricEnchantment.currentElectricAttackers) return
+
         //Sets to the first InstrumentItem that has the enchantment in your inventory, or stays null
         val electricItemStack: ItemStack? =
             if (attacker is Player) {
@@ -62,9 +64,10 @@ object ModEvents {
 
         val entitiesHit: MutableList<LivingEntity> = arrayListOf(target, attacker)
         val nearbyLiving: MutableList<LivingEntity> =
-            getNearbyLivingEntities(target, ServerConfig.ELECTRIC_RANGE.get()).toMutableList()
-
-        nearbyLiving.removeAll(entitiesHit)
+            getNearbyLivingEntities(
+                target,
+                ServerConfig.ELECTRIC_RANGE.get()
+            ).filter { it.isAlive && it !in entitiesHit }.toMutableList()
 
         // God forgive me for what I've created
         val extraFlags: MutableList<String> = ArrayList()
@@ -90,17 +93,20 @@ object ModEvents {
             )
         }
 
-        val closestEntity = getNearestEntity(nearbyLiving, target)
+        val closestEntity = getNearestEntityInList(nearbyLiving, target) ?: return
         spawnElectricParticleLine(
             Vec3(target.x, target.y, target.z),
-            Vec3(closestEntity!!.x, closestEntity.y, closestEntity.z),
+            Vec3(closestEntity.x, closestEntity.y, closestEntity.z),
             closestEntity.getLevel() as ServerLevel
         )
+
+        AndHisMusicWasElectricEnchantment.currentElectricAttackers.add(attacker)
 
         //Wait for the particles to reach
         scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMPTIME.get()) {
             if (attacker is Player) {
                 AndHisMusicWasElectricEnchantment.damage(
+                    attacker,
                     closestEntity,
                     entitiesHit,
                     1,
@@ -110,6 +116,7 @@ object ModEvents {
                 )
             } else {
                 AndHisMusicWasElectricEnchantment.damage(
+                    attacker,
                     closestEntity,
                     entitiesHit,
                     1,
