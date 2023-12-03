@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import kotlin.math.min
 
-object AndHisMusicWasElectricEnchant : Enchantment(
+object AndHisMusicWasElectricEnchantment : Enchantment(
     Rarity.VERY_RARE,
     ModEnchantments.INSTRUMENT,
     arrayOf(
@@ -24,26 +24,21 @@ object AndHisMusicWasElectricEnchant : Enchantment(
     )
 ) {
 
-    override fun getMinCost(pLevel: Int): Int {
-        return 15
-    }
-
-    override fun getMaxCost(pLevel: Int): Int {
-        return 55
-    }
+    override fun getMinCost(pLevel: Int): Int = 15
+    override fun getMaxCost(pLevel: Int): Int = 55
 
     //iteration starts at 1
     fun damage(
-        originEntity: LivingEntity?,
-        targetEntity: LivingEntity?,
-        entitiesHit: MutableList<LivingEntity?>,
+        originEntity: LivingEntity,
+        targetEntity: LivingEntity,
+        entitiesHit: MutableList<LivingEntity>,
         iteration: Int,
         event: LivingHurtEvent,
-        extraFlags: List<String?>,
+        extraFlags: List<String>,
         vararg instrumentItems: InstrumentItem
     ) {
         if (iteration > ServerConfig.ELECTRIC_MAX_JUMPS.get()) return
-        if (!targetEntity!!.isAlive) return
+        if (!targetEntity.isAlive) return
 
         //Spawn Particles
         val entityWidth = targetEntity.bbWidth.toDouble()

@@ -9,6 +9,7 @@ import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
 import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
 import com.aaronhowser1.pitchperfect.packet.SpawnNoteParticlePacket
 import com.aaronhowser1.pitchperfect.utils.CommonUtils
+import com.aaronhowser1.pitchperfect.utils.CommonUtils.hasEnchantment
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.ImmutableSetMultimap
 import com.google.common.collect.Multimap
@@ -71,7 +72,7 @@ class InstrumentItem(
 
         pitch = CommonUtils.map(pitch, -1f, 1f, 0.5f, 2f)
 
-        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
+        if (itemStack.hasEnchantment(ModEnchantments.BWAAAP.get())) {
             playSound(level, pitch, player.x, player.y, player.z, ClientConfig.VOLUME.get().toFloat())
         } else {
             playSound(level, pitch, player.x, player.y, player.z, ClientConfig.VOLUME.get().toFloat())

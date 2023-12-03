@@ -22,7 +22,7 @@ object ModEnchantments {
         ENCHANTMENTS.register(name) { enchantment }
 
     val HEALING_BEAT = registerEnchant("healing_beat", HealingBeatEnchantment)
-    val AND_HIS_MUSIC_WAS_ELECTRIC = registerEnchant("and_his_music_was_electric", AndHisMusicWasElectricEnchant)
+    val AND_HIS_MUSIC_WAS_ELECTRIC = registerEnchant("and_his_music_was_electric", AndHisMusicWasElectricEnchantment)
     val BWAAAP = registerEnchant("bwaaap", BwaaapEnchantment)
 
 }

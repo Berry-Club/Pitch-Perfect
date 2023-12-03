@@ -2,8 +2,10 @@ package com.aaronhowser1.pitchperfect.event
 
 import com.aaronhowser1.pitchperfect.PitchPerfect
 import com.aaronhowser1.pitchperfect.config.ServerConfig
+import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
+import com.aaronhowser1.pitchperfect.utils.CommonUtils.hasEnchantment
 import com.aaronhowser1.pitchperfect.utils.ModScheduler
 import com.aaronhowser1.pitchperfect.utils.ModScheduler.scheduleSynchronisedTask
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearbyLivingEntities
@@ -36,17 +38,11 @@ object ModEvents {
         val electricItemStack: ItemStack? =
             if (attacker is Player) {
                 attacker.inventory.items.firstOrNull { itemStack ->
-                    EnchantmentHelper.getItemEnchantmentLevel(
-                        ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get(),
-                        itemStack
-                    ) != 0
+                    itemStack.item is InstrumentItem && itemStack.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
                 }
             } else {
-                attacker.allSlots.firstOrNull {
-                    EnchantmentHelper.getItemEnchantmentLevel(
-                        ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get(),
-                        it
-                    ) != 0
+                attacker.allSlots.firstOrNull { itemStack ->
+                    itemStack.item is InstrumentItem && itemStack.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
                 }
             }
 
@@ -94,8 +90,7 @@ object ModEvents {
         //Wait for the particles to reach
         scheduleSynchronisedTask(
             {
-                if (attacker is Player && attacker.getMainHandItem().item is InstrumentItem
-                ) {
+                if (attacker is Player) {
                     AndHisMusicWasElectricEnchantment.damage(
                         target,
                         closestEntity,
@@ -103,7 +98,7 @@ object ModEvents {
                         1,
                         event,
                         extraFlags,
-                        instrumentItem
+                        electricItemStack as InstrumentItem
                     )
                 } else {
                     AndHisMusicWasElectricEnchantment.damage(

@@ -20,13 +20,8 @@ object BwaaapEnchantment : Enchantment(
     )
 ) {
 
-    override fun getMinCost(pLevel: Int): Int {
-        return 5
-    }
-
-    override fun getMaxCost(pLevel: Int): Int {
-        return 25
-    }
+    override fun getMinCost(pLevel: Int): Int = 5
+    override fun getMaxCost(pLevel: Int): Int = 25
 
     private fun getTargets(user: LivingEntity): List<LivingEntity> {
         val range: Int = ServerConfig.BWAAAP_RANGE.get()
