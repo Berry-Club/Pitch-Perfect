@@ -55,7 +55,7 @@ public class InstrumentItem extends Item {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         Vec3 lookVector = player.getLookAngle();
         float pitch = (float) lookVector.y();
-        pitch = map(pitch, -1,1,0.5F,2);
+        pitch = map(pitch, -1, 1, 0.5F, 2);
 
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
             playSound(level, pitch, player.getX(), player.getY(), player.getZ(), ClientConfigs.VOLUME.get().floatValue());
@@ -73,9 +73,9 @@ public class InstrumentItem extends Item {
             ModPacketHandler.messageNearbyPlayers(
                     new SpawnNoteParticlePacket(sound.getLocation(),
                             pitch,
-                            (float) (player.getX()+noteVector.x()),
-                            (float) (player.getEyeY()+noteVector.y()),
-                            (float) (player.getZ()+noteVector.z())
+                            (float) (player.getX() + noteVector.x()),
+                            (float) (player.getEyeY() + noteVector.y()),
+                            (float) (player.getZ() + noteVector.z())
                     ),
                     (ServerLevel) player.getLevel(),
                     new Vec3(player.getX(), player.getY(), player.getZ()),
@@ -135,7 +135,7 @@ public class InstrumentItem extends Item {
                 float noteY = (float) (target.getY() + entityHeight + (entityHeight * Math.random() * 1.5 - .75));
 
                 ModPacketHandler.messageNearbyPlayers(
-                    new SpawnNoteParticlePacket(sound.getLocation(), randomPitch, noteX, noteY, noteZ),
+                        new SpawnNoteParticlePacket(sound.getLocation(), randomPitch, noteX, noteY, noteZ),
                         (ServerLevel) target.getLevel(),
                         new Vec3(noteX, noteY, noteZ),
                         16
@@ -146,8 +146,7 @@ public class InstrumentItem extends Item {
         }
     }
 
-    public float map(float value, float min1, float max1, float min2, float max2)
-    {
+    public float map(float value, float min1, float max1, float min2, float max2) {
         return min2 + (max2 - min2) * ((value - min1) / (max1 - min1));
     }
 
@@ -187,9 +186,16 @@ public class InstrumentItem extends Item {
     //Like, damage to +2, or whatever
     protected Lazy<ImmutableSetMultimap<Attribute, AttributeModifier>> buildDefaultAttributes() {
         return Lazy.of(() -> ImmutableSetMultimap.of(
-                Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", getAttackDamage(), AttributeModifier.Operation.ADDITION)
+                Attributes.ATTACK_DAMAGE,
+                new AttributeModifier(
+                        BASE_ATTACK_DAMAGE_UUID,
+                        "Weapon modifier",
+                        getAttackDamage(),
+                        AttributeModifier.Operation.ADDITION
+                )
         ));
     }
+
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         //If and only if item is in the hand, for some reason
