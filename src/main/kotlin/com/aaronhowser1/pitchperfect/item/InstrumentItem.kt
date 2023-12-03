@@ -85,34 +85,44 @@ class InstrumentItem(
         }
 
         //Enchantments
-        if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
-            val healTargets: List<LivingEntity> = HealingBeatEnchantment.getTargets(player)
-            for (target in healTargets) {
-                HealingBeatEnchantment.heal(target)
-                if (!level.isClientSide()) {
-                    ModPacketHandler.messageNearbyPlayers(
-                        SpawnNoteParticlePacket(
-                            sound.location,
-                            pitch,
-                            target.x,
-                            target.eyeY,
-                            target.z
-                        ),
-                        target.getLevel() as ServerLevel,
-                        Vec3(target.x, target.eyeY, target.z),
-                        64.0
-                    )
-                }
-            }
-
-            player.cooldowns.addCooldown(this, (healTargets.size * ServerConfig.HEAL_COOLDOWN_MULT.get()).toInt())
+        if (!player.cooldowns.isOnCooldown(this)) {
+            healingBeat(itemStack, player)
+            bwaaap(itemStack, player)
         }
 
-        if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
-            BwaaapEnchantment.knockBack(player)
-            player.cooldowns.addCooldown(this, BwaaapEnchantment.getCooldown(player))
-        }
         return InteractionResultHolder.fail(itemStack)
+    }
+
+    private fun bwaaap(itemStack: ItemStack, player: Player) {
+        if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) == 0) return
+        BwaaapEnchantment.knockBack(player)
+        player.cooldowns.addCooldown(this, BwaaapEnchantment.getCooldown(player))
+    }
+
+    private fun healingBeat(itemStack: ItemStack, player: Player) {
+        if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) == 0) return
+        val healTargets: List<LivingEntity> = HealingBeatEnchantment.getTargets(player)
+
+        for (target in healTargets) {
+            HealingBeatEnchantment.heal(target)
+
+            if (!player.level.isClientSide()) {
+                ModPacketHandler.messageNearbyPlayers(
+                    SpawnNoteParticlePacket(
+                        sound.location,
+                        player.lookAngle.y.toFloat(),
+                        target.x,
+                        target.eyeY,
+                        target.z
+                    ),
+                    target.getLevel() as ServerLevel,
+                    Vec3(target.x, target.eyeY, target.z),
+                    64.0
+                )
+            }
+        }
+
+        player.cooldowns.addCooldown(this, (healTargets.size * ServerConfig.HEAL_COOLDOWN_MULT.get()).toInt())
     }
 
     fun attack(target: Entity) {
