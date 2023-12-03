@@ -51,6 +51,19 @@ class InstrumentItem(
         interactionHand: InteractionHand
     ): InteractionResultHolder<ItemStack> {
         val itemStack = player.getItemInHand(interactionHand)
+
+        useInstrument(itemStack, player, level, interactionHand)
+
+        //Enchantments
+        if (!player.cooldowns.isOnCooldown(this)) {
+            healingBeat(itemStack, player)
+            bwaaap(itemStack, player)
+        }
+
+        return InteractionResultHolder.fail(itemStack)
+    }
+
+    private fun useInstrument(itemStack: ItemStack, player: Player, level: Level, interactionHand: InteractionHand) {
         val lookVector = player.lookAngle
 
         var pitch = lookVector.y().toFloat()
@@ -83,14 +96,6 @@ class InstrumentItem(
                 128.0
             )
         }
-
-        //Enchantments
-        if (!player.cooldowns.isOnCooldown(this)) {
-            healingBeat(itemStack, player)
-            bwaaap(itemStack, player)
-        }
-
-        return InteractionResultHolder.fail(itemStack)
     }
 
     private fun bwaaap(itemStack: ItemStack, player: Player) {
