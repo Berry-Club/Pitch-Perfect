@@ -25,8 +25,21 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 
+@Suppress("unused")
 @Mod.EventBusSubscriber(modid = PitchPerfect.MOD_ID)
 object ModEvents {
+
+    @SubscribeEvent
+    fun onLivingHurt(event: LivingHurtEvent) {
+        val target = event.entity
+        val attacker: LivingEntity = event.source.entity as? LivingEntity ?: return
+
+        handleElectric(event)
+        attacker.mainHandItem.item.apply {
+            if (this is InstrumentItem) this.attack(target)
+        }
+
+    }
 
     private fun handleElectric(event: LivingHurtEvent) {
 
@@ -90,17 +103,15 @@ object ModEvents {
             {
                 if (attacker is Player) {
                     AndHisMusicWasElectricEnchantment.damage(
-                        target,
                         closestEntity,
                         entitiesHit,
                         1,
                         event,
                         extraFlags,
-                        electricItemStack as InstrumentItem
+                        electricItemStack.item as InstrumentItem
                     )
                 } else {
                     AndHisMusicWasElectricEnchantment.damage(
-                        target,
                         closestEntity,
                         entitiesHit,
                         1,
@@ -115,22 +126,9 @@ object ModEvents {
     }
 
     @SubscribeEvent
-    fun onLivingHurt(event: LivingHurtEvent) {
-        val target = event.entity
-        val attacker: LivingEntity = event.source.entity as? LivingEntity ?: return
-
-        handleElectric(event)
-        attacker.mainHandItem.item.apply {
-            if (this is InstrumentItem) this.attack(target)
-        }
-
-    }
-
-    @SubscribeEvent
     fun serverTick(event: ServerTickEvent) {
         if (event.phase == TickEvent.Phase.END) {
             ModScheduler.tick()
         }
     }
-
 }

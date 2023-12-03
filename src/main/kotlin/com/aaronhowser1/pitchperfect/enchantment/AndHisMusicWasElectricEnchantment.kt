@@ -29,13 +29,12 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
     //iteration starts at 1
     fun damage(
-        originEntity: LivingEntity,
         targetEntity: LivingEntity,
         entitiesHit: MutableList<LivingEntity>,
         iteration: Int,
         event: LivingHurtEvent,
         extraFlags: List<String>,
-        vararg instrumentItems: InstrumentItem
+        instrumentItems: InstrumentItem? = null
     ) {
         if (iteration > ServerConfig.ELECTRIC_MAX_JUMPS.get()) return
         if (!targetEntity.isAlive) return
@@ -64,7 +63,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
             event.amount * damageFactor
         )
 
-        instrumentItems.firstOrNull()?.attack(targetEntity)
+        instrumentItems?.attack(targetEntity)
 
         entitiesHit.add(targetEntity)
 
@@ -100,13 +99,12 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                     ModScheduler.scheduleSynchronisedTask(
                         {
                             damage(
-                                targetEntity,
                                 nextEntity,
                                 entitiesHit,
                                 iteration + 1,
                                 event,
                                 extraFlags,
-                                *instrumentItems
+                                instrumentItems
                             )
                         },
                         ServerConfig.ELECTRIC_JUMPTIME.get()

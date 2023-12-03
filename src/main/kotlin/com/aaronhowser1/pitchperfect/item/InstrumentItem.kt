@@ -158,24 +158,30 @@ class InstrumentItem(
                 0.5f
             ) //from [-90,90] to [2,0.5], high->low bc big number = low pitch
 
-            val noteX = (target.x + entityWidth * (Math.random() * 3 - 1.5)).toFloat()
-            val noteZ = (target.z + entityWidth * (Math.random() * 3 - 1.5)).toFloat()
-            val noteY = (target.y + entityHeight + (entityHeight * Math.random() * 1.5 - .75)).toFloat()
+            val noteX = (target.x + entityWidth * (Math.random() * 3 - 1.5))
+            val noteZ = (target.z + entityWidth * (Math.random() * 3 - 1.5))
+            val noteY = (target.y + entityHeight + (entityHeight * Math.random() * 1.5 - .75))
 
-//                ModPacketHandler.messageNearbyPlayers(
-//                    SpawnNoteParticlePacket(sound.location, ServerLevel, noteX, noteY, noteZ),
-//                    target.getLevel() as ServerLevel,
-//                    Vec3(noteX.toDouble(), noteY.toDouble(), noteZ.toDouble()),
-//                    16
-//                )
+            ModPacketHandler.messageNearbyPlayers(
+                SpawnNoteParticlePacket(
+                    sound.location,
+                    randomPitch,
+                    noteX,
+                    noteY,
+                    noteZ
+                ),
+                target.getLevel() as ServerLevel,
+                Vec3(noteX, noteY, noteZ),
+                16.0
+            )
 
             //TODO: Don't use ClientConfig, possibly use packets instead
             playSound(
                 target.getLevel(),
                 randomPitch,
-                noteX.toDouble(),
-                noteY.toDouble(),
-                noteZ.toDouble(),
+                noteX,
+                noteY,
+                noteZ,
                 max(
                     ClientConfig.VOLUME.get().toFloat() / randomAmount,
                     ClientConfig.MIN_ATTACK_VOLUME.get().toFloat()
