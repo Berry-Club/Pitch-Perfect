@@ -8,7 +8,7 @@ import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 
-@Suppress("unused")
+@Suppress("unused", "HasPlatformType")
 object ModItems {
 
     private val ITEM_REGISTRY: DeferredRegister<Item> =
@@ -18,7 +18,7 @@ object ModItems {
         ITEM_REGISTRY.register<Item>(name) { InstrumentItem(sound) }
 
     val BANJO = createInstrumentItem("banjo", SoundEvents.NOTE_BLOCK_BANJO)
-    val BASSDRUM = createInstrumentItem("bass_drum", SoundEvents.NOTE_BLOCK_BASEDRUM)
+    val BASS_DRUM = createInstrumentItem("bass_drum", SoundEvents.NOTE_BLOCK_BASEDRUM)
     val BASS = createInstrumentItem("bass", SoundEvents.NOTE_BLOCK_BASS)
     val BIT = createInstrumentItem("bit", SoundEvents.NOTE_BLOCK_BIT)
     val CHIMES = createInstrumentItem("chimes", SoundEvents.NOTE_BLOCK_CHIME)
