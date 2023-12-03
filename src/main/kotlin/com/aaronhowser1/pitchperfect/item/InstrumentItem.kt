@@ -1,16 +1,24 @@
 package com.aaronhowser1.pitchperfect.item
 
+import com.aaronhowser1.pitchperfect.config.ClientConfig
+import com.aaronhowser1.pitchperfect.config.CommonConfig
+import com.aaronhowser1.pitchperfect.utils.Utils
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.ImmutableSetMultimap
 import com.google.common.collect.Multimap
+import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
 import net.minecraftforge.common.util.Lazy
+import kotlin.math.max
 
 class InstrumentItem(
     val sound: SoundEvent
@@ -25,6 +33,68 @@ class InstrumentItem(
         const val ATTACK_DAMAGE = 0.1
     }
 
+    fun attack(target: Entity) {
+
+        val particleAmountLowerBound: Int = CommonConfig.MIN_ATTACK_PARTICLES.get()
+        val particleAmountUpperBound: Int = CommonConfig.MAX_ATTACK_PARTICLES.get()
+
+        if (particleAmountLowerBound > particleAmountUpperBound) {
+            throw IllegalArgumentException("Min attack particles cannot be greater than max attack particles")
+        }
+
+        val range = particleAmountLowerBound..particleAmountUpperBound
+        val randomAmount = range.random()
+
+        val entityWidth = target.bbWidth.toDouble()
+        val entityHeight = target.bbHeight.toDouble()
+        for (note in 1..randomAmount) {
+
+            var randomPitch = ((-90..90).random()).toFloat()
+
+            randomPitch = Utils.map(
+                randomPitch,
+                -90f,
+                90f,
+                2f,
+                0.5f
+            ) //from [-90,90] to [2,0.5], high->low bc big number = low pitch
+
+            val noteX = (target.x + entityWidth * (Math.random() * 3 - 1.5)).toFloat()
+            val noteZ = (target.z + entityWidth * (Math.random() * 3 - 1.5)).toFloat()
+            val noteY = (target.y + entityHeight + (entityHeight * Math.random() * 1.5 - .75)).toFloat()
+
+//                ModPacketHandler.messageNearbyPlayers(
+//                    SpawnNoteParticlePacket(sound.location, ServerLevel, noteX, noteY, noteZ),
+//                    target.getLevel() as ServerLevel,
+//                    Vec3(noteX.toDouble(), noteY.toDouble(), noteZ.toDouble()),
+//                    16
+//                )
+
+            //TODO: Don't use ClientConfig, possibly use packets instead
+            playSound(
+                target.getLevel(),
+                randomPitch,
+                noteX.toDouble(),
+                noteY.toDouble(),
+                noteZ.toDouble(),
+                max(
+                    ClientConfig.VOLUME.get().toFloat() / randomAmount,
+                    ClientConfig.MIN_ATTACK_VOLUME.get().toFloat()
+                )
+            )
+        }
+    }
+
+    private fun playSound(level: Level, pitch: Float, x: Double, y: Double, z: Double, volume: Float) {
+        level.playSound(
+            null,
+            BlockPos(x, y, z),
+            sound,
+            SoundSource.PLAYERS,
+            volume,
+            pitch
+        )
+    }
 
     override fun isEnchantable(pStack: ItemStack): Boolean = true
 
