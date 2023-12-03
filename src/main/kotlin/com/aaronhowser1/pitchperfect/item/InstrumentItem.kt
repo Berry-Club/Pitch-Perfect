@@ -2,21 +2,29 @@ package com.aaronhowser1.pitchperfect.item
 
 import com.aaronhowser1.pitchperfect.config.ClientConfig
 import com.aaronhowser1.pitchperfect.config.CommonConfig
+import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.utils.Utils
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.ImmutableSetMultimap
 import com.google.common.collect.Multimap
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.Vec3
 import net.minecraftforge.common.util.Lazy
 import kotlin.math.max
 
@@ -31,6 +39,71 @@ class InstrumentItem(
 
     companion object {
         const val ATTACK_DAMAGE = 0.1
+    }
+
+    override fun use(
+        level: Level,
+        player: Player,
+        interactionHand: InteractionHand
+    ): InteractionResultHolder<ItemStack> {
+        val itemStack = player.getItemInHand(interactionHand)
+        val lookVector = player.lookAngle
+
+        var pitch = lookVector.y().toFloat()
+
+        pitch = Utils.map(pitch, -1f, 1f, 0.5f, 2f)
+
+        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
+            playSound(level, pitch, player.x, player.y, player.z, ClientConfig.VOLUME.get().toFloat())
+        } else {
+            playSound(level, pitch, player.x, player.y, player.z, ClientConfig.VOLUME.get().toFloat())
+        }
+
+        val noteVector = if (interactionHand == InteractionHand.MAIN_HAND) {
+            lookVector.yRot(-0.5f)
+        } else {
+            lookVector.yRot(0.5f)
+        }
+
+        if (!level.isClientSide()) {
+            ModPacketHandler.messageNearbyPlayers(
+                SpawnNoteParticlePacket(
+                    sound.location,
+                    pitch,
+                    (player.x + noteVector.x()).toFloat(),
+                    (player.eyeY + noteVector.y()).toFloat(),
+                    (player.z + noteVector.z()).toFloat()
+                ),
+                player.getLevel() as ServerLevel,
+                Vec3(player.x, player.y, player.z),
+                128
+            )
+        }
+
+        //Enchantments
+        if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) != 0) {
+            val healTargets: List<LivingEntity> = HealingBeatEnchantment.getTargets(player)
+            for (target in healTargets) {
+                HealingBeatEnchantment.heal(target)
+                if (!level.isClientSide()) {
+                    ModPacketHandler.messageNearbyPlayers(
+                        SpawnNoteParticlePacket(
+                            sound.location,
+                            pitch, target.x.toFloat(), target.eyeY.toFloat(), target.z.toFloat()
+                        ),
+                        target.getLevel() as ServerLevel,
+                        Vec3(target.x, target.eyeY, target.z),
+                        64
+                    )
+                }
+            }
+            player.cooldowns.addCooldown(this, (healTargets.size * ServerConfig.HEAL_COOLDOWN_MULT.get()).toInt())
+        }
+        if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
+            BwaaapEnchantment.knockBack(player)
+            player.cooldowns.addCooldown(this, BwaaapEnchantment.getCooldown(player))
+        }
+        return InteractionResultHolder.fail(itemStack)
     }
 
     fun attack(target: Entity) {
