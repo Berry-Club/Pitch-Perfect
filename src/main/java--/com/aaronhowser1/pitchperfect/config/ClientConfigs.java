@@ -26,6 +26,7 @@ public class ClientConfigs {
         ELECTRIC_PARTICLE_DENSITY = BUILDER
                 .comment(" How many particles per block should be spawned along the lightning path.\n There's a minimum of 1 tick per particle, so higher numbers may cause the particles to take longer than the jump time.")
                 .defineInRange("Electric Particle Density", 3, 0, Integer.MAX_VALUE);
+
         ELECTRIC_PARTICLE_ISWAVE = BUILDER
                 .comment(" Should the wave of particles from mob A to mob B be a wave?\n False instead spawns a line, which spawns them all at once.")
                 .define("Electric Particle is wave", true);
