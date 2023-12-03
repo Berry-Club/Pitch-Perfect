@@ -1,4 +1,4 @@
-package com.aaronhowser1.pitchperfect.utils
+package com.aaronhowser1.pitchperfect.event
 
 import com.aaronhowser1.pitchperfect.PitchPerfect
 import com.google.common.collect.HashMultimap

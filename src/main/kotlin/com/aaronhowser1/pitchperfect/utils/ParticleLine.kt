@@ -3,7 +3,7 @@ package com.aaronhowser1.pitchperfect.utils
 import com.aaronhowser1.pitchperfect.config.ClientConfig
 import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.utils.ClientUtils.spawnParticle
-import com.aaronhowser1.pitchperfect.utils.ModScheduler.scheduleSynchronisedTask
+import com.aaronhowser1.pitchperfect.event.ModScheduler.scheduleSynchronisedTask
 import net.minecraft.core.particles.SimpleParticleType
 import net.minecraft.world.phys.Vec3
 import kotlin.math.max

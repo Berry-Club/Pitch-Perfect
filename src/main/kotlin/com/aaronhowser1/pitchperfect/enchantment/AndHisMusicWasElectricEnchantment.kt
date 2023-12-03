@@ -4,7 +4,7 @@ import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
 import com.aaronhowser1.pitchperfect.packet.SpawnElectricParticlePacket
-import com.aaronhowser1.pitchperfect.utils.ModScheduler
+import com.aaronhowser1.pitchperfect.event.ModScheduler
 import com.aaronhowser1.pitchperfect.utils.ServerUtils
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.EquipmentSlot

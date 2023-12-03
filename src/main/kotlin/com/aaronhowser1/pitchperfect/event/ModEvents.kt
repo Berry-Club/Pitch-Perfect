@@ -7,8 +7,7 @@ import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantme
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.hasEnchantment
-import com.aaronhowser1.pitchperfect.utils.ModScheduler
-import com.aaronhowser1.pitchperfect.utils.ModScheduler.scheduleSynchronisedTask
+import com.aaronhowser1.pitchperfect.event.ModScheduler.scheduleSynchronisedTask
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearbyLivingEntities
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearestEntity
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.spawnElectricParticleLine
