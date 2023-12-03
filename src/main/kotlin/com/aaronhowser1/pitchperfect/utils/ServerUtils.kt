@@ -1,5 +1,7 @@
 package com.aaronhowser1.pitchperfect.utils
 
+import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
+import com.aaronhowser1.pitchperfect.packet.SpawnElectricPathPacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.AABB
@@ -40,7 +42,7 @@ object ServerUtils {
         return if (nearestEntity === originEntity) null else nearestEntity
     }
 
-    fun spawnElectricParticleLine(origin: Vec3, destination: Vec3, serverLevel: ServerLevel?) {
+    fun spawnElectricParticleLine(origin: Vec3, destination: Vec3, serverLevel: ServerLevel) {
         ModPacketHandler.messageNearbyPlayers(
             SpawnElectricPathPacket(
                 origin.x(), origin.y(), origin.z(),
@@ -48,7 +50,7 @@ object ServerUtils {
             ),
             serverLevel,
             Vec3(origin.x(), origin.y(), origin.z()),
-            64
+            64.0
         )
     }
 
