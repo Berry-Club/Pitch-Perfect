@@ -1,6 +1,7 @@
 package com.aaronhowser1.pitchperfect.packet
 
 import com.aaronhowser1.pitchperfect.config.ClientConfig
+import com.aaronhowser1.pitchperfect.utils.ParticleLine
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.phys.Vec3
