@@ -2,6 +2,8 @@ package com.aaronhowser1.pitchperfect.enchantment
 
 import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
+import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
+import com.aaronhowser1.pitchperfect.packet.SpawnElectricParticlePacket
 import com.aaronhowser1.pitchperfect.utils.ModScheduler
 import com.aaronhowser1.pitchperfect.utils.ServerUtils
 import net.minecraft.server.level.ServerLevel
@@ -13,7 +15,7 @@ import net.minecraft.world.phys.Vec3
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import kotlin.math.min
 
-class AndHisMusicWasElectricEnchant : Enchantment(
+object AndHisMusicWasElectricEnchant : Enchantment(
     Rarity.VERY_RARE,
     ModEnchantments.INSTRUMENT,
     arrayOf(
@@ -56,7 +58,7 @@ class AndHisMusicWasElectricEnchant : Enchantment(
                 SpawnElectricParticlePacket(x, y, z),
                 targetEntity.getLevel() as ServerLevel,
                 Vec3(x, y, z),
-                16
+                16.0
             )
         }
 

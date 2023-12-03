@@ -21,7 +21,8 @@ object ModEnchantments {
     private fun registerEnchant(name: String, enchantment: Enchantment): RegistryObject<Enchantment> =
         ENCHANTMENTS.register(name) { enchantment }
 
-    val HEALING_BEAT = registerEnchant("healing_beat", HealingBeatEnchantment())
-    val AND_HIS_MUSIC_WAS_ELECTRIC = registerEnchant("and_his_music_was_electric", AndHisMusicWasElectricEnchant())
+    val HEALING_BEAT = registerEnchant("healing_beat", HealingBeatEnchantment)
+    val AND_HIS_MUSIC_WAS_ELECTRIC = registerEnchant("and_his_music_was_electric", AndHisMusicWasElectricEnchant)
+    val BWAAAP = registerEnchant("bwaaap", BwaaapEnchantment)
 
 }

@@ -3,6 +3,7 @@ package com.aaronhowser1.pitchperfect.item
 import com.aaronhowser1.pitchperfect.config.ClientConfig
 import com.aaronhowser1.pitchperfect.config.CommonConfig
 import com.aaronhowser1.pitchperfect.config.ServerConfig
+import com.aaronhowser1.pitchperfect.enchantment.BwaaapEnchantment
 import com.aaronhowser1.pitchperfect.enchantment.HealingBeatEnchantment
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
 import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
