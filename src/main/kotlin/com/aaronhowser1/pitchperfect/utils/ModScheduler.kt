@@ -1,5 +1,6 @@
 package com.aaronhowser1.pitchperfect.utils
 
+import com.aaronhowser1.pitchperfect.PitchPerfect
 import com.google.common.collect.HashMultimap
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -10,11 +11,18 @@ object ModScheduler {
     private var scheduler: ScheduledExecutorService? = null
     private val scheduledSyncTasks = HashMultimap.create<Int, Runnable>()
 
-    fun scheduleSynchronisedTask(run: Runnable, ticks: Int) {
-        scheduledSyncTasks.put(ModEvents.tick + ticks, run)
+    private var currentTick = 0
+
+    fun tick() {
+        currentTick++
+        handleSyncScheduledTasks(currentTick)
     }
 
-    fun scheduleAsyncTask(run: Runnable?, time: Int, unit: TimeUnit?) {
+    fun scheduleSynchronisedTask(run: Runnable, ticks: Int) {
+        scheduledSyncTasks.put(currentTick + ticks, run)
+    }
+
+    fun scheduleAsyncTask(run: Runnable, time: Int, unit: TimeUnit) {
         if (scheduler == null) serverStartupTasks()
         scheduler!!.schedule(run, time.toLong(), unit)
     }
@@ -39,7 +47,7 @@ object ModScheduler {
                 try {
                     tasks.next().run()
                 } catch (ex: Exception) {
-//                    Logging.logMessage(Level.ERROR, "Unable to run unhandled scheduled task, skipping.", ex);
+                    PitchPerfect.LOGGER.error("Unable to run unhandled scheduled task, skipping.", ex)
                 }
                 tasks.remove()
             }

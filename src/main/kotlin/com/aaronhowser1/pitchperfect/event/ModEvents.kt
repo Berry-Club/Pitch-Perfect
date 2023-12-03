@@ -4,7 +4,7 @@ import com.aaronhowser1.pitchperfect.PitchPerfect
 import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
-import com.aaronhowser1.pitchperfect.utils.ModScheduler.handleSyncScheduledTasks
+import com.aaronhowser1.pitchperfect.utils.ModScheduler
 import com.aaronhowser1.pitchperfect.utils.ModScheduler.scheduleSynchronisedTask
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearbyLivingEntities
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearestEntity
@@ -133,14 +133,10 @@ object ModEvents {
 
     }
 
-    //From Tslat
-    var tick = 0
-
     @SubscribeEvent
     fun serverTick(event: ServerTickEvent) {
         if (event.phase == TickEvent.Phase.END) {
-            tick++
-            handleSyncScheduledTasks(tick)
+            ModScheduler.tick()
         }
     }
 
