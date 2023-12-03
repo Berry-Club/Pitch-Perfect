@@ -3,7 +3,9 @@ package com.aaronhowser1.pitchperfect
 import com.aaronhowser1.pitchperfect.config.ClientConfig
 import com.aaronhowser1.pitchperfect.config.CommonConfig
 import com.aaronhowser1.pitchperfect.config.ServerConfig
+import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
 import com.aaronhowser1.pitchperfect.item.ModItems
+import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
@@ -30,10 +32,10 @@ object PitchPerfect {
 
 
         ModItems.register(MOD_BUS)
-//        ModEnchantments.register(eventBus)
-//        ModSounds.register(eventBus)
-//
-//        ModPacketHandler.setup()
+        ModEnchantments.register(MOD_BUS)
+        ModSounds.register(MOD_BUS)
+
+        ModPacketHandler.setup()
 
         MinecraftForge.EVENT_BUS.register(this)
 
