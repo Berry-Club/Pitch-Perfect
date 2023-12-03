@@ -3,7 +3,7 @@ package com.aaronhowser1.pitchperfect.item
 import com.aaronhowser1.pitchperfect.config.ClientConfig
 import com.aaronhowser1.pitchperfect.config.CommonConfig
 import com.aaronhowser1.pitchperfect.config.ServerConfig
-import com.aaronhowser1.pitchperfect.utils.Utils
+import com.aaronhowser1.pitchperfect.utils.CommonUtils
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.ImmutableSetMultimap
 import com.google.common.collect.Multimap
@@ -51,7 +51,7 @@ class InstrumentItem(
 
         var pitch = lookVector.y().toFloat()
 
-        pitch = Utils.map(pitch, -1f, 1f, 0.5f, 2f)
+        pitch = CommonUtils.map(pitch, -1f, 1f, 0.5f, 2f)
 
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) != 0) {
             playSound(level, pitch, player.x, player.y, player.z, ClientConfig.VOLUME.get().toFloat())
@@ -124,7 +124,7 @@ class InstrumentItem(
 
             var randomPitch = ((-90..90).random()).toFloat()
 
-            randomPitch = Utils.map(
+            randomPitch = CommonUtils.map(
                 randomPitch,
                 -90f,
                 90f,
