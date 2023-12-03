@@ -57,6 +57,11 @@ minecraft {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', ''
 
+            mods {
+                pitchperfect {
+                    source sourceSets.main
+                }
+            }
         }
 
         server {
@@ -68,6 +73,13 @@ minecraft {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', ''
+
+            mods {
+                pitchperfect {
+                    source sourceSets.main
+                }
+            }
+
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -82,6 +94,13 @@ minecraft {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', ''
+
+            mods {
+                pitchperfect {
+                    source sourceSets.main
+                }
+            }
+
         }
 
         data {
@@ -95,7 +114,7 @@ minecraft {
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                pitchperfect {
                     source sourceSets.main
                 }
             }

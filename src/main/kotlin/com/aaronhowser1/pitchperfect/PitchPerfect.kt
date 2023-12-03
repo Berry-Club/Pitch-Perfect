@@ -18,10 +18,6 @@ object PitchPerfect {
 
     init {
         LOGGER.log(Level.INFO, "Pitch Perfect loaded!")
-    }
-
-    init {
-        LOGGER.log(Level.INFO, "Pitch Perfect loaded!")
 
         ModLoadingContext.get().apply {
             registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "pitchperfect-client.toml")
