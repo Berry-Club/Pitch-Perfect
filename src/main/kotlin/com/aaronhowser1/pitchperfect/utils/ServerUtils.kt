@@ -1,7 +1,6 @@
 package com.aaronhowser1.pitchperfect.utils
 
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -15,7 +14,7 @@ object ServerUtils {
     }
 
     fun getNearbyLivingEntities(livingEntity: LivingEntity, range: Int): List<LivingEntity> {
-        val entities = livingEntity.getLevel().getEntities(
+        return livingEntity.getLevel().getEntities(
             livingEntity,
             AABB(
                 livingEntity.x - range,
@@ -25,10 +24,7 @@ object ServerUtils {
                 livingEntity.y + range,
                 livingEntity.z + range
             )
-        ) { e: Entity? -> e is LivingEntity }
-        val livingEntities: MutableList<LivingEntity> = ArrayList()
-        for (entity in entities) livingEntities.add(entity as LivingEntity)
-        return livingEntities
+        ).filterIsInstance<LivingEntity>()
     }
 
     fun getNearestEntity(entities: List<LivingEntity>, originEntity: LivingEntity): LivingEntity? {
