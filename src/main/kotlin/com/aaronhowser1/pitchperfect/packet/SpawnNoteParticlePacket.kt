@@ -12,7 +12,7 @@ class SpawnNoteParticlePacket(
     private val x: Double,
     private val y: Double,
     private val z: Double
-): ModPacket {
+) : ModPacket {
 
     override fun encode(buffer: FriendlyByteBuf) {
         buffer.writeResourceLocation(soundResourceLocation)
@@ -22,14 +22,16 @@ class SpawnNoteParticlePacket(
         buffer.writeDouble(z)
     }
 
-    fun decode(buffer: FriendlyByteBuf): SpawnNoteParticlePacket {
-        return SpawnNoteParticlePacket(
-            buffer.readResourceLocation(),
-            buffer.readFloat(),
-            buffer.readDouble(),
-            buffer.readDouble(),
-            buffer.readDouble()
-        )
+    companion object {
+        fun decode(buffer: FriendlyByteBuf): SpawnNoteParticlePacket {
+            return SpawnNoteParticlePacket(
+                buffer.readResourceLocation(),
+                buffer.readFloat(),
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readDouble()
+            )
+        }
     }
 
     override fun receiveMessage(context: Supplier<NetworkEvent.Context>) {

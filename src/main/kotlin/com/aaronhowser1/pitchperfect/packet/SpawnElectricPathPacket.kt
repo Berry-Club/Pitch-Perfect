@@ -26,15 +26,17 @@ class SpawnElectricPathPacket (
         buffer.writeDouble(endZ)
     }
 
-    fun decode(buffer: FriendlyByteBuf): SpawnElectricPathPacket {
-        return SpawnElectricPathPacket(
-            buffer.readDouble(),
-            buffer.readDouble(),
-            buffer.readDouble(),
-            buffer.readDouble(),
-            buffer.readDouble(),
-            buffer.readDouble()
-        )
+    companion object {
+        fun decode(buffer: FriendlyByteBuf): SpawnElectricPathPacket {
+            return SpawnElectricPathPacket(
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readDouble()
+            )
+        }
     }
 
     override fun receiveMessage(context: Supplier<NetworkEvent.Context>) {

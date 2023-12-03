@@ -21,29 +21,29 @@ object ModPacketHandler {
     fun setup() {
         var id = 0
 
-//        INSTANCE.registerMessage(
-//            ++id,
-//            SpawnNoteParticlePacket::class.java,
-//            SpawnNoteParticlePacket::encode,
-//            SpawnNoteParticlePacket::decode,
-//            SpawnNoteParticlePacket::receiveMessage
-//        )
-//
-//        INSTANCE.registerMessage(
-//            ++id,
-//            SpawnElectricParticlePacket::class.java,
-//            SpawnElectricParticlePacket::encode,
-//            SpawnElectricParticlePacket::decode,
-//            SpawnElectricParticlePacket::receiveMessage
-//        )
-//
-//        INSTANCE.registerMessage(
-//            ++id,
-//            SpawnElectricPathPacket::class.java,
-//            SpawnElectricPathPacket::encode,
-//            SpawnElectricPathPacket::decode,
-//            SpawnElectricPathPacket::receiveMessage
-//        )
+        INSTANCE.registerMessage(
+            ++id,
+            SpawnNoteParticlePacket::class.java,
+            SpawnNoteParticlePacket::encode,
+            SpawnNoteParticlePacket::decode,
+            SpawnNoteParticlePacket::receiveMessage
+        )
+
+        INSTANCE.registerMessage(
+            ++id,
+            SpawnElectricParticlePacket::class.java,
+            SpawnElectricParticlePacket::encode,
+            SpawnElectricParticlePacket::decode,
+            SpawnElectricParticlePacket::receiveMessage
+        )
+
+        INSTANCE.registerMessage(
+            ++id,
+            SpawnElectricPathPacket::class.java,
+            SpawnElectricPathPacket::encode,
+            SpawnElectricPathPacket::decode,
+            SpawnElectricPathPacket::receiveMessage
+        )
     }
 
     fun messageNearbyPlayers(packet: ModPacket, serverLevel: ServerLevel, origin: Vec3, radius: Double) {

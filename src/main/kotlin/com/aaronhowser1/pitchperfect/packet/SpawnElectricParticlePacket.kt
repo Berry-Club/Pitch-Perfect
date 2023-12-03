@@ -18,12 +18,14 @@ class SpawnElectricParticlePacket(
         buffer.writeDouble(z)
     }
 
-    fun decode(buffer: FriendlyByteBuf): SpawnElectricParticlePacket {
-        return SpawnElectricParticlePacket(
-            buffer.readDouble(),
-            buffer.readDouble(),
-            buffer.readDouble()
-        )
+    companion object {
+        fun decode(buffer: FriendlyByteBuf): SpawnElectricParticlePacket {
+            return SpawnElectricParticlePacket(
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readDouble()
+            )
+        }
     }
 
     override fun receiveMessage(context: Supplier<NetworkEvent.Context>) {
