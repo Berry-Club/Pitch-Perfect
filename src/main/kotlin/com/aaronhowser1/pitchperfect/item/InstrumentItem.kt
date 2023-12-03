@@ -197,9 +197,9 @@ class InstrumentItem(
 
     override fun isEnchantable(pStack: ItemStack): Boolean = true
 
-    override fun getEnchantmentValue(stack: ItemStack?): Int = 1
+    override fun getEnchantmentValue(stack: ItemStack): Int = 1
 
-//    override fun canApplyAtEnchantingTable(stack: ItemStack?, enchantment: Enchantment): Boolean {
+//    override fun canApplyAtEnchantingTable(stack: ItemStack, enchantment: Enchantment): Boolean {
 //        return enchantment.category == ModEnchantments.INSTRUMENT
 //    }
 
@@ -221,7 +221,7 @@ class InstrumentItem(
         }
     }
 
-    override fun getAttributeModifiers(slot: EquipmentSlot, stack: ItemStack?): Multimap<Attribute, AttributeModifier> {
+    override fun getAttributeModifiers(slot: EquipmentSlot, stack: ItemStack): Multimap<Attribute, AttributeModifier> {
         //If and only if item is in the hand, for some reason
         if (slot != EquipmentSlot.MAINHAND) return super.getAttributeModifiers(slot, stack)
 

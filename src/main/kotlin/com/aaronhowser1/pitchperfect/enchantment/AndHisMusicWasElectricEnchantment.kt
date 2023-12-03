@@ -80,11 +80,11 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         for (s in extraFlags) {
             when (s) {
                 "target = monster" -> {
-                    nextEntities.removeIf { livingEntity: LivingEntity? -> livingEntity !is Monster }
-                    nextEntities.removeIf { livingEntity: LivingEntity? -> livingEntity is Monster }
+                    nextEntities.removeIf { livingEntity: LivingEntity -> livingEntity !is Monster }
+                    nextEntities.removeIf { livingEntity: LivingEntity -> livingEntity is Monster }
                 }
 
-                "attacker = monster" -> nextEntities.removeIf { livingEntity: LivingEntity? -> livingEntity is Monster }
+                "attacker = monster" -> nextEntities.removeIf { livingEntity: LivingEntity -> livingEntity is Monster }
             }
         }
 

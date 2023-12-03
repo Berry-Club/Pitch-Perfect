@@ -20,7 +20,7 @@ object ModSounds {
         }
     }
 
-    fun register(eventBus: IEventBus?) {
+    fun register(eventBus: IEventBus) {
         SOUND_EVENTS.register(eventBus)
     }
 

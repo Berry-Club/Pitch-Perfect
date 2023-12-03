@@ -57,11 +57,11 @@ object ModEvents {
         // God forgive me for what I've created
         val extraFlags: MutableList<String> = ArrayList()
         if (target is Monster) {
-            nearbyLiving.removeIf { livingEntity: LivingEntity? -> livingEntity !is Monster }
+            nearbyLiving.removeIf { livingEntity: LivingEntity -> livingEntity !is Monster }
             extraFlags.add("target = monster")
         }
         if (attacker is Monster) {
-            nearbyLiving.removeIf { livingEntity: LivingEntity? -> livingEntity is Monster }
+            nearbyLiving.removeIf { livingEntity: LivingEntity -> livingEntity is Monster }
             extraFlags.add("attacker = monster")
         }
 

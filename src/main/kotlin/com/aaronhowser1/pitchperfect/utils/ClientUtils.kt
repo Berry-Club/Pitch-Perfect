@@ -11,7 +11,7 @@ object ClientUtils {
         get() = Minecraft.getInstance().level!!
 
     fun spawnParticle(
-        particleType: SimpleParticleType?,
+        particleType: SimpleParticleType,
         x: Double,
         y: Double,
         z: Double,

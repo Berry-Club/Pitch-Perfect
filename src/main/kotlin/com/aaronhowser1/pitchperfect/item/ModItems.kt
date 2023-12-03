@@ -34,7 +34,7 @@ object ModItems {
     val IRON_XYLOPHONE = createInstrumentItem("vibraphone", SoundEvents.NOTE_BLOCK_IRON_XYLOPHONE)
     val XYLOPHONE = createInstrumentItem("xylophone", SoundEvents.NOTE_BLOCK_XYLOPHONE)
 
-    fun register(eventBus: IEventBus?) {
+    fun register(eventBus: IEventBus) {
         ITEM_REGISTRY.register(eventBus)
     }
 

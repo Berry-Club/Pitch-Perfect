@@ -14,8 +14,8 @@ object ModPacketHandler {
     private val INSTANCE: SimpleChannel = NetworkRegistry.newSimpleChannel(
         ResourceLocation("pitchperfect", "main"),
         { PROTOCOL_VERSION },
-        { anObject: String? -> PROTOCOL_VERSION == anObject },
-        { anObject: String? -> PROTOCOL_VERSION == anObject }
+        { anObject: String -> PROTOCOL_VERSION == anObject },
+        { anObject: String -> PROTOCOL_VERSION == anObject }
     )
 
     fun setup() {
@@ -56,7 +56,7 @@ object ModPacketHandler {
     }
 
     fun messagePlayer(player: ServerPlayer, packet: ModPacket) {
-        INSTANCE.send<Any?>(
+        INSTANCE.send(
             PacketDistributor.PLAYER.with { player },
             packet
         )
