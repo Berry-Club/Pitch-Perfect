@@ -14,6 +14,7 @@ import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import kotlin.math.min
+import kotlin.math.pow
 
 object AndHisMusicWasElectricEnchantment : Enchantment(
     Rarity.VERY_RARE,
@@ -65,8 +66,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
             }
 
             //Damage
-            val damageFactor: Float = ServerConfig.ELECTRIC_DAMAGE_RETURNS.get() / iteration
-            val damage = event.amount * damageFactor
+            val damage = event.amount * ServerConfig.ELECTRIC_DAMAGE_FACTOR.get().pow(iteration)
             if (damage < 0.5) throw EndDamage()
 
             targetEntity.hurt(

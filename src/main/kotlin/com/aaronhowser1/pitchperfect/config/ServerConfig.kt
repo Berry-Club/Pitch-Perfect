@@ -22,7 +22,7 @@ object ServerConfig {
     val BWAAAP_COOLDOWN_MULT: ForgeConfigSpec.ConfigValue<Int>
 
     val ELECTRIC_RANGE: ForgeConfigSpec.ConfigValue<Int>
-    val ELECTRIC_DAMAGE_RETURNS: ForgeConfigSpec.ConfigValue<Float>
+    val ELECTRIC_DAMAGE_FACTOR: ForgeConfigSpec.ConfigValue<Float>
     val ELECTRIC_JUMPTIME: ForgeConfigSpec.ConfigValue<Int>
     val ELECTRIC_MAX_JUMPS: ForgeConfigSpec.ConfigValue<Int>
 
@@ -65,8 +65,8 @@ object ServerConfig {
         ELECTRIC_RANGE = BUILDER
             .comment(" The range in blocks around the attacked mob that should be effected by the \"And His Music Was Electric\" enchantment.")
             .define("Electric Range", 5)
-        ELECTRIC_DAMAGE_RETURNS = BUILDER
-            .comment(" The rate of diminishing returns on each mob hit, as a percentage of the original. Uses equation\n    originalDamage * ( multiplier / entityNumber )\n where entityNumber is how many times it's jumped to a new entity")
+        ELECTRIC_DAMAGE_FACTOR = BUILDER
+            .comment(" The rate at which the damage decreases with each jump.\n Uses the equation:\n  damage = originalDamage * (damageFactor ^ jumpNumber)")
             .define("Electric Damage Multiplier", 0.75F)
         ELECTRIC_JUMPTIME = BUILDER
             .comment(" How many ticks before the lightning jumps to the next entity.")
