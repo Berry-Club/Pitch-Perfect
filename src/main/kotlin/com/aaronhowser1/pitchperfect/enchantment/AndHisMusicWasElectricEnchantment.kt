@@ -1,16 +1,21 @@
 package com.aaronhowser1.pitchperfect.enchantment
 
+import com.aaronhowser1.pitchperfect.ModSounds
 import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.event.ModScheduler
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
 import com.aaronhowser1.pitchperfect.packet.SpawnElectricParticlePacket
+import com.aaronhowser1.pitchperfect.utils.CommonUtils.hasEnchantment
 import com.aaronhowser1.pitchperfect.utils.ServerUtils
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.event.entity.living.LivingHurtEvent
@@ -26,15 +31,105 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
     )
 ) {
 
-    val currentElectricSources: MutableSet<DamageSource> = mutableSetOf()
-
     override fun getMinCost(pLevel: Int): Int = 15
     override fun getMaxCost(pLevel: Int): Int = 55
+
+    private val currentElectricSources: MutableSet<DamageSource> = mutableSetOf()
+    fun handleElectric(event: LivingHurtEvent) {
+
+        val target = event.entity
+        val source: DamageSource = event.source
+
+        val attacker: LivingEntity = source.entity as? LivingEntity ?: return
+
+        if (source in currentElectricSources) return
+
+        //Sets to the first InstrumentItem that has the enchantment in your inventory, or stays null
+        val electricItemStack: ItemStack? =
+            if (attacker is Player) {
+                attacker.inventory.items.firstOrNull { itemStack ->
+                    itemStack.item is InstrumentItem && itemStack.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
+                }
+            } else {
+                attacker.allSlots.firstOrNull { itemStack ->
+                    itemStack.item is InstrumentItem && itemStack.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
+                }
+            }
+
+        if (electricItemStack == null) return
+        if (attacker.level.isClientSide) return
+
+        val entitiesHit: MutableList<LivingEntity> = arrayListOf(target, attacker)
+        val nearbyLiving: MutableList<LivingEntity> =
+            ServerUtils.getNearbyLivingEntities(
+                target,
+                ServerConfig.ELECTRIC_RANGE.get()
+            ).filter { it.isAlive && it !in entitiesHit }.toMutableList()
+
+        // God forgive me for what I've created
+        val extraFlags: MutableList<String> = ArrayList()
+        if (target is Monster) {
+            nearbyLiving.removeIf { livingEntity: LivingEntity -> livingEntity !is Monster }
+            extraFlags.add("target = monster")
+        }
+        if (attacker is Monster) {
+            nearbyLiving.removeIf { livingEntity: LivingEntity -> livingEntity is Monster }
+            extraFlags.add("attacker = monster")
+        }
+
+        if (nearbyLiving.isEmpty()) return
+
+        electricItemStack.hurtAndBreak(1, attacker) { user: LivingEntity ->
+            user.getLevel().playSound(
+                null,
+                attacker,
+                ModSounds.GUITAR_SMASH.get(),
+                SoundSource.PLAYERS,
+                1f,
+                1f
+            )
+        }
+
+        val closestEntity = ServerUtils.getNearestEntityInList(nearbyLiving, target) ?: return
+        ServerUtils.spawnElectricParticleLine(
+            Vec3(target.x, target.y, target.z),
+            Vec3(closestEntity.x, closestEntity.y, closestEntity.z),
+            closestEntity.getLevel() as ServerLevel
+        )
+
+        currentElectricSources.add(source)
+
+        //Wait for the particles to reach
+        ModScheduler.scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMPTIME.get()) {
+            if (attacker is Player) {
+                damage(
+                    attacker,
+                    closestEntity,
+                    entitiesHit,
+                    1,
+                    event,
+                    extraFlags,
+                    electricItemStack.item as InstrumentItem
+                )
+            } else {
+                damage(
+                    attacker,
+                    closestEntity,
+                    entitiesHit,
+                    1,
+                    event,
+                    extraFlags
+                )
+            }
+        }
+
+    }
+
 
     private class EndDamage : Throwable()
 
     //iteration starts at 1
-    fun damage(
+    private fun damage(
         attacker: LivingEntity,
         targetEntity: LivingEntity,
         entitiesHit: MutableList<LivingEntity>,
