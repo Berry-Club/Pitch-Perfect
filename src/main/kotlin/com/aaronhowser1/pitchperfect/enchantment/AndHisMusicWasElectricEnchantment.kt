@@ -67,7 +67,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
             //Damage
             val damageFactor: Float = ServerConfig.ELECTRIC_DAMAGE_RETURNS.get() / iteration
             val damage = event.amount * damageFactor
-            if (damage < 0.25) throw EndDamage()
+            if (damage < 0.5) throw EndDamage()
 
             targetEntity.hurt(
                 event.source,
