@@ -13,6 +13,7 @@ import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearestEntityInList
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.spawnElectricParticleLine
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
@@ -43,9 +44,11 @@ object ModEvents {
     private fun handleElectric(event: LivingHurtEvent) {
 
         val target = event.entity
-        val attacker: LivingEntity = event.source.entity as? LivingEntity ?: return
+        val source: DamageSource = event.source
 
-        if (attacker in AndHisMusicWasElectricEnchantment.currentElectricAttackers) return
+        val attacker: LivingEntity = source.entity as? LivingEntity ?: return
+
+        if (source in AndHisMusicWasElectricEnchantment.currentElectricSources) return
 
         //Sets to the first InstrumentItem that has the enchantment in your inventory, or stays null
         val electricItemStack: ItemStack? =
@@ -100,7 +103,7 @@ object ModEvents {
             closestEntity.getLevel() as ServerLevel
         )
 
-        AndHisMusicWasElectricEnchantment.currentElectricAttackers.add(attacker)
+        AndHisMusicWasElectricEnchantment.currentElectricSources.add(source)
 
         //Wait for the particles to reach
         scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMPTIME.get()) {

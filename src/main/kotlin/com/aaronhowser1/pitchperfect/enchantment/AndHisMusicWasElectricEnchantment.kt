@@ -7,6 +7,7 @@ import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
 import com.aaronhowser1.pitchperfect.packet.SpawnElectricParticlePacket
 import com.aaronhowser1.pitchperfect.utils.ServerUtils
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
@@ -25,7 +26,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
     )
 ) {
 
-    val currentElectricAttackers: MutableSet<LivingEntity> = mutableSetOf()
+    val currentElectricSources: MutableSet<DamageSource> = mutableSetOf()
 
     override fun getMinCost(pLevel: Int): Int = 15
     override fun getMaxCost(pLevel: Int): Int = 55
@@ -43,7 +44,6 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         instrumentItem: InstrumentItem? = null
     ) {
         try {
-
 
             if (iteration > ServerConfig.ELECTRIC_MAX_JUMPS.get()) throw EndDamage()
             if (!targetEntity.isAlive) throw EndDamage()
@@ -119,7 +119,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                 )
             }
         } catch (e: EndDamage) {
-            currentElectricAttackers.remove(attacker)
+            currentElectricSources.remove(event.source)
         }
     }
 
