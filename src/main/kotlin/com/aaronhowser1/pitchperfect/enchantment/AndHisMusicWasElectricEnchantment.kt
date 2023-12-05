@@ -34,7 +34,8 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
     override fun getMinCost(pLevel: Int): Int = 15
     override fun getMaxCost(pLevel: Int): Int = 55
 
-    private val currentElectricSources: MutableSet<DamageSource> = mutableSetOf()
+    private val currentElectricArcs: MutableMap<DamageSource, MutableSet<LivingEntity>> = mutableMapOf()
+
     fun handleElectric(event: LivingHurtEvent) {
 
         if (event.isCanceled) return
@@ -44,7 +45,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
         val attacker: LivingEntity = source.entity as? LivingEntity ?: return
 
-        if (source in currentElectricSources) return
+        if (source in currentElectricArcs.keys) return
 
         fun ItemStack.hasElectricEnchantment(): Boolean =
             this.item is InstrumentItem && this.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
@@ -98,7 +99,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
             closestEntity.getLevel() as ServerLevel
         )
 
-        currentElectricSources.add(source)
+        currentElectricArcs[source] = entitiesHit.toMutableSet()
 
         //Wait for the particles to reach
         ModScheduler.scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMPTIME.get()) {
@@ -106,7 +107,6 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                 damage(
                     attacker,
                     closestEntity,
-                    entitiesHit,
                     1,
                     event,
                     extraFlags,
@@ -116,7 +116,6 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                 damage(
                     attacker,
                     closestEntity,
-                    entitiesHit,
                     1,
                     event,
                     extraFlags
@@ -126,14 +125,12 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
     }
 
-
     private class EndDamage : Throwable()
 
     //iteration starts at 1
     private fun damage(
         attacker: LivingEntity,
         targetEntity: LivingEntity,
-        entitiesHit: MutableList<LivingEntity>,
         iteration: Int,
         event: LivingHurtEvent,
         extraFlags: List<String>,
@@ -172,7 +169,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
             instrumentItem?.attack(targetEntity)
 
-            entitiesHit.add(targetEntity)
+            val entitiesHit = currentElectricArcs[event.source] ?: throw EndDamage()
 
             //Spawn particle line
             val nextEntities: MutableList<LivingEntity> =
@@ -207,7 +204,6 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                 damage(
                     attacker,
                     nextEntity,
-                    entitiesHit,
                     iteration + 1,
                     event,
                     extraFlags,
@@ -215,7 +211,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                 )
             }
         } catch (e: EndDamage) {
-            currentElectricSources.remove(event.source)
+            currentElectricArcs.remove(event.source)
         }
     }
 
