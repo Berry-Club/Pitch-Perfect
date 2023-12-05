@@ -34,18 +34,19 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
     override fun getMinCost(pLevel: Int): Int = 15
     override fun getMaxCost(pLevel: Int): Int = 55
 
-    private val currentElectricArcs: MutableMap<DamageSource, MutableSet<LivingEntity>> = mutableMapOf()
-
     private val currentElectricAttacks: MutableSet<ElectricAttack> = mutableSetOf()
 
     private class ElectricAttack(
-        val damageSource: DamageSource,
+        val event: LivingHurtEvent,
         val electricItemStack: ItemStack
     ) {
+        private val damageSource: DamageSource = event.source
+
         private val attacker: LivingEntity? = damageSource.entity as? LivingEntity
         private val initialTarget: LivingEntity? = damageSource.entity as? LivingEntity
 
         private val entitiesHit: MutableList<LivingEntity> = arrayListOf()
+        private var iteration: Int = 0
 
         private val targetIsMonster: Boolean = initialTarget is Monster
         private val attackerIsMonster: Boolean = attacker is Monster
@@ -71,6 +72,8 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                 return
             }
 
+            iteration++
+
             ServerUtils.spawnElectricParticleLine(
                 Vec3(currentTarget.x, currentTarget.y, currentTarget.z),
                 Vec3(nextTarget.x, nextTarget.y, nextTarget.z),
@@ -83,14 +86,64 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                     attacker!!,
                     nextTarget,
                     1,
-                    event,
-                    extraFlags,
                     electricItemStack.item as InstrumentItem
                 )
             }
         }
 
-        fun damageItem() {
+        private class EndDamage : Exception()
+
+        //iteration starts at 1
+        private fun damage(
+            attacker: LivingEntity,
+            targetEntity: LivingEntity,
+            iteration: Int,
+            instrumentItem: InstrumentItem? = null
+        ) {
+            try {
+
+                if (iteration > ServerConfig.ELECTRIC_MAX_JUMPS.get()) throw EndDamage()
+                if (!targetEntity.isAlive) throw EndDamage()
+
+                spawnHurtParticles(targetEntity)
+                hurtTarget(targetEntity)
+
+            } catch (e: EndDamage) {
+                currentElectricArcs.remove(event.source)
+            }
+        }
+
+        private fun hurtTarget(targetEntity: LivingEntity) {
+            val damage = event.amount * ServerConfig.ELECTRIC_DAMAGE_FACTOR.get().pow(iteration)
+            if (damage < 0.5) throw EndDamage()
+
+            targetEntity.hurt(
+                event.source,
+                damage
+            )
+
+            instrumentItem?.attack(targetEntity)
+        }
+
+        private fun spawnHurtParticles(targetEntity: LivingEntity) {
+            val entityWidth = targetEntity.bbWidth.toDouble()
+            val entityHeight = targetEntity.bbHeight.toDouble()
+            for (p in 1..min(iteration.toDouble(), 5.0).toInt()) {
+
+                val x = targetEntity.x + entityWidth * (Math.random() * .75 - .375)
+                val y = targetEntity.y + entityHeight + min(2.0, iteration * 0.05)
+                val z = targetEntity.z + entityWidth * (Math.random() * .75 - .375)
+
+                ModPacketHandler.messageNearbyPlayers(
+                    SpawnElectricParticlePacket(x, y, z),
+                    targetEntity.getLevel() as ServerLevel,
+                    Vec3(x, y, z),
+                    16.0
+                )
+            }
+        }
+
+        private fun damageItem() {
             if (attacker is Player) {
                 electricItemStack.hurtAndBreak(1, attacker) { user: LivingEntity ->
                     user.getLevel().playSound(
@@ -136,11 +189,10 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
         if (event.isCanceled) return
 
-        val target = event.entity
         val source: DamageSource = event.source
         val attacker: LivingEntity = source.entity as? LivingEntity ?: return
 
-        if (currentElectricAttacks.any { it.damageSource == source }) return
+        if (currentElectricAttacks.any { it.event == event }) return
 
         fun ItemStack.hasElectricEnchantment(): Boolean =
             this.item is InstrumentItem && this.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
@@ -156,109 +208,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         if (electricItemStack == null) return
         if (attacker.level.isClientSide) return
 
-        val electricAttack = ElectricAttack(source, electricItemStack)
+        val electricAttack = ElectricAttack(event, electricItemStack)
 
     }
-
-
-    private class EndDamage : Throwable()
-
-    private enum class ExtraFlags {
-        TARGET_IS_MONSTER,
-        ATTACKER_IS_MONSTER
-    }
-
-    //iteration starts at 1
-    private fun damage(
-        attacker: LivingEntity,
-        targetEntity: LivingEntity,
-        iteration: Int,
-        event: LivingHurtEvent,
-        extraFlags: List<ExtraFlags>,
-        instrumentItem: InstrumentItem? = null
-    ) {
-        try {
-
-            if (iteration > ServerConfig.ELECTRIC_MAX_JUMPS.get()) throw EndDamage()
-            if (!targetEntity.isAlive) throw EndDamage()
-
-            //Spawn Particles
-            val entityWidth = targetEntity.bbWidth.toDouble()
-            val entityHeight = targetEntity.bbHeight.toDouble()
-            for (p in 1..min(iteration.toDouble(), 5.0).toInt()) {
-
-                val x = targetEntity.x + entityWidth * (Math.random() * .75 - .375)
-                val y = targetEntity.y + entityHeight + min(2.0, iteration * 0.05)
-                val z = targetEntity.z + entityWidth * (Math.random() * .75 - .375)
-
-                ModPacketHandler.messageNearbyPlayers(
-                    SpawnElectricParticlePacket(x, y, z),
-                    targetEntity.getLevel() as ServerLevel,
-                    Vec3(x, y, z),
-                    16.0
-                )
-            }
-            val entitiesHit = currentElectricArcs[event.source] ?: throw EndDamage()
-
-            //Damage
-            val damage = event.amount * ServerConfig.ELECTRIC_DAMAGE_FACTOR.get().pow(iteration)
-            if (damage < 0.5) throw EndDamage()
-
-            targetEntity.hurt(
-                event.source,
-                damage
-            )
-
-            instrumentItem?.attack(targetEntity)
-
-            entitiesHit.add(targetEntity)
-            currentElectricArcs[event.source] = entitiesHit
-
-            //Spawn particle line
-            val nextEntities: MutableList<LivingEntity> =
-                ServerUtils.getNearbyLivingEntities(targetEntity, ServerConfig.ELECTRIC_RANGE.get())
-                    .filter { it.isAlive && it !in entitiesHit }.toMutableList()
-
-
-            // If the attacker is not a monster, and a monster is attacked, aim only at monsters
-            // If the attacker is not a monster, and a non-monster is attacked, aim at anything nearby
-            // If the attacker is a monster, and a non-monster is attacked, aim only at non-monsters
-            // If the attacker is a monster, and a monster is attacked, aim at anything nearby
-
-            val attackerIsMonster = extraFlags.contains(ExtraFlags.ATTACKER_IS_MONSTER)
-            val targetIsMonster = extraFlags.contains(ExtraFlags.TARGET_IS_MONSTER)
-
-            if (!attackerIsMonster && targetIsMonster) {
-                nextEntities.removeIf { it !is Monster }
-            } else if (attackerIsMonster && !targetIsMonster) {
-                nextEntities.removeIf { it is Monster }
-            }
-
-            if (nextEntities.isEmpty()) throw EndDamage()
-            if (iteration + 1 > ServerConfig.ELECTRIC_MAX_JUMPS.get()) throw EndDamage()
-
-            val nextEntity = ServerUtils.getNearestEntityInList(nextEntities, targetEntity) ?: throw EndDamage()
-
-            ServerUtils.spawnElectricParticleLine(
-                Vec3(targetEntity.x, targetEntity.y, targetEntity.z),
-                Vec3(nextEntity.x, nextEntity.y, nextEntity.z),
-                targetEntity.getLevel() as ServerLevel
-            )
-
-            ModScheduler.scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMPTIME.get()) {
-                damage(
-                    attacker,
-                    nextEntity,
-                    iteration + 1,
-                    event,
-                    extraFlags,
-                    instrumentItem
-                )
-            }
-        } catch (e: EndDamage) {
-            currentElectricArcs.remove(event.source)
-        }
-    }
-
-
 }
