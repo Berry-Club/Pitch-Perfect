@@ -162,6 +162,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                     16.0
                 )
             }
+            val entitiesHit = currentElectricArcs[event.source] ?: throw EndDamage()
 
             //Damage
             val damage = event.amount * ServerConfig.ELECTRIC_DAMAGE_FACTOR.get().pow(iteration)
@@ -174,7 +175,8 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
             instrumentItem?.attack(targetEntity)
 
-            val entitiesHit = currentElectricArcs[event.source] ?: throw EndDamage()
+            entitiesHit.add(targetEntity)
+            currentElectricArcs[event.source] = entitiesHit
 
             //Spawn particle line
             val nextEntities: MutableList<LivingEntity> =
