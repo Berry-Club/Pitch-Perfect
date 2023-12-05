@@ -102,8 +102,8 @@ class InstrumentItem(
 
     private fun bwaaap(itemStack: ItemStack, player: Player) {
         if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.BWAAAP.get(), itemStack) == 0) return
-        BwaaapEnchantment.knockBack(player)
-        player.cooldowns.addCooldown(this, BwaaapEnchantment.getCooldown(player))
+
+        BwaaapEnchantment.triggerBwaaap(player, this)
     }
 
     private fun healingBeat(itemStack: ItemStack, player: Player) {

@@ -1,15 +1,17 @@
 package com.aaronhowser1.pitchperfect.enchantment
 
 import com.aaronhowser1.pitchperfect.config.ServerConfig
+import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.distanceBetweenPoints
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.entityToVec3
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.getNearbyLivingEntities
 import com.aaronhowser1.pitchperfect.utils.ServerUtils.vecBetweenPoints
-import net.minecraft.util.Mth
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.enchantment.Enchantment
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 object BwaaapEnchantment : Enchantment(
     Rarity.COMMON,
@@ -23,57 +25,72 @@ object BwaaapEnchantment : Enchantment(
     override fun getMinCost(pLevel: Int): Int = 5
     override fun getMaxCost(pLevel: Int): Int = 25
 
-    private fun getTargets(user: LivingEntity): List<LivingEntity> {
-        val range: Int = ServerConfig.BWAAAP_RANGE.get()
-        return getNearbyLivingEntities(user, range)
+    fun triggerBwaaap(user: LivingEntity, instrument: InstrumentItem) {
+        BwaaapTrigger(user, instrument)
     }
 
-    fun getCooldown(user: LivingEntity): Int {
-        var cooldown = 0f
+    private class BwaaapTrigger(val user: LivingEntity, instrument: InstrumentItem) {
+        private val targets: List<LivingEntity> = getTargets()
+        private val cooldown: Int = getCooldown()
 
-        for (target in getTargets(user)) {
+        init {
+            knockBack()
+            if (user is Player) user.cooldowns.addCooldown(instrument, cooldown)
+        }
+
+        private fun getTargets(): List<LivingEntity> {
             val range: Int = ServerConfig.BWAAAP_RANGE.get()
-
-            val distanceToTarget = distanceBetweenPoints(
-                entityToVec3(user),
-                entityToVec3(target)
-            )
-            if (distanceToTarget > range) continue
-
-            val targetPercentageFromRange = abs(distanceToTarget / range - 1)
-            cooldown += targetPercentageFromRange.toFloat()
+            return getNearbyLivingEntities(user, range)
         }
 
-        cooldown *= ServerConfig.BWAAAP_COOLDOWN_MULT.get()
-        return Mth.floor(cooldown)
-    }
+        private fun getCooldown(): Int {
+            var cooldown = 0f
 
-    fun knockBack(user: LivingEntity) {
-        val range: Int = ServerConfig.BWAAAP_RANGE.get()
-        val strength: Float = ServerConfig.BWAAAP_STRENGTH.get()
+            for (target in targets) {
+                val range: Int = ServerConfig.BWAAAP_RANGE.get()
 
-        for (target in getTargets(user)) {
-            val targetMotion = target.deltaMovement
-
-            val userToTargetVector = vecBetweenPoints(
-                entityToVec3(user),
-                entityToVec3(target)
-            )
-
-            val distanceToTarget = userToTargetVector.length()
-            if (distanceToTarget > range) continue
-
-            val targetPercentageFromRange = abs(distanceToTarget / range - 1)
-            val yMult = if (user.isCrouching) 2f else 1f
-
-            target.deltaMovement = targetMotion.add(
-                userToTargetVector.multiply(
-                    targetPercentageFromRange * strength,
-                    targetPercentageFromRange * strength * yMult,
-                    targetPercentageFromRange * strength
+                val distanceToTarget = distanceBetweenPoints(
+                    entityToVec3(user),
+                    entityToVec3(target)
                 )
-            )
+                if (distanceToTarget > range) continue
+
+                val targetPercentageFromRange = abs(distanceToTarget / range - 1)
+                cooldown += targetPercentageFromRange.toFloat()
+            }
+
+            cooldown *= ServerConfig.BWAAAP_COOLDOWN_MULT.get()
+            return cooldown.roundToInt()
         }
+
+        private fun knockBack() {
+            val range: Int = ServerConfig.BWAAAP_RANGE.get()
+            val strength: Float = ServerConfig.BWAAAP_STRENGTH.get()
+
+            for (target in targets) {
+                val targetMotion = target.deltaMovement
+
+                val userToTargetVector = vecBetweenPoints(
+                    entityToVec3(user),
+                    entityToVec3(target)
+                )
+
+                val distanceToTarget = userToTargetVector.length()
+                if (distanceToTarget > range) continue
+
+                val targetPercentageFromRange = abs(distanceToTarget / range - 1)
+                val yMult = if (user.isCrouching) 2f else 1f
+
+                target.deltaMovement = targetMotion.add(
+                    userToTargetVector.multiply(
+                        targetPercentageFromRange * strength,
+                        targetPercentageFromRange * strength * yMult,
+                        targetPercentageFromRange * strength
+                    )
+                )
+            }
+        }
+
     }
 
 }
