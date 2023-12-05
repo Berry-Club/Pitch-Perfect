@@ -37,6 +37,8 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
     private val currentElectricSources: MutableSet<DamageSource> = mutableSetOf()
     fun handleElectric(event: LivingHurtEvent) {
 
+        if (event.isCanceled) return
+
         val target = event.entity
         val source: DamageSource = event.source
 
@@ -44,16 +46,15 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
         if (source in currentElectricSources) return
 
+        fun ItemStack.hasElectricEnchantment(): Boolean =
+            this.item is InstrumentItem && this.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
+
         //Sets to the first InstrumentItem that has the enchantment in your inventory, or stays null
         val electricItemStack: ItemStack? =
             if (attacker is Player) {
-                attacker.inventory.items.firstOrNull { itemStack ->
-                    itemStack.item is InstrumentItem && itemStack.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
-                }
+                attacker.inventory.items.firstOrNull { it.hasElectricEnchantment() }
             } else {
-                attacker.allSlots.firstOrNull { itemStack ->
-                    itemStack.item is InstrumentItem && itemStack.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
-                }
+                attacker.allSlots.firstOrNull { it.hasElectricEnchantment() }
             }
 
         if (electricItemStack == null) return
