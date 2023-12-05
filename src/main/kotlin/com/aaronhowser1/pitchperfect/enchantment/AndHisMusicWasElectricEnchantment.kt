@@ -105,24 +105,14 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
         //Wait for the particles to reach
         ModScheduler.scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMPTIME.get()) {
-            if (attacker is Player) {
-                damage(
-                    attacker,
-                    closestEntity,
-                    1,
-                    event,
-                    extraFlags,
-                    electricItemStack.item as InstrumentItem
-                )
-            } else {
-                damage(
-                    attacker,
-                    closestEntity,
-                    1,
-                    event,
-                    extraFlags
-                )
-            }
+            damage(
+                attacker,
+                closestEntity,
+                1,
+                event,
+                extraFlags,
+                electricItemStack.item as InstrumentItem
+            )
         }
 
     }
