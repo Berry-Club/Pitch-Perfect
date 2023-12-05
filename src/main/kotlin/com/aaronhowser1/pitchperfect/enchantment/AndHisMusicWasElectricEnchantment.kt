@@ -69,14 +69,14 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
             ).filter { it.isAlive && it !in entitiesHit }.toMutableList()
 
         // God forgive me for what I've created
-        val extraFlags: MutableList<String> = ArrayList()
+        val extraFlags: MutableList<ExtraFlags> = ArrayList()
         if (target is Monster) {
             nearbyLiving.removeIf { livingEntity: LivingEntity -> livingEntity !is Monster }
-            extraFlags.add("target = monster")
+            extraFlags.add(ExtraFlags.TARGET_IS_MONSTER)
         }
         if (attacker is Monster) {
             nearbyLiving.removeIf { livingEntity: LivingEntity -> livingEntity is Monster }
-            extraFlags.add("attacker = monster")
+            extraFlags.add(ExtraFlags.ATTACKER_IS_MONSTER)
         }
 
         if (nearbyLiving.isEmpty()) return
@@ -127,13 +127,18 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
     private class EndDamage : Throwable()
 
+    private enum class ExtraFlags {
+        TARGET_IS_MONSTER,
+        ATTACKER_IS_MONSTER
+    }
+
     //iteration starts at 1
     private fun damage(
         attacker: LivingEntity,
         targetEntity: LivingEntity,
         iteration: Int,
         event: LivingHurtEvent,
-        extraFlags: List<String>,
+        extraFlags: List<ExtraFlags>,
         instrumentItem: InstrumentItem? = null
     ) {
         try {
@@ -176,17 +181,24 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
                 ServerUtils.getNearbyLivingEntities(targetEntity, ServerConfig.ELECTRIC_RANGE.get())
                     .filter { it.isAlive && it !in entitiesHit }.toMutableList()
 
-            //Look, this saves TWO booleans. TWO.
-            //Otherwise, I'd have to include the original nearbyLiving from ModEvents, which would mean it's limited to what's near the ORIGINAL hit mob, and not the most recent.
-            for (s in extraFlags) {
-                when (s) {
-                    "target = monster" -> {
-                        nextEntities.removeIf { livingEntity: LivingEntity -> livingEntity !is Monster }
-                        nextEntities.removeIf { livingEntity: LivingEntity -> livingEntity is Monster }
-                    }
 
-                    "attacker = monster" -> nextEntities.removeIf { livingEntity: LivingEntity -> livingEntity is Monster }
-                }
+            // If the attacker is not a monster, and a monster is attacked, aim only at monsters
+            // If the attacker is not a monster, and a non-monster is attacked, aim at anything nearby
+            // If the attacker is a monster, and a non-monster is attacked, aim only at non-monsters
+            // If the attacker is a monster, and a monster is attacked, aim at anything nearby
+
+            val attackerIsMonster = extraFlags.contains(ExtraFlags.ATTACKER_IS_MONSTER)
+            val targetIsMonster = extraFlags.contains(ExtraFlags.TARGET_IS_MONSTER)
+
+            @Suppress("KotlinConstantConditions")
+            if (!attackerIsMonster && targetIsMonster) {
+                nextEntities.removeIf { it !is Monster }
+            } else if (!attackerIsMonster && !targetIsMonster) {
+                nextEntities.removeIf { it is Monster }
+            } else if (attackerIsMonster && !targetIsMonster) {
+                nextEntities.removeIf { it is Monster }
+            } else if (attackerIsMonster && targetIsMonster) {
+                nextEntities.removeIf { it !is Monster }
             }
 
             if (nextEntities.isEmpty()) throw EndDamage()
