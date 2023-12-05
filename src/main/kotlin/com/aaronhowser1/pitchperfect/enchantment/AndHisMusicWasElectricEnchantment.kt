@@ -192,15 +192,10 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
             val attackerIsMonster = extraFlags.contains(ExtraFlags.ATTACKER_IS_MONSTER)
             val targetIsMonster = extraFlags.contains(ExtraFlags.TARGET_IS_MONSTER)
 
-            @Suppress("KotlinConstantConditions")
             if (!attackerIsMonster && targetIsMonster) {
                 nextEntities.removeIf { it !is Monster }
-            } else if (!attackerIsMonster && !targetIsMonster) {
-                nextEntities.removeIf { it is Monster }
             } else if (attackerIsMonster && !targetIsMonster) {
                 nextEntities.removeIf { it is Monster }
-            } else if (attackerIsMonster && targetIsMonster) {
-                nextEntities.removeIf { it !is Monster }
             }
 
             if (nextEntities.isEmpty()) throw EndDamage()
