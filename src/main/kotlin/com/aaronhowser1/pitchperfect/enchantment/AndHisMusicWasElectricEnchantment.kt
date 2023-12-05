@@ -59,7 +59,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         if (electricItemStack == null) return
         if (attacker.level.isClientSide) return
 
-        val electricAttack = ElectricAttack(event, electricItemStack)
+        ElectricAttack(event, electricItemStack)
 
     }
 
@@ -79,18 +79,26 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         private val targetIsMonster: Boolean = initialTarget is Monster
         private val attackerIsMonster: Boolean = attacker is Monster
 
+        private class EndDamage : Exception()
+
         init {
             currentElectricAttacks.add(this)
 
             if (initialTarget == null || attacker == null || instrumentItem == null) {
                 endAttack()
             } else {
-                entitiesHit.apply {
-                    add(initialTarget)
-                    add(attacker)
+
+                try {
+                    entitiesHit.apply {
+                        add(initialTarget)
+                        add(attacker)
+                    }
+                    hitNextTarget(initialTarget)
+                } catch (e: EndDamage) {
+                    endAttack()
                 }
-                hitNextTarget(initialTarget)
             }
+
         }
 
         private fun endAttack() {
@@ -98,13 +106,16 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         }
 
         private fun hitNextTarget(currentTarget: LivingEntity) {
+
+            if (iteration > ServerConfig.ELECTRIC_MAX_JUMPS.get()) throw EndDamage()
+
             val nextTarget: LivingEntity? = getNearestTarget(currentTarget)
             if (nextTarget == null) {
                 endAttack()
                 return
             }
 
-            iteration++
+            if (iteration++ == 1) damageItem()
 
             ServerUtils.spawnElectricParticleLine(
                 Vec3(currentTarget.x, currentTarget.y, currentTarget.z),
@@ -118,33 +129,22 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
             }
         }
 
-        private class EndDamage : Exception()
-
         private fun damage(
             targetEntity: LivingEntity
         ) {
-            try {
-                if (iteration > ServerConfig.ELECTRIC_MAX_JUMPS.get()) throw EndDamage()
-                if (!targetEntity.isAlive) throw EndDamage()
+            if (!targetEntity.isAlive) throw EndDamage()
 
-                spawnHurtParticles(targetEntity)
-                hurtTarget(targetEntity)
+            spawnHurtParticles(targetEntity)
+            hurtTarget(targetEntity)
 
-                hitNextTarget(targetEntity)
-
-            } catch (e: EndDamage) {
-                endAttack()
-            }
+            hitNextTarget(targetEntity)
         }
 
         private fun hurtTarget(targetEntity: LivingEntity) {
             val damage = event.amount * ServerConfig.ELECTRIC_DAMAGE_FACTOR.get().pow(iteration)
             if (damage < 0.5) throw EndDamage()
 
-            targetEntity.hurt(
-                event.source,
-                damage
-            )
+            targetEntity.hurt(event.source, damage)
 
             instrumentItem?.attack(targetEntity)
         }
@@ -189,8 +189,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         private fun getNearbyTargets(currentTarget: LivingEntity): List<LivingEntity> {
 
             val nearbyTargets = ServerUtils.getNearbyLivingEntities(
-                currentTarget,
-                ServerConfig.ELECTRIC_RANGE.get()
+                currentTarget, ServerConfig.ELECTRIC_RANGE.get()
             ).filter { it.isAlive && it !in entitiesHit }.toMutableList()
 
             // If the attacker is not a monster, and a monster is attacked, aim only at monsters
