@@ -36,14 +36,42 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
     private val currentElectricAttacks: MutableSet<ElectricAttack> = mutableSetOf()
 
+    fun handleElectric(event: LivingHurtEvent) {
+
+        if (event.isCanceled) return
+
+        val source: DamageSource = event.source
+        val attacker: LivingEntity = source.entity as? LivingEntity ?: return
+
+        if (currentElectricAttacks.any { it.damageSource == source }) return
+
+        fun ItemStack.hasElectricEnchantment(): Boolean =
+            this.item is InstrumentItem && this.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
+
+        //Sets to the first InstrumentItem that has the enchantment in your inventory, or stays null
+        val electricItemStack: ItemStack? =
+            if (attacker is Player) {
+                attacker.inventory.items.firstOrNull { it.hasElectricEnchantment() }
+            } else {
+                attacker.allSlots.firstOrNull { it.hasElectricEnchantment() }
+            }
+
+        if (electricItemStack == null) return
+        if (attacker.level.isClientSide) return
+
+        val electricAttack = ElectricAttack(event, electricItemStack)
+
+    }
+
     private class ElectricAttack(
         val event: LivingHurtEvent,
         val electricItemStack: ItemStack
     ) {
-        private val damageSource: DamageSource = event.source
+        val damageSource: DamageSource = event.source
+        private val instrumentItem: InstrumentItem? = electricItemStack.item as? InstrumentItem
 
         private val attacker: LivingEntity? = damageSource.entity as? LivingEntity
-        private val initialTarget: LivingEntity? = damageSource.entity as? LivingEntity
+        private val initialTarget: LivingEntity? = event.entity
 
         private val entitiesHit: MutableList<LivingEntity> = arrayListOf()
         private var iteration: Int = 0
@@ -54,9 +82,13 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         init {
             currentElectricAttacks.add(this)
 
-            if (initialTarget == null || attacker == null) {
+            if (initialTarget == null || attacker == null || instrumentItem == null) {
                 endAttack()
             } else {
+                entitiesHit.apply {
+                    add(initialTarget)
+                    add(attacker)
+                }
                 hitNextTarget(initialTarget)
             }
         }
@@ -66,7 +98,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         }
 
         private fun hitNextTarget(currentTarget: LivingEntity) {
-            val nextTarget = getNearestTarget(currentTarget)
+            val nextTarget: LivingEntity? = getNearestTarget(currentTarget)
             if (nextTarget == null) {
                 endAttack()
                 return
@@ -82,34 +114,26 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
             //Wait for the particles to reach
             ModScheduler.scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMPTIME.get()) {
-                damage(
-                    attacker!!,
-                    nextTarget,
-                    1,
-                    electricItemStack.item as InstrumentItem
-                )
+                damage(nextTarget)
             }
         }
 
         private class EndDamage : Exception()
 
-        //iteration starts at 1
         private fun damage(
-            attacker: LivingEntity,
-            targetEntity: LivingEntity,
-            iteration: Int,
-            instrumentItem: InstrumentItem? = null
+            targetEntity: LivingEntity
         ) {
             try {
-
                 if (iteration > ServerConfig.ELECTRIC_MAX_JUMPS.get()) throw EndDamage()
                 if (!targetEntity.isAlive) throw EndDamage()
 
                 spawnHurtParticles(targetEntity)
                 hurtTarget(targetEntity)
 
+                hitNextTarget(targetEntity)
+
             } catch (e: EndDamage) {
-                currentElectricArcs.remove(event.source)
+                endAttack()
             }
         }
 
@@ -182,33 +206,6 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
             return nearbyTargets
         }
-
-    }
-
-    fun handleElectric(event: LivingHurtEvent) {
-
-        if (event.isCanceled) return
-
-        val source: DamageSource = event.source
-        val attacker: LivingEntity = source.entity as? LivingEntity ?: return
-
-        if (currentElectricAttacks.any { it.event == event }) return
-
-        fun ItemStack.hasElectricEnchantment(): Boolean =
-            this.item is InstrumentItem && this.hasEnchantment(ModEnchantments.AND_HIS_MUSIC_WAS_ELECTRIC.get())
-
-        //Sets to the first InstrumentItem that has the enchantment in your inventory, or stays null
-        val electricItemStack: ItemStack? =
-            if (attacker is Player) {
-                attacker.inventory.items.firstOrNull { it.hasElectricEnchantment() }
-            } else {
-                attacker.allSlots.firstOrNull { it.hasElectricEnchantment() }
-            }
-
-        if (electricItemStack == null) return
-        if (attacker.level.isClientSide) return
-
-        val electricAttack = ElectricAttack(event, electricItemStack)
 
     }
 }
