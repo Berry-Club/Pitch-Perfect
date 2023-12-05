@@ -81,15 +81,17 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
 
         if (nearbyLiving.isEmpty()) return
 
-        electricItemStack.hurtAndBreak(1, attacker) { user: LivingEntity ->
-            user.getLevel().playSound(
-                null,
-                attacker,
-                ModSounds.GUITAR_SMASH.get(),
-                SoundSource.PLAYERS,
-                1f,
-                1f
-            )
+        if (attacker is Player) {
+            electricItemStack.hurtAndBreak(1, attacker) { user: LivingEntity ->
+                user.getLevel().playSound(
+                    null,
+                    attacker.blockPosition(),
+                    ModSounds.GUITAR_SMASH.get(),
+                    SoundSource.PLAYERS,
+                    1f,
+                    1f
+                )
+            }
         }
 
         val closestEntity = ServerUtils.getNearestEntityInList(nearbyLiving, target) ?: return
@@ -124,6 +126,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         }
 
     }
+
 
     private class EndDamage : Throwable()
 
