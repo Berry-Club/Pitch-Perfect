@@ -11,7 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries
 @Suppress("unused", "HasPlatformType")
 object ModItems {
 
-    private val ITEM_REGISTRY: DeferredRegister<Item> =
+    val ITEM_REGISTRY: DeferredRegister<Item> =
         DeferredRegister.create(ForgeRegistries.ITEMS, PitchPerfect.MOD_ID)
 
     private fun createInstrumentItem(name: String, sound: SoundEvent) =

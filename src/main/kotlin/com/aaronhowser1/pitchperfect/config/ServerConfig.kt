@@ -32,8 +32,8 @@ object ServerConfig {
         BUILDER.push("Server configs for Pitch Perfect")
 
         MOB_SPAWNS_WITH_INSTRUMENT_CHANCE = BUILDER
-            .comment(" The chance that a monster with an empty mainhand will have it filled with an instrument on spawn.")
-            .defineInRange("Mob Spawns With Instrument Chance", 1f, 0.0f, 1.0f, Float::class.java)
+            .comment(" The chance that a monster with an empty main-hand will have it filled with an instrument on spawn.")
+            .defineInRange("Mob Spawns With Instrument Chance", 0.005f, 0.0f, 1.0f, Float::class.java)
 
         BUILDER.comment(" === ENCHANTMENTS ===")
 
