@@ -35,7 +35,7 @@ object ServerConfig {
             .comment(" The chance that a monster with an empty main-hand will have it filled with an instrument on spawn.")
             .defineInRange("Mob Spawns With Instrument Chance", 0.005f, 0.0f, 1.0f, Float::class.java)
 
-        BUILDER.comment(" === ENCHANTMENTS ===")
+        BUILDER.comment("\n\n === ENCHANTMENTS ===\n\n")
 
         HEAL_RANGE = BUILDER
             .comment(" The range in blocks around the user that the Healing Beat enchantment checks for mobs to heal.")
@@ -67,7 +67,7 @@ object ServerConfig {
             .comment(" The reach the BWAAAP enchantment has.")
             .defineInRange("BWAAAP Range", 5f, 0f, 128f, Float::class.java)
         BWAAAP_STRENGTH = BUILDER
-            .comment(" The strength the BWAAAP enchantment has. Decreases with distance.\n Uses the equation:\n targetDistancePercentageToRange*strength")
+            .comment(" The strength the BWAAAP enchantment has. Decreases with distance.\n Uses the equation:\n  strength * targetsDistanceToMaxRange")
             .define("BWAAAP Strength", 1.25F)
         BWAAAP_COOLDOWN_MULT = BUILDER
             .comment(" How many ticks to cool down for every mob BWAAAP'd.")
