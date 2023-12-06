@@ -39,7 +39,7 @@ object HealingBeatEnchantment : Enchantment(
 
         val instrument: InstrumentItem? = itemStack.item.asInstrument()
         val mobsToHeal: List<LivingEntity>
-            get() = getMobsToHeal()
+            get() = findMobsToHeal()
 
         init {
             pulse()
@@ -84,9 +84,9 @@ object HealingBeatEnchantment : Enchantment(
          * 3. If the mob is a monster, returns true if the mob is whitelisted or the user is a monster.
          * 4. If the mob is not a monster, returns false if the user IS a monster.
          */
-        private fun getMobsToHeal(): List<LivingEntity> {
+        private fun findMobsToHeal(): List<LivingEntity> {
 
-            val nearbyMobs = ServerUtils.getNearbyLivingEntities(user, user.boundingBox.size.ceil())
+            val nearbyMobs = ServerUtils.getNearbyLivingEntities(user, ServerConfig.HEAL_RANGE.get())
 
             return nearbyMobs.filter { possibleTarget: LivingEntity ->
 

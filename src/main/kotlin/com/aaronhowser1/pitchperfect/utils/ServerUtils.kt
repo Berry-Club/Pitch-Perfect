@@ -15,7 +15,7 @@ object ServerUtils {
         )
     }
 
-    fun getNearbyLivingEntities(livingEntity: LivingEntity, range: Int): List<LivingEntity> {
+    fun getNearbyLivingEntities(livingEntity: LivingEntity, range: Float): List<LivingEntity> {
         return livingEntity.getLevel().getEntities(
             livingEntity,
             AABB(

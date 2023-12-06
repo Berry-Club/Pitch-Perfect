@@ -16,7 +16,7 @@ class ParticleLine(
 
     private var iteration: Int = 1
     private val particlesPerBlock: Int = ClientConfig.ELECTRIC_PARTICLE_DENSITY.get()
-    private val totalTravelTime: Int = ServerConfig.ELECTRIC_JUMPTIME.get()
+    private val totalTravelTime: Int = ServerConfig.ELECTRIC_JUMP_TIME.get()
 
 
     fun spawnWave() {
