@@ -6,11 +6,11 @@ import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
 import com.aaronhowser1.pitchperfect.packet.SpawnNotePacket
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.asInstrument
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.ceil
+import com.aaronhowser1.pitchperfect.utils.CommonUtils.isMonster
 import com.aaronhowser1.pitchperfect.utils.ServerUtils
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.Enchantment
@@ -76,22 +76,31 @@ object HealingBeatEnchantment : Enchantment(
             )
         }
 
-        private fun isMonster(target: LivingEntity): Boolean {
-            return target is Monster
-        }
-
+        /**
+         * @return A list of nearby mobs that can be healed.
+         *
+         * 1. Checks if the mob is at max health.
+         * 2. Checks if the mob is blacklisted.
+         * 3. If the mob is a monster, returns true if the mob is whitelisted or the user is a monster.
+         * 4. If the mob is not a monster, returns false if the user IS a monster.
+         */
         private fun getMobsToHeal(): List<LivingEntity> {
 
             val nearbyMobs = ServerUtils.getNearbyLivingEntities(user, user.boundingBox.size.ceil())
 
-            return nearbyMobs.filter { mob: LivingEntity ->
+            return nearbyMobs.filter { possibleTarget: LivingEntity ->
 
-                val canBeHealed = mob.health < mob.maxHealth
+                val canBeHealed = possibleTarget.health < possibleTarget.maxHealth
                 if (!canBeHealed) return@filter false
 
-                if (mobIsBlacklisted(mob)) return@filter false
+                if (mobIsBlacklisted(possibleTarget)) return@filter false
 
-                if (isMonster(mob) && !mobIsWhitelisted((mob))) return@filter false
+                if (possibleTarget.isMonster()) {
+                    if (user.isMonster()) return@filter true
+                    if (mobIsWhitelisted(possibleTarget)) return@filter true
+                } else {
+                    if (user.isMonster()) return@filter false
+                }
 
                 return@filter true
             }
