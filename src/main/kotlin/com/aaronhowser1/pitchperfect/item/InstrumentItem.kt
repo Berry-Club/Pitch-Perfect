@@ -68,15 +68,17 @@ class InstrumentItem(
     private fun useInstrument(itemStack: ItemStack, player: Player, level: Level, interactionHand: InteractionHand) {
         val lookVector = player.lookAngle
 
-        var pitch = lookVector.y().toFloat()
+        var pitch = lookVector.y.toFloat()
 
         pitch = CommonUtils.map(pitch, -1f, 1f, 0.5f, 2f)
 
-        if (itemStack.hasEnchantment(ModEnchantments.BWAAAP.get())) {
-            playSound(level, pitch, player.x, player.y, player.z, ClientConfig.VOLUME.get().toFloat())
+        val volume = if (itemStack.hasEnchantment(ModEnchantments.BWAAAP.get())) {
+            ClientConfig.VOLUME.get().toFloat() * 1.5f
         } else {
-            playSound(level, pitch, player.x, player.y, player.z, ClientConfig.VOLUME.get().toFloat())
+            ClientConfig.VOLUME.get().toFloat()
         }
+
+        playSound(level, pitch, player.x, player.y, player.z, volume)
 
         val noteVector = if (interactionHand == InteractionHand.MAIN_HAND) {
             lookVector.yRot(-0.5f)
