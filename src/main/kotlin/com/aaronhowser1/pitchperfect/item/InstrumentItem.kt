@@ -74,9 +74,9 @@ class InstrumentItem(
         pitch = CommonUtils.map(pitch, -1f, 1f, 0.5f, 2f)
 
         val volume = if (itemStack.hasEnchantment(ModEnchantments.BWAAAP.get())) {
-            1f * 1.5f
+            ClientConfig.VOLUME.get().toFloat() * 1.5f
         } else {
-            1f
+            ClientConfig.VOLUME.get().toFloat()
         }
 
         playSound(level, pitch, player.x, player.y, player.z, volume)
@@ -176,7 +176,10 @@ class InstrumentItem(
                 noteX,
                 noteY,
                 noteZ,
-                max(1f / randomAmount, 0.5f)
+                max(
+                    ClientConfig.VOLUME.get().toFloat() / randomAmount,
+                    ClientConfig.MIN_ATTACK_VOLUME.get().toFloat()
+                )
             )
         }
     }
