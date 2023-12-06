@@ -25,6 +25,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
@@ -173,9 +174,9 @@ class InstrumentItem(
 
     override fun getEnchantmentValue(stack: ItemStack): Int = 1
 
-//    override fun canApplyAtEnchantingTable(stack: ItemStack, enchantment: Enchantment): Boolean {
-//        return enchantment.category == ModEnchantments.INSTRUMENT
-//    }
+    override fun canApplyAtEnchantingTable(stack: ItemStack, enchantment: Enchantment): Boolean {
+        return enchantment.category == ModEnchantments.INSTRUMENT
+    }
 
     //Ok beyond this, I barely understood
     //Mostly stolen from https://github.com/Tslat/Advent-Of-Ascension/blob/1.18.2/source/content/item/weapon/maul/BaseMaul.java (with permission, thanks Tslat)
