@@ -22,7 +22,7 @@ object ServerConfig {
     val BWAAAP_STRENGTH: ForgeConfigSpec.ConfigValue<Float>
     val BWAAAP_COOLDOWN_MULT: ForgeConfigSpec.ConfigValue<Int>
 
-    val ELECTRIC_RANGE: ForgeConfigSpec.ConfigValue<Int>
+    val ELECTRIC_RANGE: ForgeConfigSpec.ConfigValue<Float>
     val ELECTRIC_DAMAGE_FACTOR: ForgeConfigSpec.ConfigValue<Float>
     val ELECTRIC_JUMP_TIME: ForgeConfigSpec.ConfigValue<Int>
     val ELECTRIC_MAX_JUMPS: ForgeConfigSpec.ConfigValue<Int>
@@ -44,7 +44,7 @@ object ServerConfig {
             .comment(" Mobs that Healing Beat can always heal\n Example: [\"minecraft:piglin\"]")
             .defineListAllowEmpty(
                 listOf("Healing Beat Whitelist"),
-                { listOf("minecraft:piglin") },
+                { listOf() },
                 { ResourceLocation.isValidResourceLocation(it as? String ?: "") }
             )
 
@@ -52,7 +52,7 @@ object ServerConfig {
             .comment(" Mobs that Healing Beat can never heal\n Example: [\"minecraft:cow\"]")
             .defineListAllowEmpty(
                 listOf("Healing Beat Blacklist"),
-                { listOf("minecraft:cow") },
+                { listOf() },
                 { ResourceLocation.isValidResourceLocation(it as? String ?: "") }
             )
 
@@ -68,7 +68,7 @@ object ServerConfig {
 
         ELECTRIC_RANGE = BUILDER
             .comment(" The range in blocks around the attacked mob that should be effected by the \"And His Music Was Electric\" enchantment.")
-            .define("Electric Range", 5)
+            .defineInRange("Electric Range", 5f, 0f, 128f, Float::class.java)
         ELECTRIC_DAMAGE_FACTOR = BUILDER
             .comment(" The rate at which the damage decreases with each jump.\n Uses the equation:\n  damage = originalDamage * (damageFactor ^ jumpNumber)")
             .define("Electric Damage Multiplier", 0.75F)
@@ -76,7 +76,7 @@ object ServerConfig {
             .comment(" How many ticks before the lightning jumps to the next entity.")
             .defineInRange("Electric Jump Time", 4, 0, Integer.MAX_VALUE)
         ELECTRIC_MAX_JUMPS = BUILDER
-            .comment(" How many times the lightning can jump.\n Keep in mind that, after a certain amount of jumps, it deals less than half a heart.")
+            .comment(" How many times the lightning can jump.\n If it would do less than 0.5 damage, it will stop.")
             .defineInRange("Electric Jump Limit", Integer.MAX_VALUE, 0, Integer.MAX_VALUE)
 
 
