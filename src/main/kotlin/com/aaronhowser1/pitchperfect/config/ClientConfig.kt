@@ -20,22 +20,11 @@ object ClientConfig {
             .defineInRange("Instrument Volume", 0.5, 0.0, 3.0)
 
         MIN_ATTACK_VOLUME = BUILDER
-            .comment(
-                """
-                The minimum volume each individual note plays at, when attacking.
-                Uses the equation:
-                  Math.max( (1.5*instrumentVolume / amountOfParticles), minimumAttackVolume)
-                """.trimIndent()
-            )
+            .comment(" The minimum volume each individual note plays at, when attacking.\n Uses the equation:\n  Math.max( (1.5*instrumentVolume / amountOfParticles), minimumAttackVolume)")
             .defineInRange("Attack Volume", 0.5, 0.0, 3.0)
 
         ELECTRIC_PARTICLE_DENSITY = BUILDER
-            .comment(
-                """
-                How many particles per block should be spawned along the lightning path.
-                There's a minimum of 1 tick per particle, so higher numbers may cause the particles to take longer than the jump time.
-                """.trimIndent()
-            )
+            .comment(" How many particles per block should be spawned along the lightning path.\n There's a minimum of 1 tick per particle, so higher numbers may cause the particles to take longer than the jump time.")
             .defineInRange("Electric Particle Density", 10, 1, Int.MAX_VALUE)
 
         ELECTRIC_PARTICLE_ISWAVE = BUILDER

@@ -14,6 +14,7 @@ object ServerConfig {
     val HEALING_BEAT_WHITELIST: ForgeConfigSpec.ConfigValue<List<String>>
     val HEALING_BEAT_BLACKLIST: ForgeConfigSpec.ConfigValue<List<String>>
 
+    val HEAL_RANGE: ForgeConfigSpec.ConfigValue<Float>
     val HEAL_AMOUNT: ForgeConfigSpec.ConfigValue<Float>
     val HEAL_COOLDOWN_MULT: ForgeConfigSpec.ConfigValue<Float>
 
@@ -23,12 +24,15 @@ object ServerConfig {
 
     val ELECTRIC_RANGE: ForgeConfigSpec.ConfigValue<Int>
     val ELECTRIC_DAMAGE_FACTOR: ForgeConfigSpec.ConfigValue<Float>
-    val ELECTRIC_JUMPTIME: ForgeConfigSpec.ConfigValue<Int>
+    val ELECTRIC_JUMP_TIME: ForgeConfigSpec.ConfigValue<Int>
     val ELECTRIC_MAX_JUMPS: ForgeConfigSpec.ConfigValue<Int>
 
     init {
         BUILDER.push("Server configs for Pitch Perfect")
 
+        HEAL_RANGE = BUILDER
+            .comment(" The range in blocks around the user that the Healing Beat enchantment checks for mobs to heal.")
+            .defineInRange("Healing Beat Range", 5.0f, 0.0f, 64.0f, Float::class.java)
         HEAL_AMOUNT = BUILDER
             .comment(" How much health is healed each time Healing Beat is used.")
             .define("Healing Beat Amount", 0.25F)
@@ -68,7 +72,7 @@ object ServerConfig {
         ELECTRIC_DAMAGE_FACTOR = BUILDER
             .comment(" The rate at which the damage decreases with each jump.\n Uses the equation:\n  damage = originalDamage * (damageFactor ^ jumpNumber)")
             .define("Electric Damage Multiplier", 0.75F)
-        ELECTRIC_JUMPTIME = BUILDER
+        ELECTRIC_JUMP_TIME = BUILDER
             .comment(" How many ticks before the lightning jumps to the next entity.")
             .defineInRange("Electric Jump Time", 4, 0, Integer.MAX_VALUE)
         ELECTRIC_MAX_JUMPS = BUILDER
