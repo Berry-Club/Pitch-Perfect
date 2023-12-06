@@ -1,22 +1,19 @@
 package com.aaronhowser1.pitchperfect.item
 
-import com.aaronhowser1.pitchperfect.config.ClientConfig
 import com.aaronhowser1.pitchperfect.config.CommonConfig
 import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.enchantment.BwaaapEnchantment
 import com.aaronhowser1.pitchperfect.enchantment.HealingBeatEnchantment
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
 import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
-import com.aaronhowser1.pitchperfect.packet.SpawnNoteParticlePacket
-import com.aaronhowser1.pitchperfect.utils.CommonUtils
+import com.aaronhowser1.pitchperfect.packet.SpawnNotePacket
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.hasEnchantment
+import com.aaronhowser1.pitchperfect.utils.CommonUtils.map
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.ImmutableSetMultimap
 import com.google.common.collect.Multimap
-import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.Entity
@@ -32,7 +29,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.common.util.Lazy
-import kotlin.math.max
 import kotlin.random.Random
 
 class InstrumentItem(
@@ -66,20 +62,15 @@ class InstrumentItem(
         return InteractionResultHolder.fail(itemStack)
     }
 
-    private fun useInstrument(itemStack: ItemStack, player: Player, level: Level, interactionHand: InteractionHand) {
+    private fun useInstrument(
+        itemStack: ItemStack,
+        player: Player,
+        level: Level,
+        interactionHand: InteractionHand
+    ) {
         val lookVector = player.lookAngle
 
-        var pitch = lookVector.y.toFloat()
-
-        pitch = CommonUtils.map(pitch, -1f, 1f, 0.5f, 2f)
-
-        val volume = if (itemStack.hasEnchantment(ModEnchantments.BWAAAP.get())) {
-            ClientConfig.VOLUME.get().toFloat() * 1.5f
-        } else {
-            ClientConfig.VOLUME.get().toFloat()
-        }
-
-        playSound(level, pitch, player.x, player.y, player.z, volume)
+        val pitch = lookVector.y.toFloat().map(-1f, 1f, 0.5f, 2f)
 
         val noteVector = if (interactionHand == InteractionHand.MAIN_HAND) {
             lookVector.yRot(-0.5f)
@@ -87,14 +78,17 @@ class InstrumentItem(
             lookVector.yRot(0.5f)
         }
 
+        val hasBwaaap = itemStack.hasEnchantment(ModEnchantments.BWAAAP.get())
+
         if (!level.isClientSide()) {
             ModPacketHandler.messageNearbyPlayers(
-                SpawnNoteParticlePacket(
+                SpawnNotePacket(
                     sound.location,
                     pitch,
                     (player.x + noteVector.x()),
                     (player.eyeY + noteVector.y()),
-                    (player.z + noteVector.z())
+                    (player.z + noteVector.z()),
+                    hasBwaaap
                 ),
                 player.getLevel() as ServerLevel,
                 Vec3(player.x, player.y, player.z),
@@ -118,7 +112,7 @@ class InstrumentItem(
 
             if (!player.level.isClientSide()) {
                 ModPacketHandler.messageNearbyPlayers(
-                    SpawnNoteParticlePacket(
+                    SpawnNotePacket(
                         sound.location,
                         player.lookAngle.y.toFloat(),
                         target.x,
@@ -132,7 +126,10 @@ class InstrumentItem(
             }
         }
 
-        player.cooldowns.addCooldown(this, (healTargets.size * ServerConfig.HEAL_COOLDOWN_MULT.get()).toInt())
+        player.cooldowns.addCooldown(
+            this,
+            (healTargets.size * ServerConfig.HEAL_COOLDOWN_MULT.get()).toInt()
+        )
     }
 
     fun attack(target: Entity) {
@@ -158,7 +155,7 @@ class InstrumentItem(
             val noteY = target.y + entityHeight + (entityHeight * Random.nextDouble(-0.75, 0.75))
 
             ModPacketHandler.messageNearbyPlayers(
-                SpawnNoteParticlePacket(
+                SpawnNotePacket(
                     sound.location,
                     randomPitch,
                     noteX,
@@ -169,30 +166,7 @@ class InstrumentItem(
                 Vec3(noteX, noteY, noteZ),
                 16.0
             )
-
-            playSound(
-                target.getLevel(),
-                randomPitch,
-                noteX,
-                noteY,
-                noteZ,
-                max(
-                    ClientConfig.VOLUME.get().toFloat() / randomAmount,
-                    ClientConfig.MIN_ATTACK_VOLUME.get().toFloat()
-                )
-            )
         }
-    }
-
-    private fun playSound(level: Level, pitch: Float, x: Double, y: Double, z: Double, volume: Float) {
-        level.playSound(
-            null,
-            BlockPos(x, y, z),
-            sound,
-            SoundSource.PLAYERS,
-            volume,
-            pitch
-        )
     }
 
     override fun isEnchantable(pStack: ItemStack): Boolean = true

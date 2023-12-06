@@ -24,10 +24,10 @@ object ModPacketHandler {
 
         INSTANCE.registerMessage(
             ++id,
-            SpawnNoteParticlePacket::class.java,
-            SpawnNoteParticlePacket::encode,
-            SpawnNoteParticlePacket::decode,
-            SpawnNoteParticlePacket::receiveMessage
+            SpawnNotePacket::class.java,
+            SpawnNotePacket::encode,
+            SpawnNotePacket::decode,
+            SpawnNotePacket::receiveMessage
         )
 
         INSTANCE.registerMessage(

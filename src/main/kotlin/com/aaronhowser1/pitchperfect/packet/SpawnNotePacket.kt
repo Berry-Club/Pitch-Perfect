@@ -1,17 +1,18 @@
 package com.aaronhowser1.pitchperfect.packet
 
-import com.aaronhowser1.pitchperfect.utils.ClientUtils.spawnNote
+import com.aaronhowser1.pitchperfect.utils.ClientUtils.playNote
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.network.NetworkEvent
 import java.util.function.Supplier
 
-class SpawnNoteParticlePacket(
+class SpawnNotePacket(
     private val soundResourceLocation: ResourceLocation,
     private val pitch: Float,
     private val x: Double,
     private val y: Double,
-    private val z: Double
+    private val z: Double,
+    private val hasBwaaap: Boolean = false
 ) : ModPacket {
 
     override fun encode(buffer: FriendlyByteBuf) {
@@ -20,22 +21,24 @@ class SpawnNoteParticlePacket(
         buffer.writeDouble(x)
         buffer.writeDouble(y)
         buffer.writeDouble(z)
+        buffer.writeBoolean(hasBwaaap)
     }
 
     companion object {
-        fun decode(buffer: FriendlyByteBuf): SpawnNoteParticlePacket {
-            return SpawnNoteParticlePacket(
+        fun decode(buffer: FriendlyByteBuf): SpawnNotePacket {
+            return SpawnNotePacket(
                 buffer.readResourceLocation(),
                 buffer.readFloat(),
                 buffer.readDouble(),
                 buffer.readDouble(),
-                buffer.readDouble()
+                buffer.readDouble(),
+                buffer.readBoolean()
             )
         }
     }
 
     override fun receiveMessage(context: Supplier<NetworkEvent.Context>) {
-        spawnNote(pitch, x, y, z)
+        playNote(soundResourceLocation, pitch, x, y, z, hasBwaaap)
         context.get().packetHandled = true
     }
 

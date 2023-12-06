@@ -6,8 +6,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper
 
 object CommonUtils {
 
-    fun map(value: Float, min1: Float, max1: Float, min2: Float, max2: Float): Float {
-        return min2 + (max2 - min2) * ((value - min1) / (max1 - min1))
+    fun Float.map(min1: Float, max1: Float, min2: Float, max2: Float): Float {
+        return min2 + (max2 - min2) * ((this - min1) / (max1 - min1))
     }
 
     fun ItemStack.hasEnchantment(enchantment: Enchantment): Boolean =
