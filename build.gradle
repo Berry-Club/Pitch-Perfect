@@ -144,7 +144,7 @@ dependencies {
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 
     // spark
-    runtimeOnly(fg.deobf("curse.maven:spark-361579:4505309"))
+    implementation fg.deobf("curse.maven:spark-361579:4505309")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
