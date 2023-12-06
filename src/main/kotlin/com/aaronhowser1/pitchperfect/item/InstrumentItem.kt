@@ -1,7 +1,6 @@
 package com.aaronhowser1.pitchperfect.item
 
 import com.aaronhowser1.pitchperfect.config.CommonConfig
-import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.enchantment.BwaaapEnchantment
 import com.aaronhowser1.pitchperfect.enchantment.HealingBeatEnchantment
 import com.aaronhowser1.pitchperfect.enchantment.ModEnchantments
@@ -18,7 +17,6 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
@@ -33,7 +31,7 @@ import net.minecraftforge.common.util.Lazy
 import kotlin.random.Random
 
 class InstrumentItem(
-    private val sound: SoundEvent
+    val sound: SoundEvent
 ) : Item(
     Properties()
         .stacksTo(1)
@@ -106,31 +104,8 @@ class InstrumentItem(
 
     private fun healingBeat(itemStack: ItemStack, player: Player) {
         if (EnchantmentHelper.getTagEnchantmentLevel(ModEnchantments.HEALING_BEAT.get(), itemStack) == 0) return
-        val healTargets: List<LivingEntity> = HealingBeatEnchantment.getTargets(player)
 
-        for (target in healTargets) {
-            HealingBeatEnchantment.heal(target)
-
-            if (!player.level.isClientSide()) {
-                ModPacketHandler.messageNearbyPlayers(
-                    SpawnNotePacket(
-                        sound.location,
-                        player.lookAngle.y.toFloat(),
-                        target.x,
-                        target.eyeY,
-                        target.z
-                    ),
-                    target.getLevel() as ServerLevel,
-                    Vec3(target.x, target.eyeY, target.z),
-                    64.0
-                )
-            }
-        }
-
-        player.cooldowns.addCooldown(
-            this,
-            (healTargets.size * ServerConfig.HEAL_COOLDOWN_MULT.get()).toInt()
-        )
+        HealingBeatEnchantment.heal(player, itemStack)
     }
 
     fun attack(target: Entity) {

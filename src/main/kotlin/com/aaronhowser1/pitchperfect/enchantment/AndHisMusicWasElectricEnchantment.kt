@@ -6,6 +6,7 @@ import com.aaronhowser1.pitchperfect.event.ModScheduler
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
 import com.aaronhowser1.pitchperfect.packet.SpawnElectricParticlePacket
+import com.aaronhowser1.pitchperfect.utils.CommonUtils.asInstrument
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.hasEnchantment
 import com.aaronhowser1.pitchperfect.utils.ServerUtils
 import net.minecraft.server.level.ServerLevel
@@ -68,7 +69,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         val electricItemStack: ItemStack
     ) {
         val damageSource: DamageSource = event.source
-        private val instrumentItem: InstrumentItem? = electricItemStack.item as? InstrumentItem
+        private val instrumentItem: InstrumentItem? = electricItemStack.item.asInstrument()
 
         private val attacker: LivingEntity? = damageSource.entity as? LivingEntity
         private val initialTarget: LivingEntity? = event.entity
