@@ -33,6 +33,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.common.util.Lazy
 import kotlin.math.max
+import kotlin.random.Random
 
 class InstrumentItem(
     private val sound: SoundEvent
@@ -150,19 +151,11 @@ class InstrumentItem(
         val entityHeight = target.bbHeight.toDouble()
         for (note in 1..randomAmount) {
 
-            var randomPitch = ((-90..90).random()).toFloat()
+            val randomPitch = Random.nextDouble(0.5, 2.0).toFloat()
 
-            randomPitch = CommonUtils.map(
-                randomPitch,
-                -90f,
-                90f,
-                2f,
-                0.5f
-            ) //from [-90,90] to [2,0.5], high->low bc big number = low pitch
-
-            val noteX = (target.x + entityWidth * (Math.random() * 3 - 1.5))
-            val noteZ = (target.z + entityWidth * (Math.random() * 3 - 1.5))
-            val noteY = (target.y + entityHeight + (entityHeight * Math.random() * 1.5 - .75))
+            val noteX = target.x + entityWidth * Random.nextDouble(-1.5, 1.5)
+            val noteZ = target.z + entityWidth * Random.nextDouble(-1.5, 1.5)
+            val noteY = target.y + entityHeight + (entityHeight * Random.nextDouble(-0.75, 0.75))
 
             ModPacketHandler.messageNearbyPlayers(
                 SpawnNoteParticlePacket(
@@ -177,7 +170,6 @@ class InstrumentItem(
                 16.0
             )
 
-            //TODO: Don't use ClientConfig, possibly use packets instead
             playSound(
                 target.getLevel(),
                 randomPitch,
