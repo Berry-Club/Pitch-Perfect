@@ -8,7 +8,8 @@ object ServerConfig {
     val BUILDER = ForgeConfigSpec.Builder()
     val SPEC: ForgeConfigSpec
 
-    // Lifted largely from Eccentric Tome, as that was the first config I found that had lists
+
+    val MOB_SPAWNS_WITH_INSTRUMENT_CHANCE: ForgeConfigSpec.ConfigValue<Float>
 
     // Lifted largely from Eccentric Tome, as that was the first config I found that had lists
     val HEALING_BEAT_WHITELIST: ForgeConfigSpec.ConfigValue<List<String>>
@@ -18,7 +19,7 @@ object ServerConfig {
     val HEAL_AMOUNT: ForgeConfigSpec.ConfigValue<Float>
     val HEAL_COOLDOWN_MULT: ForgeConfigSpec.ConfigValue<Float>
 
-    val BWAAAP_RANGE: ForgeConfigSpec.ConfigValue<Int>
+    val BWAAAP_RANGE: ForgeConfigSpec.ConfigValue<Float>
     val BWAAAP_STRENGTH: ForgeConfigSpec.ConfigValue<Float>
     val BWAAAP_COOLDOWN_MULT: ForgeConfigSpec.ConfigValue<Int>
 
@@ -29,6 +30,12 @@ object ServerConfig {
 
     init {
         BUILDER.push("Server configs for Pitch Perfect")
+
+        MOB_SPAWNS_WITH_INSTRUMENT_CHANCE = BUILDER
+            .comment(" The chance that a monster with an empty mainhand will have it filled with an instrument on spawn.")
+            .defineInRange("Mob Spawns With Instrument Chance", 1f, 0.0f, 1.0f, Float::class.java)
+
+        BUILDER.comment(" === ENCHANTMENTS ===")
 
         HEAL_RANGE = BUILDER
             .comment(" The range in blocks around the user that the Healing Beat enchantment checks for mobs to heal.")
@@ -58,7 +65,7 @@ object ServerConfig {
 
         BWAAAP_RANGE = BUILDER
             .comment(" The reach the BWAAAP enchantment has.")
-            .define("BWAAAP Range", 5)
+            .defineInRange("BWAAAP Range", 5f, 0f, 128f, Float::class.java)
         BWAAAP_STRENGTH = BUILDER
             .comment(" The strength the BWAAAP enchantment has. Decreases with distance.\n Uses the equation:\n targetDistancePercentageToRange*strength")
             .define("BWAAAP Strength", 1.25F)

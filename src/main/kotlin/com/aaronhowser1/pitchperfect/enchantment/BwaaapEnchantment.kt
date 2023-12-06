@@ -33,13 +33,15 @@ object BwaaapEnchantment : Enchantment(
         private val targets: List<LivingEntity> = getTargets()
         private val cooldown: Int = getCooldown()
 
+        private val range: Float = ServerConfig.BWAAAP_RANGE.get()
+
+
         init {
             knockBack()
             if (user is Player) user.cooldowns.addCooldown(instrument, cooldown)
         }
 
         private fun getTargets(): List<LivingEntity> {
-            val range: Int = ServerConfig.BWAAAP_RANGE.get()
             return getNearbyLivingEntities(user, range)
         }
 
@@ -47,8 +49,6 @@ object BwaaapEnchantment : Enchantment(
             var cooldown = 0f
 
             for (target in targets) {
-                val range: Int = ServerConfig.BWAAAP_RANGE.get()
-
                 val distanceToTarget = distanceBetweenPoints(
                     entityToVec3(user),
                     entityToVec3(target)
@@ -64,7 +64,6 @@ object BwaaapEnchantment : Enchantment(
         }
 
         private fun knockBack() {
-            val range: Int = ServerConfig.BWAAAP_RANGE.get()
             val strength: Float = ServerConfig.BWAAAP_STRENGTH.get()
 
             for (target in targets) {
