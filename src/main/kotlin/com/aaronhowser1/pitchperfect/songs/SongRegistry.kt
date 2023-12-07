@@ -26,6 +26,7 @@ object SongRegistry {
             ticksUntilNextBeat(1)
         }
     }
+        get() = field.copy()
 
     private fun song(instrument: InstrumentItem, block: SongBuilder.() -> Unit): NoteSequence {
         val s = SongBuilder(instrument)

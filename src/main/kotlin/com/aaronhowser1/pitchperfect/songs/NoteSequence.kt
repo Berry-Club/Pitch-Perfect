@@ -4,16 +4,16 @@ import com.aaronhowser1.pitchperfect.event.ModScheduler
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.packet.ModPacketHandler
 import com.aaronhowser1.pitchperfect.packet.SpawnNotePacket
-import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 
-class NoteSequence(val instrument: InstrumentItem) {
+data class NoteSequence(
+    val instrument: InstrumentItem,
+    val beats: MutableList<Beat> = mutableListOf()
+) {
 
     private val soundResourceLocation: ResourceLocation = instrument.sound.location
-
-    val beats: MutableList<Beat> = mutableListOf()
 
     data class Beat(val notes: List<Float>, val ticksUntilNextBeat: Int)
 
