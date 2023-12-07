@@ -1,4 +1,4 @@
-package com.aaronhowser1.pitchperfect.utils
+package com.aaronhowser1.pitchperfect.songs
 
 import com.aaronhowser1.pitchperfect.event.ModScheduler
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
@@ -8,7 +8,7 @@ import net.minecraft.world.level.Level
 
 class NoteSequence(val instrument: InstrumentItem) {
 
-    private val beats: List<Beat> = listOf()
+    val beats: MutableList<Beat> = mutableListOf()
 
     data class Beat(val notes: List<Float>, val ticksUntilNextBeat: Int)
 
