@@ -5,13 +5,16 @@ import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.item.ModItems
+import com.aaronhowser1.pitchperfect.songs.SongRegistry
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.isMonster
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraftforge.event.TickEvent
 import net.minecraftforge.event.TickEvent.ServerTickEvent
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import net.minecraftforge.event.entity.living.LivingSpawnEvent
+import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import kotlin.random.Random
@@ -30,6 +33,17 @@ object ModEvents {
             if (this is InstrumentItem) this.attack(target)
         }
 
+    }
+
+    @SubscribeEvent
+    fun songTrigger(event: PlayerInteractEvent) {
+
+        val entity = event.entity
+        val level = entity.level
+
+        if (level as? ServerLevel == null) return
+
+        SongRegistry.testSong.play(level, entity)
     }
 
     @SubscribeEvent

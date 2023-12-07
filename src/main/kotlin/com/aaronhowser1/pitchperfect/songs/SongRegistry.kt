@@ -6,16 +6,24 @@ import com.aaronhowser1.pitchperfect.utils.CommonUtils.asInstrument
 
 object SongRegistry {
 
-    val SONGS: MutableSet<NoteSequence> = mutableSetOf()
+    private val SONGS: MutableSet<NoteSequence> = mutableSetOf()
 
     val testSong: NoteSequence = song(ModItems.BIT.get().asInstrument()!!) {
         beat {
             note(0.5f)
-            note(0.5f)
-            note(0.5f)
-            note(0.5f)
-
-            ticksUntilNextBeat(5)
+            ticksUntilNextBeat(1)
+        }
+        beat {
+            note(0.6f)
+            ticksUntilNextBeat(1)
+        }
+        beat {
+            note(0.7f)
+            ticksUntilNextBeat(1)
+        }
+        beat {
+            note(0.8f)
+            ticksUntilNextBeat(1)
         }
     }
 
