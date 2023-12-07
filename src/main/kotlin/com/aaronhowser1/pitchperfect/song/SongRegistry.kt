@@ -1,8 +1,8 @@
-package com.aaronhowser1.pitchperfect.songs
+package com.aaronhowser1.pitchperfect.song
 
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
-import com.aaronhowser1.pitchperfect.item.ModItems
-import com.aaronhowser1.pitchperfect.utils.CommonUtils.asInstrument
+import com.aaronhowser1.pitchperfect.song.songs.Megalovania
+import com.aaronhowser1.pitchperfect.song.songs.TestSong
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.logIfError
 import net.minecraft.world.entity.LivingEntity
 import kotlin.math.pow
@@ -17,56 +17,11 @@ object SongRegistry {
 
     val songsPlaying: MutableMap<LivingEntity, NoteSequence> = mutableMapOf()
 
-    val testSong: NoteSequence = song("test song", ModItems.BIT.asInstrument()!!) {
-        repeat(100) {
-            beat {
-                val noteValue1 = 0.5f + (it * 0.1f) % 1.5f
-                val noteValue2 = 0.5f + (it * 0.3f) % 1.5f
+    val testSong: NoteSequence = TestSong.register()
 
-                notes(noteValue1, noteValue2)
-                ticksUntilNextBeat = 3
-            }
-        }
-    }
+    val megalovania: NoteSequence = Megalovania.register()
 
-    val megalovania: NoteSequence = song("megalovania", ModItems.BIT.asInstrument()!!) {
-        beat {
-            notes(8)
-        }
-        beat {
-            notes(8)
-        }
-        beat {
-            notes(20)
-        }
-        beat {
-            notes(15)
-        }
-        beat {
-            notes(14)
-        }
-        beat {
-            notes(13)
-        }
-        beat {
-            notes(11)
-        }
-        beat {
-            notes(8)
-        }
-        beat {
-            notes(11)
-        }
-        beat {
-            notes(13)
-        }
-        beat {
-            notes(6)
-        }
-
-    }
-
-    private fun song(name: String, instrument: InstrumentItem, block: SongBuilder.() -> Unit): NoteSequence {
+    fun song(name: String, instrument: InstrumentItem, block: SongBuilder.() -> Unit): NoteSequence {
         val noteSequence = SongBuilder(name, instrument)
             .apply(block)
             .build()

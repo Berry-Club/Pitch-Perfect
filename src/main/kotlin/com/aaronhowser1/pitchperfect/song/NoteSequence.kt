@@ -1,4 +1,4 @@
-package com.aaronhowser1.pitchperfect.songs
+package com.aaronhowser1.pitchperfect.song
 
 import com.aaronhowser1.pitchperfect.event.ModScheduler
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
