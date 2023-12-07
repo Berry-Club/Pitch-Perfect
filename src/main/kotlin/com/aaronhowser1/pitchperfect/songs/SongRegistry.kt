@@ -3,6 +3,7 @@ package com.aaronhowser1.pitchperfect.songs
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.item.ModItems
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.asInstrument
+import com.aaronhowser1.pitchperfect.utils.CommonUtils.checkError
 import net.minecraft.world.entity.LivingEntity
 import kotlin.math.pow
 
@@ -88,14 +89,14 @@ object SongRegistry {
 
         fun build(): NoteSequence {
 
-//            require(noteSequence.beats.isNotEmpty()) { "Song $name has no beats!" }
-//            require(noteSequence.beats.all { it.notes.isNotEmpty() }) { "One of $name's beats has no notes!" }
-//
-//            noteSequence.beats.forEachIndexed { index, beat ->
-//                require(beat.notes.all { it in 0.5f..2f }) {
-//                    "One of $name's beats has a note that is not between 0.5 and 2! (Beat $index ${beat.notes})"
-//                }
-//            }
+            checkError(noteSequence.beats.isNotEmpty()) { "Song $name has no beats!" }
+            checkError(noteSequence.beats.all { it.notes.isNotEmpty() }) { "One of $name's beats has no notes!" }
+
+            noteSequence.beats.forEachIndexed { index, beat ->
+                checkError(beat.notes.all { it in 0.5f..2f }) {
+                    "One of $name's beats has a note that is not between 0.5 and 2! (Beat $index ${beat.notes})"
+                }
+            }
 
             return noteSequence
         }

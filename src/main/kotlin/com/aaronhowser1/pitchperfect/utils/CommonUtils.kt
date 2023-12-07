@@ -1,5 +1,6 @@
 package com.aaronhowser1.pitchperfect.utils
 
+import com.aaronhowser1.pitchperfect.PitchPerfect
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
@@ -26,4 +27,9 @@ object CommonUtils {
     fun RegistryObject<Item>.asInstrument(): InstrumentItem? = this.get().asInstrument()
 
     fun LivingEntity.isMonster(): Boolean = this is Monster
+
+    fun checkError(condition: Boolean, message: () -> String) {
+        if (condition) PitchPerfect.LOGGER.error(message)
+    }
+
 }
