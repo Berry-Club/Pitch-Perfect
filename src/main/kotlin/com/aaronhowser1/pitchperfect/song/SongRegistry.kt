@@ -55,7 +55,7 @@ object SongRegistry {
         class BeatBuilder(name: String) {
 
             private var notes: List<Float> = listOf()
-            var ticksUntilNextBeat: Int = 1
+            var repeaterTicksAfter: Int = 1
 
             fun notes(vararg list: Float) {
                 notes = list.toList()
@@ -77,7 +77,7 @@ object SongRegistry {
             }
 
             fun build(): NoteSequence.Beat {
-                return NoteSequence.Beat(notes, ticksUntilNextBeat)
+                return NoteSequence.Beat(notes, repeaterTicksAfter * 2)
             }
         }
 

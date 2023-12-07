@@ -14,7 +14,7 @@ object TestSong {
                 val noteValue2 = 0.5f + (it * 0.3f) % 1.5f
 
                 notes(noteValue1, noteValue2)
-                ticksUntilNextBeat = 3
+                repeaterTicksAfter = 3
             }
         }
     }
