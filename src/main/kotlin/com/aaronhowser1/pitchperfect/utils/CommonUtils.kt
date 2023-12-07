@@ -29,7 +29,7 @@ object CommonUtils {
     fun LivingEntity.isMonster(): Boolean = this is Monster
 
     fun checkError(condition: Boolean, message: () -> String) {
-        if (condition) PitchPerfect.LOGGER.error(message)
+        if (!condition) PitchPerfect.LOGGER.error(message)
     }
 
 }

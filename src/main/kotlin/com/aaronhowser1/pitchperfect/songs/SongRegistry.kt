@@ -63,9 +63,6 @@ object SongRegistry {
         beat {
             notes(6)
         }
-        beat {
-            notes(520)
-        }
 
     }
 
