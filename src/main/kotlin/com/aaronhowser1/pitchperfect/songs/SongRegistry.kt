@@ -62,6 +62,9 @@ object SongRegistry {
         beat {
             notes(6)
         }
+        beat {
+            notes(520)
+        }
 
     }
 
@@ -75,36 +78,38 @@ object SongRegistry {
         return noteSequence
     }
 
-    class SongBuilder(name: String, val instrument: InstrumentItem) {
+    class SongBuilder(private val name: String, val instrument: InstrumentItem) {
 
         private val noteSequence = NoteSequence(name, instrument)
 
         fun beat(block: BeatBuilder.() -> Unit) {
-            noteSequence.beats.add(BeatBuilder().apply(block).build())
+            noteSequence.beats.add(BeatBuilder(name).apply(block).build())
         }
 
         fun build(): NoteSequence {
+
+//            require(noteSequence.beats.isNotEmpty()) { "Song $name has no beats!" }
+//            require(noteSequence.beats.all { it.notes.isNotEmpty() }) { "One of $name's beats has no notes!" }
+//
+//            noteSequence.beats.forEachIndexed { index, beat ->
+//                require(beat.notes.all { it in 0.5f..2f }) {
+//                    "One of $name's beats has a note that is not between 0.5 and 2! (Beat $index ${beat.notes})"
+//                }
+//            }
+
             return noteSequence
         }
 
-        class BeatBuilder {
+        class BeatBuilder(name: String) {
 
             private var notes: List<Float> = listOf()
             var ticksUntilNextBeat: Int = 1
 
             fun notes(vararg list: Float) {
-                require(list.isNotEmpty()) { "List of notes cannot be empty" }
-
-                val badNotes = list.filter { it !in 0.5f..1.5f }
-                println("Bad notes: $badNotes")
-
                 notes = list.toList()
             }
 
             fun notes(vararg list: Int) {
-
-                require(list.all { it in 0..24 }) { "List of notes must be between 0 and 24" }
-
                 val floatList = mutableListOf<Float>()
                 for (i in list) {
 
@@ -112,11 +117,7 @@ object SongRegistry {
                     // A Note Block's float pitch value is calculated as 2 ^ (note / 12)
                     // Where "note" ranges from -12 to 12
                     // We'll input it as 0-24 though, because that's easier to work with
-
                     val truePitch = 2f.pow((i - 12) / 12f)
-
-                    println("From $i to $truePitch")
-
                     floatList.add(truePitch)
                 }
 
