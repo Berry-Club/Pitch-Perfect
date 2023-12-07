@@ -3,10 +3,12 @@ package com.aaronhowser1.pitchperfect.utils
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
+import net.minecraft.world.item.Instrument
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraftforge.registries.RegistryObject
 
 object CommonUtils {
 
@@ -21,6 +23,7 @@ object CommonUtils {
     fun Float.ceil(): Int = kotlin.math.ceil(this).toInt()
 
     fun Item.asInstrument(): InstrumentItem? = this as? InstrumentItem
+    fun RegistryObject<Item>.asInstrument(): InstrumentItem? = this.get().asInstrument()
 
     fun LivingEntity.isMonster(): Boolean = this is Monster
 }

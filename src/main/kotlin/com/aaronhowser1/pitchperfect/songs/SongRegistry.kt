@@ -11,12 +11,14 @@ object SongRegistry {
 
     val songsPlaying: MutableMap<LivingEntity, NoteSequence> = mutableMapOf()
 
-    val testSong: NoteSequence = song(ModItems.BIT.get().asInstrument()!!) {
+    val testSong: NoteSequence = song(ModItems.BIT.asInstrument()!!) {
         repeat(100) {
             beat {
-                note(0.5f + it * 0.1f)
-                note(0.7f + it * 0.1f)
-                ticksUntilNextBeat(5)
+                val noteValue1 = 0.5f + (it * 0.1f) % 1.5f
+                val noteValue2 = 0.7f + (it * 0.1f) % 1.3f
+                note(noteValue1)
+                note(noteValue2)
+                ticksUntilNextBeat(3)
             }
         }
     }
