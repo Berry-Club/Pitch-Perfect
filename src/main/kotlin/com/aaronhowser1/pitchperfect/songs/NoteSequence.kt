@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 
 class NoteSequence(
+    val name: String,
     val instrument: InstrumentItem,
     val beats: MutableList<Beat> = mutableListOf()
 ) {
@@ -19,9 +20,7 @@ class NoteSequence(
 
     fun toggle(level: ServerLevel, livingEntity: LivingEntity) {
 
-        val currentSong = SongRegistry.songsPlaying[livingEntity]
-
-        when (currentSong) {
+        when (val currentSong = SongRegistry.songsPlaying[livingEntity]) {
             null -> {
                 start(level, livingEntity)
             }
