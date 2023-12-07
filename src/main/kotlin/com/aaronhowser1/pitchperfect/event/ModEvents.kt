@@ -5,16 +5,15 @@ import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.item.ModItems
-import com.aaronhowser1.pitchperfect.songs.SongRegistry
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.isMonster
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.block.NoteBlock
 import net.minecraftforge.event.TickEvent
 import net.minecraftforge.event.TickEvent.ServerTickEvent
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import net.minecraftforge.event.entity.living.LivingSpawnEvent
-import net.minecraftforge.event.entity.player.PlayerInteractEvent
+import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import kotlin.random.Random
@@ -36,14 +35,21 @@ object ModEvents {
     }
 
     @SubscribeEvent
-    fun songTrigger(event: PlayerInteractEvent) {
+    fun onBreakBlock(event: BlockEvent.BreakEvent) {
 
-        val entity = event.entity
-        val level = entity.level
+        val state = event.state
 
-        if (level as? ServerLevel == null) return
+        try {
 
-        SongRegistry.testSong.toggle(level, entity)
+            if (state.block is NoteBlock) {
+                val pitch = state.getValue(NoteBlock.NOTE)
+                println(pitch)
+            }
+        } catch (e: Exception) {
+            println(e.message)
+        }
+
+        event.isCanceled = true
     }
 
     @SubscribeEvent
