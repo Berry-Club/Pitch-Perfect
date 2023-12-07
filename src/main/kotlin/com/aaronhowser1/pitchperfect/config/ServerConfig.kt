@@ -31,6 +31,8 @@ object ServerConfig {
     init {
         BUILDER.push("Server configs for Pitch Perfect")
 
+
+        //TODO: Replace all float configs with double configs
         MOB_SPAWNS_WITH_INSTRUMENT_CHANCE = BUILDER
             .comment(" The chance that a monster with an empty main-hand will have it filled with an instrument on spawn.")
             .defineInRange("Mob Spawns With Instrument Chance", 0.005f, 0.0f, 1.0f, Float::class.java)
