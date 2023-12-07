@@ -5,6 +5,7 @@ import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.item.ModItems
+import com.aaronhowser1.pitchperfect.song.SongRegistry
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.isMonster
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
@@ -53,7 +54,7 @@ object ModEvents {
             println(e.message)
         }
 
-//        SongRegistry.megalovania.toggle(level, event.player)
+        SongRegistry.megalovania.toggle(level, event.player)
 
         event.isCanceled = true
     }

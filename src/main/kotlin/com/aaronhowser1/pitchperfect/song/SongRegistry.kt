@@ -18,7 +18,6 @@ object SongRegistry {
     val songsPlaying: MutableMap<LivingEntity, NoteSequence> = mutableMapOf()
 
     val testSong: NoteSequence = TestSong.register()
-
     val megalovania: NoteSequence = Megalovania.register()
 
     fun song(name: String, instrument: InstrumentItem, block: SongBuilder.() -> Unit): NoteSequence {
