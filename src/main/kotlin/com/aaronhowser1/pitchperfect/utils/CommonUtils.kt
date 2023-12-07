@@ -4,7 +4,6 @@ import com.aaronhowser1.pitchperfect.PitchPerfect
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
-import net.minecraft.world.item.Instrument
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.Enchantment
@@ -28,7 +27,7 @@ object CommonUtils {
 
     fun LivingEntity.isMonster(): Boolean = this is Monster
 
-    fun checkError(condition: Boolean, message: () -> String) {
+    fun logIfError(condition: Boolean, message: () -> String) {
         if (!condition) PitchPerfect.LOGGER.error(message)
     }
 
