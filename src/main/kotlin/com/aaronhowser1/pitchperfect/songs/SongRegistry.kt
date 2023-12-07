@@ -16,9 +16,9 @@ object SongRegistry {
             beat {
                 val noteValue1 = 0.5f + (it * 0.1f) % 1.5f
                 val noteValue2 = 0.7f + (it * 0.1f) % 1.3f
-                note(noteValue1)
-                note(noteValue2)
-                ticksUntilNextBeat(3)
+
+                notes = mutableListOf(noteValue1, noteValue2)
+                ticksUntilNextBeat = 3
             }
         }
     }
@@ -47,17 +47,8 @@ object SongRegistry {
 
         class BeatBuilder {
 
-            private val notes: MutableList<Float> = mutableListOf()
-            private var ticksUntilNextBeat: Int = 0
-
-            fun note(pitch: Float) {
-                notes.add(pitch)
-            }
-
-            fun ticksUntilNextBeat(ticks: Int) {
-                if (ticksUntilNextBeat != 0) throw IllegalStateException("Ticks until next beat already set")
-                ticksUntilNextBeat = ticks
-            }
+            var notes: List<Float> = listOf()
+            var ticksUntilNextBeat: Int = 1
 
             fun build(): NoteSequence.Beat {
                 return NoteSequence.Beat(notes, ticksUntilNextBeat)
