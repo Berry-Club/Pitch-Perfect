@@ -17,6 +17,8 @@ object SongRegistry {
 
     val songsPlaying: MutableMap<LivingEntity, NoteSequence> = mutableMapOf()
 
+
+    //TODO: Move to jsons in datapacks
     val testSong: NoteSequence = TestSong.register()
     val megalovania: NoteSequence = Megalovania.register()
 
