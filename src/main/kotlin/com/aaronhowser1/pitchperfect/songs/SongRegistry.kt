@@ -3,10 +3,13 @@ package com.aaronhowser1.pitchperfect.songs
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.item.ModItems
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.asInstrument
+import net.minecraft.world.entity.LivingEntity
 
 object SongRegistry {
 
     private val SONGS: MutableSet<NoteSequence> = mutableSetOf()
+
+    val songsPlaying: MutableMap<LivingEntity, NoteSequence> = mutableMapOf()
 
     val testSong: NoteSequence = song(ModItems.BIT.get().asInstrument()!!) {
         beat {
@@ -17,16 +20,7 @@ object SongRegistry {
             note(0.6f)
             ticksUntilNextBeat(1)
         }
-        beat {
-            note(0.7f)
-            ticksUntilNextBeat(1)
-        }
-        beat {
-            note(0.8f)
-            ticksUntilNextBeat(1)
-        }
     }
-        get() = field.copy()
 
     private fun song(instrument: InstrumentItem, block: SongBuilder.() -> Unit): NoteSequence {
         val s = SongBuilder(instrument)

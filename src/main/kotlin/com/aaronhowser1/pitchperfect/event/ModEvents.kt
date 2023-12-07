@@ -43,7 +43,7 @@ object ModEvents {
 
         if (level as? ServerLevel == null) return
 
-        SongRegistry.testSong.play(level, entity)
+        SongRegistry.testSong.toggle(level, entity)
     }
 
     @SubscribeEvent

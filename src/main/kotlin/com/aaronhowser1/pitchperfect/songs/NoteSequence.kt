@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 
-data class NoteSequence(
+class NoteSequence(
     val instrument: InstrumentItem,
     val beats: MutableList<Beat> = mutableListOf()
 ) {
@@ -17,14 +17,45 @@ data class NoteSequence(
 
     data class Beat(val notes: List<Float>, val ticksUntilNextBeat: Int)
 
-    private var currentBeat = 0
+    fun toggle(level: ServerLevel, livingEntity: LivingEntity) {
 
-    fun play(level: ServerLevel, livingEntity: LivingEntity) {
-        playBeat(level, livingEntity)
+        val currentSong = SongRegistry.songsPlaying[livingEntity]
+
+        when (currentSong) {
+            null -> {
+                start(level, livingEntity)
+            }
+
+            this -> {
+                stopPlaying(livingEntity)
+            }
+
+            else -> {
+                currentSong.stopPlaying(livingEntity)
+                start(level, livingEntity)
+            }
+        }
     }
 
-    private fun playBeat(level: ServerLevel, livingEntity: LivingEntity) {
-        val beat = beats.getOrNull(currentBeat) ?: return
+    private fun start(level: ServerLevel, livingEntity: LivingEntity) {
+        SongRegistry.songsPlaying[livingEntity] = this
+        playBeat(level, livingEntity, 0)
+    }
+
+    private fun stopPlaying(livingEntity: LivingEntity) {
+        SongRegistry.songsPlaying.remove(livingEntity)
+    }
+
+    private fun playBeat(level: ServerLevel, livingEntity: LivingEntity, iteration: Int) {
+
+        if (SongRegistry.songsPlaying[livingEntity] != this) return
+
+        val beat = beats.getOrNull(iteration)
+
+        if (beat == null) {
+            stopPlaying(livingEntity)
+            return
+        }
 
         val eyePos = livingEntity.eyePosition
 
@@ -44,10 +75,9 @@ data class NoteSequence(
             )
         }
 
-        currentBeat++
 
         ModScheduler.scheduleSynchronisedTask(beat.ticksUntilNextBeat) {
-            playBeat(level, livingEntity)
+            playBeat(level, livingEntity, iteration + 1)
         }
     }
 
