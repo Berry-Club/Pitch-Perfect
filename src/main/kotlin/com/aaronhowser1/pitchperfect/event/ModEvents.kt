@@ -5,7 +5,9 @@ import com.aaronhowser1.pitchperfect.config.ServerConfig
 import com.aaronhowser1.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import com.aaronhowser1.pitchperfect.item.InstrumentItem
 import com.aaronhowser1.pitchperfect.item.ModItems
+import com.aaronhowser1.pitchperfect.songs.SongRegistry
 import com.aaronhowser1.pitchperfect.utils.CommonUtils.isMonster
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.block.NoteBlock
@@ -37,6 +39,10 @@ object ModEvents {
     @SubscribeEvent
     fun onBreakBlock(event: BlockEvent.BreakEvent) {
 
+
+        val level = event.level
+        if (level !is ServerLevel) return
+
         val state = event.state
 
         try {
@@ -48,6 +54,8 @@ object ModEvents {
         } catch (e: Exception) {
             println(e.message)
         }
+
+        SongRegistry.megalovania.toggle(level, event.player)
 
         event.isCanceled = true
     }
