@@ -55,6 +55,10 @@ object ModEvents {
 //        event.isCanceled = true
 //    }
 
+
+    //TODO:
+    // Apparently this might also trigger on mob DESPAWN, which is whatever. But like. Who cares? The mob is despawning.
+    // Maybe I could mixin to Zombie#populateDefaultEquipmentSlots
     @SubscribeEvent
     fun onLivingSpawn(event: LivingSpawnEvent) {
         if (event is LivingSpawnEvent.AllowDespawn) return
@@ -67,9 +71,7 @@ object ModEvents {
         val chance = ServerConfig.MOB_SPAWNS_WITH_INSTRUMENT_CHANCE.get()
         val random = Random.nextDouble()
 
-        println("${chance > random}, $chance, $random")
         if (chance < random) return
-        println("pass!")
 
         val randomInstrument = ModItems.ITEM_REGISTRY.entries.random().get()
         entity.setItemInHand(InteractionHand.MAIN_HAND, randomInstrument.defaultInstance)
