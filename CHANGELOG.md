@@ -1,4 +1,4 @@
-# 1.3.2
+# 1.4.0
 
 - Now required Kotlin for Forge (and, obviously, the mod has been ported to Kotlin)
 - Various code improvements, should perform better now (though it didn't really perform poorly before)
