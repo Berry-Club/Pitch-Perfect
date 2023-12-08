@@ -36,28 +36,28 @@ object ModEvents {
 
     }
 
-    @SubscribeEvent
-    fun onBreakBlock(event: BlockEvent.BreakEvent) {
-
-        val level = event.level
-        if (level !is ServerLevel) return
-
-        val state = event.state
-
-        try {
-
-            if (state.block is NoteBlock) {
-                val pitch = state.getValue(NoteBlock.NOTE)
-                println(pitch)
-            }
-        } catch (e: Exception) {
-            println(e.message)
-        }
-
-        SongRegistry.megalovania.toggle(level, event.player)
-
-        event.isCanceled = true
-    }
+//    @SubscribeEvent
+//    fun onBreakBlock(event: BlockEvent.BreakEvent) {
+//
+//        val level = event.level
+//        if (level !is ServerLevel) return
+//
+//        val state = event.state
+//
+//        try {
+//
+//            if (state.block is NoteBlock) {
+//                val pitch = state.getValue(NoteBlock.NOTE)
+//                println(pitch)
+//            }
+//        } catch (e: Exception) {
+//            println(e.message)
+//        }
+//
+//        SongRegistry.megalovania.toggle(level, event.player)
+//
+//        event.isCanceled = true
+//    }
 
     @SubscribeEvent
     fun onLivingSpawn(event: LivingSpawnEvent) {
