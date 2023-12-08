@@ -33,7 +33,7 @@ object BwaaapEnchantment : Enchantment(
         private val targets: List<LivingEntity> = getTargets()
         private val cooldown: Int = getCooldown()
 
-        private val range: Float = ServerConfig.BWAAAP_RANGE.get()
+        private val range: Float = ServerConfig.BWAAAP_RANGE.get().toFloat()
 
 
         init {
@@ -64,7 +64,7 @@ object BwaaapEnchantment : Enchantment(
         }
 
         private fun knockBack() {
-            val strength: Float = ServerConfig.BWAAAP_STRENGTH.get()
+            val strength: Float = ServerConfig.BWAAAP_STRENGTH.get().toFloat()
 
             for (target in targets) {
                 val targetMotion = target.deltaMovement

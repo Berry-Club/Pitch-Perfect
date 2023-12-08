@@ -60,7 +60,7 @@ object HealingBeatEnchantment : Enchantment(
         }
 
         private fun heal(target: LivingEntity) {
-            target.heal(ServerConfig.HEAL_AMOUNT.get())
+            target.heal(ServerConfig.HEAL_AMOUNT.get().toFloat())
 
             ModPacketHandler.messageNearbyPlayers(
                 SpawnNotePacket(
@@ -86,7 +86,7 @@ object HealingBeatEnchantment : Enchantment(
          */
         private fun findMobsToHeal(): List<LivingEntity> {
 
-            val nearbyMobs = ServerUtils.getNearbyLivingEntities(user, ServerConfig.HEAL_RANGE.get())
+            val nearbyMobs = ServerUtils.getNearbyLivingEntities(user, ServerConfig.HEAL_RANGE.get().toFloat())
 
             return nearbyMobs.filter { possibleTarget: LivingEntity ->
 

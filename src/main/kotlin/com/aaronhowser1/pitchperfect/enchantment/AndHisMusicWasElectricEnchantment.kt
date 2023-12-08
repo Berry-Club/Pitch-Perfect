@@ -142,7 +142,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         }
 
         private fun hurtTarget(targetEntity: LivingEntity) {
-            val damage = event.amount * ServerConfig.ELECTRIC_DAMAGE_FACTOR.get().pow(iteration)
+            val damage = event.amount * ServerConfig.ELECTRIC_DAMAGE_FACTOR.get().pow(iteration).toFloat()
             if (damage < 0.5) throw EndDamage()
 
             targetEntity.hurt(event.source, damage)
@@ -190,7 +190,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
         private fun getNearbyTargets(currentTarget: LivingEntity): List<LivingEntity> {
 
             val nearbyTargets = ServerUtils.getNearbyLivingEntities(
-                currentTarget, ServerConfig.ELECTRIC_RANGE.get()
+                currentTarget, ServerConfig.ELECTRIC_RANGE.get().toFloat()
             ).filter { it.isAlive && it !in entitiesHit }.toMutableList()
 
             // If the attacker is not a monster, and a monster is attacked, aim only at monsters
