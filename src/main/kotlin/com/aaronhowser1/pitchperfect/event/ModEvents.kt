@@ -57,13 +57,19 @@ object ModEvents {
 
     @SubscribeEvent
     fun onLivingSpawn(event: LivingSpawnEvent) {
+        if (event is LivingSpawnEvent.AllowDespawn) return
+
         val entity = event.entity
 
         if (!entity.isMonster()) return
         if (!entity.mainHandItem.isEmpty) return
 
         val chance = ServerConfig.MOB_SPAWNS_WITH_INSTRUMENT_CHANCE.get()
-        if (Random.nextDouble() > chance) return
+        val random = Random.nextDouble()
+
+        println("${chance > random}, $chance, $random")
+        if (chance < random) return
+        println("pass!")
 
         val randomInstrument = ModItems.ITEM_REGISTRY.entries.random().get()
         entity.setItemInHand(InteractionHand.MAIN_HAND, randomInstrument.defaultInstance)
