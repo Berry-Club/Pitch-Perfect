@@ -1,11 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect
 
-import com.aaronhowser.mods.pitchperfect.config.ClientConfig
-import com.aaronhowser.mods.pitchperfect.config.CommonConfig
-import com.aaronhowser.mods.pitchperfect.config.ServerConfig
-import com.aaronhowser.mods.pitchperfect.enchantment.ModEnchantments
-import com.aaronhowser.mods.pitchperfect.item.ModItems
-import com.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
+import dev.aaronhowser.mods.pitchperfect.config.CommonConfig
+import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.enchantment.ModEnchantments
+import dev.aaronhowser.mods.pitchperfect.item.ModItems
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
@@ -15,14 +15,14 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
-@Mod(dev.aaronhowser.mods.pitchperfect.PitchPerfect.MOD_ID)
+@Mod(PitchPerfect.MOD_ID)
 object PitchPerfect {
 
     const val MOD_ID = "pitchperfect"
-    val LOGGER: Logger = LogManager.getLogger(dev.aaronhowser.mods.pitchperfect.PitchPerfect.MOD_ID)
+    val LOGGER: Logger = LogManager.getLogger(MOD_ID)
 
     init {
-        dev.aaronhowser.mods.pitchperfect.PitchPerfect.LOGGER.log(Level.INFO, "Pitch Perfect loaded!")
+        LOGGER.log(Level.INFO, "Pitch Perfect loaded!")
 
         ModLoadingContext.get().apply {
             registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "pitchperfect-client.toml")
@@ -33,7 +33,7 @@ object PitchPerfect {
 
         ModItems.register(MOD_BUS)
         ModEnchantments.register(MOD_BUS)
-        dev.aaronhowser.mods.pitchperfect.ModSounds.register(MOD_BUS)
+        ModSounds.register(MOD_BUS)
 
         ModPacketHandler.setup()
 

@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.packet
 
-import com.aaronhowser.mods.pitchperfect.utils.ClientUtils.playNote
+import dev.aaronhowser.mods.pitchperfect.utils.ClientUtils.playNote
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.network.NetworkEvent

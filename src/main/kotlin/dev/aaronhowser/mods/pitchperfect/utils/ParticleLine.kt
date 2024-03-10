@@ -1,9 +1,9 @@
 package dev.aaronhowser.mods.pitchperfect.utils
 
-import com.aaronhowser.mods.pitchperfect.config.ClientConfig
-import com.aaronhowser.mods.pitchperfect.config.ServerConfig
-import com.aaronhowser.mods.pitchperfect.event.ModScheduler.scheduleSynchronisedTask
-import com.aaronhowser.mods.pitchperfect.utils.ClientUtils.spawnParticle
+import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
+import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.event.ModScheduler.scheduleSynchronisedTask
+import dev.aaronhowser.mods.pitchperfect.utils.ClientUtils.spawnParticle
 import net.minecraft.core.particles.SimpleParticleType
 import net.minecraft.world.phys.Vec3
 import kotlin.math.max

@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.utils
 
-import com.aaronhowser.mods.pitchperfect.config.ClientConfig
-import com.aaronhowser.mods.pitchperfect.utils.CommonUtils.map
+import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
+import dev.aaronhowser.mods.pitchperfect.utils.CommonUtils.map
 import net.minecraft.client.Minecraft
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.particles.SimpleParticleType

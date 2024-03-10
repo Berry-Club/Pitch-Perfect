@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.packet
 
-import com.aaronhowser.mods.pitchperfect.utils.ClientUtils.spawnParticle
+import dev.aaronhowser.mods.pitchperfect.utils.ClientUtils.spawnParticle
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraftforge.network.NetworkEvent

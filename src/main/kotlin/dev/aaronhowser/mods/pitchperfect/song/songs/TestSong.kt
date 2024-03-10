@@ -1,9 +1,9 @@
 package dev.aaronhowser.mods.pitchperfect.song.songs
 
-import com.aaronhowser.mods.pitchperfect.item.ModItems
-import com.aaronhowser.mods.pitchperfect.song.NoteSequence
-import com.aaronhowser.mods.pitchperfect.song.SongRegistry
-import com.aaronhowser.mods.pitchperfect.utils.CommonUtils.asInstrument
+import dev.aaronhowser.mods.pitchperfect.item.ModItems
+import dev.aaronhowser.mods.pitchperfect.song.NoteSequence
+import dev.aaronhowser.mods.pitchperfect.song.SongRegistry
+import dev.aaronhowser.mods.pitchperfect.utils.CommonUtils.asInstrument
 
 object TestSong {
 

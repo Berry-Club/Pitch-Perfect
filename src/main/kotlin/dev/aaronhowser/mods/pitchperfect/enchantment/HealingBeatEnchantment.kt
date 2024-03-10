@@ -1,13 +1,13 @@
 package dev.aaronhowser.mods.pitchperfect.enchantment
 
-import com.aaronhowser.mods.pitchperfect.config.ServerConfig
-import com.aaronhowser.mods.pitchperfect.item.InstrumentItem
-import com.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
-import com.aaronhowser.mods.pitchperfect.packet.SpawnNotePacket
-import com.aaronhowser.mods.pitchperfect.utils.CommonUtils.asInstrument
-import com.aaronhowser.mods.pitchperfect.utils.CommonUtils.ceil
-import com.aaronhowser.mods.pitchperfect.utils.CommonUtils.isMonster
-import com.aaronhowser.mods.pitchperfect.utils.ServerUtils
+import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.SpawnNotePacket
+import dev.aaronhowser.mods.pitchperfect.utils.CommonUtils.asInstrument
+import dev.aaronhowser.mods.pitchperfect.utils.CommonUtils.ceil
+import dev.aaronhowser.mods.pitchperfect.utils.CommonUtils.isMonster
+import dev.aaronhowser.mods.pitchperfect.utils.ServerUtils
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity

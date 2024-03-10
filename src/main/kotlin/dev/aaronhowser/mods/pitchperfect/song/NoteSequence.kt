@@ -1,9 +1,9 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
-import com.aaronhowser.mods.pitchperfect.event.ModScheduler
-import com.aaronhowser.mods.pitchperfect.item.InstrumentItem
-import com.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
-import com.aaronhowser.mods.pitchperfect.packet.SpawnNotePacket
+import dev.aaronhowser.mods.pitchperfect.event.ModScheduler
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.SpawnNotePacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity

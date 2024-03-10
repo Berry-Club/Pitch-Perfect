@@ -1,11 +1,10 @@
 package dev.aaronhowser.mods.pitchperfect.event
 
-import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import com.aaronhowser.mods.pitchperfect.config.ServerConfig
-import com.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
-import com.aaronhowser.mods.pitchperfect.item.InstrumentItem
-import com.aaronhowser.mods.pitchperfect.item.ModItems
-import com.aaronhowser.mods.pitchperfect.utils.CommonUtils.isMonster
+import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.item.ModItems
+import dev.aaronhowser.mods.pitchperfect.utils.CommonUtils.isMonster
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraftforge.event.TickEvent

@@ -1,9 +1,9 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
-import com.aaronhowser.mods.pitchperfect.item.InstrumentItem
-import com.aaronhowser.mods.pitchperfect.song.songs.Megalovania
-import com.aaronhowser.mods.pitchperfect.song.songs.TestSong
-import com.aaronhowser.mods.pitchperfect.utils.CommonUtils.logIfError
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.song.songs.Megalovania
+import dev.aaronhowser.mods.pitchperfect.song.songs.TestSong
+import dev.aaronhowser.mods.pitchperfect.utils.CommonUtils.logIfError
 import net.minecraft.world.entity.LivingEntity
 import kotlin.math.pow
 

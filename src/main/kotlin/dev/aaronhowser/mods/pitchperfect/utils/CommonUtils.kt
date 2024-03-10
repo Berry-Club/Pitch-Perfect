@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.utils
 
-import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import com.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.item.Item

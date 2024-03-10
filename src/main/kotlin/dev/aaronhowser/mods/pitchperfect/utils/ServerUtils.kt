@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.utils
 
-import com.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
-import com.aaronhowser.mods.pitchperfect.packet.SpawnElectricPathPacket
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.SpawnElectricPathPacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.AABB

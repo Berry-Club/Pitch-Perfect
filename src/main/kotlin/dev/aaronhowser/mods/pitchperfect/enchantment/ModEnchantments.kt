@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.enchantment
 
-import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import com.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.EnchantmentCategory

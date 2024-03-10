@@ -1,11 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect.enchantment
 
-import com.aaronhowser.mods.pitchperfect.config.ServerConfig
-import com.aaronhowser.mods.pitchperfect.item.InstrumentItem
-import com.aaronhowser.mods.pitchperfect.utils.ServerUtils.distanceBetweenPoints
-import com.aaronhowser.mods.pitchperfect.utils.ServerUtils.entityToVec3
-import com.aaronhowser.mods.pitchperfect.utils.ServerUtils.getNearbyLivingEntities
-import com.aaronhowser.mods.pitchperfect.utils.ServerUtils.vecBetweenPoints
+import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.utils.ServerUtils.distanceBetweenPoints
+import dev.aaronhowser.mods.pitchperfect.utils.ServerUtils.entityToVec3
+import dev.aaronhowser.mods.pitchperfect.utils.ServerUtils.getNearbyLivingEntities
+import dev.aaronhowser.mods.pitchperfect.utils.ServerUtils.vecBetweenPoints
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player

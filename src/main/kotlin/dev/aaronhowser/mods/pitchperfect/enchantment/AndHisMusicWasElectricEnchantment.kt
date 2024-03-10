@@ -1,13 +1,13 @@
 package dev.aaronhowser.mods.pitchperfect.enchantment
 
-import com.aaronhowser.mods.pitchperfect.config.ServerConfig
-import com.aaronhowser.mods.pitchperfect.event.ModScheduler
-import com.aaronhowser.mods.pitchperfect.item.InstrumentItem
-import com.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
-import com.aaronhowser.mods.pitchperfect.packet.SpawnElectricParticlePacket
-import com.aaronhowser.mods.pitchperfect.utils.CommonUtils.asInstrument
-import com.aaronhowser.mods.pitchperfect.utils.CommonUtils.hasEnchantment
-import com.aaronhowser.mods.pitchperfect.utils.ServerUtils
+import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.event.ModScheduler
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.SpawnElectricParticlePacket
+import dev.aaronhowser.mods.pitchperfect.utils.CommonUtils.asInstrument
+import dev.aaronhowser.mods.pitchperfect.utils.CommonUtils.hasEnchantment
+import dev.aaronhowser.mods.pitchperfect.utils.ServerUtils
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.damagesource.DamageSource
