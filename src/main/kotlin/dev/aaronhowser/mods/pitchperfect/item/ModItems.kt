@@ -12,7 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries
 object ModItems {
 
     val ITEM_REGISTRY: DeferredRegister<Item> =
-        DeferredRegister.create(ForgeRegistries.ITEMS, dev.aaronhowser.mods.pitchperfect.PitchPerfect.MOD_ID)
+        DeferredRegister.create(ForgeRegistries.ITEMS, PitchPerfect.MOD_ID)
 
     private fun createInstrumentItem(name: String, sound: SoundEvent) =
         ITEM_REGISTRY.register<Item>(name) { InstrumentItem(sound) }
