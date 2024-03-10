@@ -50,3 +50,9 @@
     - I also plan on making them play series of notes rather than just one random one, but that requires figuring out how to either use midi files or making my own shittier version 
 - Configs look nicer
 - All configs now use doubles instead of floats
+
+
+# 1.4.1
+
+- Lot of refactors
+- FIX AND HIS MUSIC WAS ELECTRIC
