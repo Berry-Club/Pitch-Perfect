@@ -75,7 +75,7 @@ class NoteSequence(
         }
 
 
-        ModScheduler.scheduleSynchronisedTask(beat.ticksUntilNextBeat) {
+        ModScheduler.scheduleTaskInTicks(beat.ticksUntilNextBeat) {
             playBeat(level, livingEntity, iteration + 1)
         }
     }

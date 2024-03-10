@@ -79,7 +79,7 @@ object ModEvents {
     @SubscribeEvent
     fun serverTick(event: ServerTickEvent) {
         if (event.phase == TickEvent.Phase.END) {
-            ModScheduler.tick()
+            ModScheduler.tick++
         }
     }
 }

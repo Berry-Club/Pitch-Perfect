@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.utils
 
 import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
-import dev.aaronhowser.mods.pitchperfect.event.ModScheduler.scheduleSynchronisedTask
+import dev.aaronhowser.mods.pitchperfect.event.ModScheduler.scheduleTaskInTicks
 import dev.aaronhowser.mods.pitchperfect.utils.ClientUtils.spawnParticle
 import net.minecraft.core.particles.SimpleParticleType
 import net.minecraft.world.phys.Vec3
@@ -60,7 +60,7 @@ class ParticleLine(
             1f, 1f, 1f
         )
         iteration++
-        scheduleSynchronisedTask(ticksPerParticle) {
+        scheduleTaskInTicks(ticksPerParticle) {
             spawnNextParticleInWave(
                 deltaVector,
                 ticksPerParticle,
@@ -72,11 +72,11 @@ class ParticleLine(
     fun spawnEntireLine() {
         if (particlesPerBlock == 0) return
 
-        scheduleSynchronisedTask(totalTravelTime) {
+        scheduleTaskInTicks(totalTravelTime) {
             val pathVector = originPositionVec.vectorTo(destinationPositionVec)
             val pathSize = pathVector.length().toFloat()
             val totalParticleCount = (pathSize * particlesPerBlock.toFloat()).toInt()
-            if (totalParticleCount == 0) return@scheduleSynchronisedTask
+            if (totalParticleCount == 0) return@scheduleTaskInTicks
             val deltaVector = pathVector.scale((1f / totalParticleCount).toDouble())
             for (i in 1..totalParticleCount) {
                 val dx = deltaVector.x() * i

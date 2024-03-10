@@ -124,7 +124,7 @@ object AndHisMusicWasElectricEnchantment : Enchantment(
             )
 
             //Wait for the particles to reach
-            ModScheduler.scheduleSynchronisedTask(ServerConfig.ELECTRIC_JUMP_TIME.get()) {
+            ModScheduler.scheduleTaskInTicks(ServerConfig.ELECTRIC_JUMP_TIME.get()) {
                 damage(nextTarget)
             }
         }
