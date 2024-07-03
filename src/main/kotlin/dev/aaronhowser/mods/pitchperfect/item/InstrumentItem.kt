@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import dev.aaronhowser.mods.pitchperfect.config.CommonConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.BwaaapEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.HealingBeatEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.ModEnchantments
@@ -20,6 +21,8 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.Vec3
+import kotlin.random.Random
 
 class InstrumentItem(
     instrument: InstrumentComponent.Instrument
@@ -126,6 +129,48 @@ class InstrumentItem(
 
         healingBeat(itemStack, player)
         bwaaap(itemStack, player)
+    }
+
+    override fun onLeftClickEntity(stack: ItemStack, player: Player, entity: Entity): Boolean {
+        if (entity.level().isClientSide) return false
+
+        val sound = getSoundEvent(stack) ?: return false
+
+        val particleAmountLowerBound = CommonConfig.MIN_ATTACK_PARTICLES.get()
+        val particleAmountUpperBound = CommonConfig.MAX_ATTACK_PARTICLES.get()
+
+        require(particleAmountLowerBound <= particleAmountUpperBound) {
+            "Min attack particles cannot be greater than max attack particles."
+        }
+
+        val range = particleAmountLowerBound..particleAmountUpperBound
+        val randomAmount = range.random()
+
+        val entityWidth = entity.bbWidth
+        val entityHeight = entity.bbHeight
+
+        for (note in 1..randomAmount) {
+            val randomPitch = Random.nextDouble(0.5, 2.0).toFloat()
+
+            val noteX = entity.x + entityWidth * Random.nextDouble(-1.5, 1.5)
+            val noteZ = entity.z + entityWidth * Random.nextDouble(-1.5, 1.5)
+            val noteY = entity.y + entityHeight + entityHeight * Random.nextDouble(-0.75, 0.75)
+
+            ModPacketHandler.messageNearbyPlayers(
+                SpawnNotePacket(
+                    sound.location,
+                    randomPitch,
+                    noteX,
+                    noteY,
+                    noteZ
+                ),
+                entity.level() as ServerLevel,
+                Vec3(entity.x, entity.y, entity.z),
+                48.0
+            )
+        }
+
+        return false
     }
 
 }
