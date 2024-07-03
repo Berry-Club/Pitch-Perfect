@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "P P",
-    " S ",
-    "S S"
-  ],
+  "category": "misc",
   "key": {
     "P": {
       "tag": "minecraft:planks"
@@ -13,7 +9,13 @@
       "item": "minecraft:stick"
     }
   },
+  "pattern": [
+    "P P",
+    " S ",
+    "S S"
+  ],
   "result": {
-    "item": "pitchperfect:sticks"
+    "count": 1,
+    "id": "pitchperfect:sticks"
   }
 }

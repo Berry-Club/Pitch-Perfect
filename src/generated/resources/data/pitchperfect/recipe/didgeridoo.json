@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "pitchperfect:flute"
+    },
+    "W": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "  F",
+    " W ",
+    "W  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "pitchperfect:didgeridoo"
+  }
+}

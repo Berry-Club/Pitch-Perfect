@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " WS",
-    "SBS",
-    "SW "
-  ],
+  "category": "misc",
   "key": {
-    "S": {
-      "item": "minecraft:stick"
-    },
     "B": {
       "item": "minecraft:bamboo"
+    },
+    "S": {
+      "item": "minecraft:stick"
     },
     "W": {
       "tag": "minecraft:planks"
     }
   },
+  "pattern": [
+    " WS",
+    "SBS",
+    "SW "
+  ],
   "result": {
-    "item": "pitchperfect:flute"
+    "count": 1,
+    "id": "pitchperfect:flute"
   }
 }

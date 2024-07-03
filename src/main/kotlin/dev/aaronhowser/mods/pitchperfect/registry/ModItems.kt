@@ -26,21 +26,21 @@ object ModItems {
         ITEM_REGISTRY.register("cow_bell", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_COW_BELL) })
     val DIDGERIDOO: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("didgeridoo", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_DIDGERIDOO) })
-    val PLING: DeferredItem<InstrumentItem> =
+    val ELECTRIC_PIANO: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("electric_piano", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_PLING) })
     val FLUTE: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("flute", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_FLUTE) })
-    val BELL: DeferredItem<InstrumentItem> =
+    val GLOCKENSPIEL: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("glockenspiel", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_BELL) })
     val GUITAR: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("guitar", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_GUITAR) })
     val HARP: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("harp", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_HARP) })
-    val SNARE: DeferredItem<InstrumentItem> =
+    val SNARE_DRUM: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("snare_drum", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_SNARE) })
-    val HAT: DeferredItem<InstrumentItem> =
+    val STICKS: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("sticks", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_HAT) })
-    val IRON_XYLOPHONE: DeferredItem<InstrumentItem> =
+    val VIBRAPHONE: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("vibraphone", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_IRON_XYLOPHONE) })
     val XYLOPHONE: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.register("xylophone", Supplier { InstrumentItem(SoundEvents.NOTE_BLOCK_XYLOPHONE) })

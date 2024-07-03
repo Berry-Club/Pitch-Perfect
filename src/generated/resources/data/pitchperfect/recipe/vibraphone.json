@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " G ",
-    "IBI",
-    "I I"
-  ],
+  "category": "misc",
   "key": {
+    "B": {
+      "item": "minecraft:bell"
+    },
     "G": {
       "item": "pitchperfect:glockenspiel"
     },
     "I": {
       "item": "minecraft:iron_ingot"
-    },
-    "B": {
-      "item": "minecraft:bell"
     }
   },
+  "pattern": [
+    " G ",
+    "IBI",
+    "I I"
+  ],
   "result": {
-    "item": "pitchperfect:vibraphone"
+    "count": 1,
+    "id": "pitchperfect:vibraphone"
   }
 }

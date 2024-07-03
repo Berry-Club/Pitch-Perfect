@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_nugget"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
   "pattern": [
     "IWI",
     "LWW",
     "IWI"
   ],
-  "key": {
-    "I": {
-      "item": "minecraft:iron_nugget"
-    },
-    "W": {
-      "tag": "minecraft:wool"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    }
-  },
   "result": {
-    "item": "pitchperfect:bass_drum"
+    "count": 1,
+    "id": "pitchperfect:bass_drum"
   }
 }

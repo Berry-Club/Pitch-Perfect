@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "BBB",
-    "DDD",
-    "BRB"
-  ],
+  "category": "misc",
   "key": {
     "B": {
       "item": "minecraft:black_concrete"
@@ -16,7 +12,13 @@
       "item": "minecraft:redstone"
     }
   },
+  "pattern": [
+    "BBB",
+    "DDD",
+    "BRB"
+  ],
   "result": {
-    "item": "pitchperfect:electric_piano"
+    "count": 1,
+    "id": "pitchperfect:electric_piano"
   }
 }

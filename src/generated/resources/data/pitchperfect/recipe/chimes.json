@@ -1,22 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "GNN",
-    "G S",
-    "GNN"
-  ],
+  "category": "misc",
   "key": {
     "G": {
-      "item": "minecraft:gold_ingot"
-    },
-    "N": {
       "item": "minecraft:gold_nugget"
     },
     "S": {
       "item": "minecraft:string"
     }
   },
+  "pattern": [
+    " S ",
+    "SSS",
+    "GGG"
+  ],
   "result": {
-    "item": "pitchperfect:harp"
+    "count": 1,
+    "id": "pitchperfect:chimes"
   }
 }

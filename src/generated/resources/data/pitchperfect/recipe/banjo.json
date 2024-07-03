@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "  S",
-    "WS ",
-    "TW "
-  ],
+  "category": "misc",
   "key": {
+    "L": {
+      "tag": "minecraft:wool"
+    },
     "S": {
       "item": "minecraft:stick"
     },
     "W": {
       "tag": "minecraft:planks"
-    },
-    "T": {
-      "item": "minecraft:string"
     }
   },
+  "pattern": [
+    "  S",
+    "WS ",
+    "LW "
+  ],
   "result": {
-    "item": "pitchperfect:guitar"
+    "count": 1,
+    "id": "pitchperfect:banjo"
   }
 }

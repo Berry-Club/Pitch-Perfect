@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bell"
+    },
+    "I": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    " I ",
+    "IBI",
+    "I I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "pitchperfect:cow_bell"
+  }
+}

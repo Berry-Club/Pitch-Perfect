@@ -30,6 +30,11 @@ object ModDataGen {
             ModItemModelProvider(output, existingFileHelper)
         )
 
+        val recipeProvider = generator.addProvider(
+            event.includeServer(),
+            ModRecipeProvider(output, lookupProvider)
+        )
+
     }
 
 }

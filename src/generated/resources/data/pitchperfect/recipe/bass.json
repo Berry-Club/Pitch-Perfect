@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "  S",
-    "WS ",
-    "NW "
-  ],
+  "category": "misc",
   "key": {
-    "S": {
-      "item": "minecraft:stick"
-    },
     "N": {
       "item": "minecraft:note_block"
+    },
+    "S": {
+      "item": "minecraft:stick"
     },
     "W": {
       "tag": "minecraft:planks"
     }
   },
+  "pattern": [
+    "  S",
+    "WS ",
+    "NW "
+  ],
   "result": {
-    "item": "pitchperfect:bass"
+    "count": 1,
+    "id": "pitchperfect:bass"
   }
 }
