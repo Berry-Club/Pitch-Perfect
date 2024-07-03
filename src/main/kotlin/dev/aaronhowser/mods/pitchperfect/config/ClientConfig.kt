@@ -26,7 +26,7 @@ class ClientConfig(
 
     private fun clientConfigs() {
 
-        builder.push(" Client configs for Pitch Perfect")
+        builder.push("Client")
 
         VOLUME = builder
             .comment("The volume that instruments play at, when right-clicked.")
