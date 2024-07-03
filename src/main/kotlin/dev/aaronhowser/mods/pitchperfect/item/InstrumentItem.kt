@@ -1,11 +1,10 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
-import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
@@ -14,18 +13,18 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
 class InstrumentItem(
-    val sound: Holder.Reference<SoundEvent>
+    val instrument: InstrumentComponent.Instrument
 ) : Item(
     Properties()
         .durability(100)
+        .component()
 ) {
 
-    companion object {
+    val sound =
 
+        override
 
-    }
-
-    override fun use(
+    fun use(
         pLevel: Level,
         pPlayer: Player,
         pUsedHand: InteractionHand
