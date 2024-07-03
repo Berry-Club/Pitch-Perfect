@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.enchantment
 
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.LivingEntity
@@ -18,11 +19,17 @@ object HealingBeatEnchantment {
         itemStack: ItemStack
     ) {
 
-        val mobsToHeal = findMobsToHeal()
+        val instrument = itemStack.item as? InstrumentItem
+        val mobsToHeal by lazy { findMobsToHeal() }
+
+        init {
+            pulse()
+        }
 
         private fun pulse() {
-
             if (user.level().isClientSide) return
+            if (mobsToHeal.isEmpty()) return
+            if (instrument == null) return
 
         }
 
