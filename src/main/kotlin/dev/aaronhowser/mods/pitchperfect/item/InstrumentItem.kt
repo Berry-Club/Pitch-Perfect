@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import dev.aaronhowser.mods.pitchperfect.enchantment.HealingBeatEnchantment
+import dev.aaronhowser.mods.pitchperfect.enchantment.ModEnchantments
 import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
@@ -30,6 +32,18 @@ class InstrumentItem(
         fun getSoundEvent(itemStack: ItemStack): SoundEvent? {
             val instrument = getInstrument(itemStack) ?: return null
             return instrument.soundEvent
+        }
+
+        fun healingBeat(itemStack: ItemStack, player: Player) {
+            if (player.cooldowns.isOnCooldown(itemStack.item)) return
+
+            val healingBeatLevel = itemStack.getEnchantmentLevel(
+                ModEnchantments.getEnchantHolder(player.level(), ModEnchantments.healingBeatResourceKey)
+            )
+
+            if (healingBeatLevel == 0) return
+
+            HealingBeatEnchantment.trigger(player, itemStack)
         }
 
     }
@@ -78,6 +92,8 @@ class InstrumentItem(
                 128.0
             )
         }
+
+        healingBeat(itemStack, player)
     }
 
 }
