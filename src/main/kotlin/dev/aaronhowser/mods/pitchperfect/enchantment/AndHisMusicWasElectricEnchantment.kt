@@ -1,8 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect.enchantment
 
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
 import dev.aaronhowser.mods.pitchperfect.util.ModScheduler
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
@@ -84,7 +87,15 @@ object AndHisMusicWasElectricEnchantment {
             iteration++
 
             if (attacker is Player) {
-                itemStack.hurtAndBreak(1, attacker, attacker.getEquipmentSlotForItem(itemStack))
+                val level = attacker.level() as ServerLevel
+                itemStack.hurtAndBreak(80, level, attacker) {
+                    level.playSound(
+                        null,
+                        attacker.blockPosition(),
+                        ModSounds.GUITAR_SMASH.get(),
+                        SoundSource.PLAYERS
+                    )
+                }
             }
 
             ModScheduler.scheduleTaskInTicks(ServerConfig.ELECTRIC_JUMP_TIME.get()) {
