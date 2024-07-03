@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.datagen
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModBlockTagsProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModItemTagsProvider
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.PackOutput
@@ -33,6 +35,16 @@ object ModDataGen {
         val recipeProvider = generator.addProvider(
             event.includeServer(),
             ModRecipeProvider(output, lookupProvider)
+        )
+
+        val blockTagProvider = generator.addProvider(
+            event.includeServer(),
+            ModBlockTagsProvider(output, lookupProvider, existingFileHelper)
+        )
+
+        val itemTagProvider = generator.addProvider(
+            event.includeServer(),
+            ModItemTagsProvider(output, lookupProvider, blockTagProvider.contentsGetter(), existingFileHelper)
         )
 
     }
