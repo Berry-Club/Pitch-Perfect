@@ -24,6 +24,12 @@ object ModDataGen {
         val lookupProvider: CompletableFuture<HolderLookup.Provider> = event.lookupProvider
 
         val languageProvider = generator.addProvider(event.includeClient(), ModLanguageProvider(output))
+
+        val itemModelProvider = generator.addProvider(
+            event.includeClient(),
+            ModItemModelProvider(output, existingFileHelper)
+        )
+
     }
 
 }
