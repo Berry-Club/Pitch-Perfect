@@ -14,7 +14,7 @@ object ModPacketHandler {
 
         val registrar = event.registrar("1")
 
-        registrar.playToServer(
+        registrar.playToClient(
             SpawnNotePacket.TYPE,
             SpawnNotePacket.STREAM_CODEC,
             DirectionalPayloadHandler(

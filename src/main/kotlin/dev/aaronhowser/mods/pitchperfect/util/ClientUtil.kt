@@ -46,7 +46,7 @@ object ClientUtil {
         }
 
         level?.playSound(
-            null,
+            localPlayer,
             x, y, z,
             sound,
             SoundSource.PLAYERS,
