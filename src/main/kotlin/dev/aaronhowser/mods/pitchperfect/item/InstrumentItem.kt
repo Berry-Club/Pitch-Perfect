@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import dev.aaronhowser.mods.pitchperfect.enchantment.BwaaapEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.HealingBeatEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.ModEnchantments
 import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
@@ -46,6 +47,18 @@ class InstrumentItem(
             HealingBeatEnchantment.trigger(player, itemStack)
         }
 
+        fun bwaaap(itemStack: ItemStack, player: Player) {
+            if (player.cooldowns.isOnCooldown(itemStack.item)) return
+
+            val bwaaapLevel = itemStack.getEnchantmentLevel(
+                ModEnchantments.getEnchantHolder(player.level(), ModEnchantments.bwaaapResourceKey)
+            )
+
+            if (bwaaapLevel == 0) return
+
+            BwaaapEnchantment.trigger(player, itemStack)
+        }
+
     }
 
     override fun use(
@@ -85,7 +98,7 @@ class InstrumentItem(
                     (player.x + noteVector.x),
                     (player.eyeY + noteVector.y),
                     (player.z + noteVector.z),
-                    false   //TODO
+                    false   //TODO BWAAAAP
                 ),
                 level as ServerLevel,
                 player.eyePosition,
@@ -94,6 +107,7 @@ class InstrumentItem(
         }
 
         healingBeat(itemStack, player)
+        bwaaap(itemStack, player)
     }
 
 }

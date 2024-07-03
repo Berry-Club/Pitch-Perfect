@@ -25,7 +25,7 @@ class ServerConfig(
 
         lateinit var BWAAAP_RANGE: ModConfigSpec.DoubleValue
         lateinit var BWAAAP_STRENGTH: ModConfigSpec.DoubleValue
-        lateinit var BWAAAP_COOLDOWN_PER: ModConfigSpec.DoubleValue
+        lateinit var BWAAAP_COOLDOWN_FACTOR: ModConfigSpec.DoubleValue
 
         lateinit var ELECTRIC_RANGE: ModConfigSpec.DoubleValue
         lateinit var ELECTRIC_DAMAGE_FACTOR: ModConfigSpec.DoubleValue
@@ -72,7 +72,7 @@ class ServerConfig(
         BWAAAP_STRENGTH = builder
             .comment(" The strength the BWAAAP enchantment has. Decreases with distance.\n Uses the equation:\n  strength * targetsDistanceToMaxRange")
             .defineInRange("BWAAAP Strength", 1.25, 0.0, Double.MAX_VALUE)
-        BWAAAP_COOLDOWN_PER = builder
+        BWAAAP_COOLDOWN_FACTOR = builder
             .comment(" How many ticks to cool down for every mob BWAAAP'd.")
             .defineInRange("BWAAAP Cooldown Multiplier", 10.0, 0.0, Double.MAX_VALUE)
 

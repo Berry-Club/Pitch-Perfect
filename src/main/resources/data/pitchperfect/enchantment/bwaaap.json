@@ -1,0 +1,22 @@
+{
+  "anvil_cost": 1,
+  "description": {
+    "translate": "enchantment.pitchperfect.bwaaap"
+  },
+  "effects": {},
+  "exclusive_set": "#pitchperfect:instruments",
+  "max_level": 1,
+  "min_cost": {
+    "base": 5,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 25,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#pitchperfect:instruments",
+  "weight": 10
+}
