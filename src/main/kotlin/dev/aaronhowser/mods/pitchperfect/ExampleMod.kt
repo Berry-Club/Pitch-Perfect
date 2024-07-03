@@ -1,6 +1,6 @@
-package example.examplemod
+package dev.aaronhowser.mods.pitchperfect
 
-import example.examplemod.block.ModBlocks
+import dev.aaronhowser.mods.pitchperfect.block.ModBlocks
 import net.minecraft.client.Minecraft
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
@@ -37,11 +37,11 @@ object ExampleMod {
 
         val obj = runForDist(
             clientTarget = {
-                MOD_BUS.addListener(::onClientSetup)
+                MOD_BUS.addListener(ExampleMod::onClientSetup)
                 Minecraft.getInstance()
             },
             serverTarget = {
-                MOD_BUS.addListener(::onServerSetup)
+                MOD_BUS.addListener(ExampleMod::onServerSetup)
                 "test"
             })
 

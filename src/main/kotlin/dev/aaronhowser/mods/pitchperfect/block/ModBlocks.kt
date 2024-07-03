@@ -1,6 +1,6 @@
-package example.examplemod.block
+package dev.aaronhowser.mods.pitchperfect.block
 
-import example.examplemod.ExampleMod
+import dev.aaronhowser.mods.pitchperfect.ExampleMod
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.neoforged.neoforge.registries.DeferredRegister
