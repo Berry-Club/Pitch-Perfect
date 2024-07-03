@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect
 
 import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
+import dev.aaronhowser.mods.pitchperfect.config.CommonConfig
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.registry.ModRegistries
 import net.neoforged.fml.ModContainer
@@ -25,6 +26,7 @@ class PitchPerfect(
         ModRegistries.register(MOD_BUS)
 
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC)
+        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.CONFIG_SPEC)
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.CONFIG_SPEC)
 
     }
