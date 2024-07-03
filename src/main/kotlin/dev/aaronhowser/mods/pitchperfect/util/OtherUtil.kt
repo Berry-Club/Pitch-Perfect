@@ -2,6 +2,8 @@ package dev.aaronhowser.mods.pitchperfect.util
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.phys.AABB
 
 object OtherUtil {
 
@@ -11,6 +13,20 @@ object OtherUtil {
 
     fun modResource(path: String): ResourceLocation {
         return ResourceLocation.fromNamespaceAndPath(PitchPerfect.ID, path)
+    }
+
+    fun getNearbyLivingEntities(originEntity: LivingEntity, range: Double): List<LivingEntity> {
+        return originEntity.level().getEntities(
+            originEntity,
+            AABB(
+                originEntity.x - range,
+                originEntity.y - range,
+                originEntity.z - range,
+                originEntity.x + range,
+                originEntity.y + range,
+                originEntity.z + range
+            )
+        ).filterIsInstance<LivingEntity>()
     }
 
 }
