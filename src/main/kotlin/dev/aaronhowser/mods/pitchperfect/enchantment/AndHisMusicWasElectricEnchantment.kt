@@ -83,6 +83,10 @@ object AndHisMusicWasElectricEnchantment {
             }
             iteration++
 
+            if (attacker is Player) {
+                itemStack.hurtAndBreak(1, attacker, attacker.getEquipmentSlotForItem(itemStack))
+            }
+
             ModScheduler.scheduleTaskInTicks(ServerConfig.ELECTRIC_JUMP_TIME.get()) {
                 damage(nextTarget)
             }

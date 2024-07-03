@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.pitchperfect.enchantment.ModEnchantments
 import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
+import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
@@ -81,6 +82,8 @@ class InstrumentItem(
         }
 
     }
+
+    override fun getBreakingSound(): SoundEvent = ModSounds.GUITAR_SMASH.get()
 
     override fun use(
         pLevel: Level,
