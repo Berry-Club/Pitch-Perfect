@@ -1,7 +1,10 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.core.Holder
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -51,16 +54,20 @@ class InstrumentItem(
         }
 
         if (!level.isClientSide) {
-            level.playSound(
-                null,
-                player.blockPosition(),
-                sound.value(),
-                player.soundSource,
-                1f,
-                pitch
+            ModPacketHandler.messageNearbyPlayers(
+                SpawnNotePacket(
+                    sound.value().location,
+                    pitch,
+                    (player.x + noteVector.x),
+                    (player.eyeY + noteVector.y),
+                    (player.z + noteVector.z),
+                    false   //TODO
+                ),
+                level as ServerLevel,
+                player.eyePosition,
+                128.0
             )
         }
-
     }
 
 }

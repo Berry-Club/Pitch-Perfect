@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.packet.server_to_client
 
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
+import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
@@ -17,13 +18,19 @@ data class SpawnNotePacket(
     val z: Double,
     val hasBwaaap: Boolean
 ) : IModPacket {
+
     override fun receiveMessage(context: IPayloadContext) {
-        TODO("Not yet implemented")
+        ClientUtil.playNote(
+            soundResourceLocation,
+            pitch,
+            x,
+            y,
+            z,
+            hasBwaaap
+        )
     }
 
-    override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> {
-        TODO("Not yet implemented")
-    }
+    override fun type(): CustomPacketPayload.Type<SpawnNotePacket> = TYPE
 
     companion object {
         val TYPE: CustomPacketPayload.Type<SpawnNotePacket> =
