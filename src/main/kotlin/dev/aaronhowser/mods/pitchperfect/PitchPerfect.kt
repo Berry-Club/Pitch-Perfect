@@ -1,7 +1,9 @@
 package dev.aaronhowser.mods.pitchperfect
 
+import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
+import net.neoforged.fml.config.ModConfig
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
@@ -16,6 +18,8 @@ class PitchPerfect(
     }
 
     init {
+
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC)
 
     }
 }
