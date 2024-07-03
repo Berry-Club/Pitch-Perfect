@@ -6,7 +6,8 @@ object ModRegistries {
 
     private val registries = listOf(
         ModItems.ITEM_REGISTRY,
-        ModCreativeTabs.CREATIVE_TAB_REGISTRY
+        ModCreativeTabs.CREATIVE_TAB_REGISTRY,
+        ModDataComponents.DATA_COMPONENT_REGISTRY
     )
 
     fun register(modBus: IEventBus) {

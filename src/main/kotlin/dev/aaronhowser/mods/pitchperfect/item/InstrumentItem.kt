@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
@@ -13,18 +14,27 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
 class InstrumentItem(
-    val instrument: InstrumentComponent.Instrument
+    instrument: InstrumentComponent.Instrument
 ) : Item(
     Properties()
         .durability(100)
-        .component()
+        .component(InstrumentComponent.component, InstrumentComponent(instrument))
 ) {
 
-    val sound =
+    companion object {
 
-        override
+        fun getInstrument(itemStack: ItemStack): InstrumentComponent? {
+            return itemStack.get(InstrumentComponent.component)
+        }
 
-    fun use(
+        fun getSoundEvent(itemStack: ItemStack): SoundEvent? {
+            val instrument = getInstrument(itemStack) ?: return null
+            return instrument.soundEvent
+        }
+
+    }
+
+    override fun use(
         pLevel: Level,
         pPlayer: Player,
         pUsedHand: InteractionHand
@@ -42,6 +52,7 @@ class InstrumentItem(
         level: Level,
         interactionHand: InteractionHand
     ) {
+        val sound = getSoundEvent(itemStack) ?: return
 
         val lookVector = player.lookAngle
         val pitch = lookVector.y.toFloat().map(-1f, 1f, 0.5f, 2f)
@@ -55,7 +66,7 @@ class InstrumentItem(
         if (!level.isClientSide) {
             ModPacketHandler.messageNearbyPlayers(
                 SpawnNotePacket(
-                    sound.value().location,
+                    sound.location,
                     pitch,
                     (player.x + noteVector.x),
                     (player.eyeY + noteVector.y),

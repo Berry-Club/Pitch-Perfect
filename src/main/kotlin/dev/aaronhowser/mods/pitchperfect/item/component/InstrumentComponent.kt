@@ -7,12 +7,32 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 
-class InstrumentComponent(
+data class InstrumentComponent(
     val instrumentId: Int
 ) {
+    constructor(instrument: Instrument) : this(instrument.id)
+
     companion object {
+
+        val CODEC: Codec<InstrumentComponent> =
+            RecordCodecBuilder.create { instance ->
+                instance.group(
+                    Codec.INT.fieldOf("instrumentId").forGetter(InstrumentComponent::instrumentId)
+                ).apply(instance, ::InstrumentComponent)
+            }
+
+        val STREAM_CODEC: StreamCodec<ByteBuf, InstrumentComponent> =
+            StreamCodec.composite(
+                ByteBufCodecs.INT, InstrumentComponent::instrumentId,
+                ::InstrumentComponent
+            )
+
+        val component: DataComponentType<InstrumentComponent> by lazy {
+            ModDataComponents.INSTRUMENT_COMPONENT.get()
+        }
 
         val map = mapOf(
             1 to SoundEvents.NOTE_BLOCK_BANJO.value(),
@@ -32,24 +52,28 @@ class InstrumentComponent(
             15 to SoundEvents.NOTE_BLOCK_IRON_XYLOPHONE.value(),
             16 to SoundEvents.NOTE_BLOCK_XYLOPHONE.value()
         )
+    }
 
-        val CODEC: Codec<InstrumentComponent> =
-            RecordCodecBuilder.create { instance ->
-                instance.group(
-                    Codec.INT.fieldOf("instrumentId").forGetter(InstrumentComponent::instrumentId)
-                ).apply(instance, ::InstrumentComponent)
-            }
+    val soundEvent: SoundEvent?
+        get() = map[instrumentId]
 
-        val STREAM_CODEC: StreamCodec<ByteBuf, InstrumentComponent> =
-            StreamCodec.composite(
-                ByteBufCodecs.INT, InstrumentComponent::instrumentId,
-                ::InstrumentComponent
-            )
-
-        val component: DataComponentType<InstrumentComponent> by lazy {
-            ModDataComponents.INSTRUMENT_COMPONENT.get()
-        }
-
+    enum class Instrument(val id: Int) {
+        BANJO(1),
+        BASEDRUM(2),
+        BASS(3),
+        BIT(4),
+        CHIME(5),
+        COW_BELL(6),
+        DIDGERIDOO(7),
+        PLING(8),
+        FLUTE(9),
+        BELL(10),
+        GUITAR(11),
+        HARP(12),
+        SNARE(13),
+        HAT(14),
+        IRON_XYLOPHONE(15),
+        XYLOPHONE(16)
     }
 
 }
