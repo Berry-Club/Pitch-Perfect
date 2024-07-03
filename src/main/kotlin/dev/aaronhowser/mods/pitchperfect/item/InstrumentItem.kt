@@ -11,9 +11,14 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlotGroup
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.level.Level
 
 class InstrumentItem(
@@ -22,6 +27,19 @@ class InstrumentItem(
     Properties()
         .durability(100)
         .component(InstrumentComponent.component, InstrumentComponent(instrument))
+        .attributes(
+            ItemAttributeModifiers.builder()
+                .add(
+                    Attributes.ATTACK_DAMAGE,
+                    AttributeModifier(
+                        BASE_ATTACK_DAMAGE_ID,
+                        0.1,
+                        AttributeModifier.Operation.ADD_VALUE
+                    ),
+                    EquipmentSlotGroup.MAINHAND
+                )
+                .build()
+        )
 ) {
 
     companion object {
