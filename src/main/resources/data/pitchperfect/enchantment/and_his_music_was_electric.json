@@ -1,0 +1,22 @@
+{
+  "anvil_cost": 1,
+  "description": {
+    "translate": "enchantment.pitchperfect.and_his_music_was_electric"
+  },
+  "effects": {},
+  "exclusive_set": "#pitchperfect:instruments",
+  "max_level": 1,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 55,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#pitchperfect:instruments",
+  "weight": 10
+}
