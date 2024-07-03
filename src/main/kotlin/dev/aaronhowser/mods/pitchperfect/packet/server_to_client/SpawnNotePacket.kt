@@ -16,7 +16,7 @@ data class SpawnNotePacket(
     val x: Double,
     val y: Double,
     val z: Double,
-    val hasBwaaap: Boolean
+    val hasBwaaap: Boolean = false
 ) : IModPacket {
 
     override fun receiveMessage(context: IPayloadContext) {

@@ -2,10 +2,15 @@ package dev.aaronhowser.mods.pitchperfect.enchantment
 
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 
 object HealingBeatEnchantment {
@@ -16,10 +21,10 @@ object HealingBeatEnchantment {
 
     private class HealingBeatPulse(
         private val user: LivingEntity,
-        itemStack: ItemStack
+        private val itemStack: ItemStack
     ) {
 
-        val instrument = itemStack.item as? InstrumentItem
+        val soundEvent = InstrumentItem.getSoundEvent(itemStack)
         val mobsToHeal by lazy { findMobsToHeal() }
 
         init {
@@ -29,8 +34,33 @@ object HealingBeatEnchantment {
         private fun pulse() {
             if (user.level().isClientSide) return
             if (mobsToHeal.isEmpty()) return
-            if (instrument == null) return
+            if (soundEvent == null) return
 
+            mobsToHeal.forEach { heal(it) }
+
+            if (user is Player) {
+                user.cooldowns.addCooldown(
+                    itemStack.item,
+                    Mth.ceil(ServerConfig.HEAL_COOLDOWN_PER.get() * mobsToHeal.size)
+                )
+            }
+        }
+
+        private fun heal(target: LivingEntity) {
+            target.heal(ServerConfig.HEAL_AMOUNT.get().toFloat())
+
+            ModPacketHandler.messageNearbyPlayers(
+                SpawnNotePacket(
+                    soundEvent!!.location,
+                    user.lookAngle.y.toFloat(),
+                    target.x,
+                    target.eyeY,
+                    target.z
+                ),
+                user.level() as ServerLevel,
+                target.eyePosition,
+                64.0
+            )
         }
 
         private fun findMobsToHeal(): List<LivingEntity> {
