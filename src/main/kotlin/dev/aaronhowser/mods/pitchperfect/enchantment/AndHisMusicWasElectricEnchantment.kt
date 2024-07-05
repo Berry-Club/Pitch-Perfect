@@ -114,6 +114,8 @@ object AndHisMusicWasElectricEnchantment {
                         SoundSource.PLAYERS
                     )
                 }
+
+                itemStack.item.onLeftClickEntity(itemStack, attacker, nextTarget)
             }
 
             ModScheduler.scheduleTaskInTicks(ServerConfig.ELECTRIC_JUMP_TIME.get()) {
