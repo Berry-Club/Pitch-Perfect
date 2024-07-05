@@ -67,9 +67,11 @@ object ClientUtil {
     ) {
         clientLevel?.addParticle(
             particleType,
+            true,
             x, y, z,
-            red.toDouble(), green.toDouble(), blue
-                .toDouble()
+            red.toDouble(),
+            green.toDouble(),
+            blue.toDouble()
         )
     }
 
