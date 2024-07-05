@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.enchantment
 
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnElectricPathPacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
 import dev.aaronhowser.mods.pitchperfect.util.ModScheduler
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
@@ -85,6 +87,20 @@ object AndHisMusicWasElectricEnchantment {
                 return
             }
             iteration++
+
+            ModPacketHandler.messageNearbyPlayers(
+                SpawnElectricPathPacket(
+                    currentTarget.x,
+                    currentTarget.y,
+                    currentTarget.z,
+                    nextTarget.x,
+                    nextTarget.y,
+                    nextTarget.z
+                ),
+                currentTarget.level() as ServerLevel,
+                currentTarget.position(),
+                ServerConfig.ELECTRIC_RANGE.get()
+            )
 
             if (attacker is Player) {
                 val level = attacker.level() as ServerLevel
