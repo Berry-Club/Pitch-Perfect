@@ -2,10 +2,11 @@ package dev.aaronhowser.mods.pitchperfect.enchantment
 
 import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnSparkParticlePacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
 import dev.aaronhowser.mods.pitchperfect.util.ModScheduler
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
-import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
@@ -13,7 +14,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent
 import java.util.*
@@ -68,6 +68,8 @@ object AndHisMusicWasElectricEnchantment {
         private val attackerIsMonster = attacker is Monster
         private val targetIsMonster = initialTarget is Monster
 
+        private val level: ServerLevel = attacker.level() as ServerLevel
+
         private fun end() {
             currentElectricAttacks.remove(this)
         }
@@ -96,16 +98,15 @@ object AndHisMusicWasElectricEnchantment {
 
             ElectricLine(
                 currentTarget.x,
-                currentTarget.y,
+                currentTarget.eyeY,
                 currentTarget.z,
                 nextTarget.x,
-                nextTarget.y,
+                nextTarget.eyeY,
                 nextTarget.z,
-                attacker.level()
+                level
             )
 
             if (attacker is Player) {
-                val level = attacker.level() as ServerLevel
                 itemStack.hurtAndBreak(80, level, attacker) {
                     level.playSound(
                         null,
@@ -177,7 +178,7 @@ object AndHisMusicWasElectricEnchantment {
         private val x2: Double,
         private val y2: Double,
         private val z2: Double,
-        private val level: Level
+        private val level: ServerLevel
     ) {
         private val particlesPerBlock: Int = ClientConfig.ELECTRIC_PARTICLE_DENSITY.get()
         private val totalTravelTime: Int = ServerConfig.ELECTRIC_JUMP_TIME.get()
@@ -209,13 +210,15 @@ object AndHisMusicWasElectricEnchantment {
                 val particleLoc = Vec3(x1, y1, z1).add(deltaVec)
 
                 ModScheduler.scheduleTaskInTicks(delay) {
-                    level.addParticle(
-                        ParticleTypes.ANGRY_VILLAGER,
-                        true,
-                        particleLoc.x,
-                        particleLoc.y,
-                        particleLoc.z,
-                        0.0, 0.0, 0.0
+                    ModPacketHandler.messageNearbyPlayers(
+                        SpawnSparkParticlePacket(
+                            particleLoc.x,
+                            particleLoc.y,
+                            particleLoc.z
+                        ),
+                        level,
+                        particleLoc,
+                        64.0
                     )
                 }
             }

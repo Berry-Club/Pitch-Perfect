@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.packet
 
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnSparkParticlePacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -17,6 +18,15 @@ object ModPacketHandler {
         registrar.playToClient(
             SpawnNotePacket.TYPE,
             SpawnNotePacket.STREAM_CODEC,
+            DirectionalPayloadHandler(
+                { packet, context -> packet.receiveMessage(context) },
+                { packet, context -> packet.receiveMessage(context) }
+            )
+        )
+
+        registrar.playToClient(
+            SpawnSparkParticlePacket.TYPE,
+            SpawnSparkParticlePacket.STREAM_CODEC,
             DirectionalPayloadHandler(
                 { packet, context -> packet.receiveMessage(context) },
                 { packet, context -> packet.receiveMessage(context) }
