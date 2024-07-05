@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.pitchperfect.packet
 
-import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnElectricPathPacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -18,15 +17,6 @@ object ModPacketHandler {
         registrar.playToClient(
             SpawnNotePacket.TYPE,
             SpawnNotePacket.STREAM_CODEC,
-            DirectionalPayloadHandler(
-                { packet, context -> packet.receiveMessage(context) },
-                { packet, context -> packet.receiveMessage(context) }
-            )
-        )
-
-        registrar.playToClient(
-            SpawnElectricPathPacket.TYPE,
-            SpawnElectricPathPacket.STREAM_CODEC,
             DirectionalPayloadHandler(
                 { packet, context -> packet.receiveMessage(context) },
                 { packet, context -> packet.receiveMessage(context) }

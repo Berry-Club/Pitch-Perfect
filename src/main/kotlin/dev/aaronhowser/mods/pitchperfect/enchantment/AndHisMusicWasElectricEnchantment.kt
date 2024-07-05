@@ -2,8 +2,6 @@ package dev.aaronhowser.mods.pitchperfect.enchantment
 
 import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
-import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
-import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnElectricPathPacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
 import dev.aaronhowser.mods.pitchperfect.util.ModScheduler
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
@@ -14,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent
 import kotlin.math.pow
@@ -91,18 +90,15 @@ object AndHisMusicWasElectricEnchantment {
             }
             iteration++
 
-            ModPacketHandler.messageNearbyPlayers(
-                SpawnElectricPathPacket(
-                    currentTarget.x,
-                    currentTarget.y,
-                    currentTarget.z,
-                    nextTarget.x,
-                    nextTarget.y,
-                    nextTarget.z
-                ),
-                currentTarget.level() as ServerLevel,
-                currentTarget.position(),
-                64.0
+            ElectricLine(
+                currentTarget.x,
+                currentTarget.y,
+                currentTarget.z,
+                nextTarget.x,
+                nextTarget.y,
+                nextTarget.z,
+                ClientConfig.ELECTRIC_PARTICLE_IS_WAVE.get(),
+                attacker.level()
             )
 
             if (attacker is Player) {
@@ -176,7 +172,8 @@ object AndHisMusicWasElectricEnchantment {
         val x2: Double,
         val y2: Double,
         val z2: Double,
-        val isWave: Boolean
+        val isWave: Boolean,
+        val level: Level
     ) {
         private val particlesPerBlock: Int = ClientConfig.ELECTRIC_PARTICLE_DENSITY.get()
         private val totalTravelTime: Int = ServerConfig.ELECTRIC_JUMP_TIME.get()
@@ -213,7 +210,6 @@ object AndHisMusicWasElectricEnchantment {
                 val particleLoc = Vec3(x1, y1, z1).add(deltaVec)
 
                 ModScheduler.scheduleTaskInTicks(delay) {
-
 
 
                 }
