@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.enchantment
 
+import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnElectricPathPacket
@@ -8,10 +9,12 @@ import dev.aaronhowser.mods.pitchperfect.util.ModScheduler
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
+import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent
 import kotlin.math.pow
 
@@ -99,7 +102,7 @@ object AndHisMusicWasElectricEnchantment {
                 ),
                 currentTarget.level() as ServerLevel,
                 currentTarget.position(),
-                ServerConfig.ELECTRIC_RANGE.get()
+                64.0
             )
 
             if (attacker is Player) {
@@ -162,6 +165,66 @@ object AndHisMusicWasElectricEnchantment {
             }
 
             return nearbyTargets.toList()
+        }
+
+    }
+
+    class ElectricLine(
+        val x1: Double,
+        val y1: Double,
+        val z1: Double,
+        val x2: Double,
+        val y2: Double,
+        val z2: Double,
+        val isWave: Boolean
+    ) {
+        private val particlesPerBlock: Int = ClientConfig.ELECTRIC_PARTICLE_DENSITY.get()
+        private val totalTravelTime: Int = ServerConfig.ELECTRIC_JUMP_TIME.get()
+
+        init {
+            if (isWave) {
+                spawnWave()
+            } else {
+                spawnLine()
+            }
+        }
+
+        private fun spawnWave() {
+
+            if (particlesPerBlock < 1) return
+            if (totalTravelTime < 1) {
+                spawnLine()
+                return
+            }
+
+            val pathVector = Vec3(x2 - x1, y2 - y1, z2 - z1)
+            val pathLength = pathVector.length()
+
+            val totalParticleCount = Mth.floor(pathLength * particlesPerBlock)
+            if (totalParticleCount < 1) return
+
+            val ticksPerParticle = totalTravelTime.toDouble() / totalParticleCount
+
+            for (i in 0 until totalParticleCount) {
+                val delay = Mth.floor(i * ticksPerParticle)
+
+                val percent = i.toDouble() / totalParticleCount
+                val deltaVec = pathVector.scale(percent)
+                val particleLoc = Vec3(x1, y1, z1).add(deltaVec)
+
+                ModScheduler.scheduleTaskInTicks(delay) {
+
+
+
+                }
+
+            }
+
+
+        }
+
+        private fun spawnLine() {
+
         }
 
     }
