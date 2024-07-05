@@ -13,10 +13,10 @@ import net.minecraft.world.level.Level
 
 object ClientUtil {
 
-    private val localPlayer: LocalPlayer?
+    val localPlayer: LocalPlayer?
         get() = Minecraft.getInstance().player
 
-    private val level: Level?
+    val clientLevel: Level?
         get() = localPlayer?.level()
 
     fun playNote(
@@ -45,7 +45,7 @@ object ClientUtil {
             ClientConfig.VOLUME.get().toFloat()
         }
 
-        level?.playSound(
+        clientLevel?.playSound(
             localPlayer,
             x, y, z,
             sound,
@@ -65,7 +65,7 @@ object ClientUtil {
         green: Float,
         blue: Float
     ) {
-        level?.addParticle(
+        clientLevel?.addParticle(
             particleType,
             x, y, z,
             red.toDouble(), green.toDouble(), blue
