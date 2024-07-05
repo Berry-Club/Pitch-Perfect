@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent
+import java.util.*
 import kotlin.math.pow
 
 object AndHisMusicWasElectricEnchantment {
@@ -61,7 +62,7 @@ object AndHisMusicWasElectricEnchantment {
     ) {
         private val initialTarget: LivingEntity = event.entity
 
-        private val entitiesToAvoid: MutableSet<LivingEntity> = mutableSetOf(initialTarget, attacker)
+        private val entitiesToAvoid: MutableSet<UUID> = mutableSetOf(initialTarget.uuid, attacker.uuid)
         private var iteration: Int = 0
 
         private val attackerIsMonster = attacker is Monster
@@ -84,6 +85,8 @@ object AndHisMusicWasElectricEnchantment {
                 end()
                 return
             }
+
+            entitiesToAvoid.add(nextTarget.uuid)
 
             if (iteration > ServerConfig.ELECTRIC_MAX_JUMPS.get()) {
                 end()
@@ -147,7 +150,7 @@ object AndHisMusicWasElectricEnchantment {
             val nearbyTargets = OtherUtil.getNearbyLivingEntities(
                 currentTarget,
                 ServerConfig.ELECTRIC_RANGE.get()
-            ).filter { !it.isDeadOrDying && it !in entitiesToAvoid }.toMutableSet()
+            ).filter { !it.isDeadOrDying && it.uuid !in entitiesToAvoid }.toMutableSet()
 
             // If the attacker is not a monster, and a monster is attacked, aim only at monsters
             // If the attacker is not a monster, and a non-monster is attacked, aim at anything nearby
