@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
 import dev.aaronhowser.mods.pitchperfect.util.ModScheduler
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
@@ -165,13 +166,13 @@ object AndHisMusicWasElectricEnchantment {
     }
 
     class ElectricLine(
-        val x1: Double,
-        val y1: Double,
-        val z1: Double,
-        val x2: Double,
-        val y2: Double,
-        val z2: Double,
-        val level: Level
+        private val x1: Double,
+        private val y1: Double,
+        private val z1: Double,
+        private val x2: Double,
+        private val y2: Double,
+        private val z2: Double,
+        private val level: Level
     ) {
         private val particlesPerBlock: Int = ClientConfig.ELECTRIC_PARTICLE_DENSITY.get()
         private val totalTravelTime: Int = ServerConfig.ELECTRIC_JUMP_TIME.get()
@@ -203,15 +204,17 @@ object AndHisMusicWasElectricEnchantment {
                 val particleLoc = Vec3(x1, y1, z1).add(deltaVec)
 
                 ModScheduler.scheduleTaskInTicks(delay) {
-
-
+                    level.addParticle(
+                        ParticleTypes.ANGRY_VILLAGER,
+                        true,
+                        particleLoc.x,
+                        particleLoc.y,
+                        particleLoc.z,
+                        0.0, 0.0, 0.0
+                    )
                 }
-
             }
-
-
         }
-
     }
 
 }
