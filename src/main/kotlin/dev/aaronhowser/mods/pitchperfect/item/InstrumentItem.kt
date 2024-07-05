@@ -48,13 +48,13 @@ class InstrumentItem(
 
     companion object {
 
-        fun getInstrument(itemStack: ItemStack): InstrumentComponent? {
-            return itemStack.get(InstrumentComponent.component)
+        fun getInstrument(itemStack: ItemStack): InstrumentComponent.Instrument? {
+            return itemStack.get(InstrumentComponent.component)?.instrument
         }
 
         fun getSoundEvent(itemStack: ItemStack): SoundEvent? {
             val instrument = getInstrument(itemStack) ?: return null
-            return instrument.soundEvent
+            return instrument.soundEvent.value()
         }
 
         fun healingBeat(itemStack: ItemStack, player: Player) {
