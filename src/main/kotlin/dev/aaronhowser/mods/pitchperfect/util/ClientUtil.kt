@@ -3,21 +3,21 @@ package dev.aaronhowser.mods.pitchperfect.util
 import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.client.Minecraft
+import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.particles.SimpleParticleType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundSource
-import net.minecraft.world.level.Level
 
 object ClientUtil {
 
     val localPlayer: LocalPlayer?
         get() = Minecraft.getInstance().player
 
-    val clientLevel: Level?
-        get() = localPlayer?.level()
+    val clientLevel: ClientLevel?
+        get() = localPlayer?.level() as? ClientLevel
 
     fun playNote(
         soundRl: ResourceLocation,
