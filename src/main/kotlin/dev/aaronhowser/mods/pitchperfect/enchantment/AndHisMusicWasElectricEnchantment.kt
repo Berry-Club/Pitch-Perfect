@@ -97,7 +97,6 @@ object AndHisMusicWasElectricEnchantment {
                 nextTarget.x,
                 nextTarget.y,
                 nextTarget.z,
-                ClientConfig.ELECTRIC_PARTICLE_IS_WAVE.get(),
                 attacker.level()
             )
 
@@ -172,25 +171,19 @@ object AndHisMusicWasElectricEnchantment {
         val x2: Double,
         val y2: Double,
         val z2: Double,
-        val isWave: Boolean,
         val level: Level
     ) {
         private val particlesPerBlock: Int = ClientConfig.ELECTRIC_PARTICLE_DENSITY.get()
         private val totalTravelTime: Int = ServerConfig.ELECTRIC_JUMP_TIME.get()
 
         init {
-            if (isWave) {
-                spawnWave()
-            } else {
-                spawnLine()
-            }
+            spawnWave()
         }
 
         private fun spawnWave() {
 
             if (particlesPerBlock < 1) return
             if (totalTravelTime < 1) {
-                spawnLine()
                 return
             }
 
@@ -216,10 +209,6 @@ object AndHisMusicWasElectricEnchantment {
 
             }
 
-
-        }
-
-        private fun spawnLine() {
 
         }
 
