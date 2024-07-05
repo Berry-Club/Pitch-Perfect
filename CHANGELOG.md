@@ -56,3 +56,8 @@
 
 - Lot of refactors
 - FIX AND HIS MUSIC WAS ELECTRIC
+
+# 1.5.0
+
+- Updated to 1.21
+- And His Music Was Electric now works and looks nicer
