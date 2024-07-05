@@ -60,7 +60,7 @@ object AndHisMusicWasElectricEnchantment {
     private class ElectricAttack(
         val event: LivingHurtEvent,
         val attacker: LivingEntity,
-        val itemStack: ItemStack
+        val instrumentStack: ItemStack
     ) {
         private val initialTarget: LivingEntity = event.entity
 
@@ -114,7 +114,7 @@ object AndHisMusicWasElectricEnchantment {
             )
 
             if (attacker is Player) {
-                itemStack.hurtAndBreak(80, level, attacker) {
+                instrumentStack.hurtAndBreak(80, level, attacker) {
                     level.playSound(
                         null,
                         attacker.blockPosition(),
@@ -123,7 +123,9 @@ object AndHisMusicWasElectricEnchantment {
                     )
                 }
 
-                itemStack.item.onLeftClickEntity(itemStack, attacker, nextTarget)
+                if (attacker.mainHandItem == instrumentStack) {
+                    instrumentStack.item.onLeftClickEntity(instrumentStack, attacker, nextTarget)
+                }
             }
 
             ModScheduler.scheduleTaskInTicks(ServerConfig.ELECTRIC_JUMP_TIME.get()) {
