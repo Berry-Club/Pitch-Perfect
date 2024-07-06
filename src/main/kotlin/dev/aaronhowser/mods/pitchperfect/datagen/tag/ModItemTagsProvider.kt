@@ -26,11 +26,25 @@ class ModItemTagsProvider(
 
     override fun addTags(pProvider: HolderLookup.Provider) {
 
-        //TODO: If I ever add blocks (or items that aren't Instruments), exclude them from this tag
-        for (item in ModItems.ITEM_REGISTRY.entries) {
-            this.tag(INSTRUMENTS_TAG)
-                .add(item.get())
-        }
+        this.tag(INSTRUMENTS_TAG)
+            .add(
+                ModItems.BANJO.get(),
+                ModItems.BASS_DRUM.get(),
+                ModItems.BASS.get(),
+                ModItems.BIT.get(),
+                ModItems.CHIMES.get(),
+                ModItems.COW_BELL.get(),
+                ModItems.DIDGERIDOO.get(),
+                ModItems.ELECTRIC_PIANO.get(),
+                ModItems.FLUTE.get(),
+                ModItems.GLOCKENSPIEL.get(),
+                ModItems.GUITAR.get(),
+                ModItems.HARP.get(),
+                ModItems.SNARE_DRUM.get(),
+                ModItems.STICKS.get(),
+                ModItems.VIBRAPHONE.get(),
+                ModItems.XYLOPHONE.get()
+            )
 
     }
 

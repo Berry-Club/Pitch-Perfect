@@ -34,20 +34,20 @@ data class InstrumentComponent(
         val soundEvent: Holder<SoundEvent>
     ) : StringRepresentable {
         BANJO("banjo", SoundEvents.NOTE_BLOCK_BANJO),
-        BASEDRUM("base_drum", SoundEvents.NOTE_BLOCK_BASEDRUM),
+        BASS_DRUM("bass_drum", SoundEvents.NOTE_BLOCK_BASEDRUM),
         BASS("bass", SoundEvents.NOTE_BLOCK_BASS),
         BIT("bit", SoundEvents.NOTE_BLOCK_BIT),
-        CHIME("chime", SoundEvents.NOTE_BLOCK_CHIME),
+        CHIMES("chimes", SoundEvents.NOTE_BLOCK_CHIME),
         COW_BELL("cow_bell", SoundEvents.NOTE_BLOCK_COW_BELL),
         DIDGERIDOO("didgeridoo", SoundEvents.NOTE_BLOCK_DIDGERIDOO),
-        PLING("pling", SoundEvents.NOTE_BLOCK_PLING),
+        ELECTRIC_PIANO("electric_piano", SoundEvents.NOTE_BLOCK_PLING),
         FLUTE("flute", SoundEvents.NOTE_BLOCK_FLUTE),
-        BELL("bell", SoundEvents.NOTE_BLOCK_BELL),
+        GLOCKENSPIEL("glockenspiel", SoundEvents.NOTE_BLOCK_BELL),
         GUITAR("guitar", SoundEvents.NOTE_BLOCK_GUITAR),
         HARP("harp", SoundEvents.NOTE_BLOCK_HARP),
-        SNARE("snare", SoundEvents.NOTE_BLOCK_SNARE),
-        HAT("hat", SoundEvents.NOTE_BLOCK_HAT),
-        IRON_XYLOPHONE("vibraphone", SoundEvents.NOTE_BLOCK_IRON_XYLOPHONE),
+        SNARE_DRUM("snare_drum", SoundEvents.NOTE_BLOCK_SNARE),
+        STICKS("sticks", SoundEvents.NOTE_BLOCK_HAT),
+        VIBRAPHONE("vibraphone", SoundEvents.NOTE_BLOCK_IRON_XYLOPHONE),
         XYLOPHONE("xylophone", SoundEvents.NOTE_BLOCK_XYLOPHONE),
 
         ;

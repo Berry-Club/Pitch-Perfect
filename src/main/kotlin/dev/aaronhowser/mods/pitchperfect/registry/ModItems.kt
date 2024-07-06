@@ -14,33 +14,33 @@ object ModItems {
     val BANJO: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("banjo") { InstrumentItem(InstrumentComponent.Instrument.BANJO) }
     val BASS_DRUM: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("bass_drum") { InstrumentItem(InstrumentComponent.Instrument.BASEDRUM) }
+        ITEM_REGISTRY.registerItem("bass_drum") { InstrumentItem(InstrumentComponent.Instrument.BASS_DRUM) }
     val BASS: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("bass") { InstrumentItem(InstrumentComponent.Instrument.BASS) }
     val BIT: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("bit") { InstrumentItem(InstrumentComponent.Instrument.BIT) }
     val CHIMES: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("chimes") { InstrumentItem(InstrumentComponent.Instrument.CHIME) }
+        ITEM_REGISTRY.registerItem("chimes") { InstrumentItem(InstrumentComponent.Instrument.CHIMES) }
     val COW_BELL: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("cow_bell") { InstrumentItem(InstrumentComponent.Instrument.COW_BELL) }
     val DIDGERIDOO: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("didgeridoo") { InstrumentItem(InstrumentComponent.Instrument.DIDGERIDOO) }
     val ELECTRIC_PIANO: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("electric_piano") { InstrumentItem(InstrumentComponent.Instrument.PLING) }
+        ITEM_REGISTRY.registerItem("electric_piano") { InstrumentItem(InstrumentComponent.Instrument.ELECTRIC_PIANO) }
     val FLUTE: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("flute") { InstrumentItem(InstrumentComponent.Instrument.FLUTE) }
     val GLOCKENSPIEL: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("glockenspiel") { InstrumentItem(InstrumentComponent.Instrument.BELL) }
+        ITEM_REGISTRY.registerItem("glockenspiel") { InstrumentItem(InstrumentComponent.Instrument.GLOCKENSPIEL) }
     val GUITAR: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("guitar") { InstrumentItem(InstrumentComponent.Instrument.GUITAR) }
     val HARP: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("harp") { InstrumentItem(InstrumentComponent.Instrument.HARP) }
     val SNARE_DRUM: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("snare_drum") { InstrumentItem(InstrumentComponent.Instrument.SNARE) }
+        ITEM_REGISTRY.registerItem("snare_drum") { InstrumentItem(InstrumentComponent.Instrument.SNARE_DRUM) }
     val STICKS: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("sticks") { InstrumentItem(InstrumentComponent.Instrument.HAT) }
+        ITEM_REGISTRY.registerItem("sticks") { InstrumentItem(InstrumentComponent.Instrument.STICKS) }
     val VIBRAPHONE: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("vibraphone") { InstrumentItem(InstrumentComponent.Instrument.IRON_XYLOPHONE) }
+        ITEM_REGISTRY.registerItem("vibraphone") { InstrumentItem(InstrumentComponent.Instrument.VIBRAPHONE) }
     val XYLOPHONE: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("xylophone") { InstrumentItem(InstrumentComponent.Instrument.XYLOPHONE) }
 
