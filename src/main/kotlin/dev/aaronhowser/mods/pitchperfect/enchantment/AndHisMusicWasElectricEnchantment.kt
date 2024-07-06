@@ -6,7 +6,8 @@ import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnElectricLinePacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
-import dev.aaronhowser.mods.pitchperfect.util.ModScheduler
+import dev.aaronhowser.mods.pitchperfect.util.ModClientScheduler
+import dev.aaronhowser.mods.pitchperfect.util.ModServerScheduler
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
@@ -128,7 +129,7 @@ object AndHisMusicWasElectricEnchantment {
                 }
             }
 
-            ModScheduler.scheduleTaskInTicks(ServerConfig.ELECTRIC_JUMP_TIME.get()) {
+            ModServerScheduler.scheduleTaskInTicks(ServerConfig.ELECTRIC_JUMP_TIME.get()) {
                 damage(nextTarget)
             }
 
@@ -218,7 +219,7 @@ object AndHisMusicWasElectricEnchantment {
                 val deltaVec = pathVector.scale(percent)
                 val particleLoc = Vec3(x1, y1, z1).add(deltaVec)
 
-                ModScheduler.scheduleTaskInTicks(delay) {
+                ModClientScheduler.scheduleTaskInTicks(delay) {
 
                     ClientUtil.spawnParticle(
                         ParticleTypes.ELECTRIC_SPARK,
