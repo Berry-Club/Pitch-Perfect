@@ -91,6 +91,10 @@ repositories {
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
         content { includeGroup "thedarkcolour" }
     }
+
+    maven {
+        url "https://cursemaven.com"
+    }
 }
 
 dependencies {
@@ -99,6 +103,10 @@ dependencies {
 
     // Must use the '-neoforge' version on NeoForge. If on regular forge, omit the '-neoforge'
     implementation 'thedarkcolour:kotlinforforge-neoforge:5.3.0'
+
+    // KubeJs
+    implementation "curse.maven:kubejs-238086:5495805"
+    implementation "curse.maven:rhino-416294:5495611"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
