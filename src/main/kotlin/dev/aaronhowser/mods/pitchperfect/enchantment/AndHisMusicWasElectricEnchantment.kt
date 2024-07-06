@@ -18,7 +18,7 @@ import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import java.util.*
 import kotlin.math.pow
 
@@ -26,12 +26,11 @@ object AndHisMusicWasElectricEnchantment {
 
     private val currentElectricAttacks: MutableSet<ElectricAttack> = mutableSetOf()
 
-    fun handleElectric(event: LivingHurtEvent) {
-        if (event.isCanceled) return
-        if (event.amount < 1f) return
-
+    fun handleElectric(event: LivingDamageEvent.Post) {
         val source = event.source
         val attacker = source.entity as? LivingEntity ?: return
+
+        if (event.newDamage < 1f) return
 
         if (attacker.level().isClientSide) return
 
@@ -59,7 +58,7 @@ object AndHisMusicWasElectricEnchantment {
     }
 
     private class ElectricAttack(
-        val event: LivingHurtEvent,
+        val event: LivingDamageEvent.Post,
         val attacker: LivingEntity,
         val instrumentStack: ItemStack
     ) {
@@ -143,7 +142,7 @@ object AndHisMusicWasElectricEnchantment {
                 return
             }
 
-            val damage = event.amount * ServerConfig.ELECTRIC_DAMAGE_FACTOR.get().pow(iteration).toFloat()
+            val damage = event.newDamage * ServerConfig.ELECTRIC_DAMAGE_FACTOR.get().pow(iteration).toFloat()
             if (damage < 0.5f) {
                 end()
                 return

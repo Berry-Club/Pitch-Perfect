@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 
 @EventBusSubscriber(
     modid = PitchPerfect.ID
@@ -12,7 +12,7 @@ import net.neoforged.neoforge.event.entity.living.LivingHurtEvent
 object OtherEvents {
 
     @SubscribeEvent
-    fun onLivingHurt(event: LivingHurtEvent) {
+    fun afterLivingHurt(event: LivingDamageEvent.Post) {
         AndHisMusicWasElectricEnchantment.handleElectric(event)
     }
 
