@@ -1,11 +1,13 @@
 package dev.aaronhowser.mods.pitchperfect.item.component
 
-import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import io.netty.buffer.ByteBuf
+import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import com.mojang.datafixers.util.Pair as MojangPair
 
 data class MusicItemComponent(
     val beats: List<Beat>
@@ -17,10 +19,12 @@ data class MusicItemComponent(
 
         val STREAM_CODEC: StreamCodec<ByteBuf, MusicItemComponent> =
             ByteBufCodecs.fromCodec(CODEC)
+
+        val component: DataComponentType<MusicItemComponent> by lazy { ModDataComponents.MUSIC_COMPONENT.get() }
     }
 
     data class Beat(
-        val sounds: List<Pair<Float, InstrumentComponent.Instrument>>,
+        val sounds: List<MojangPair<Float, InstrumentComponent.Instrument>>,
         val delayAfter: Int
     ) {
 

@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.particles.SimpleParticleType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 
 object ClientUtil {
@@ -27,6 +28,20 @@ object ClientUtil {
         z: Double,
         hasBwaaap: Boolean
     ) {
+        val sound =
+            BuiltInRegistries.SOUND_EVENT.get(soundRl) ?: throw IllegalArgumentException("Sound not found: $soundRl")
+
+        playNote(sound, pitch, x, y, z, hasBwaaap)
+    }
+
+    fun playNote(
+        sound: SoundEvent,
+        pitch: Float,
+        x: Double,
+        y: Double,
+        z: Double,
+        hasBwaaap: Boolean
+    ) {
 
         val noteColor = pitch.map(0.5f, 2f, 0f, 24f)
 
@@ -35,9 +50,6 @@ object ClientUtil {
             x, y, z,
             noteColor / 24f, 0f, 0f
         )
-
-        val sound =
-            BuiltInRegistries.SOUND_EVENT.get(soundRl) ?: throw IllegalArgumentException("Sound not found: $soundRl")
 
         val volume = if (hasBwaaap) {
             ClientConfig.VOLUME.get().toFloat() * 1.5f
@@ -53,7 +65,6 @@ object ClientUtil {
             volume,
             pitch
         )
-
     }
 
     fun spawnParticle(
