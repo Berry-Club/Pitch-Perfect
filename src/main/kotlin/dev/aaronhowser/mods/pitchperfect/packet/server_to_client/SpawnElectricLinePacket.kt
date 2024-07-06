@@ -16,11 +16,13 @@ class SpawnElectricLinePacket(
 ) : IModPacket {
 
     override fun receiveMessage(context: IPayloadContext) {
-        AndHisMusicWasElectricEnchantment.ElectricLine(
-            start.x, start.y, start.z,
-            end.x, end.y, end.z,
-            int
-        )
+        context.enqueueWork {
+            AndHisMusicWasElectricEnchantment.ElectricLine(
+                start.x, start.y, start.z,
+                end.x, end.y, end.z,
+                int
+            )
+        }
     }
 
     override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> {

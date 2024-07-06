@@ -20,14 +20,16 @@ data class SpawnNotePacket(
 ) : IModPacket {
 
     override fun receiveMessage(context: IPayloadContext) {
-        ClientUtil.playNote(
-            soundResourceLocation,
-            pitch,
-            x,
-            y,
-            z,
-            hasBwaaap
-        )
+        context.enqueueWork {
+            ClientUtil.playNote(
+                soundResourceLocation,
+                pitch,
+                x,
+                y,
+                z,
+                hasBwaaap
+            )
+        }
     }
 
     override fun type(): CustomPacketPayload.Type<SpawnNotePacket> = TYPE
