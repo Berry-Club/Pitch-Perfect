@@ -124,7 +124,7 @@ object AndHisMusicWasElectricEnchantment {
                     )
                 }
 
-                if (attacker.mainHandItem == instrumentStack) {
+                if (attacker.mainHandItem == instrumentStack || attacker.offhandItem == instrumentStack) {
                     instrumentStack.item.onLeftClickEntity(instrumentStack, attacker, nextTarget)
                 }
             }
