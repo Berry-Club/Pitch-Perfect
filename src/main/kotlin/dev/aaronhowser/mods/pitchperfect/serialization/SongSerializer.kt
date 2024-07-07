@@ -1,22 +1,24 @@
 package dev.aaronhowser.mods.pitchperfect.serialization
 
+import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import java.nio.file.Files
 import java.nio.file.Path
 
 object SongSerializer {
 
-    @Serializable
     data class Song(
+        @SerializedName("beats")
         val beats: List<Beat>
     )
 
-    @Serializable
     data class Beat(
+        @SerializedName("delay_before")
         val delayBefore: Int = 1,
-        val sounds: Map<NoteBlockInstrument, Float>
+        @SerializedName("sounds")
+        val sounds: Map<NoteBlockInstrument, List<Float>>
     )
 
     fun fromSongItemComponent(component: SongItemComponent): Song {
@@ -26,7 +28,7 @@ object SongSerializer {
 
         for (beat in componentBeats) {
 
-            val sounds = mutableMapOf<NoteBlockInstrument, Float>()
+            val sounds = beat.sounds
             val delayBefore = beat.delayBefore
 
             newBeats.add(Beat(delayBefore, sounds))
@@ -36,13 +38,9 @@ object SongSerializer {
     }
 
     fun save(song: Song, path: Path) {
-        val json = Json {
-            prettyPrint = true
-        }
-
-        val jsonString = json.encodeToString(Song.serializer(), song)
-
-        path.toFile().writeText(jsonString)
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val jsonString = gson.toJson(song)
+        Files.write(path, jsonString.toByteArray())
     }
 
 }

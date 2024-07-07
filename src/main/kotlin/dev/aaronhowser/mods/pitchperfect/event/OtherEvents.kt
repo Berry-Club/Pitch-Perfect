@@ -31,10 +31,10 @@ object OtherEvents {
     @SubscribeEvent
     fun onChat(event: ServerChatEvent) {
         val songComponent = SheetMusicItem.createRandomMusicSheet().get(SongItemComponent.component) ?: return
-
+        println(songComponent)
         val song = SongSerializer.fromSongItemComponent(songComponent)
-
-        val path = FMLPaths.CONFIGDIR.get().resolve("AAAAAAAAA").resolve("song.json")
+        println(song)
+        val path = FMLPaths.CONFIGDIR.get().resolve("song.json")
 
         SongSerializer.save(song, path)
     }
