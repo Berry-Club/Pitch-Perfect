@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.pitchperfect.serialization
+package dev.aaronhowser.mods.pitchperfect.song
 
 import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
