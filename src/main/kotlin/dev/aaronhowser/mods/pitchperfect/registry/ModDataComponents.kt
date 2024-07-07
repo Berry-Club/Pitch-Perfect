@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.pitchperfect.registry
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.SongBuilderComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
 import net.minecraft.core.component.DataComponentType
 import net.neoforged.neoforge.registries.DeferredHolder

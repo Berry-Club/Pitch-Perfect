@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
-import dev.aaronhowser.mods.pitchperfect.item.component.SongBuilderComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
 import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
@@ -73,16 +74,16 @@ class MusicSheetItem : Item(
             return musicStack
         }
 
-        fun toggleRecording(stack: ItemStack, level: Level) {
+        fun toggleRecording(stack: ItemStack) {
             if (isRecording(stack)) {
-                stack.remove(SongBuilderComponent.component)
+                stack.remove(BooleanItemComponent.isRecordingComponent)
             } else {
-                stack.set(SongBuilderComponent.component, SongBuilderComponent(level.gameTime, emptyMap()))
+                stack.set(BooleanItemComponent.isRecordingComponent, BooleanItemComponent(true))
             }
         }
 
         fun isRecording(stack: ItemStack): Boolean {
-            return stack.has(SongBuilderComponent.component)
+            return stack.get(BooleanItemComponent.isRecordingComponent).isTrue
         }
     }
 
@@ -91,7 +92,7 @@ class MusicSheetItem : Item(
         if (pLevel.isClientSide) return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand))
 
         if (pPlayer.isCrouching) {
-            toggleRecording(pPlayer.getItemInHand(pUsedHand), pLevel)
+            toggleRecording(pPlayer.getItemInHand(pUsedHand))
             return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand))
         }
 

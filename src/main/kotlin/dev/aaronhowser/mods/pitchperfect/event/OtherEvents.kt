@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.pitchperfect.event
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.MusicSheetItem
-import dev.aaronhowser.mods.pitchperfect.item.component.SongBuilderComponent
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.util.Mth
 import net.minecraft.world.level.Level
@@ -39,27 +38,6 @@ object OtherEvents {
 
         val currentWorldTick = (event.level as? Level)?.gameTime ?: throw IllegalStateException()
 
-        for (player in nearbyRecordingPlayers) {
-            val musicStack =
-                player.inventory.items.first { stack -> MusicSheetItem.isRecording(stack) }
-
-            val songBuilderComponent = musicStack.get(SongBuilderComponent.component) ?: throw IllegalStateException()
-
-            val map: Map<Long, Map<NoteBlockInstrument, List<Float>>> = songBuilderComponent.map
-
-            val mapForTick: Map<NoteBlockInstrument, List<Float>> = map.getOrDefault(currentWorldTick, mutableMapOf())
-            val pitchesForInstrument = mapForTick.getOrDefault(instrument, mutableListOf())
-
-            val newPitches = pitchesForInstrument + pitch
-            val newMapForTick: Map<NoteBlockInstrument, List<Float>> = mapOf(instrument to newPitches)
-
-            val newMap = map.toMutableMap()
-            newMap[currentWorldTick] = newMapForTick
-
-            val newComponent = SongBuilderComponent(currentWorldTick, newMap)
-
-            musicStack.set(SongBuilderComponent.component, newComponent)
-        }
     }
 
 }
