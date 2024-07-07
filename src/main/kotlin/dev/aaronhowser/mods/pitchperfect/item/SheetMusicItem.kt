@@ -1,5 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.mojang.serialization.JsonOps
 import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
@@ -10,6 +13,8 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.neoforged.fml.loading.FMLPaths
+import java.nio.file.Files
 
 class SheetMusicItem : Item(
     Properties()
@@ -18,10 +23,15 @@ class SheetMusicItem : Item(
 
     companion object {
 
-        fun playSounds(song: LatvianWhy.Song, player: Player) {
+        val GSON: Gson = GsonBuilder().setPrettyPrinting().setLenient().serializeNulls().disableHtmlEscaping().create()
 
+
+        fun playSounds(song: LatvianWhy.Song, player: Player) {
             println(song)
 
+            val jsonString = GSON.toJson(LatvianWhy.Song.CODEC.encodeStart(JsonOps.INSTANCE, song).getOrThrow())
+
+            Files.writeString(FMLPaths.CONFIGDIR.get().resolve("my_song.json"), jsonString)
         }
 
         fun toggleRecording(stack: ItemStack, player: Player) {

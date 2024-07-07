@@ -201,8 +201,11 @@ object LatvianWhy {
             return this.displayName
         }
 
-        val playSoundPitch
-            get() = playSoundPitches[this]
+        fun getGoodPitch(): Float {
+            val refNoteValue = REFERENCE_NOTE + (REFERENCE_OCTAVE * 12)
+            val noteValue = this.note + (this.octave * 12)
+            return 2f.pow((noteValue - refNoteValue) / 12f)
+        }
 
         companion object {
             private val VALUES = entries.toTypedArray()
@@ -218,33 +221,13 @@ object LatvianWhy {
                     { list: List<Note> -> if (list.size == 1) Either.left(list.first()) else Either.right(list) }
                 )
 
-            val playSoundPitches
-                get() = mapOf(
-                    F3S to 0.5f,
-                    G3 to 2f.pow(-11f / 12f),
-                    G3S to 2f.pow(-10f / 12f),
-                    A3 to 2f.pow(-9f / 12f),
-                    A3S to 2f.pow(-8f / 12f),
-                    B3 to 2f.pow(-7f / 12f),
-                    C4 to 2f.pow(-6f / 12f),
-                    C4S to 2f.pow(-5f / 12f),
-                    D4 to 2f.pow(-4f / 12f),
-                    D4S to 2f.pow(-3f / 12f),
-                    E4 to 2f.pow(-2f / 12f),
-                    F4 to 2f.pow(-1f / 12f),
-                    F4S to 1f,
-                    G4 to 2f.pow(1f / 12f),
-                    G4S to 2f.pow(2f / 12f),
-                    A4 to 2f.pow(3f / 12f),
-                    A4S to 2f.pow(4f / 12f),
-                    B4 to 2f.pow(5f / 12f),
-                    C5 to 2f.pow(6f / 12f),
-                    C5S to 2f.pow(7f / 12f),
-                    D5 to 2f.pow(8f / 12f),
-                    D5S to 2f.pow(9f / 12f),
-                    E5 to 2f.pow(10f / 12f),
-                    F5 to 2f.pow(11f / 12f)
-                )
+            // F4S, which has a pitch of 1.0, is the reference Note
+            private const val REFERENCE_NOTE = 6
+            private const val REFERENCE_OCTAVE = 4
+
+            fun getFromPitch(pitch: Float): Note {
+                return VALUES.first { it.getGoodPitch() == pitch }
+            }
         }
 
     }

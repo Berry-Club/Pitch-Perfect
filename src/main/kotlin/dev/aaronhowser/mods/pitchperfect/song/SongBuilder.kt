@@ -28,7 +28,6 @@ class SongBuilder(
     }
 
     fun build(): LatvianWhy.Song {
-
         val instrumentBeatMap = mutableMapOf<NoteBlockInstrument, List<LatvianWhy.Beat>>()
 
         for ((sound, map) in notesMap) {
@@ -36,7 +35,7 @@ class SongBuilder(
 
             for ((tick, pitches) in map) {
                 for (pitch in pitches) {
-                    val note = LatvianWhy.Note.entries.first { it.playSoundPitch == pitch }
+                    val note = LatvianWhy.Note.getFromPitch(pitch)
 
                     println(
                         """
@@ -44,10 +43,10 @@ class SongBuilder(
                         - Pitch Float: $pitch
                         - Note: $note
                         - NoteDisplayName: ${note.displayName}
-                        - PlaySoundPitch: ${note.playSoundPitch}
                         - NoteNote: ${note.note}
                         - NoteOctave: ${note.octave}
                         - NotePitch: ${note.pitch}
+                        - NoteGoodPitch: ${note.getGoodPitch()}
                     """.trimIndent()
                     )
 
