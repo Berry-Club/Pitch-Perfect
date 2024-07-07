@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.event
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
@@ -39,7 +40,7 @@ object OtherEvents {
 
         val nearbyRecordingPlayers = event.level.players().filter { player ->
             player.inventory.contains { stack -> SheetMusicItem.isRecording(stack) } &&
-                    player.blockPosition().distSqr(blockPos) < Mth.square(64)
+                    player.blockPosition().distSqr(blockPos) < Mth.square(ServerConfig.RECORDING_RANGE.get())
         }
 
         for (player in nearbyRecordingPlayers) {

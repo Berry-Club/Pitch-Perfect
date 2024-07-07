@@ -31,6 +31,8 @@ class ServerConfig(
         lateinit var ELECTRIC_DAMAGE_FACTOR: ModConfigSpec.DoubleValue
         lateinit var ELECTRIC_JUMP_TIME: ModConfigSpec.IntValue
         lateinit var ELECTRIC_MAX_JUMPS: ModConfigSpec.IntValue
+
+        lateinit var RECORDING_RANGE: ModConfigSpec.DoubleValue
     }
 
     init {
@@ -89,6 +91,10 @@ class ServerConfig(
             .comment("How many times the lightning can jump.\nIf it would do less than 0.5 damage, it will stop.")
             .defineInRange("Electric Jump Limit", Integer.MAX_VALUE, 0, Integer.MAX_VALUE)
 
+        RECORDING_RANGE = builder
+            .comment("What range should Note Blocks search around them for players that ar recording on Music Sheets.")
+            .defineInRange("Recording Range", 64.0, 0.0, 512.0)
+        
         builder.pop()
     }
 
