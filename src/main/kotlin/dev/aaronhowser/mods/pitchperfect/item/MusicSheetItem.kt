@@ -30,6 +30,7 @@ class MusicSheetItem : Item(
             var currentDelay = 0
 
             for (beat in beats) {
+                currentDelay += beat.delayBefore
                 for ((instrument, pitches) in beat.sounds) {
                     for (pitch in pitches) {
                         ModClientScheduler.scheduleTaskInTicks(currentDelay) {
@@ -44,7 +45,6 @@ class MusicSheetItem : Item(
                         }
                     }
                 }
-                currentDelay += beat.delayAfter
             }
         }
 
@@ -63,7 +63,7 @@ class MusicSheetItem : Item(
 
                 beats += SongItemComponent.SoundsWithDelayAfter(
                     sounds = mapOf(instrument to pitches),
-                    delayAfter = Random.nextInt(1, 4)
+                    delayBefore = Random.nextInt(1, 4)
                 )
             }
 

@@ -18,7 +18,7 @@ data class SongItemComponent(
 
     data class SoundsWithDelayAfter(
         val sounds: Map<NoteBlockInstrument, List<Float>>,
-        val delayAfter: Int
+        val delayBefore: Int
     ) {
 
         companion object {
@@ -36,7 +36,7 @@ data class SongItemComponent(
                         StringRepresentable.fromEnum(NoteBlockInstrument::values),
                         PITCH_LIST_CODEC
                     ).fieldOf("sounds").forGetter(SoundsWithDelayAfter::sounds),
-                    Codec.INT.optionalFieldOf("delay_after", 1).forGetter(SoundsWithDelayAfter::delayAfter)
+                    Codec.INT.optionalFieldOf("delay_after", 1).forGetter(SoundsWithDelayAfter::delayBefore)
                 ).apply(instance, ::SoundsWithDelayAfter)
             }
 
