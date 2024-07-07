@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.registry
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SongBuilderComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
@@ -21,6 +22,11 @@ object ModDataComponents {
     val SONG_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SongItemComponent>> =
         DATA_COMPONENT_REGISTRY.registerComponentType("song") {
             it.persistent(SongItemComponent.CODEC).networkSynchronized(SongItemComponent.STREAM_CODEC)
+        }
+
+    val IS_RECORDING_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<BooleanItemComponent>> =
+        DATA_COMPONENT_REGISTRY.registerComponentType("is_recording") {
+            it.persistent(BooleanItemComponent.CODEC).networkSynchronized(BooleanItemComponent.STREAM_CODEC)
         }
 
     val SONG_BUILDER_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SongBuilderComponent>> =
