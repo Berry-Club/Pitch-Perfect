@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
-import dev.aaronhowser.mods.pitchperfect.item.component.LongItemComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.SongBuilderComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
@@ -17,7 +17,6 @@ import kotlin.random.Random
 class MusicSheetItem : Item(
     Properties()
         .stacksTo(1)
-        .component(SongItemComponent.component, SongItemComponent(emptyList()))
 ) {
 
     companion object {
@@ -75,15 +74,15 @@ class MusicSheetItem : Item(
         }
 
         fun toggleRecording(stack: ItemStack, level: Level) {
-            if (stack.has(LongItemComponent.startedRecordingAt)) {
-                stack.remove(LongItemComponent.startedRecordingAt)
+            if (isRecording(stack)) {
+                stack.remove(SongBuilderComponent.component)
             } else {
-                stack.set(LongItemComponent.startedRecordingAt, LongItemComponent(level.gameTime))
+                stack.set(SongBuilderComponent.component, SongBuilderComponent(level.gameTime, emptyMap()))
             }
         }
 
         fun isRecording(stack: ItemStack): Boolean {
-            return stack.has(LongItemComponent.startedRecordingAt)
+            return stack.has(SongBuilderComponent.component)
         }
     }
 
