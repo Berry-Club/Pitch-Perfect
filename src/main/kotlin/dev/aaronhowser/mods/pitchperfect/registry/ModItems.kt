@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.registry
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
-import dev.aaronhowser.mods.pitchperfect.item.MusicSheetItem
+import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -45,7 +45,7 @@ object ModItems {
     val XYLOPHONE: DeferredItem<InstrumentItem> =
         ITEM_REGISTRY.registerItem("xylophone") { InstrumentItem(NoteBlockInstrument.XYLOPHONE) }
 
-    val MUSIC_SHEET: DeferredItem<MusicSheetItem> =
-        ITEM_REGISTRY.registerItem("music_sheet") { MusicSheetItem() }
+    val MUSIC_SHEET: DeferredItem<SheetMusicItem> =
+        ITEM_REGISTRY.registerItem("sheet_music") { SheetMusicItem() }
 
 }

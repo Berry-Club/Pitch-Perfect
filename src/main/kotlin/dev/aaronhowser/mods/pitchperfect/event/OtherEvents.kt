@@ -2,9 +2,8 @@ package dev.aaronhowser.mods.pitchperfect.event
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
-import dev.aaronhowser.mods.pitchperfect.item.MusicSheetItem
+import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
-import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
@@ -39,7 +38,7 @@ object OtherEvents {
         val currentWorldTick = (event.level as? Level)?.gameTime ?: throw IllegalStateException()
 
         val nearbyRecordingPlayers = event.level.players().filter { player ->
-            player.inventory.contains { stack -> MusicSheetItem.isRecording(stack) } &&
+            player.inventory.contains { stack -> SheetMusicItem.isRecording(stack) } &&
                     player.blockPosition().distSqr(blockPos) < Mth.square(64)
         }
 

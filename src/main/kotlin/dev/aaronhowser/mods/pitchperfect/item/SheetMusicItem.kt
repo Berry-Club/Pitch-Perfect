@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import kotlin.random.Random
 
-class MusicSheetItem : Item(
+class SheetMusicItem : Item(
     Properties()
         .stacksTo(1)
 ) {

@@ -105,7 +105,7 @@ dependencies {
     implementation 'thedarkcolour:kotlinforforge-neoforge:5.3.0'
 
     // KubeJs
-    implementation "curse.maven:kubejs-238086:5495805"
+//    implementation "curse.maven:kubejs-238086:5495805"
     implementation "curse.maven:rhino-416294:5495611"
 }
 
