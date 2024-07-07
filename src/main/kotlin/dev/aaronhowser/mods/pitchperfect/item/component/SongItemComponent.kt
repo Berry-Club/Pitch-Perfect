@@ -36,7 +36,7 @@ data class SongItemComponent(
                         StringRepresentable.fromEnum(NoteBlockInstrument::values),
                         PITCH_LIST_CODEC
                     ).fieldOf("sounds").forGetter(SoundsWithDelayAfter::sounds),
-                    Codec.INT.optionalFieldOf("delay_after", 1).forGetter(SoundsWithDelayAfter::delayBefore)
+                    Codec.INT.optionalFieldOf("delay_before", 1).forGetter(SoundsWithDelayAfter::delayBefore)
                 ).apply(instance, ::SoundsWithDelayAfter)
             }
 
