@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
-import dev.aaronhowser.mods.pitchperfect.serialization.SongSerializer
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 
 class SongBuilder(

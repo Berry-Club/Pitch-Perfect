@@ -6,7 +6,9 @@ import com.mojang.serialization.JsonOps
 import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
-import dev.aaronhowser.mods.pitchperfect.serialization.SongSerializer
+import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
+import dev.aaronhowser.mods.pitchperfect.song.SongSerializer
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
@@ -26,11 +28,18 @@ class SheetMusicItem : Item(
         val GSON: Gson = GsonBuilder().setPrettyPrinting().setLenient().serializeNulls().disableHtmlEscaping().create()
 
         fun playSounds(song: SongSerializer.Song, player: Player) {
-            println(song)
-
             val jsonString = GSON.toJson(SongSerializer.Song.CODEC.encodeStart(JsonOps.INSTANCE, song).getOrThrow())
 
             Files.writeString(FMLPaths.CONFIGDIR.get().resolve("my_song.json"), jsonString)
+
+            val serverLevel = player.level() as ServerLevel
+
+            val songPlayer = SongPlayer(
+                serverLevel,
+                song
+            ) { player.eyePosition }
+
+            songPlayer.startPlaying()
         }
 
         fun toggleRecording(stack: ItemStack, player: Player) {
@@ -66,7 +75,7 @@ class SheetMusicItem : Item(
             return InteractionResultHolder.success(stack)
         }
 
-//        playSounds(stack, pPlayer)
+
 
         return InteractionResultHolder.success(stack)
     }
