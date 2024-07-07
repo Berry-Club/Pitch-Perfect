@@ -51,8 +51,10 @@ class MusicSheetItem : Item(
         fun createRandomMusicSheet(): ItemStack {
             val beats = mutableListOf<SongItemComponent.SoundsWithDelayAfter>()
 
+            val validInstruments = NoteBlockInstrument.entries.filter { it.isTunable }
+
             repeat(16) {
-                val instrument = NoteBlockInstrument.entries.random()
+                val instrument = validInstruments.random()
 
                 val pitches = mutableListOf<Float>()
                 repeat(Random.nextInt(1, 4)) {
@@ -87,6 +89,8 @@ class MusicSheetItem : Item(
     }
 
     override fun use(pLevel: Level, pPlayer: Player, pUsedHand: InteractionHand): InteractionResultHolder<ItemStack> {
+
+        if (pLevel.isClientSide) return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand))
 
         if (pPlayer.isCrouching) {
             toggleRecording(pPlayer.getItemInHand(pUsedHand), pLevel)
