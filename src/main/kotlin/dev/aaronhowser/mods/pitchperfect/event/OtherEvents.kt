@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.event
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.MusicSheetItem
+import dev.aaronhowser.mods.pitchperfect.item.component.LongItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.util.Mth
@@ -23,6 +24,8 @@ object OtherEvents {
 
     @SubscribeEvent
     fun onNoteBlock(event: NoteBlockEvent.Play) {
+        if (event.level.isClientSide) return
+
         val blockPos = event.pos
 
         val nearbyRecordingPlayers = event.level.players().filter { player ->
@@ -35,14 +38,32 @@ object OtherEvents {
 
         val currentWorldTick = event.level.server?.tickCount ?: throw IllegalStateException()
 
+        val beat = SongItemComponent.SoundsWithDelayAfter(
+            mapOf(instrument to listOf(pitch)),
+            1
+        )
+
+        //TODO: Make a InProgressSongComponent
         for (player in nearbyRecordingPlayers) {
 
             val musicStack =
                 player.inventory.items.first { stack -> MusicSheetItem.isRecording(stack) }
 
-            val currentMusic =
+            val sheetStartTime =
+                musicStack.get(LongItemComponent.startedRecordingAt)?.long ?: throw IllegalStateException()
+
+            val ticksSinceStarting = currentWorldTick - sheetStartTime
+
+            val currentSong =
                 musicStack.get(SongItemComponent.component) ?: throw IllegalStateException()
 
+            val currentBeats = currentSong.beats
+
+            val newBeats = currentBeats + beat
+
+            val newSong = SongItemComponent(newBeats)
+
+            musicStack.set(SongItemComponent.component, newSong)
         }
 
     }
