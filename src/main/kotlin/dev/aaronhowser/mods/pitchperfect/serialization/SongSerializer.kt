@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import java.util.function.Function
 import kotlin.math.pow
 
-object LatvianWhy {
+object SongSerializer {
 
     data class Song(
         val beats: Map<NoteBlockInstrument, List<Beat>>
@@ -25,14 +25,14 @@ object LatvianWhy {
                     Codec.unboundedMap(StringRepresentable.fromEnum { INSTRUMENTS }, Beat.CODEC.listOf())
                         .fieldOf("beats")
                         .forGetter(Song::beats)
-                ).apply(instance, LatvianWhy::Song)
+                ).apply(instance, SongSerializer::Song)
             }
 
             val STREAM_CODEC: StreamCodec<ByteBuf, Song> = ByteBufCodecs.map(
                 ::HashMap,
                 ByteBufCodecs.idMapper({ INSTRUMENTS[it] }, NoteBlockInstrument::ordinal),
                 Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
-            ).map(LatvianWhy::Song) { HashMap(it.beats) }
+            ).map(SongSerializer::Song) { HashMap(it.beats) }
 
         }
 
@@ -48,13 +48,13 @@ object LatvianWhy {
                 instance.group(
                     Codec.INT.optionalFieldOf("at", 0).forGetter(Beat::at),
                     Note.ONE_OR_MORE_CODEC.fieldOf("notes").forGetter(Beat::notes)
-                ).apply(instance, LatvianWhy::Beat)
+                ).apply(instance, SongSerializer::Beat)
             }
 
             val STREAM_CODEC: StreamCodec<ByteBuf, Beat> = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, Beat::at,
                 Note.STREAM_CODEC.apply(ByteBufCodecs.list()), Beat::notes,
-                LatvianWhy::Beat
+                SongSerializer::Beat
             )
 
         }

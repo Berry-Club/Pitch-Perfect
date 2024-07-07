@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
-import dev.aaronhowser.mods.pitchperfect.serialization.LatvianWhy
+import dev.aaronhowser.mods.pitchperfect.serialization.SongSerializer
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 
 class SongBuilder(
@@ -27,27 +27,27 @@ class SongBuilder(
         notesMap[instrument] = newInstrumentBeats
     }
 
-    fun build(): LatvianWhy.Song {
-        val instrumentBeatMap = mutableMapOf<NoteBlockInstrument, List<LatvianWhy.Beat>>()
+    fun build(): SongSerializer.Song {
+        val instrumentBeatMap = mutableMapOf<NoteBlockInstrument, List<SongSerializer.Beat>>()
 
         for ((sound, map) in notesMap) {
-            val instrumentBeats = mutableListOf<LatvianWhy.Beat>()
+            val instrumentBeats = mutableListOf<SongSerializer.Beat>()
 
             for ((tick, pitches) in map) {
-                val notes: MutableList<LatvianWhy.Note> = mutableListOf()
+                val notes: MutableList<SongSerializer.Note> = mutableListOf()
                 for (pitch in pitches) {
-                    val note = LatvianWhy.Note.getFromPitch(pitch)
+                    val note = SongSerializer.Note.getFromPitch(pitch)
 
                     notes.add(note)
                 }
-                val beat = LatvianWhy.Beat(tick, notes)
+                val beat = SongSerializer.Beat(tick, notes)
                 instrumentBeats.add(beat)
             }
 
             instrumentBeatMap[sound] = instrumentBeats
         }
 
-        return LatvianWhy.Song(instrumentBeatMap)
+        return SongSerializer.Song(instrumentBeatMap)
     }
 
 }

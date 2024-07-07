@@ -6,7 +6,7 @@ import com.mojang.serialization.JsonOps
 import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
-import dev.aaronhowser.mods.pitchperfect.serialization.LatvianWhy
+import dev.aaronhowser.mods.pitchperfect.serialization.SongSerializer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
@@ -25,10 +25,10 @@ class SheetMusicItem : Item(
 
         val GSON: Gson = GsonBuilder().setPrettyPrinting().setLenient().serializeNulls().disableHtmlEscaping().create()
 
-        fun playSounds(song: LatvianWhy.Song, player: Player) {
+        fun playSounds(song: SongSerializer.Song, player: Player) {
             println(song)
 
-            val jsonString = GSON.toJson(LatvianWhy.Song.CODEC.encodeStart(JsonOps.INSTANCE, song).getOrThrow())
+            val jsonString = GSON.toJson(SongSerializer.Song.CODEC.encodeStart(JsonOps.INSTANCE, song).getOrThrow())
 
             Files.writeString(FMLPaths.CONFIGDIR.get().resolve("my_song.json"), jsonString)
         }
