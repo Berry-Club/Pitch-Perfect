@@ -62,8 +62,8 @@ object LatvianWhy {
     }
 
     enum class Note(
-        private val note: Int,
-        private val octave: Int
+        val note: Int,
+        val octave: Int
     ) : StringRepresentable {
 
         //        A0(9, 0),
@@ -177,7 +177,7 @@ object LatvianWhy {
 
         ;
 
-        private val displayName: String = when (note) {
+        val displayName: String = when (note) {
             0 -> "C"
             1 -> "C#"
             2 -> "D"
@@ -195,7 +195,7 @@ object LatvianWhy {
 
         private val midiNoteNumber: Int = 21 + (octave * 12) + note
         private val frequency: Float = (440.0 * 2.0.pow(midiNoteNumber - 69.0) / 12.0).toFloat()
-        private val pitch: Float = 2.0.pow((midiNoteNumber - 69.0) / 12.0).toFloat()
+        val pitch: Float = 2.0.pow((midiNoteNumber - 69.0) / 12.0).toFloat()
 
         override fun getSerializedName(): String {
             return this.displayName

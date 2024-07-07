@@ -37,6 +37,20 @@ class SongBuilder(
             for ((tick, pitches) in map) {
                 for (pitch in pitches) {
                     val note = LatvianWhy.Note.entries.first { it.playSoundPitch == pitch }
+
+                    println(
+                        """
+                        A new note:
+                        - Pitch Float: $pitch
+                        - Note: $note
+                        - NoteDisplayName: ${note.displayName}
+                        - PlaySoundPitch: ${note.playSoundPitch}
+                        - NoteNote: ${note.note}
+                        - NoteOctave: ${note.octave}
+                        - NotePitch: ${note.pitch}
+                    """.trimIndent()
+                    )
+
                     val beat = LatvianWhy.Beat(tick, listOf(note))
                     instrumentBeats.add(beat)
                 }
