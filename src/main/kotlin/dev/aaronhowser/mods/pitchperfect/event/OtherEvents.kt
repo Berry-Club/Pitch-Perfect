@@ -31,12 +31,9 @@ object OtherEvents {
     @SubscribeEvent
     fun onChat(event: ServerChatEvent) {
         val songComponent = SheetMusicItem.createRandomMusicSheet().get(SongItemComponent.component) ?: return
-        println(songComponent)
         val song = SongSerializer.fromSongItemComponent(songComponent)
-        println(song)
-        val path = FMLPaths.CONFIGDIR.get().resolve("song.json")
 
-        SongSerializer.save(song, path)
+        SongSerializer.save(song)
     }
 
     val builders = mutableMapOf<Player, SongBuilder>()
