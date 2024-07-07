@@ -19,5 +19,9 @@ data class BooleanItemComponent(
             ByteBufCodecs.BOOL.map(::BooleanItemComponent, BooleanItemComponent::value)
 
         val isRecordingComponent: DataComponentType<BooleanItemComponent> by lazy { ModDataComponents.IS_RECORDING_COMPONENT.get() }
+
+        val BooleanItemComponent?.isTrue
+            get() = this?.value == true
+
     }
 }

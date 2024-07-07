@@ -14,7 +14,11 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import kotlin.random.Random
 
-class MusicSheetItem : Item(Properties().stacksTo(1)) {
+class MusicSheetItem : Item(
+    Properties()
+        .stacksTo(1)
+        .component(MusicItemComponent.component, MusicItemComponent(emptyList()))
+) {
 
     companion object {
 
