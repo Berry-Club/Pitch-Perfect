@@ -29,8 +29,23 @@ class SongBuilder(
 
     fun build(): LatvianWhy.Song {
 
+        val instrumentBeatMap = mutableMapOf<NoteBlockInstrument, List<LatvianWhy.Beat>>()
 
+        for ((sound, map) in notesMap) {
+            val instrumentBeats = mutableListOf<LatvianWhy.Beat>()
 
+            for ((tick, pitches) in map) {
+                for (pitch in pitches) {
+                    val note = LatvianWhy.Note.entries.first { it.playSoundPitch == pitch }
+                    val beat = LatvianWhy.Beat(tick, listOf(note))
+                    instrumentBeats.add(beat)
+                }
+            }
+
+            instrumentBeatMap[sound] = instrumentBeats
+        }
+
+        return LatvianWhy.Song(instrumentBeatMap)
     }
 
 }

@@ -20,6 +20,8 @@ class SheetMusicItem : Item(
 
         fun playSounds(song: LatvianWhy.Song, player: Player) {
 
+            println(song)
+
         }
 
         fun toggleRecording(stack: ItemStack, player: Player) {

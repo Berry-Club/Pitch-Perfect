@@ -66,7 +66,7 @@ object LatvianWhy {
         private val octave: Int
     ) : StringRepresentable {
 
-//        A0(9, 0),
+        //        A0(9, 0),
 //        A0S(10, 0),
 //        B0(11, 0),
 //        C1(0, 1),
@@ -201,6 +201,9 @@ object LatvianWhy {
             return this.displayName
         }
 
+        val playSoundPitch
+            get() = playSoundPitches[this]
+
         companion object {
             private val VALUES = entries.toTypedArray()
 
@@ -213,6 +216,34 @@ object LatvianWhy {
                 .xmap(
                     { either: Either<Note, MutableList<Note>> -> either.map(::listOf, Function.identity()) },
                     { list: List<Note> -> if (list.size == 1) Either.left(list.first()) else Either.right(list) }
+                )
+
+            val playSoundPitches
+                get() = mapOf(
+                    F3S to 0.5f,
+                    G3 to 2f.pow(-11f / 12f),
+                    G3S to 2f.pow(-10f / 12f),
+                    A3 to 2f.pow(-9f / 12f),
+                    A3S to 2f.pow(-8f / 12f),
+                    B3 to 2f.pow(-7f / 12f),
+                    C4 to 2f.pow(-6f / 12f),
+                    C4S to 2f.pow(-5f / 12f),
+                    D4 to 2f.pow(-4f / 12f),
+                    D4S to 2f.pow(-3f / 12f),
+                    E4 to 2f.pow(-2f / 12f),
+                    F4 to 2f.pow(-1f / 12f),
+                    F4S to 1f,
+                    G4 to 2f.pow(1f / 12f),
+                    G4S to 2f.pow(2f / 12f),
+                    A4 to 2f.pow(3f / 12f),
+                    A4S to 2f.pow(4f / 12f),
+                    B4 to 2f.pow(5f / 12f),
+                    C5 to 2f.pow(6f / 12f),
+                    C5S to 2f.pow(7f / 12f),
+                    D5 to 2f.pow(8f / 12f),
+                    D5S to 2f.pow(9f / 12f),
+                    E5 to 2f.pow(10f / 12f),
+                    F5 to 2f.pow(11f / 12f)
                 )
         }
 
