@@ -1,13 +1,16 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
-import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
+import dev.aaronhowser.mods.pitchperfect.serialization.LatvianWhy
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 
 class SongBuilder(
     private val startingTick: Long
 ) {
 
-    private val notesMap: MutableMap<NoteBlockInstrument, Map<Int, List<Float>>> = mutableMapOf()
+    private val notesMap: MutableMap<NoteBlockInstrument, Map<
+            Int,            // Tick
+            List<Float>>    // Pitches
+            > = mutableMapOf()
 
     fun addNote(
         currentTick: Long,
@@ -24,11 +27,10 @@ class SongBuilder(
         notesMap[instrument] = newInstrumentBeats
     }
 
-    fun build(): SongItemComponent {
+    fun build(): LatvianWhy.Song {
 
-        println(notesMap.toString())
 
-        return SongItemComponent(emptyList())
+
     }
 
 }

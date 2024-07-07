@@ -4,8 +4,6 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
-import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
-import dev.aaronhowser.mods.pitchperfect.serialization.SongSerializer
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.player.Player
@@ -31,11 +29,6 @@ object OtherEvents {
     fun onChat(event: ServerChatEvent) {
         val player = event.player
         val heldItem = player.mainHandItem
-
-        val songComponent = heldItem.get(SongItemComponent.component) ?: return
-        val song = SongSerializer.fromSongItemComponent(songComponent)
-
-        SongSerializer.save(song)
     }
 
     val builders = mutableMapOf<Player, SongBuilder>()
