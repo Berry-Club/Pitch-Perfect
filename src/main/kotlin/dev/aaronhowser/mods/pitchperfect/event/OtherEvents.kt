@@ -2,9 +2,8 @@ package dev.aaronhowser.mods.pitchperfect.event
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
-import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
-import dev.aaronhowser.mods.pitchperfect.item.component.MusicSheetItemComponent
+import dev.aaronhowser.mods.pitchperfect.item.MusicSheetItem
+import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.util.Mth
 import net.neoforged.bus.api.SubscribeEvent
@@ -27,7 +26,7 @@ object OtherEvents {
         val blockPos = event.pos
 
         val nearbyRecordingPlayers = event.level.players().filter { player ->
-            player.inventory.contains { stack -> stack.get(BooleanItemComponent.isRecordingComponent).isTrue } &&
+            player.inventory.contains { stack -> MusicSheetItem.isRecording(stack) } &&
                     player.blockPosition().distSqr(blockPos) < Mth.square(64)
         }
 
@@ -39,10 +38,10 @@ object OtherEvents {
         for (player in nearbyRecordingPlayers) {
 
             val musicStack =
-                player.inventory.items.first { stack -> stack.get(BooleanItemComponent.isRecordingComponent).isTrue }
+                player.inventory.items.first { stack -> MusicSheetItem.isRecording(stack) }
 
             val currentMusic =
-                musicStack.get(MusicSheetItemComponent.component) ?: throw IllegalStateException()
+                musicStack.get(SongItemComponent.component) ?: throw IllegalStateException()
 
         }
 
