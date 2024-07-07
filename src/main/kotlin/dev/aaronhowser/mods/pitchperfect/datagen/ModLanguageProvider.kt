@@ -25,6 +25,8 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         const val STICKS = "item.pitchperfect.sticks"
         const val VIBRAPHONE = "item.pitchperfect.vibraphone"
         const val XYLOPHONE = "item.pitchperfect.xylophone"
+
+        const val SHEET_MUSIC = "item.pitchperfect.sheet_music"
     }
 
     object Enchantment {
@@ -64,6 +66,7 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         add(Item.STICKS, "Drum Sticks")
         add(Item.VIBRAPHONE, "Vibraphone")
         add(Item.XYLOPHONE, "Xylophone")
+        add(Item.SHEET_MUSIC, "Sheet Music")
 
         add(Enchantment.HEALING_BEAT, "Healing Beat")
         add(Enchantment.HEALING_BEAT_DESC, "Heals nearby mobs when used")
