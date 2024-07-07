@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
 import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
@@ -74,12 +75,22 @@ class MusicSheetItem : Item(
             return musicStack
         }
 
-        fun toggleRecording(stack: ItemStack) {
+        fun toggleRecording(stack: ItemStack, player: Player) {
             if (isRecording(stack)) {
-                stack.remove(BooleanItemComponent.isRecordingComponent)
+                stopRecording(stack, player)
             } else {
                 stack.set(BooleanItemComponent.isRecordingComponent, BooleanItemComponent(true))
             }
+        }
+
+        fun stopRecording(itemStack: ItemStack, player: Player) {
+            itemStack.remove(BooleanItemComponent.isRecordingComponent)
+
+            val songBuilder = OtherEvents.builders[player] ?: return
+            OtherEvents.builders.remove(player)
+            val songComponent = songBuilder.build()
+
+            itemStack.set(SongItemComponent.component, songComponent)
         }
 
         fun isRecording(stack: ItemStack): Boolean {
@@ -88,19 +99,18 @@ class MusicSheetItem : Item(
     }
 
     override fun use(pLevel: Level, pPlayer: Player, pUsedHand: InteractionHand): InteractionResultHolder<ItemStack> {
+        val stack = pPlayer.getItemInHand(pUsedHand)
 
-        if (pLevel.isClientSide) return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand))
+        if (pLevel.isClientSide) return InteractionResultHolder.pass(stack)
 
-        if (pPlayer.isCrouching) {
-            toggleRecording(pPlayer.getItemInHand(pUsedHand))
-            return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand))
+        if (pPlayer.isShiftKeyDown) {
+            toggleRecording(stack, pPlayer)
+            return InteractionResultHolder.success(stack)
         }
 
-        val newMusicStack = createRandomMusicSheet()
-        pPlayer.setItemInHand(pUsedHand, newMusicStack)
-        playSounds(newMusicStack, pPlayer)
+        playSounds(stack, pPlayer)
 
-        return InteractionResultHolder.success(newMusicStack)
+        return InteractionResultHolder.success(stack)
     }
 
     override fun isFoil(pStack: ItemStack): Boolean {
