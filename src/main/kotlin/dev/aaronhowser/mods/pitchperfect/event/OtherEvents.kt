@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
-import dev.aaronhowser.mods.pitchperfect.item.component.MusicItemComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.MusicSheetItemComponent
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.util.Mth
 import net.neoforged.bus.api.SubscribeEvent
@@ -34,11 +34,6 @@ object OtherEvents {
         val pitch = event.vanillaNoteId.toFloat().map(0f, 24f, 0f, 1f)
         val instrument = event.instrument
 
-        val doot = MusicItemComponent.Beat.Doot(
-            instrument = instrument,
-            pitch = 1f
-        )
-
         val currentWorldTick = event.level.server?.tickCount ?: throw IllegalStateException()
 
         for (player in nearbyRecordingPlayers) {
@@ -47,9 +42,7 @@ object OtherEvents {
                 player.inventory.items.first { stack -> stack.get(BooleanItemComponent.isRecordingComponent).isTrue }
 
             val currentMusic =
-                musicStack.get(MusicItemComponent.component) ?: throw IllegalStateException()
-
-            val beats = currentMusic.beats
+                musicStack.get(MusicSheetItemComponent.component) ?: throw IllegalStateException()
 
         }
 

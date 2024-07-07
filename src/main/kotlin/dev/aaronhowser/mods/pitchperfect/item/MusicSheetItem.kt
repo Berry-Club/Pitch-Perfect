@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
 import dev.aaronhowser.mods.pitchperfect.item.component.LongItemComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.MusicItemComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.MusicSheetItemComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
 import dev.aaronhowser.mods.pitchperfect.util.ModClientScheduler
@@ -18,13 +18,13 @@ import kotlin.random.Random
 class MusicSheetItem : Item(
     Properties()
         .stacksTo(1)
-        .component(MusicItemComponent.component, MusicItemComponent(emptyList()))
+        .component(MusicSheetItemComponent.component, MusicSheetItemComponent(emptyList()))
 ) {
 
     companion object {
 
         fun playSounds(musicStack: ItemStack, blockPos: BlockPos) {
-            val musicInstructions = musicStack.get(MusicItemComponent.component) ?: return
+            val musicInstructions = musicStack.get(MusicSheetItemComponent.component) ?: return
 
             val beats = musicInstructions.beats
 
@@ -51,9 +51,9 @@ class MusicSheetItem : Item(
 
         fun createRandomMusicSheet(): ItemStack {
             val beats = (0 until 16).map {
-                MusicItemComponent.Beat(
+                MusicSheetItemComponent.Beat(
                     listOf(
-                        MusicItemComponent.Beat.Doot(
+                        MusicSheetItemComponent.Beat.Doot(
                             NoteBlockInstrument.entries.random(),
                             Random.nextFloat()
                         )
@@ -62,10 +62,10 @@ class MusicSheetItem : Item(
                 )
             }
 
-            val musicInstructions = MusicItemComponent(beats)
+            val musicInstructions = MusicSheetItemComponent(beats)
 
             val musicStack = ModItems.MUSIC_SHEET.toStack()
-            musicStack.set(MusicItemComponent.component, musicInstructions)
+            musicStack.set(MusicSheetItemComponent.component, musicInstructions)
 
             return musicStack
         }
