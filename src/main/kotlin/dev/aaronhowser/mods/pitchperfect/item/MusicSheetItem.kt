@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import dev.aaronhowser.mods.pitchperfect.item.component.LongItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.MusicItemComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
@@ -68,9 +69,23 @@ class MusicSheetItem : Item(
 
             return musicStack
         }
+
+        fun toggleRecording(stack: ItemStack, level: Level) {
+            if (stack.has(LongItemComponent.startedRecordingAt)) {
+                stack.remove(LongItemComponent.startedRecordingAt)
+            } else {
+                stack.set(LongItemComponent.startedRecordingAt, LongItemComponent(level.gameTime))
+            }
+        }
     }
 
     override fun use(pLevel: Level, pPlayer: Player, pUsedHand: InteractionHand): InteractionResultHolder<ItemStack> {
+
+        if (pPlayer.isCrouching) {
+            toggleRecording(pPlayer.getItemInHand(pUsedHand), pLevel)
+            return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand))
+        }
+
         val newMusicStack = createRandomMusicSheet()
         pPlayer.setItemInHand(pUsedHand, newMusicStack)
         playSounds(newMusicStack, pPlayer.blockPosition().above(3))
