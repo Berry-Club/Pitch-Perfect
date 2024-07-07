@@ -39,6 +39,8 @@ object OtherEvents {
             pitch = 1f
         )
 
+        val currentWorldTick = event.level.server?.tickCount ?: throw IllegalStateException()
+
         for (player in nearbyRecordingPlayers) {
 
             val musicStack =

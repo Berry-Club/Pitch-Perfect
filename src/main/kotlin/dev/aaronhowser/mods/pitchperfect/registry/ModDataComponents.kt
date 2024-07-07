@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.registry
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.LongItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.MusicItemComponent
 import net.minecraft.core.component.DataComponentType
 import net.neoforged.neoforge.registries.DeferredHolder
@@ -26,6 +27,11 @@ object ModDataComponents {
     val IS_RECORDING_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<BooleanItemComponent>> =
         DATA_COMPONENT_REGISTRY.registerComponentType("is_recording") {
             it.persistent(BooleanItemComponent.CODEC).networkSynchronized(BooleanItemComponent.STREAM_CODEC)
+        }
+
+    val STARTED_RECORDING_AT_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<LongItemComponent>> =
+        DATA_COMPONENT_REGISTRY.registerComponentType("started_recording_at") {
+            it.persistent(LongItemComponent.CODEC).networkSynchronized(LongItemComponent.STREAM_CODEC)
         }
 
 }
