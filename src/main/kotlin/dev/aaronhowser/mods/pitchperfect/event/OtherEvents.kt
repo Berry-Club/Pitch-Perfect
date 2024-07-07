@@ -4,6 +4,8 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
+import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
+import dev.aaronhowser.mods.pitchperfect.serialization.SongSerializer
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.player.Player
@@ -11,6 +13,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.NoteBlock
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.fml.loading.FMLPaths
+import net.neoforged.neoforge.event.ServerChatEvent
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.level.NoteBlockEvent
 
@@ -22,6 +26,17 @@ object OtherEvents {
     @SubscribeEvent
     fun afterLivingHurt(event: LivingDamageEvent.Post) {
         AndHisMusicWasElectricEnchantment.handleElectric(event)
+    }
+
+    @SubscribeEvent
+    fun onChat(event: ServerChatEvent) {
+        val songComponent = SheetMusicItem.createRandomMusicSheet().get(SongItemComponent.component) ?: return
+
+        val song = SongSerializer.fromSongItemComponent(songComponent)
+
+        val path = FMLPaths.CONFIGDIR.get().resolve("AAAAAAAAA").resolve("song.json")
+
+        SongSerializer.save(song, path)
     }
 
     val builders = mutableMapOf<Player, SongBuilder>()
