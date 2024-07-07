@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.registry
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.item.MusicSheetItem
-import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
 
@@ -13,37 +13,37 @@ object ModItems {
         DeferredRegister.createItems(PitchPerfect.ID)
 
     val BANJO: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("banjo") { InstrumentItem(InstrumentComponent.Instrument.BANJO) }
+        ITEM_REGISTRY.registerItem("banjo") { InstrumentItem(NoteBlockInstrument.BANJO) }
     val BASS_DRUM: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("bass_drum") { InstrumentItem(InstrumentComponent.Instrument.BASS_DRUM) }
+        ITEM_REGISTRY.registerItem("bass_drum") { InstrumentItem(NoteBlockInstrument.BASEDRUM) }
     val BASS: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("bass") { InstrumentItem(InstrumentComponent.Instrument.BASS) }
+        ITEM_REGISTRY.registerItem("bass") { InstrumentItem(NoteBlockInstrument.BASS) }
     val BIT: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("bit") { InstrumentItem(InstrumentComponent.Instrument.BIT) }
+        ITEM_REGISTRY.registerItem("bit") { InstrumentItem(NoteBlockInstrument.BIT) }
     val CHIMES: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("chimes") { InstrumentItem(InstrumentComponent.Instrument.CHIMES) }
+        ITEM_REGISTRY.registerItem("chimes") { InstrumentItem(NoteBlockInstrument.CHIME) }
     val COW_BELL: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("cow_bell") { InstrumentItem(InstrumentComponent.Instrument.COW_BELL) }
+        ITEM_REGISTRY.registerItem("cow_bell") { InstrumentItem(NoteBlockInstrument.COW_BELL) }
     val DIDGERIDOO: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("didgeridoo") { InstrumentItem(InstrumentComponent.Instrument.DIDGERIDOO) }
+        ITEM_REGISTRY.registerItem("didgeridoo") { InstrumentItem(NoteBlockInstrument.DIDGERIDOO) }
     val ELECTRIC_PIANO: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("electric_piano") { InstrumentItem(InstrumentComponent.Instrument.ELECTRIC_PIANO) }
+        ITEM_REGISTRY.registerItem("electric_piano") { InstrumentItem(NoteBlockInstrument.PLING) }
     val FLUTE: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("flute") { InstrumentItem(InstrumentComponent.Instrument.FLUTE) }
+        ITEM_REGISTRY.registerItem("flute") { InstrumentItem(NoteBlockInstrument.FLUTE) }
     val GLOCKENSPIEL: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("glockenspiel") { InstrumentItem(InstrumentComponent.Instrument.GLOCKENSPIEL) }
+        ITEM_REGISTRY.registerItem("glockenspiel") { InstrumentItem(NoteBlockInstrument.BELL) }
     val GUITAR: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("guitar") { InstrumentItem(InstrumentComponent.Instrument.GUITAR) }
+        ITEM_REGISTRY.registerItem("guitar") { InstrumentItem(NoteBlockInstrument.GUITAR) }
     val HARP: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("harp") { InstrumentItem(InstrumentComponent.Instrument.HARP) }
+        ITEM_REGISTRY.registerItem("harp") { InstrumentItem(NoteBlockInstrument.HARP) }
     val SNARE_DRUM: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("snare_drum") { InstrumentItem(InstrumentComponent.Instrument.SNARE_DRUM) }
+        ITEM_REGISTRY.registerItem("snare_drum") { InstrumentItem(NoteBlockInstrument.SNARE) }
     val STICKS: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("sticks") { InstrumentItem(InstrumentComponent.Instrument.STICKS) }
+        ITEM_REGISTRY.registerItem("sticks") { InstrumentItem(NoteBlockInstrument.HAT) }
     val VIBRAPHONE: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("vibraphone") { InstrumentItem(InstrumentComponent.Instrument.VIBRAPHONE) }
+        ITEM_REGISTRY.registerItem("vibraphone") { InstrumentItem(NoteBlockInstrument.IRON_XYLOPHONE) }
     val XYLOPHONE: DeferredItem<InstrumentItem> =
-        ITEM_REGISTRY.registerItem("xylophone") { InstrumentItem(InstrumentComponent.Instrument.XYLOPHONE) }
+        ITEM_REGISTRY.registerItem("xylophone") { InstrumentItem(NoteBlockInstrument.XYLOPHONE) }
 
     val MUSIC_SHEET: DeferredItem<MusicSheetItem> =
         ITEM_REGISTRY.registerItem("music_sheet") { MusicSheetItem() }

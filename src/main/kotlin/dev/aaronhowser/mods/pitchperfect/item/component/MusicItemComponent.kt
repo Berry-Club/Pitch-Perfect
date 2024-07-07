@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 
 data class MusicItemComponent(
     val beats: List<Beat>
@@ -37,14 +38,14 @@ data class MusicItemComponent(
         }
 
         data class Doot(
-            val instrument: InstrumentComponent.Instrument,
+            val instrument: NoteBlockInstrument,
             val pitch: Float
         ) {
 
             companion object {
                 val CODEC: Codec<Doot> = RecordCodecBuilder.create { instance ->
                     instance.group(
-                        InstrumentComponent.Instrument.CODEC.fieldOf("instrument").forGetter(Doot::instrument),
+                        InstrumentComponent.INSTRUMENT_CODEC.fieldOf("instrument").forGetter(Doot::instrument),
                         Codec.FLOAT.fieldOf("pitch").forGetter(Doot::pitch)
                     ).apply(instance, ::Doot)
                 }

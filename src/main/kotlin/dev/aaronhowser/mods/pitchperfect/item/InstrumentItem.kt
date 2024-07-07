@@ -22,11 +22,12 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.phys.Vec3
 import kotlin.random.Random
 
 class InstrumentItem(
-    instrument: InstrumentComponent.Instrument
+    instrument: NoteBlockInstrument
 ) : Item(
     Properties()
         .durability(100)
@@ -48,7 +49,7 @@ class InstrumentItem(
 
     companion object {
 
-        fun getInstrument(itemStack: ItemStack): InstrumentComponent.Instrument? {
+        fun getInstrument(itemStack: ItemStack): NoteBlockInstrument? {
             return itemStack.get(InstrumentComponent.component)?.instrument
         }
 

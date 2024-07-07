@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
-import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.MusicItemComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
@@ -12,6 +11,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import kotlin.random.Random
 
 class MusicSheetItem : Item(
@@ -53,7 +53,7 @@ class MusicSheetItem : Item(
                 MusicItemComponent.Beat(
                     listOf(
                         MusicItemComponent.Beat.Doot(
-                            InstrumentComponent.Instrument.entries.random(),
+                            NoteBlockInstrument.entries.random(),
                             Random.nextFloat()
                         )
                     ),
