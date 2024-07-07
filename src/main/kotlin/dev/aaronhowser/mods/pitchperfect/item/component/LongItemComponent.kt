@@ -7,7 +7,7 @@ import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 
-class LongItemComponent(
+data class LongItemComponent(
     val long: Long
 ) {
 
