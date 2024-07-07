@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
 import dev.aaronhowser.mods.pitchperfect.item.component.LongItemComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.MusicSheetItemComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
 import dev.aaronhowser.mods.pitchperfect.util.ModClientScheduler
@@ -18,13 +18,13 @@ import kotlin.random.Random
 class MusicSheetItem : Item(
     Properties()
         .stacksTo(1)
-        .component(MusicSheetItemComponent.component, MusicSheetItemComponent(emptyList()))
+        .component(SongItemComponent.component, SongItemComponent(emptyList()))
 ) {
 
     companion object {
 
         fun playSounds(musicStack: ItemStack, blockPos: BlockPos) {
-            val musicInstructions = musicStack.get(MusicSheetItemComponent.component) ?: return
+            val musicInstructions = musicStack.get(SongItemComponent.component) ?: return
             val beats = musicInstructions.beats
 
             var currentDelay = 0
@@ -49,22 +49,26 @@ class MusicSheetItem : Item(
         }
 
         fun createRandomMusicSheet(): ItemStack {
-            val beats = (0 until 16).map {
-                MusicSheetItemComponent.Beat(
-                    listOf(
-                        MusicSheetItemComponent.Beat.Doot(
-                            NoteBlockInstrument.entries.random(),
-                            Random.nextFloat()
-                        )
-                    ),
-                    Random.nextInt(1, 5)
+            val beats = mutableListOf<SongItemComponent.SoundsWithDelayAfter>()
+
+            repeat(16) {
+                val instrument = NoteBlockInstrument.entries.random()
+
+                val pitches = mutableListOf<Float>()
+                repeat(Random.nextInt(1, 4)) {
+                    pitches += Random.nextFloat()
+                }
+
+                beats += SongItemComponent.SoundsWithDelayAfter(
+                    sounds = mapOf(instrument to pitches),
+                    delayAfter = Random.nextInt(1, 4)
                 )
             }
 
-            val musicInstructions = MusicSheetItemComponent(beats)
+            val musicInstructions = SongItemComponent(beats)
 
             val musicStack = ModItems.MUSIC_SHEET.toStack()
-            musicStack.set(MusicSheetItemComponent.component, musicInstructions)
+            musicStack.set(SongItemComponent.component, musicInstructions)
 
             return musicStack
         }

@@ -12,7 +12,7 @@ import net.minecraft.util.StringRepresentable
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import java.util.function.Function
 
-data class MusicSheetItemComponent(
+data class SongItemComponent(
     val beats: List<SoundsWithDelayAfter>
 ) {
 
@@ -45,13 +45,13 @@ data class MusicSheetItemComponent(
 
     companion object {
 
-        val CODEC: Codec<MusicSheetItemComponent> =
-            SoundsWithDelayAfter.CODEC.listOf().xmap(::MusicSheetItemComponent, MusicSheetItemComponent::beats)
+        val CODEC: Codec<SongItemComponent> =
+            SoundsWithDelayAfter.CODEC.listOf().xmap(::SongItemComponent, SongItemComponent::beats)
 
-        val STREAM_CODEC: StreamCodec<ByteBuf, MusicSheetItemComponent> = ByteBufCodecs.fromCodec(CODEC)
+        val STREAM_CODEC: StreamCodec<ByteBuf, SongItemComponent> = ByteBufCodecs.fromCodec(CODEC)
 
-        val component: DataComponentType<MusicSheetItemComponent> by lazy {
-            ModDataComponents.MUSIC_SHEET_COMPONENT.get()
+        val component: DataComponentType<SongItemComponent> by lazy {
+            ModDataComponents.SONG_COMPONENT.get()
         }
 
     }
