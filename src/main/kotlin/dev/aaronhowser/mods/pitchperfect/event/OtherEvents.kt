@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.NoteBlock
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
@@ -31,7 +32,8 @@ object OtherEvents {
 
         val blockPos = event.pos
 
-        val pitch = event.vanillaNoteId.toFloat().map(0f, 24f, 0f, 1f)
+        val pitch = NoteBlock.getPitchFromNote(event.vanillaNoteId)
+
         val instrument = event.instrument
 
         val currentWorldTick = (event.level as? Level)?.gameTime ?: throw IllegalStateException()

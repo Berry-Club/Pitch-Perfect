@@ -37,7 +37,7 @@ class MusicSheetItem : Item(
                                 instrument.soundEvent.value(),
                                 pitch,
                                 player.x,
-                                player.y + 2,
+                                player.eyeY ,
                                 player.z,
                                 false
                             )
@@ -83,7 +83,7 @@ class MusicSheetItem : Item(
             }
         }
 
-        fun stopRecording(itemStack: ItemStack, player: Player) {
+        private fun stopRecording(itemStack: ItemStack, player: Player) {
             itemStack.remove(BooleanItemComponent.isRecordingComponent)
 
             val songBuilder = OtherEvents.builders[player] ?: return

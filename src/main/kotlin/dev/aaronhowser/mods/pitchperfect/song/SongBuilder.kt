@@ -24,18 +24,17 @@ class SongBuilder(
     }
 
     fun build(): SongItemComponent {
-        var ticksSoFar = 0L
+        var previousTick = startingTick
 
         val beats = mutableListOf<SongItemComponent.SoundsWithDelayAfter>()
 
         for ((tick, tickNotes) in tickToNotesMap) {
-            val ticksAfterStart = tick - startingTick
-            ticksSoFar += ticksAfterStart
+            val delay = tick - previousTick
+            previousTick = tick
 
             val sounds = tickNotes.toMap()
-            val delayAfter = ticksAfterStart.toInt()
 
-            beats.add(SongItemComponent.SoundsWithDelayAfter(sounds, delayAfter))
+            beats.add(SongItemComponent.SoundsWithDelayAfter(sounds, delay.toInt()))
         }
 
         return SongItemComponent(beats)
