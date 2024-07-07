@@ -34,25 +34,14 @@ class SongBuilder(
             val instrumentBeats = mutableListOf<LatvianWhy.Beat>()
 
             for ((tick, pitches) in map) {
+                val notes: MutableList<LatvianWhy.Note> = mutableListOf()
                 for (pitch in pitches) {
                     val note = LatvianWhy.Note.getFromPitch(pitch)
 
-                    println(
-                        """
-                        A new note:
-                        - Pitch Float: $pitch
-                        - Note: $note
-                        - NoteDisplayName: ${note.displayName}
-                        - NoteNote: ${note.note}
-                        - NoteOctave: ${note.octave}
-                        - NotePitch: ${note.pitch}
-                        - NoteGoodPitch: ${note.getGoodPitch()}
-                    """.trimIndent()
-                    )
-
-                    val beat = LatvianWhy.Beat(tick, listOf(note))
-                    instrumentBeats.add(beat)
+                    notes.add(note)
                 }
+                val beat = LatvianWhy.Beat(tick, notes)
+                instrumentBeats.add(beat)
             }
 
             instrumentBeatMap[sound] = instrumentBeats
