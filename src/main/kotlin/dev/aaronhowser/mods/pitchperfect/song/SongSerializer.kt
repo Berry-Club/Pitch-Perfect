@@ -2,12 +2,17 @@ package dev.aaronhowser.mods.pitchperfect.song
 
 import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
+import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.latvian.mods.kubejs.util.JsonUtils.GSON
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import net.neoforged.fml.loading.FMLPaths
+import java.nio.file.Files
+import java.nio.file.Path
 import java.util.function.Function
 import kotlin.math.pow
 
@@ -34,6 +39,29 @@ object SongSerializer {
                 Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
             ).map(SongSerializer::Song) { HashMap(it.beats) }
 
+
+            val defaultPath: Path = FMLPaths.CONFIGDIR.get().resolve("song.json")
+
+            fun fromFile(path: Path): Song? {
+                try {
+                    val jsonString = Files.readString(path)
+                    val jsonElement = GSON.fromJson(jsonString, Song::class.java)
+
+                    return jsonElement
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return null
+                }
+            }
+        }
+
+        fun saveToPath(path: Path) {
+            try {
+                val jsonString = GSON.toJson(CODEC.encodeStart(JsonOps.INSTANCE, this).getOrThrow())
+                Files.writeString(path, jsonString)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
     }

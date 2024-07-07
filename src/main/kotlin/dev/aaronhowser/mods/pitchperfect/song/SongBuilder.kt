@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import java.nio.file.Path
 
 class SongBuilder(
     private val startingTick: Long
@@ -26,7 +27,7 @@ class SongBuilder(
         notesMap[instrument] = newInstrumentBeats
     }
 
-    fun build(): SongSerializer.Song {
+    fun build(path: Path? = null): SongSerializer.Song {
         val instrumentBeatMap = mutableMapOf<NoteBlockInstrument, List<SongSerializer.Beat>>()
 
         for ((sound, map) in notesMap) {
@@ -46,7 +47,13 @@ class SongBuilder(
             instrumentBeatMap[sound] = instrumentBeats
         }
 
-        return SongSerializer.Song(instrumentBeatMap)
+        val song = SongSerializer.Song(instrumentBeatMap)
+
+        if (path != null) {
+            song.saveToPath(path)
+        }
+
+        return song
     }
 
 }

@@ -27,6 +27,8 @@ class SongPlayer(
         playing = true
         started = true
 
+        println(song)
+
         for ((instrument, beats) in song.beats) {
             for ((tick, notes) in beats) {
                 for (note in notes) {

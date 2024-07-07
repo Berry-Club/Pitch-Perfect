@@ -1,8 +1,5 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.mojang.serialization.JsonOps
 import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
@@ -15,8 +12,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.neoforged.fml.loading.FMLPaths
-import java.nio.file.Files
 
 class SheetMusicItem : Item(
     Properties()
@@ -25,13 +20,7 @@ class SheetMusicItem : Item(
 
     companion object {
 
-        val GSON: Gson = GsonBuilder().setPrettyPrinting().setLenient().serializeNulls().disableHtmlEscaping().create()
-
-        fun playSounds(song: SongSerializer.Song, player: Player) {
-            val jsonString = GSON.toJson(SongSerializer.Song.CODEC.encodeStart(JsonOps.INSTANCE, song).getOrThrow())
-
-            Files.writeString(FMLPaths.CONFIGDIR.get().resolve("my_song.json"), jsonString)
-
+        fun playSong(song: SongSerializer.Song, player: Player) {
             val serverLevel = player.level() as ServerLevel
 
             val songPlayer = SongPlayer(
@@ -55,9 +44,7 @@ class SheetMusicItem : Item(
 
             val songBuilder = OtherEvents.builders[player] ?: return
             OtherEvents.builders.remove(player)
-            val song = songBuilder.build()
-
-            playSounds(song, player)
+            songBuilder.build(SongSerializer.Song.defaultPath)
         }
 
         fun isRecording(stack: ItemStack): Boolean {
@@ -75,7 +62,9 @@ class SheetMusicItem : Item(
             return InteractionResultHolder.success(stack)
         }
 
-
+        val song =
+            SongSerializer.Song.fromFile(SongSerializer.Song.defaultPath) ?: return InteractionResultHolder.fail(stack)
+        playSong(song, pPlayer)
 
         return InteractionResultHolder.success(stack)
     }
