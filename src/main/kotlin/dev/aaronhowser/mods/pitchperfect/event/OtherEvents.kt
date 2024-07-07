@@ -13,7 +13,6 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.NoteBlock
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
-import net.neoforged.fml.loading.FMLPaths
 import net.neoforged.neoforge.event.ServerChatEvent
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.level.NoteBlockEvent
@@ -30,7 +29,10 @@ object OtherEvents {
 
     @SubscribeEvent
     fun onChat(event: ServerChatEvent) {
-        val songComponent = SheetMusicItem.createRandomMusicSheet().get(SongItemComponent.component) ?: return
+        val player = event.player
+        val heldItem = player.mainHandItem
+
+        val songComponent = heldItem.get(SongItemComponent.component) ?: return
         val song = SongSerializer.fromSongItemComponent(songComponent)
 
         SongSerializer.save(song)
