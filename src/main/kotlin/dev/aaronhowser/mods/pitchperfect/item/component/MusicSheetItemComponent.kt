@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import java.util.function.Function
 
 data class MusicSheetItemComponent(
-    val sounds: List<SoundsWithDelayAfter>
+    val beats: List<SoundsWithDelayAfter>
 ) {
 
     data class SoundsWithDelayAfter(
@@ -46,7 +46,7 @@ data class MusicSheetItemComponent(
     companion object {
 
         val CODEC: Codec<MusicSheetItemComponent> =
-            SoundsWithDelayAfter.CODEC.listOf().xmap(::MusicSheetItemComponent, MusicSheetItemComponent::sounds)
+            SoundsWithDelayAfter.CODEC.listOf().xmap(::MusicSheetItemComponent, MusicSheetItemComponent::beats)
 
         val STREAM_CODEC: StreamCodec<ByteBuf, MusicSheetItemComponent> = ByteBufCodecs.fromCodec(CODEC)
 

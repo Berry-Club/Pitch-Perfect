@@ -25,26 +25,25 @@ class MusicSheetItem : Item(
 
         fun playSounds(musicStack: ItemStack, blockPos: BlockPos) {
             val musicInstructions = musicStack.get(MusicSheetItemComponent.component) ?: return
-
             val beats = musicInstructions.beats
 
             var currentDelay = 0
 
             for (beat in beats) {
-                for ((instrument, pitch) in beat.sounds) {
-
-                    ModClientScheduler.scheduleTaskInTicks(currentDelay) {
-                        ClientUtil.playNote(
-                            instrument.soundEvent.value(),
-                            pitch,
-                            blockPos.x.toDouble(),
-                            blockPos.y.toDouble(),
-                            blockPos.z.toDouble(),
-                            false
-                        )
+                for ((instrument, pitches) in beat.sounds) {
+                    for (pitch in pitches) {
+                        ModClientScheduler.scheduleTaskInTicks(currentDelay) {
+                            ClientUtil.playNote(
+                                instrument.soundEvent.value(),
+                                pitch,
+                                blockPos.x.toDouble(),
+                                blockPos.y.toDouble(),
+                                blockPos.z.toDouble(),
+                                false
+                            )
+                        }
                     }
                 }
-
                 currentDelay += beat.delayAfter
             }
         }
@@ -77,6 +76,10 @@ class MusicSheetItem : Item(
                 stack.set(LongItemComponent.startedRecordingAt, LongItemComponent(level.gameTime))
             }
         }
+
+        fun isRecording(stack: ItemStack): Boolean {
+            return stack.has(LongItemComponent.startedRecordingAt)
+        }
     }
 
     override fun use(pLevel: Level, pPlayer: Player, pUsedHand: InteractionHand): InteractionResultHolder<ItemStack> {
@@ -91,6 +94,10 @@ class MusicSheetItem : Item(
         playSounds(newMusicStack, pPlayer.blockPosition().above(3))
 
         return InteractionResultHolder.success(newMusicStack)
+    }
+
+    override fun isFoil(pStack: ItemStack): Boolean {
+        return isRecording(pStack)
     }
 
 }
