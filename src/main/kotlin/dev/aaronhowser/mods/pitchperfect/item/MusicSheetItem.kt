@@ -5,7 +5,6 @@ import dev.aaronhowser.mods.pitchperfect.item.component.SongItemComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
 import dev.aaronhowser.mods.pitchperfect.util.ModClientScheduler
-import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
@@ -23,7 +22,7 @@ class MusicSheetItem : Item(
 
     companion object {
 
-        fun playSounds(musicStack: ItemStack, blockPos: BlockPos) {
+        fun playSounds(musicStack: ItemStack, player: Player) {
             val musicInstructions = musicStack.get(SongItemComponent.component) ?: return
             val beats = musicInstructions.beats
 
@@ -36,9 +35,9 @@ class MusicSheetItem : Item(
                             ClientUtil.playNote(
                                 instrument.soundEvent.value(),
                                 pitch,
-                                blockPos.x.toDouble(),
-                                blockPos.y.toDouble(),
-                                blockPos.z.toDouble(),
+                                player.x,
+                                player.y + 2,
+                                player.z,
                                 false
                             )
                         }
@@ -99,7 +98,7 @@ class MusicSheetItem : Item(
 
         val newMusicStack = createRandomMusicSheet()
         pPlayer.setItemInHand(pUsedHand, newMusicStack)
-        playSounds(newMusicStack, pPlayer.blockPosition().above(3))
+        playSounds(newMusicStack, pPlayer)
 
         return InteractionResultHolder.success(newMusicStack)
     }
