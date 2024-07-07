@@ -16,6 +16,10 @@ class PitchPerfect(
     modContainer: ModContainer
 ) {
 
+    //TODO:
+    // mobs that play music
+    // capturing mob souls to play them in your inventory? or use that with the Conductor block? Force a mob to play music?
+
     companion object {
         const val ID = "pitchperfect"
         val LOGGER: Logger = LogManager.getLogger(ID)
