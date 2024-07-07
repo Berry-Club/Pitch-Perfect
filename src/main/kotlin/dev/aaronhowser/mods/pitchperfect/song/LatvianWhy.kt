@@ -1,9 +1,40 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
+import com.mojang.datafixers.util.Either
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
+import io.netty.buffer.ByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.StringRepresentable
+import java.util.function.Function
 import kotlin.math.pow
 
 object LatvianWhy {
+
+    data class Beat(
+        val at: Int,
+        val notes: List<Note>
+    ) {
+
+        companion object {
+
+            val CODEC: Codec<Beat> = RecordCodecBuilder.create { instance ->
+                instance.group(
+                    Codec.INT.fieldOf("at").forGetter(Beat::at),
+                    Note.ONE_OR_MORE_CODEC.fieldOf("notes").forGetter(Beat::notes)
+                ).apply(instance, ::Beat)
+            }
+
+            val STREAM_CODEC: StreamCodec<ByteBuf, Beat> = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, Beat::at,
+                Note.STREAM_CODEC.apply(ByteBufCodecs.list()), Beat::notes,
+                ::Beat
+            )
+
+        }
+
+    }
 
     enum class Note(
         private val note: Int,
@@ -120,7 +151,7 @@ object LatvianWhy {
 
         ;
 
-        private val realName: String = when (note) {
+        private val displayName: String = when (note) {
             0 -> "C"
             1 -> "C#"
             2 -> "D"
@@ -141,7 +172,24 @@ object LatvianWhy {
         private val pitch: Float = 2.0.pow((midiNoteNumber - 69.0) / 12.0).toFloat()
 
         override fun getSerializedName(): String {
-            return this.realName
+            return this.displayName
+        }
+
+        companion object {
+            private val VALUES = entries.toTypedArray()
+
+            val CODEC: Codec<Note> = StringRepresentable.fromEnum { VALUES }
+
+            val STREAM_CODEC: StreamCodec<ByteBuf, Note> = ByteBufCodecs.BYTE.map(
+                { VALUES[it.toInt()] }, { it.ordinal.toByte() }
+            )
+
+            val ONE_OR_MORE_CODEC: Codec<List<Note>> = Codec
+                .either(CODEC, CODEC.listOf())
+                .xmap(
+                    { a: Either<Note, MutableList<Note>> -> a.map(::listOf, Function.identity()) },
+                    { list: List<Note> -> if (list.size == 1) Either.left(list.first()) else Either.right(list) }
+                )
         }
 
     }
