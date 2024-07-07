@@ -28,9 +28,4 @@ object ModDataComponents {
             it.persistent(BooleanItemComponent.CODEC).networkSynchronized(BooleanItemComponent.STREAM_CODEC)
         }
 
-    val SONG_BUILDER_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SongBuilderComponent>> =
-        DATA_COMPONENT_REGISTRY.registerComponentType("song_progress") {
-            it.persistent(SongBuilderComponent.CODEC).networkSynchronized(SongBuilderComponent.STREAM_CODEC)
-        }
-
 }

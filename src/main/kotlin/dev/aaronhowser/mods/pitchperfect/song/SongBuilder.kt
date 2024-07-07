@@ -7,20 +7,20 @@ class SongBuilder(
     val startingTick: Long
 ) {
 
-    private val map: MutableMap<Long, MutableMap<NoteBlockInstrument, List<Float>>> = mutableMapOf()
+    private val tickToNotesMap: MutableMap<Long, MutableMap<NoteBlockInstrument, List<Float>>> = mutableMapOf()
 
     fun addNote(
         currentTick: Long,
         instrument: NoteBlockInstrument,
         pitch: Float
     ) {
-        val currentTickMap = map.getOrDefault(currentTick, mutableMapOf())
+        val currentTickMap = tickToNotesMap.getOrDefault(currentTick, mutableMapOf())
         val currentPitches = currentTickMap.getOrDefault(instrument, mutableListOf())
 
         val newPitches = currentPitches + pitch
         currentTickMap[instrument] = newPitches
 
-        map[currentTick] = currentTickMap   // Is this one required?
+        tickToNotesMap[currentTick] = currentTickMap   // Is this one required?
     }
 
     fun build(): SongItemComponent {
@@ -28,7 +28,7 @@ class SongBuilder(
 
         val beats = mutableListOf<SongItemComponent.SoundsWithDelayAfter>()
 
-        for ((tick, tickNotes) in map) {
+        for ((tick, tickNotes) in tickToNotesMap) {
             val ticksAfterStart = tick - startingTick
             ticksSoFar += ticksAfterStart
 
@@ -39,6 +39,10 @@ class SongBuilder(
         }
 
         return SongItemComponent(beats)
+    }
+
+    override fun toString(): String {
+        return "SongBuilder(startingTick=$startingTick, tickToNotesMap=$tickToNotesMap)"
     }
 
 }
