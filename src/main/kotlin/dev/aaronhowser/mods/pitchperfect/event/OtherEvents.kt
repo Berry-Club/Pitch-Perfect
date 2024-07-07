@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEncha
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
 import dev.aaronhowser.mods.pitchperfect.item.component.MusicItemComponent
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.util.Mth
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
@@ -30,8 +31,13 @@ object OtherEvents {
                     player.blockPosition().distSqr(blockPos) < Mth.square(64)
         }
 
-        val pitch = event.note
+        val pitch = event.vanillaNoteId.toFloat().map(0f, 24f, 0f, 1f)
         val instrument = event.instrument
+
+        val doot = MusicItemComponent.Beat.Doot(
+            instrument = instrument,
+            pitch = 1f
+        )
 
         for (player in nearbyRecordingPlayers) {
 

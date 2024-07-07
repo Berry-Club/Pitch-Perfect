@@ -31,7 +31,7 @@ data class MusicItemComponent(
         companion object {
             val CODEC: Codec<Beat> = RecordCodecBuilder.create { instance ->
                 instance.group(
-                    Doot.CODEC.listOf().fieldOf("sounds").forGetter(Beat::sounds),
+                    Doot.CODEC.listOf().fieldOf("doots").forGetter(Beat::sounds),
                     Codec.INT.fieldOf("delay_after").forGetter(Beat::delayAfter)
                 ).apply(instance, ::Beat)
             }
@@ -45,7 +45,7 @@ data class MusicItemComponent(
             companion object {
                 val CODEC: Codec<Doot> = RecordCodecBuilder.create { instance ->
                     instance.group(
-                        InstrumentComponent.INSTRUMENT_CODEC.fieldOf("instrument").forGetter(Doot::instrument),
+                        InstrumentComponent.INSTRUMENT_CODEC.fieldOf("sound").forGetter(Doot::instrument),
                         Codec.FLOAT.fieldOf("pitch").forGetter(Doot::pitch)
                     ).apply(instance, ::Doot)
                 }
