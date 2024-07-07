@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import com.mojang.datafixers.util.Pair as MojangPair
 
 data class MusicItemComponent(
     val beats: List<Beat>
@@ -24,23 +23,32 @@ data class MusicItemComponent(
     }
 
     data class Beat(
-        val sounds: List<MojangPair<Float, InstrumentComponent.Instrument>>,
+        val sounds: List<Doot>,
         val delayAfter: Int
     ) {
 
         companion object {
             val CODEC: Codec<Beat> = RecordCodecBuilder.create { instance ->
                 instance.group(
-                    Codec.pair(
-                        Codec.FLOAT,
-                        InstrumentComponent.Instrument.CODEC
-                    ).listOf().fieldOf("sounds").forGetter(Beat::sounds),
-                    Codec.INT.fieldOf("delayAfter").forGetter(Beat::delayAfter)
+                    Doot.CODEC.listOf().fieldOf("sounds").forGetter(Beat::sounds),
+                    Codec.INT.fieldOf("delay_after").forGetter(Beat::delayAfter)
                 ).apply(instance, ::Beat)
             }
+        }
 
-            val STREAM_CODEC: StreamCodec<ByteBuf, Beat> =
-                ByteBufCodecs.fromCodec(CODEC)
+        data class Doot(
+            val instrument: InstrumentComponent.Instrument,
+            val pitch: Float
+        ) {
+
+            companion object {
+                val CODEC: Codec<Doot> = RecordCodecBuilder.create { instance ->
+                    instance.group(
+                        InstrumentComponent.Instrument.CODEC.fieldOf("instrument").forGetter(Doot::instrument),
+                        Codec.FLOAT.fieldOf("pitch").forGetter(Doot::pitch)
+                    ).apply(instance, ::Doot)
+                }
+            }
 
         }
 

@@ -13,7 +13,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import kotlin.random.Random
-import com.mojang.datafixers.util.Pair as MojangPair
 
 class MusicSheetItem : Item(Properties().stacksTo(1)) {
 
@@ -27,14 +26,11 @@ class MusicSheetItem : Item(Properties().stacksTo(1)) {
             var currentDelay = 0
 
             for (beat in beats) {
-                for (pair in beat.sounds) {
-                    val pitch = pair.first
-                    val sound = pair.second.soundEvent.value()
+                for ((instrument, pitch) in beat.sounds) {
 
                     ModClientScheduler.scheduleTaskInTicks(currentDelay) {
-
                         ClientUtil.playNote(
-                            sound,
+                            instrument.soundEvent.value(),
                             pitch,
                             blockPos.x.toDouble(),
                             blockPos.y.toDouble(),
@@ -52,12 +48,12 @@ class MusicSheetItem : Item(Properties().stacksTo(1)) {
             val beats = (0 until 16).map {
                 MusicItemComponent.Beat(
                     listOf(
-                        MojangPair(
-                            Random.nextFloat(),
-                            InstrumentComponent.Instrument.entries.random()
+                        MusicItemComponent.Beat.Doot(
+                            InstrumentComponent.Instrument.entries.random(),
+                            Random.nextFloat()
                         )
                     ),
-                    2
+                    Random.nextInt(1, 5)
                 )
             }
 
@@ -71,17 +67,11 @@ class MusicSheetItem : Item(Properties().stacksTo(1)) {
     }
 
     override fun use(pLevel: Level, pPlayer: Player, pUsedHand: InteractionHand): InteractionResultHolder<ItemStack> {
-        val musicStack = pPlayer.getItemInHand(pUsedHand)
+        val newMusicStack = createRandomMusicSheet()
+        pPlayer.setItemInHand(pUsedHand, newMusicStack)
+        playSounds(newMusicStack, pPlayer.blockPosition().above(3))
 
-        if (musicStack.has(MusicItemComponent.component)) {
-            val blockPos = pPlayer.blockPosition()
-            playSounds(musicStack, blockPos)
-        } else {
-            val newMusicStack = createRandomMusicSheet()
-            pPlayer.setItemInHand(pUsedHand, newMusicStack)
-        }
-
-        return super.use(pLevel, pPlayer, pUsedHand)
+        return InteractionResultHolder.success(newMusicStack)
     }
 
 }
