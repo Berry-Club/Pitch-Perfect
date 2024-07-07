@@ -25,7 +25,6 @@ class SheetMusicItem : Item(
 
         val GSON: Gson = GsonBuilder().setPrettyPrinting().setLenient().serializeNulls().disableHtmlEscaping().create()
 
-
         fun playSounds(song: LatvianWhy.Song, player: Player) {
             println(song)
 
