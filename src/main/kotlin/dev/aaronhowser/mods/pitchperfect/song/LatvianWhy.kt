@@ -7,21 +7,46 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.StringRepresentable
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import java.util.function.Function
 import kotlin.math.pow
 
 object LatvianWhy {
 
+    data class Song(
+        val beats: Map<NoteBlockInstrument, List<Beat>>
+    ) {
+
+        companion object {
+            private val INSTRUMENTS = NoteBlockInstrument.entries.toTypedArray()
+
+            val CODEC: Codec<Song> = RecordCodecBuilder.create { instance ->
+                instance.group(
+                    Codec.unboundedMap(StringRepresentable.fromEnum { INSTRUMENTS }, Beat.CODEC.listOf())
+                        .fieldOf("beats")
+                        .forGetter(Song::beats)
+                ).apply(instance, ::Song)
+            }
+
+            val STREAM_CODEC: StreamCodec<ByteBuf, Song> = ByteBufCodecs.map(
+                ::HashMap,
+                ByteBufCodecs.idMapper({ INSTRUMENTS[it] }, NoteBlockInstrument::ordinal),
+                Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
+            ).map(::Song) { HashMap(it.beats) }
+
+        }
+
+    }
+
     data class Beat(
         val at: Int,
         val notes: List<Note>
     ) {
-
         companion object {
 
             val CODEC: Codec<Beat> = RecordCodecBuilder.create { instance ->
                 instance.group(
-                    Codec.INT.fieldOf("at").forGetter(Beat::at),
+                    Codec.INT.optionalFieldOf("at", 0).forGetter(Beat::at),
                     Note.ONE_OR_MORE_CODEC.fieldOf("notes").forGetter(Beat::notes)
                 ).apply(instance, ::Beat)
             }
@@ -40,6 +65,7 @@ object LatvianWhy {
         private val note: Int,
         private val octave: Int
     ) : StringRepresentable {
+
         A0(9, 0),
         A0S(10, 0),
         B0(11, 0),
@@ -180,14 +206,12 @@ object LatvianWhy {
 
             val CODEC: Codec<Note> = StringRepresentable.fromEnum { VALUES }
 
-            val STREAM_CODEC: StreamCodec<ByteBuf, Note> = ByteBufCodecs.BYTE.map(
-                { VALUES[it.toInt()] }, { it.ordinal.toByte() }
-            )
+            val STREAM_CODEC: StreamCodec<ByteBuf, Note> = ByteBufCodecs.idMapper({ VALUES[it] }, Note::ordinal)
 
             val ONE_OR_MORE_CODEC: Codec<List<Note>> = Codec
                 .either(CODEC, CODEC.listOf())
                 .xmap(
-                    { a: Either<Note, MutableList<Note>> -> a.map(::listOf, Function.identity()) },
+                    { either: Either<Note, MutableList<Note>> -> either.map(::listOf, Function.identity()) },
                     { list: List<Note> -> if (list.size == 1) Either.left(list.first()) else Either.right(list) }
                 )
         }
