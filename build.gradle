@@ -101,6 +101,8 @@ dependencies {
     // Use the latest version of NeoForge
     implementation "net.neoforged:neoforge:${neo_version}"
 
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3"
+
     // Must use the '-neoforge' version on NeoForge. If on regular forge, omit the '-neoforge'
     implementation 'thedarkcolour:kotlinforforge-neoforge:5.3.0'
 
