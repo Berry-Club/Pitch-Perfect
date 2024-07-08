@@ -254,7 +254,18 @@ object SongSerializer {
             private const val REFERENCE_OCTAVE = 4
 
             fun getFromPitch(pitch: Float): Note {
-                return VALUES.first { it.getGoodPitch() == pitch }
+
+                val note = VALUES.firstOrNull { it.getGoodPitch() == pitch }
+
+                if (note == null) {
+                    println("Could not find note for pitch: $pitch")
+                    for (n in VALUES) {
+                        println("${n.displayName} -> ${n.getGoodPitch()}")
+                    }
+                    return F3
+                }
+
+                return note
             }
         }
 
