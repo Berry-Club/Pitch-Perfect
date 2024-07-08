@@ -259,9 +259,11 @@ object SongSerializer {
                 val note = VALUES.firstOrNull { it.getGoodPitch() == pitch }
 
                 if (note == null) {
-                    val closestNote = VALUES.minBy {
+                    val closestNote = VALUES.minByOrNull {
                         Mth.abs(it.getGoodPitch() - pitch)
                     }
+
+                    requireNotNull(closestNote) { "No note found for pitch $pitch (How did this happen????)" }
 
                     PitchPerfect.LOGGER.error("No note with exact pitch $pitch, using closest note: $closestNote (${closestNote.getGoodPitch()}")
 
