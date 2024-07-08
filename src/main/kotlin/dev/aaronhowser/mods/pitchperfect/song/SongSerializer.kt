@@ -4,10 +4,12 @@ import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.latvian.mods.kubejs.util.JsonUtils.GSON
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.util.Mth
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.neoforged.fml.loading.FMLPaths
@@ -151,7 +153,7 @@ object SongSerializer {
         D5S(3, 5),
         E5(4, 5),
         F5(5, 5),
-//        F5S(6, 5),
+        F5S(6, 5),
 //        G5(7, 5),
 //        G5S(8, 5),
 //        A5(9, 5),
@@ -254,15 +256,16 @@ object SongSerializer {
             private const val REFERENCE_OCTAVE = 4
 
             fun getFromPitch(pitch: Float): Note {
-
                 val note = VALUES.firstOrNull { it.getGoodPitch() == pitch }
 
                 if (note == null) {
-                    println("Could not find note for pitch: $pitch")
-                    for (n in VALUES) {
-                        println("${n.displayName} -> ${n.getGoodPitch()}")
+                    val closestNote = VALUES.minBy {
+                        Mth.abs(it.getGoodPitch() - pitch)
                     }
-                    return F3
+
+                    PitchPerfect.LOGGER.error("No note with exact pitch $pitch, using closest note: $closestNote (${closestNote.getGoodPitch()}")
+
+                    return closestNote
                 }
 
                 return note
