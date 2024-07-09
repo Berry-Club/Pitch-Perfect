@@ -42,7 +42,11 @@ class ConductorBlock(
     }
 
     override fun getOcclusionShape(pState: BlockState, pLevel: BlockGetter, pPos: BlockPos): VoxelShape {
-        return Boxes.ALL
+        return when (pState.getValue(FACING)) {
+            Direction.NORTH, Direction.SOUTH -> Boxes.SHAPE_NS
+            Direction.EAST, Direction.WEST -> Boxes.SHAPE_EW
+            else -> Boxes.SHAPE_NS
+        }
     }
 
     override fun getCollisionShape(
@@ -51,7 +55,11 @@ class ConductorBlock(
         pPos: BlockPos,
         pContext: CollisionContext
     ): VoxelShape {
-        return Boxes.ALL
+        return when (pState.getValue(FACING)) {
+            Direction.NORTH, Direction.SOUTH -> Boxes.SHAPE_NS
+            Direction.EAST, Direction.WEST -> Boxes.SHAPE_EW
+            else -> Boxes.SHAPE_NS
+        }
     }
 
     override fun getShape(
@@ -60,7 +68,11 @@ class ConductorBlock(
         pPos: BlockPos,
         pContext: CollisionContext
     ): VoxelShape {
-        return Boxes.ALL
+        return when (pState.getValue(FACING)) {
+            Direction.NORTH, Direction.SOUTH -> Boxes.SHAPE_NS
+            Direction.EAST, Direction.WEST -> Boxes.SHAPE_EW
+            else -> Boxes.SHAPE_NS
+        }
     }
 
     companion object {
@@ -78,12 +90,18 @@ class ConductorBlock(
                 4.0 + 8, 0.0 + 1, 4.0 + 8
             )
 
-            val TRAY: VoxelShape = Block.box(
+            val TRAY_NS: VoxelShape = Block.box(
                 3.0, 16.0, 5.0,
                 3.0 + 10, 16.0 + 0.1, 5.0 + 4
             )
 
-            val ALL: VoxelShape = Shapes.or(STAND, BASE, TRAY)
+            val TRAY_EW: VoxelShape = Block.box(
+                5.0, 16.0, 3.0,
+                5.0 + 4, 16.0 + 0.1, 3.0 + 10
+            )
+
+            val SHAPE_NS: VoxelShape = Shapes.or(BASE, STAND, TRAY_NS)
+            val SHAPE_EW: VoxelShape = Shapes.or(BASE, STAND, TRAY_EW)
 
         }
 
