@@ -42,11 +42,7 @@ class ConductorBlock(
     }
 
     override fun getOcclusionShape(pState: BlockState, pLevel: BlockGetter, pPos: BlockPos): VoxelShape {
-        return when (pState.getValue(FACING)) {
-            Direction.NORTH, Direction.SOUTH -> Boxes.SHAPE_NS
-            Direction.EAST, Direction.WEST -> Boxes.SHAPE_EW
-            else -> Boxes.SHAPE_NS
-        }
+        return Boxes.getFacingShape(pState.getValue(FACING))
     }
 
     override fun getCollisionShape(
@@ -64,18 +60,23 @@ class ConductorBlock(
         pPos: BlockPos,
         pContext: CollisionContext
     ): VoxelShape {
-        return when (pState.getValue(FACING)) {
-            Direction.NORTH -> Boxes.SHAPE_N
-            Direction.SOUTH -> Boxes.SHAPE_NS
-            Direction.EAST, Direction.WEST -> Boxes.SHAPE_EW
-            else -> Boxes.SHAPE_NS
-        }
+        return Boxes.getFacingShape(pState.getValue(FACING))
     }
 
     companion object {
         val CODEC: MapCodec<ConductorBlock> = simpleCodec(::ConductorBlock)
 
         private object Boxes {
+
+            fun getFacingShape(facing: Direction): VoxelShape {
+                return when (facing) {
+                    Direction.NORTH -> SHAPE_N
+                    Direction.SOUTH -> SHAPE_S
+                    Direction.EAST -> SHAPE_E
+                    Direction.WEST -> SHAPE_W
+                    else -> SHAPE_N
+                }
+            }
 
             private object Parts {
                 val STAND: VoxelShape = Block.box(
@@ -108,14 +109,48 @@ class ConductorBlock(
                         3.0 + 10, 20.0 + 4, 10.0 + 2
                     )
                 )
+
+                val BACK_S: VoxelShape = Shapes.or(
+                    Block.box(
+                        3.0, 16.0, 5.0,
+                        3.0 + 10, 16.0 + 4, 5.0 + 2
+                    ),
+                    Block.box(
+                        3.0, 20.0, 4.0,
+                        3.0 + 10, 20.0 + 4, 4.0 + 2
+                    )
+                )
+
+                val BACK_E: VoxelShape = Shapes.or(
+                    Block.box(
+                        5.0, 16.0, 3.0,
+                        5.0 + 2, 16.0 + 4, 3.0 + 10
+                    ),
+                    Block.box(
+                        4.0, 20.0, 3.0,
+                        4.0 + 2, 20.0 + 4, 3.0 + 10
+                    )
+                )
+
+                val BACK_W: VoxelShape = Shapes.or(
+                    Block.box(
+                        9.0, 16.0, 3.0,
+                        9.0 + 2, 16.0 + 4, 3.0 + 10
+                    ),
+                    Block.box(
+                        10.0, 20.0, 3.0,
+                        10.0 + 2, 20.0 + 4, 3.0 + 10
+                    )
+                )
+
             }
 
             val BASE_AND_STAND: VoxelShape = Shapes.or(Parts.BASE, Parts.STAND)
 
             val SHAPE_N: VoxelShape = Shapes.or(Parts.BASE, Parts.STAND, Parts.TRAY_NS, Parts.BACK_N)
-
-            val SHAPE_NS: VoxelShape = Shapes.or(Parts.BASE, Parts.STAND, Parts.TRAY_NS)
-            val SHAPE_EW: VoxelShape = Shapes.or(Parts.BASE, Parts.STAND, Parts.TRAY_EW)
+            val SHAPE_S: VoxelShape = Shapes.or(Parts.BASE, Parts.STAND, Parts.TRAY_NS, Parts.BACK_S)
+            val SHAPE_E: VoxelShape = Shapes.or(Parts.BASE, Parts.STAND, Parts.TRAY_EW, Parts.BACK_E)
+            val SHAPE_W: VoxelShape = Shapes.or(Parts.BASE, Parts.STAND, Parts.TRAY_EW, Parts.BACK_W)
 
         }
 
