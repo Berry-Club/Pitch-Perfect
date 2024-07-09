@@ -1,10 +1,12 @@
 package dev.aaronhowser.mods.pitchperfect.datagen.model
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import net.minecraft.core.Direction
 import net.minecraft.data.PackOutput
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder
@@ -25,6 +27,13 @@ class ModBlockStateProvider(
 
         getVariantBuilder(block)
             .forAllStates {
+                val half = it.getValue(ConductorBlock.HALF)
+
+                val modelFile = if (half == DoubleBlockHalf.LOWER) {
+                    models().getExistingFile(modLoc("block/conductor"))
+                } else {
+                    models().getExistingFile(mcLoc("block/air"))
+                }
 
                 val facing: Direction = it.getValue(HorizontalDirectionalBlock.FACING)
                 val yRotation = when (facing) {
@@ -37,10 +46,7 @@ class ModBlockStateProvider(
 
                 ConfiguredModel
                     .builder()
-                    .modelFile(
-                        models()
-                            .getExistingFile(modLoc("block/conductor"))
-                    )
+                    .modelFile(modelFile)
                     .rotationY(yRotation)
                     .build()
             }

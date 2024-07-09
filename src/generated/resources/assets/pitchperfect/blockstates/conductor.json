@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,half=lower": {
       "model": "pitchperfect:block/conductor",
       "y": 90
     },
-    "facing=north": {
+    "facing=east,half=upper": {
+      "model": "minecraft:block/air",
+      "y": 90
+    },
+    "facing=north,half=lower": {
       "model": "pitchperfect:block/conductor"
     },
-    "facing=south": {
+    "facing=north,half=upper": {
+      "model": "minecraft:block/air"
+    },
+    "facing=south,half=lower": {
       "model": "pitchperfect:block/conductor",
       "y": 180
     },
-    "facing=west": {
+    "facing=south,half=upper": {
+      "model": "minecraft:block/air",
+      "y": 180
+    },
+    "facing=west,half=lower": {
       "model": "pitchperfect:block/conductor",
+      "y": 270
+    },
+    "facing=west,half=upper": {
+      "model": "minecraft:block/air",
       "y": 270
     }
   }
