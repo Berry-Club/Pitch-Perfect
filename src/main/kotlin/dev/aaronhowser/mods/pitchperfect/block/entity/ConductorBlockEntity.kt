@@ -6,6 +6,8 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.player.Player
@@ -87,6 +89,16 @@ class ConductorBlockEntity(
         }
 
         Containers.dropContents(this.level!!, this.blockPos, inventory)
+    }
+
+    override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
+        pTag.put("inventory", itemHandler.serializeNBT(pRegistries))
+        super.saveAdditional(pTag, pRegistries)
+    }
+
+    override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
+        itemHandler.deserializeNBT(pRegistries, pTag.getCompound("inventory"))
+        super.loadAdditional(pTag, pRegistries)
     }
 
 }
