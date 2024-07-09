@@ -105,8 +105,8 @@ dependencies {
     implementation 'thedarkcolour:kotlinforforge-neoforge:5.3.0'
 
     // KubeJs
-    implementation "curse.maven:kubejs-238086:5495805"
-    implementation "curse.maven:rhino-416294:5495611"
+    implementation "curse.maven:kubejs-238086:5508982"
+    implementation "curse.maven:rhino-416294:5499585"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
