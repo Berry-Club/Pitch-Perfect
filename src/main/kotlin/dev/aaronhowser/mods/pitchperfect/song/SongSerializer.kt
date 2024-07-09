@@ -1,11 +1,12 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import dev.latvian.mods.kubejs.util.JsonUtils.GSON
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -41,6 +42,7 @@ object SongSerializer {
                 Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
             ).map(SongSerializer::Song) { HashMap(it.beats) }
 
+            val GSON: Gson = GsonBuilder().disableHtmlEscaping().setLenient().create()
 
             val defaultPath: Path = FMLPaths.CONFIGDIR.get().resolve("song.json")
 
