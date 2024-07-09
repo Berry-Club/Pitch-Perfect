@@ -4,7 +4,9 @@ import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.block.entity.ConductorBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -119,6 +121,23 @@ class ConductorBlock(
         }
     }
 
+    override fun useItemOn(
+        pStack: ItemStack,
+        pState: BlockState,
+        pLevel: Level,
+        pPos: BlockPos,
+        pPlayer: Player,
+        pHand: InteractionHand,
+        pHitResult: BlockHitResult
+    ): ItemInteractionResult {
+        val mainPos = if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) pPos else pPos.below()
+        val blockEntity = pLevel.getBlockEntity(mainPos) as? ConductorBlockEntity ?: return ItemInteractionResult.FAIL
+
+        blockEntity.playerClick(pPlayer)
+
+        return ItemInteractionResult.SUCCESS
+    }
+
     override fun useWithoutItem(
         pState: BlockState,
         pLevel: Level,
@@ -129,7 +148,7 @@ class ConductorBlock(
         val mainPos = if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) pPos else pPos.below()
         val blockEntity = pLevel.getBlockEntity(mainPos) as? ConductorBlockEntity ?: return InteractionResult.FAIL
 
-//        pPlayer.openMenu(blockEntity, pPos)
+        blockEntity.playerClick(pPlayer)
 
         return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
     }

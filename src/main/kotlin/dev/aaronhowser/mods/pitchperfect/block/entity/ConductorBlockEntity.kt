@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -29,6 +30,29 @@ class ConductorBlockEntity(
 
     fun getItemHandler(side: Direction?): IItemHandler {
         return itemHandler
+    }
+
+    fun playerClick(player: Player) {
+        val blockItem = itemHandler.getStackInSlot(0)
+        val handItem = player.getItemInHand(player.usedItemHand)
+
+        if (blockItem.isEmpty) {
+            if (!itemHandler.isItemValid(0, handItem)) return
+
+            itemHandler.setStackInSlot(0, handItem.copy())
+            player.setItemInHand(player.usedItemHand, ItemStack.EMPTY)
+        } else {
+
+            if (handItem.isEmpty) {
+                player.setItemInHand(player.usedItemHand, blockItem.copy())
+            } else {
+                if (!player.inventory.add(blockItem.copy())) {
+                    player.drop(blockItem.copy(), false)
+                }
+            }
+
+            itemHandler.setStackInSlot(0, ItemStack.EMPTY)
+        }
     }
 
     fun dropDrops() {
