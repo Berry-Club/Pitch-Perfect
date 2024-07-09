@@ -100,9 +100,10 @@ class ConductorBlock(
     override fun canSurvive(pState: BlockState, pLevel: LevelReader, pPos: BlockPos): Boolean {
         val posBelow = pPos.below()
         val stateBelow = pLevel.getBlockState(posBelow)
+        val stateAbove = pLevel.getBlockState(pPos.above())
 
         return if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-            stateBelow.isFaceSturdy(pLevel, posBelow, Direction.UP)
+            stateBelow.isFaceSturdy(pLevel, posBelow, Direction.UP) && (stateAbove.isAir || stateAbove.block == this)
         } else {
             stateBelow.block == this
         }
