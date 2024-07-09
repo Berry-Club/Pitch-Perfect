@@ -51,6 +51,6 @@ object ModItems {
         ITEM_REGISTRY.registerItem("sheet_music") { SheetMusicItem() }
 
     val CONDUCTOR_BOCK_ITEM: DeferredItem<DoubleHighBlockItem> =
-        ITEM_REGISTRY.registerItem("conductor_test") { DoubleHighBlockItem(ModBlocks.CONDUCTOR.get(), Item.Properties()) }
+        ITEM_REGISTRY.registerItem("conductor") { DoubleHighBlockItem(ModBlocks.CONDUCTOR.get(), Item.Properties()) }
 
 }

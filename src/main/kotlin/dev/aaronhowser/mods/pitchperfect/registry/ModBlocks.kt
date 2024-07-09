@@ -12,15 +12,17 @@ object ModBlocks {
     val BLOCK_REGISTRY: DeferredRegister.Blocks =
         DeferredRegister.createBlocks(PitchPerfect.ID)
 
-    val CONDUCTOR: DeferredBlock<ConductorBlock> = registerBlock("conductor") { ConductorBlock() }
+    val COMPOSER: DeferredBlock<Block> = registerBlock("composer") { Block(BlockBehaviour.Properties.of()) }
+    val CONDUCTOR: DeferredBlock<ConductorBlock> = registerBlock("conductor", false) { ConductorBlock() }
 
     private fun <T : Block> registerBlock(
         name: String,
+        makeBlockItem: Boolean = true,
         supplier: () -> T = { Block(BlockBehaviour.Properties.of()) as T }
     ): DeferredBlock<T> {
         val block = BLOCK_REGISTRY.register(name, supplier)
 
-        ModItems.ITEM_REGISTRY.registerSimpleBlockItem(name, block)
+        if (makeBlockItem) ModItems.ITEM_REGISTRY.registerSimpleBlockItem(name, block)
 
         return block
     }

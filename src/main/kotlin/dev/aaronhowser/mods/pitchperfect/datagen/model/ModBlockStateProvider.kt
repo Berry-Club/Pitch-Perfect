@@ -19,6 +19,7 @@ class ModBlockStateProvider(
 
     override fun registerStatesAndModels() {
         conductor()
+        composer()
     }
 
     private fun conductor() {
@@ -59,6 +60,13 @@ class ModBlockStateProvider(
             )
         )
 
+    }
+
+    private fun composer() {
+        simpleBlockWithItem(
+            ModBlocks.COMPOSER.get(),
+            cubeAll(ModBlocks.COMPOSER.get())
+        )
     }
 
 }
