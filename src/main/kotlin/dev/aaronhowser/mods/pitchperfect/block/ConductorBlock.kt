@@ -1,9 +1,12 @@
 package dev.aaronhowser.mods.pitchperfect.block
 
 import com.mojang.serialization.MapCodec
+import dev.aaronhowser.mods.pitchperfect.block.entity.ConductorBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
@@ -11,12 +14,16 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -26,7 +33,7 @@ class ConductorBlock(
         .mapColor(MapColor.METAL)
         .sound(SoundType.METAL)
         .noOcclusion()
-) : HorizontalDirectionalBlock(properties) {
+) : HorizontalDirectionalBlock(properties), EntityBlock {
 
     init {
         registerDefaultState(
@@ -93,6 +100,45 @@ class ConductorBlock(
 
     override fun codec(): MapCodec<ConductorBlock> {
         return CODEC
+    }
+
+    // Block Entity functions:
+
+    override fun onRemove(
+        pState: BlockState,
+        pLevel: Level,
+        pPos: BlockPos,
+        pNewState: BlockState,
+        pMovedByPiston: Boolean
+    ) {
+        if (pState.block != pNewState.block) {
+            val blockEntity = pLevel.getBlockEntity(pPos)
+            if (blockEntity is ConductorBlockEntity) {
+                blockEntity.dropDrops()
+            }
+        }
+    }
+
+    override fun useWithoutItem(
+        pState: BlockState,
+        pLevel: Level,
+        pPos: BlockPos,
+        pPlayer: Player,
+        pHitResult: BlockHitResult
+    ): InteractionResult {
+        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
+    }
+
+    override fun newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity {
+        return ConductorBlockEntity(pPos, pState)
+    }
+
+    override fun <T : BlockEntity?> getTicker(
+        pLevel: Level,
+        pState: BlockState,
+        pBlockEntityType: BlockEntityType<T>
+    ): BlockEntityTicker<T>? {
+        return super.getTicker(pLevel, pState, pBlockEntityType)
     }
 
     // Multiblock functions:
