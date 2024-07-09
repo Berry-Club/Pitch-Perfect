@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.registry
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.neoforged.neoforge.registries.DeferredBlock
@@ -12,7 +13,10 @@ object ModBlocks {
     val BLOCK_REGISTRY: DeferredRegister.Blocks =
         DeferredRegister.createBlocks(PitchPerfect.ID)
 
-    val CONDUCTOR: DeferredBlock<ConductorBlock> = registerBlock("conductor") { ConductorBlock() }
+    val COMPOSER: DeferredBlock<Block> =
+        registerBlock("composer") { Block(BlockBehaviour.Properties.of()) }
+    val CONDUCTOR: DeferredBlock<ConductorBlock> =
+        registerBlock("conductor") { ConductorBlock() }
 
     private fun <T : Block> registerBlock(
         name: String,
@@ -20,7 +24,9 @@ object ModBlocks {
     ): DeferredBlock<T> {
         val block = BLOCK_REGISTRY.register(name, supplier)
 
-        ModItems.ITEM_REGISTRY.registerSimpleBlockItem(name, block)
+//        if (blockItem == null) {
+//            ModItems.ITEM_REGISTRY.registerSimpleBlockItem(name, block)
+//        }
 
         return block
     }

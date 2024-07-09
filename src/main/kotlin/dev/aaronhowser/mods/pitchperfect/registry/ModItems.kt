@@ -3,6 +3,8 @@ package dev.aaronhowser.mods.pitchperfect.registry
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
+import net.minecraft.world.item.DoubleHighBlockItem
+import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -47,5 +49,8 @@ object ModItems {
 
     val MUSIC_SHEET: DeferredItem<SheetMusicItem> =
         ITEM_REGISTRY.registerItem("sheet_music") { SheetMusicItem() }
+
+    val CONDUCTOR_BOCK_ITEM: DeferredItem<DoubleHighBlockItem> =
+        ITEM_REGISTRY.registerItem("conductor") { DoubleHighBlockItem(ModBlocks.CONDUCTOR.get(), Item.Properties()) }
 
 }
