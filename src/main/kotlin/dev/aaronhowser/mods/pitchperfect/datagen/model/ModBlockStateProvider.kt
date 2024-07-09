@@ -29,12 +29,21 @@ class ModBlockStateProvider(
         getVariantBuilder(block)
             .forAllStates {
                 val half = it.getValue(ConductorBlock.HALF)
+                val hasItem = it.getValue(ConductorBlock.FILLED)
 
-                val modelFile = if (half == DoubleBlockHalf.LOWER) {
-                    models().getExistingFile(modLoc("block/conductor"))
+                val modelLoc = if (half == DoubleBlockHalf.LOWER) {
+                    modLoc(
+                        if (hasItem) {
+                            "block/conductor_filled"
+                        } else {
+                            "block/conductor"
+                        }
+                    )
                 } else {
-                    models().getExistingFile(mcLoc("block/air"))
+                    mcLoc("block/air")
                 }
+
+                val modelFile = models().getExistingFile(modelLoc)
 
                 val facing: Direction = it.getValue(HorizontalDirectionalBlock.FACING)
                 val yRotation = when (facing) {

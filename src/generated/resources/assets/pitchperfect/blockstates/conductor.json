@@ -1,32 +1,62 @@
 {
   "variants": {
-    "facing=east,half=lower": {
+    "enabled=false,facing=east,half=lower": {
       "model": "pitchperfect:block/conductor",
       "y": 90
     },
-    "facing=east,half=upper": {
+    "enabled=false,facing=east,half=upper": {
       "model": "minecraft:block/air",
       "y": 90
     },
-    "facing=north,half=lower": {
+    "enabled=false,facing=north,half=lower": {
       "model": "pitchperfect:block/conductor"
     },
-    "facing=north,half=upper": {
+    "enabled=false,facing=north,half=upper": {
       "model": "minecraft:block/air"
     },
-    "facing=south,half=lower": {
+    "enabled=false,facing=south,half=lower": {
       "model": "pitchperfect:block/conductor",
       "y": 180
     },
-    "facing=south,half=upper": {
+    "enabled=false,facing=south,half=upper": {
       "model": "minecraft:block/air",
       "y": 180
     },
-    "facing=west,half=lower": {
+    "enabled=false,facing=west,half=lower": {
       "model": "pitchperfect:block/conductor",
       "y": 270
     },
-    "facing=west,half=upper": {
+    "enabled=false,facing=west,half=upper": {
+      "model": "minecraft:block/air",
+      "y": 270
+    },
+    "enabled=true,facing=east,half=lower": {
+      "model": "pitchperfect:block/conductor_filled",
+      "y": 90
+    },
+    "enabled=true,facing=east,half=upper": {
+      "model": "minecraft:block/air",
+      "y": 90
+    },
+    "enabled=true,facing=north,half=lower": {
+      "model": "pitchperfect:block/conductor_filled"
+    },
+    "enabled=true,facing=north,half=upper": {
+      "model": "minecraft:block/air"
+    },
+    "enabled=true,facing=south,half=lower": {
+      "model": "pitchperfect:block/conductor_filled",
+      "y": 180
+    },
+    "enabled=true,facing=south,half=upper": {
+      "model": "minecraft:block/air",
+      "y": 180
+    },
+    "enabled=true,facing=west,half=lower": {
+      "model": "pitchperfect:block/conductor_filled",
+      "y": 270
+    },
+    "enabled=true,facing=west,half=upper": {
       "model": "minecraft:block/air",
       "y": 270
     }

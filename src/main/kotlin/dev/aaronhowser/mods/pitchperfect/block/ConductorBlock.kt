@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.material.MapColor
@@ -49,11 +50,12 @@ class ConductorBlock(
         return defaultBlockState()
             .setValue(FACING, pContext.horizontalDirection.opposite)
             .setValue(HALF, DoubleBlockHalf.LOWER)
+            .setValue(FILLED, false)
     }
 
     override fun createBlockStateDefinition(pBuilder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(pBuilder)
-        pBuilder.add(FACING, HALF)
+        pBuilder.add(FACING, HALF, FILLED)
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
@@ -96,6 +98,7 @@ class ConductorBlock(
 
     companion object {
         val HALF: EnumProperty<DoubleBlockHalf> = BlockStateProperties.DOUBLE_BLOCK_HALF
+        val FILLED: BooleanProperty = BlockStateProperties.ENABLED
 
         val CODEC: MapCodec<ConductorBlock> = simpleCodec(::ConductorBlock)
     }

@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
+import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.core.BlockPos
@@ -30,6 +31,17 @@ class ConductorBlockEntity(
 
     fun getItemHandler(side: Direction?): IItemHandler {
         return itemHandler
+    }
+
+    override fun setChanged() {
+        super.setChanged()
+
+        blockState.setValue(
+            ConductorBlock.FILLED,
+            !itemHandler.getStackInSlot(0).isEmpty
+        )
+
+        level?.sendBlockUpdated(blockPos, blockState, blockState, 1 or 2)   // 1 = update adjacent, 2 = send to client
     }
 
     fun playerClick(player: Player) {
