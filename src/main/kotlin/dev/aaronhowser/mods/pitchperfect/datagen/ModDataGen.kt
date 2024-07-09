@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.datagen
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.datagen.model.ModBlockStateProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.model.ModItemModelProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModBlockTagsProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModItemTagsProvider
 import net.minecraft.core.HolderLookup
@@ -26,6 +28,11 @@ object ModDataGen {
         val lookupProvider: CompletableFuture<HolderLookup.Provider> = event.lookupProvider
 
         val languageProvider = generator.addProvider(event.includeClient(), ModLanguageProvider(output))
+
+        val blockStateProvider = generator.addProvider(
+            event.includeClient(),
+            ModBlockStateProvider(output, existingFileHelper)
+        )
 
         val itemModelProvider = generator.addProvider(
             event.includeClient(),
