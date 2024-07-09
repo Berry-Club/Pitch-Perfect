@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "pitchperfect:block/conductor",
+      "y": 90
+    },
+    "facing=north": {
       "model": "pitchperfect:block/conductor"
+    },
+    "facing=south": {
+      "model": "pitchperfect:block/conductor",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "pitchperfect:block/conductor",
+      "y": 270
     }
   }
 }
