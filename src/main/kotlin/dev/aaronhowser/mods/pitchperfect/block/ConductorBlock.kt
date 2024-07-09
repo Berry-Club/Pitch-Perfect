@@ -8,11 +8,9 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.HorizontalDirectionalBlock
-import net.minecraft.world.level.block.RenderShape
-import net.minecraft.world.level.block.SoundType
+import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -108,6 +106,27 @@ class ConductorBlock(
         } else {
             stateBelow.block == this
         }
+    }
+
+    override fun destroy(pLevel: LevelAccessor, pPos: BlockPos, pState: BlockState) {
+        val half = pState.getValue(HALF)
+
+        val otherHalfPos = when (half) {
+            DoubleBlockHalf.LOWER -> pPos.above()
+            DoubleBlockHalf.UPPER -> pPos.below()
+            else -> return
+        }
+        val otherHalfState = pLevel.getBlockState(otherHalfPos)
+
+        if (otherHalfState.block == this) {
+            pLevel.setBlock(
+                otherHalfPos,
+                Blocks.AIR.defaultBlockState(),
+                1 or 2 or 32      // 1 = cause block update, 2 = send change to clients, 32 = neighbors dont drop items
+            )
+        }
+
+        super.destroy(pLevel, pPos, pState)
     }
 
     override fun setPlacedBy(
