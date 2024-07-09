@@ -97,8 +97,36 @@ class ConductorBlock(
         return CODEC
     }
 
-    private object Boxes {
+    // Multiblock functions:
 
+    override fun canSurvive(pState: BlockState, pLevel: LevelReader, pPos: BlockPos): Boolean {
+        val posBelow = pPos.below()
+        val stateBelow = pLevel.getBlockState(posBelow)
+
+        return if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) {
+            stateBelow.isFaceSturdy(pLevel, posBelow, Direction.UP)
+        } else {
+            stateBelow.block == this
+        }
+    }
+
+    override fun setPlacedBy(
+        pLevel: Level,
+        pPos: BlockPos,
+        pState: BlockState,
+        pPlacer: LivingEntity?,
+        pStack: ItemStack
+    ) {
+        if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) {
+            pLevel.setBlock(
+                pPos.above(),
+                pState.setValue(HALF, DoubleBlockHalf.UPPER),
+                3
+            )
+        }
+    }
+
+    private object Boxes {
         fun getShape(half: DoubleBlockHalf, facing: Direction): VoxelShape {
             return when (half) {
                 DoubleBlockHalf.LOWER -> Bottom.getFacingShape(facing)
@@ -208,35 +236,6 @@ class ConductorBlock(
             }
         }
 
-    }
-
-    // Multiblock functions:
-
-    override fun canSurvive(pState: BlockState, pLevel: LevelReader, pPos: BlockPos): Boolean {
-        val posBelow = pPos.below()
-        val stateBelow = pLevel.getBlockState(posBelow)
-
-        return if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-            stateBelow.isFaceSturdy(pLevel, posBelow, Direction.UP)
-        } else {
-            stateBelow.block == this
-        }
-    }
-
-    override fun setPlacedBy(
-        pLevel: Level,
-        pPos: BlockPos,
-        pState: BlockState,
-        pPlacer: LivingEntity?,
-        pStack: ItemStack
-    ) {
-        if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-            pLevel.setBlock(
-                pPos.above(),
-                pState.setValue(HALF, DoubleBlockHalf.UPPER),
-                3
-            )
-        }
     }
 
 }
