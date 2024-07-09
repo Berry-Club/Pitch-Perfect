@@ -4,6 +4,8 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.Containers
+import net.minecraft.world.SimpleContainer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -29,12 +31,13 @@ class ConductorBlockEntity(
         return itemHandler
     }
 
-    init {
-        println("ConductorBlockEntity created at $pPos")
-    }
-
     fun dropDrops() {
+        val inventory = SimpleContainer(itemHandler.slots)
+        for (i in 0 until itemHandler.slots) {
+            inventory.setItem(i, itemHandler.getStackInSlot(i))
+        }
 
+        Containers.dropContents(this.level!!, this.blockPos, inventory)
     }
 
 }

@@ -126,11 +126,16 @@ class ConductorBlock(
         pPlayer: Player,
         pHitResult: BlockHitResult
     ): InteractionResult {
+        val mainPos = if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) pPos else pPos.below()
+        val blockEntity = pLevel.getBlockEntity(mainPos) as? ConductorBlockEntity ?: return InteractionResult.FAIL
+
+//        pPlayer.openMenu(blockEntity, pPos)
+
         return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
     }
 
-    override fun newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity {
-        return ConductorBlockEntity(pPos, pState)
+    override fun newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity? {
+        return if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) ConductorBlockEntity(pPos, pState) else null
     }
 
     override fun <T : BlockEntity?> getTicker(
