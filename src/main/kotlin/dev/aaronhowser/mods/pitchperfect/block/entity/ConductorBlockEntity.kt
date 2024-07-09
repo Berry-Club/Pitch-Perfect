@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.block.entity
 
 import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
+import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -36,12 +37,24 @@ class ConductorBlockEntity(
     override fun setChanged() {
         super.setChanged()
 
-        blockState.setValue(
+        val newBottomState = blockState.setValue(
             ConductorBlock.FILLED,
             !itemHandler.getStackInSlot(0).isEmpty
         )
 
-        level?.sendBlockUpdated(blockPos, blockState, blockState, 1 or 2)   // 1 = update adjacent, 2 = send to client
+        level?.setBlock(blockPos, newBottomState, 1 or 2) // 1 = update adjacent, 2 = send to client
+        level?.sendBlockUpdated(blockPos, blockState, blockState, 1 or 2)
+
+        val oldTopState = level?.getBlockState(blockPos.above()) ?: return
+        if (oldTopState.block != ModBlocks.CONDUCTOR.get()) return
+
+        val newTopState = oldTopState.setValue(
+            ConductorBlock.FILLED,
+            !itemHandler.getStackInSlot(0).isEmpty
+        )
+
+        level?.setBlock(blockPos.above(), newTopState, 1 or 2)
+        level?.sendBlockUpdated(blockPos.above(), oldTopState, newTopState, 1 or 2)
     }
 
     fun playerClick(player: Player) {
