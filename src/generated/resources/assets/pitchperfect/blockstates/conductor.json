@@ -1,62 +1,122 @@
 {
   "variants": {
-    "enabled=false,facing=east,half=lower": {
+    "enabled=false,facing=east,half=lower,powered=false": {
       "model": "pitchperfect:block/conductor",
       "y": 90
     },
-    "enabled=false,facing=east,half=upper": {
+    "enabled=false,facing=east,half=lower,powered=true": {
+      "model": "pitchperfect:block/conductor",
+      "y": 90
+    },
+    "enabled=false,facing=east,half=upper,powered=false": {
       "model": "minecraft:block/air",
       "y": 90
     },
-    "enabled=false,facing=north,half=lower": {
+    "enabled=false,facing=east,half=upper,powered=true": {
+      "model": "minecraft:block/air",
+      "y": 90
+    },
+    "enabled=false,facing=north,half=lower,powered=false": {
       "model": "pitchperfect:block/conductor"
     },
-    "enabled=false,facing=north,half=upper": {
+    "enabled=false,facing=north,half=lower,powered=true": {
+      "model": "pitchperfect:block/conductor"
+    },
+    "enabled=false,facing=north,half=upper,powered=false": {
       "model": "minecraft:block/air"
     },
-    "enabled=false,facing=south,half=lower": {
+    "enabled=false,facing=north,half=upper,powered=true": {
+      "model": "minecraft:block/air"
+    },
+    "enabled=false,facing=south,half=lower,powered=false": {
       "model": "pitchperfect:block/conductor",
       "y": 180
     },
-    "enabled=false,facing=south,half=upper": {
+    "enabled=false,facing=south,half=lower,powered=true": {
+      "model": "pitchperfect:block/conductor",
+      "y": 180
+    },
+    "enabled=false,facing=south,half=upper,powered=false": {
       "model": "minecraft:block/air",
       "y": 180
     },
-    "enabled=false,facing=west,half=lower": {
+    "enabled=false,facing=south,half=upper,powered=true": {
+      "model": "minecraft:block/air",
+      "y": 180
+    },
+    "enabled=false,facing=west,half=lower,powered=false": {
       "model": "pitchperfect:block/conductor",
       "y": 270
     },
-    "enabled=false,facing=west,half=upper": {
+    "enabled=false,facing=west,half=lower,powered=true": {
+      "model": "pitchperfect:block/conductor",
+      "y": 270
+    },
+    "enabled=false,facing=west,half=upper,powered=false": {
       "model": "minecraft:block/air",
       "y": 270
     },
-    "enabled=true,facing=east,half=lower": {
+    "enabled=false,facing=west,half=upper,powered=true": {
+      "model": "minecraft:block/air",
+      "y": 270
+    },
+    "enabled=true,facing=east,half=lower,powered=false": {
       "model": "pitchperfect:block/conductor_filled",
       "y": 90
     },
-    "enabled=true,facing=east,half=upper": {
+    "enabled=true,facing=east,half=lower,powered=true": {
+      "model": "pitchperfect:block/conductor_filled",
+      "y": 90
+    },
+    "enabled=true,facing=east,half=upper,powered=false": {
       "model": "minecraft:block/air",
       "y": 90
     },
-    "enabled=true,facing=north,half=lower": {
+    "enabled=true,facing=east,half=upper,powered=true": {
+      "model": "minecraft:block/air",
+      "y": 90
+    },
+    "enabled=true,facing=north,half=lower,powered=false": {
       "model": "pitchperfect:block/conductor_filled"
     },
-    "enabled=true,facing=north,half=upper": {
+    "enabled=true,facing=north,half=lower,powered=true": {
+      "model": "pitchperfect:block/conductor_filled"
+    },
+    "enabled=true,facing=north,half=upper,powered=false": {
       "model": "minecraft:block/air"
     },
-    "enabled=true,facing=south,half=lower": {
+    "enabled=true,facing=north,half=upper,powered=true": {
+      "model": "minecraft:block/air"
+    },
+    "enabled=true,facing=south,half=lower,powered=false": {
       "model": "pitchperfect:block/conductor_filled",
       "y": 180
     },
-    "enabled=true,facing=south,half=upper": {
+    "enabled=true,facing=south,half=lower,powered=true": {
+      "model": "pitchperfect:block/conductor_filled",
+      "y": 180
+    },
+    "enabled=true,facing=south,half=upper,powered=false": {
       "model": "minecraft:block/air",
       "y": 180
     },
-    "enabled=true,facing=west,half=lower": {
+    "enabled=true,facing=south,half=upper,powered=true": {
+      "model": "minecraft:block/air",
+      "y": 180
+    },
+    "enabled=true,facing=west,half=lower,powered=false": {
       "model": "pitchperfect:block/conductor_filled",
       "y": 270
     },
-    "enabled=true,facing=west,half=upper": {
+    "enabled=true,facing=west,half=lower,powered=true": {
+      "model": "pitchperfect:block/conductor_filled",
+      "y": 270
+    },
+    "enabled=true,facing=west,half=upper,powered=false": {
+      "model": "minecraft:block/air",
+      "y": 270
+    },
+    "enabled=true,facing=west,half=upper,powered=true": {
       "model": "minecraft:block/air",
       "y": 270
     }

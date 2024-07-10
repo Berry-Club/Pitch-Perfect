@@ -38,6 +38,8 @@ class ConductorBlock(
             stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(HALF, DoubleBlockHalf.LOWER)
+                .setValue(FILLED, false)
+                .setValue(POWERED, false)
         )
     }
 
@@ -46,11 +48,12 @@ class ConductorBlock(
             .setValue(FACING, pContext.horizontalDirection.opposite)
             .setValue(HALF, DoubleBlockHalf.LOWER)
             .setValue(FILLED, false)
+            .setValue(POWERED, false)
     }
 
     override fun createBlockStateDefinition(pBuilder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(pBuilder)
-        pBuilder.add(FACING, HALF, FILLED)
+        pBuilder.add(FACING, HALF, FILLED, POWERED)
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
@@ -94,6 +97,7 @@ class ConductorBlock(
     companion object {
         val HALF: EnumProperty<DoubleBlockHalf> = BlockStateProperties.DOUBLE_BLOCK_HALF
         val FILLED: BooleanProperty = BlockStateProperties.ENABLED
+        val POWERED: BooleanProperty = BlockStateProperties.POWERED
 
         val CODEC: MapCodec<ConductorBlock> = simpleCodec(::ConductorBlock)
     }
