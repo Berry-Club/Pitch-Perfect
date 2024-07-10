@@ -4,16 +4,21 @@ import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
+import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
+import dev.aaronhowser.mods.pitchperfect.song.SongSerializer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.items.IItemHandler
 import net.neoforged.neoforge.items.ItemStackHandler
 
@@ -57,6 +62,9 @@ class ConductorBlockEntity(
 
         level?.setBlock(blockPos.above(), newTopState, 1 or 2)
         level?.sendBlockUpdated(blockPos.above(), oldTopState, newTopState, 1 or 2)
+
+        songPlayer?.stopPlaying()
+        songPlayer = null
     }
 
     fun playerClick(player: Player) {
@@ -99,6 +107,47 @@ class ConductorBlockEntity(
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         itemHandler.deserializeNBT(pRegistries, pTag.getCompound("inventory"))
         super.loadAdditional(pTag, pRegistries)
+    }
+
+    private var songPlayer: SongPlayer? = null
+
+    fun redstonePulse() {
+        val level = level as? ServerLevel ?: return
+
+        val blockItem = itemHandler.getStackInSlot(0)
+        if (blockItem.item != ModItems.MUSIC_SHEET.get()) return
+
+        val song = SongSerializer.Song(
+            mapOf(
+                NoteBlockInstrument.PLING to listOf(
+                    SongSerializer.Beat(
+                        1,
+                        listOf(
+                            SongSerializer.Note.A3,
+                            SongSerializer.Note.D5,
+                        )
+                    ),
+                    SongSerializer.Beat(
+                        3,
+                        listOf(
+                            SongSerializer.Note.C5S,
+                            SongSerializer.Note.F3,
+                        )
+                    ),
+                    SongSerializer.Beat(
+                        5,
+                        listOf(
+                            SongSerializer.Note.G4,
+                            SongSerializer.Note.A3,
+                        )
+                    ),
+                )
+            )
+        )
+
+        songPlayer = SongPlayer(level, song) { Vec3.atCenterOf(blockPos) }
+
+        songPlayer?.startPlaying()
     }
 
 }

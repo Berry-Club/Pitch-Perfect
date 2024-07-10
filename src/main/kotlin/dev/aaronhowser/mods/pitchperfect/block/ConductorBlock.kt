@@ -11,14 +11,9 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
-import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
-import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.*
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.entity.BlockEntityTicker
-import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -160,12 +155,34 @@ class ConductorBlock(
         return if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) ConductorBlockEntity(pPos, pState) else null
     }
 
-    override fun <T : BlockEntity?> getTicker(
-        pLevel: Level,
+    override fun shouldCheckWeakPower(state: BlockState, level: SignalGetter, pos: BlockPos, side: Direction): Boolean {
+        return true
+    }
+
+    override fun neighborChanged(
         pState: BlockState,
-        pBlockEntityType: BlockEntityType<T>
-    ): BlockEntityTicker<T>? {
-        return super.getTicker(pLevel, pState, pBlockEntityType)
+        pLevel: Level,
+        pPos: BlockPos,
+        pNeighborBlock: Block,
+        pNeighborPos: BlockPos,
+        pMovedByPiston: Boolean
+    ) {
+        val mainPos = if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) pPos else pPos.below()
+
+        val isPowered = pLevel.hasNeighborSignal(pPos)
+        if (!isPowered) return
+
+        val blockEntity = pLevel.getBlockEntity(mainPos) as? ConductorBlockEntity ?: return
+        blockEntity.redstonePulse()
+    }
+
+    override fun canConnectRedstone(
+        state: BlockState,
+        level: BlockGetter,
+        pos: BlockPos,
+        direction: Direction?
+    ): Boolean {
+        return true
     }
 
     // Multiblock functions:
