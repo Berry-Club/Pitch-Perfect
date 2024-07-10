@@ -33,6 +33,8 @@ class ServerConfig(
         lateinit var ELECTRIC_MAX_JUMPS: ModConfigSpec.IntValue
 
         lateinit var RECORDING_RANGE: ModConfigSpec.DoubleValue
+
+        lateinit var CAN_GIVE_ARMOR_STANDS_INSTRUMENTS: ModConfigSpec.BooleanValue
     }
 
     init {
@@ -94,7 +96,11 @@ class ServerConfig(
         RECORDING_RANGE = builder
             .comment("What range should Note Blocks search around them for players that ar recording on Music Sheets.")
             .defineInRange("Recording Range", 64.0, 0.0, 512.0)
-        
+
+        CAN_GIVE_ARMOR_STANDS_INSTRUMENTS = builder
+            .comment("Should players be able to give Armor Stands instruments? Disable if another mod is installed that already does this.")
+            .define("Can Give Armor Stands Instruments", true)
+
         builder.pop()
     }
 
