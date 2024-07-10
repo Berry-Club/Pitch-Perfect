@@ -2,10 +2,13 @@ package dev.aaronhowser.mods.pitchperfect.block.entity
 
 import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.song.SongSerializer
+import dev.aaronhowser.mods.pitchperfect.util.ModServerScheduler
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -22,6 +25,9 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.phys.AABB
 import net.neoforged.neoforge.items.IItemHandler
 import net.neoforged.neoforge.items.ItemStackHandler
+import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component1
+import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component2
+import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component3
 import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.toVec3
 
 class ConductorBlockEntity(
@@ -175,6 +181,45 @@ class ConductorBlockEntity(
         findNearbyArmorStands()
         val cachedSong = song ?: return
 
+        for ((instrument, beats) in cachedSong.beats) {
+            val armorStands = nearbyArmorStands[instrument]
+            if (armorStands == null) {
+                println("No armor stands found for $instrument")
+                continue
+            }
+
+            for ((delay, notes) in beats) {
+
+                for (note in notes) {
+                    val pitch = note.getGoodPitch()
+
+                    val location = armorStands.randomOrNull()?.eyePosition ?: blockPos.toVec3().add(0.5, 1.5, 0.5)
+
+                    ModServerScheduler.scheduleTaskInTicks(delay) {
+
+                        val (x, y, z) = location
+
+                        ModPacketHandler.messageNearbyPlayers(
+                            SpawnNotePacket(
+                                instrument.soundEvent.value().location,
+                                pitch,
+                                x,
+                                y,
+                                z,
+                                false
+                            ),
+                            level as ServerLevel,
+                            location,
+                            128.0
+                        )
+
+                    }
+
+                }
+
+            }
+
+        }
 
     }
 
