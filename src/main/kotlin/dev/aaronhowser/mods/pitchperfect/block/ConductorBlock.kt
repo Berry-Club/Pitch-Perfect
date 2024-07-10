@@ -221,9 +221,15 @@ class ConductorBlock(
 
     private object Boxes {
         fun getShape(half: DoubleBlockHalf, facing: Direction): VoxelShape {
+            val combinedShape = Shapes.or(
+                Bottom.getFacingShape(facing),
+                Top.getFacingShape(facing)
+            )
+
             return when (half) {
-                DoubleBlockHalf.LOWER -> Bottom.getFacingShape(facing)
-                DoubleBlockHalf.UPPER -> Top.getFacingShape(facing)
+                DoubleBlockHalf.LOWER -> combinedShape
+                DoubleBlockHalf.UPPER -> combinedShape.move(0.0, -1.0, 0.0)
+                else -> Shapes.empty()
             }
         }
 
@@ -285,45 +291,45 @@ class ConductorBlock(
             object Parts {
                 val BACK_N: VoxelShape = Shapes.or(
                     Block.box(
-                        3.0, 0.0, 9.0,
-                        3.0 + 10, 0.0 + 4, 9.0 + 2
+                        3.0, 16.0, 9.0,
+                        3.0 + 10, 16.0 + 4, 9.0 + 2
                     ),
                     Block.box(
-                        3.0, 4.0, 10.0,
-                        3.0 + 10, 4.0 + 4, 10.0 + 2
+                        3.0, 20.0, 10.0,
+                        3.0 + 10, 20.0 + 4, 10.0 + 2
                     )
                 )
 
                 val BACK_S: VoxelShape = Shapes.or(
                     Block.box(
-                        3.0, 0.0, 5.0,
-                        3.0 + 10, 0.0 + 4, 5.0 + 2
+                        3.0, 16.0, 5.0,
+                        3.0 + 10, 16.0 + 4, 5.0 + 2
                     ),
                     Block.box(
-                        3.0, 4.0, 4.0,
-                        3.0 + 10, 4.0 + 4, 4.0 + 2
+                        3.0, 20.0, 4.0,
+                        3.0 + 10, 20.0 + 4, 4.0 + 2
                     )
                 )
 
                 val BACK_E: VoxelShape = Shapes.or(
                     Block.box(
-                        5.0, 0.0, 3.0,
-                        5.0 + 2, 0.0 + 4, 3.0 + 10
+                        5.0, 16.0, 3.0,
+                        5.0 + 2, 16.0 + 4, 3.0 + 10
                     ),
                     Block.box(
-                        4.0, 4.0, 3.0,
-                        4.0 + 2, 4.0 + 4, 3.0 + 10
+                        4.0, 20.0, 3.0,
+                        4.0 + 2, 20.0 + 4, 3.0 + 10
                     )
                 )
 
                 val BACK_W: VoxelShape = Shapes.or(
                     Block.box(
-                        9.0, 0.0, 3.0,
-                        9.0 + 2, 0.0 + 4, 3.0 + 10
+                        9.0, 16.0, 3.0,
+                        9.0 + 2, 16.0 + 4, 3.0 + 10
                     ),
                     Block.box(
-                        10.0, 4.0, 3.0,
-                        10.0 + 2, 4.0 + 4, 3.0 + 10
+                        10.0, 20.0, 3.0,
+                        10.0 + 2, 20.0 + 4, 3.0 + 10
                     )
                 )
             }
