@@ -174,10 +174,19 @@ class ConductorBlock(
         val mainPos = if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) pPos else pPos.below()
 
         val isPowered = pLevel.hasNeighborSignal(pPos)
-        if (!isPowered) return
 
-        val blockEntity = pLevel.getBlockEntity(mainPos) as? ConductorBlockEntity ?: return
-        blockEntity.redstonePulse()
+        if (isPowered == pState.getValue(POWERED)) return
+
+        pLevel.setBlock(
+            mainPos,
+            pState.setValue(POWERED, isPowered),
+            1 or 2
+        )
+
+        if (isPowered) {
+            val blockEntity = pLevel.getBlockEntity(mainPos) as? ConductorBlockEntity ?: return
+            blockEntity.redstonePulse()
+        }
     }
 
     override fun canConnectRedstone(
