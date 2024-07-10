@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3
 import kotlin.random.Random
 
 class InstrumentItem(
-    instrument: NoteBlockInstrument
+    val instrument: NoteBlockInstrument
 ) : Item(
     Properties()
         .durability(100)

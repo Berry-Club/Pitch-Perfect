@@ -1,10 +1,10 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
 import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
-import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.SongSerializer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -13,14 +13,16 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
+import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
-import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.AABB
 import net.neoforged.neoforge.items.IItemHandler
 import net.neoforged.neoforge.items.ItemStackHandler
+import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.toVec3
 
 class ConductorBlockEntity(
     pPos: BlockPos,
@@ -63,8 +65,7 @@ class ConductorBlockEntity(
         level?.setBlock(blockPos.above(), newTopState, 1 or 2)
         level?.sendBlockUpdated(blockPos.above(), oldTopState, newTopState, 1 or 2)
 
-        songPlayer?.stopPlaying()
-        songPlayer = null
+        song = null
     }
 
     fun playerClick(player: Player) {
@@ -109,7 +110,7 @@ class ConductorBlockEntity(
         super.loadAdditional(pTag, pRegistries)
     }
 
-    private var songPlayer: SongPlayer? = null
+    private var song: SongSerializer.Song? = null
 
     fun redstonePulse() {
         val level = level as? ServerLevel ?: return
@@ -145,9 +146,36 @@ class ConductorBlockEntity(
             )
         )
 
-        songPlayer = SongPlayer(level, song) { Vec3.atCenterOf(blockPos) }
+        this.song = song
 
-        songPlayer?.startPlaying()
+        startPlaying()
+    }
+
+    private val nearbyArmorStands: MutableMap<NoteBlockInstrument, List<ArmorStand>> = mutableMapOf()
+    private fun findNearbyArmorStands() {
+        val level = level as? ServerLevel ?: return
+        nearbyArmorStands.clear()
+
+        val armorStands = level.getEntitiesOfClass(
+            ArmorStand::class.java,
+            AABB.ofSize(blockPos.toVec3(), 16.0, 16.0, 16.0)
+        )
+
+        for (instrument in NoteBlockInstrument.entries) {
+            val instrumentStands =
+                armorStands.filter {
+                    InstrumentItem.getInstrument(it.mainHandItem) == instrument || InstrumentItem.getInstrument(it.offhandItem) == instrument
+                }
+
+            nearbyArmorStands[instrument] = instrumentStands
+        }
+    }
+
+    private fun startPlaying() {
+        findNearbyArmorStands()
+        val cachedSong = song ?: return
+
+
     }
 
 }
