@@ -119,39 +119,26 @@ class ConductorBlockEntity(
     private var song: SongSerializer.Song? = null
 
     fun redstonePulse() {
-        val level = level as? ServerLevel ?: return
-
         val blockItem = itemHandler.getStackInSlot(0)
         if (blockItem.item != ModItems.MUSIC_SHEET.get()) return
 
-        val song = SongSerializer.Song(
-            mapOf(
-                NoteBlockInstrument.PLING to listOf(
-                    SongSerializer.Beat(
-                        1,
-                        listOf(
-                            SongSerializer.Note.A3,
-                            SongSerializer.Note.D5,
-                        )
-                    ),
-                    SongSerializer.Beat(
-                        3,
-                        listOf(
-                            SongSerializer.Note.C5S,
-                            SongSerializer.Note.F3,
-                        )
-                    ),
-                    SongSerializer.Beat(
-                        5,
-                        listOf(
-                            SongSerializer.Note.G4,
-                            SongSerializer.Note.A3,
-                        )
-                    ),
-                )
-            )
-        )
+        val map: MutableMap<NoteBlockInstrument, MutableList<SongSerializer.Beat>> = mutableMapOf()
 
+        for (beat in 0 until 40) {
+            val instrument = NoteBlockInstrument.entries.filter { it.isTunable }.randomOrNull() ?: continue
+
+            val beatList = map.getOrPut(instrument) { mutableListOf() }
+
+            val notes = (0 until 4).map {
+                SongSerializer.Note.entries.random()
+            }
+
+            beatList.add(SongSerializer.Beat(beat, notes))
+
+            map[instrument] = beatList
+        }
+
+        val song = SongSerializer.Song(map)
         this.song = song
 
         startPlaying()
