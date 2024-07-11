@@ -6,6 +6,8 @@ import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEncha
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -66,27 +68,33 @@ object OtherEvents {
 
     }
 
-    //TODO: Maybe just Access Transform `disabledSlots` to be zero?
     @SubscribeEvent
     fun onActivateEntity(event: PlayerInteractEvent.EntityInteractSpecific) {
-        val armorStand = event.target as? ArmorStand ?: return
+        if (event.level.isClientSide) return
 
-        if (armorStand.level().isClientSide) return
+        val armorStand = event.target as? ArmorStand ?: return
         if (!ServerConfig.CAN_GIVE_ARMOR_STANDS_INSTRUMENTS.get()) return
 
         val player = event.entity
-        val playerItem = player.getItemInHand(event.hand)
-
-        if (!playerItem.has(InstrumentComponent.component)) return
 
         val armorStandItem = armorStand.mainHandItem
-        if (!armorStandItem.isEmpty) return
+        if (armorStandItem.isEmpty) {
+            val playerItem = player.getItemInHand(event.hand)
+            if (!playerItem.has(InstrumentComponent.component)) return
 
-        armorStand.isShowArms = true
+            armorStand.disabledSlots = -1
+            armorStand.isShowArms = true
 
-        armorStand.setItemInHand(InteractionHand.MAIN_HAND, playerItem.copy())
-        println(armorStand.mainHandItem)
-        playerItem.shrink(1)
+            armorStand.setItemInHand(InteractionHand.MAIN_HAND, playerItem.copy())
+            playerItem.shrink(1)
+        } else {
+            if (!armorStandItem.has(InstrumentComponent.component)) return
+
+            player.addItem(armorStandItem.copy())
+            armorStandItem.shrink(1)
+        }
+
+        event.level.playSound(null, armorStand.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS)
     }
 
 }
