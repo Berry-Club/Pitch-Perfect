@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.phys.AABB
+import net.neoforged.fml.loading.FMLPaths
 import net.neoforged.neoforge.items.IItemHandler
 import net.neoforged.neoforge.items.ItemStackHandler
 import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component1
@@ -122,23 +123,8 @@ class ConductorBlockEntity(
         val blockItem = itemHandler.getStackInSlot(0)
         if (blockItem.item != ModItems.MUSIC_SHEET.get()) return
 
-        val map: MutableMap<NoteBlockInstrument, MutableList<SongSerializer.Beat>> = mutableMapOf()
-
-        for (beat in 0 until 40) {
-            val instrument = NoteBlockInstrument.entries.filter { it.isTunable }.randomOrNull() ?: continue
-
-            val beatList = map.getOrPut(instrument) { mutableListOf() }
-
-            val notes = (0 until 4).map {
-                SongSerializer.Note.entries.random()
-            }
-
-            beatList.add(SongSerializer.Beat(beat, notes))
-
-            map[instrument] = beatList
-        }
-
-        val song = SongSerializer.Song(map)
+        val song = SongSerializer.Song.fromFile(FMLPaths.CONFIGDIR.get().resolve("song.json"))
+        println(song)
         this.song = song
 
         startPlaying()
