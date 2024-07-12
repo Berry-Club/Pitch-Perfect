@@ -1,12 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.mojang.serialization.Codec
-import com.mojang.serialization.JsonOps
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import io.netty.buffer.ByteBuf
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.Mth
@@ -19,78 +18,45 @@ import kotlin.math.pow
 
 object SongSerializer {
 
+    @Serializable
     data class Song(
         val beats: Map<NoteBlockInstrument, List<Beat>>
     ) {
 
         companion object {
-            private val INSTRUMENTS = NoteBlockInstrument.entries.toTypedArray()
-
-            val CODEC: Codec<Song> = RecordCodecBuilder.create { instance ->
-                instance.group(
-                    Codec.unboundedMap(StringRepresentable.fromEnum { INSTRUMENTS }, Beat.CODEC.listOf())
-                        .fieldOf("beats")
-                        .forGetter(Song::beats)
-                ).apply(instance, SongSerializer::Song)
-            }
-
-            val STREAM_CODEC: StreamCodec<ByteBuf, Song> = ByteBufCodecs.map(
-                ::HashMap,
-                ByteBufCodecs.idMapper({ INSTRUMENTS[it] }, NoteBlockInstrument::ordinal),
-                Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
-            ).map(SongSerializer::Song) { HashMap(it.beats) }
-
-            val GSON: Gson = GsonBuilder().disableHtmlEscaping().setLenient().create()
-
             val defaultPath: Path = FMLPaths.CONFIGDIR.get().resolve("song.json")
 
             fun fromFile(path: Path): Song? {
-                try {
-                    val jsonString = Files.readString(path)
-                    println(jsonString)
-                    val jsonElement = GSON.fromJson(jsonString, Song::class.java)
-
-                    return jsonElement
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                if (!Files.exists(path)) {
+                    PitchPerfect.LOGGER.error("File $path does not exist")
                     return null
+                }
+
+                return try {
+                    val jsonString = Files.readString(path)
+                    Json.decodeFromString(jsonString)
+                } catch (e: Exception) {
+                    PitchPerfect.LOGGER.error("Failed to load song from $path", e)
+                    null
                 }
             }
         }
 
         fun saveToPath(path: Path) {
             try {
-                val jsonString = GSON.toJson(CODEC.encodeStart(JsonOps.INSTANCE, this).getOrThrow())
-                Files.writeString(path, jsonString)
+                val jsonString = Json.encodeToString(this)
+                Files.write(path, jsonString.toByteArray())
             } catch (e: Exception) {
-                e.printStackTrace()
+                PitchPerfect.LOGGER.error("Failed to save song to $path", e)
             }
         }
-
     }
 
+    @Serializable
     data class Beat(
         val at: Int,
         val notes: List<Note>
-    ) {
-        companion object {
-
-            val CODEC: Codec<Beat> = RecordCodecBuilder.create { instance ->
-                instance.group(
-                    Codec.INT.optionalFieldOf("at", 0).forGetter(Beat::at),
-                    Note.CODEC.listOf().fieldOf("notes").forGetter(Beat::notes)
-                ).apply(instance, SongSerializer::Beat)
-            }
-
-            val STREAM_CODEC: StreamCodec<ByteBuf, Beat> = StreamCodec.composite(
-                ByteBufCodecs.VAR_INT, Beat::at,
-                Note.STREAM_CODEC.apply(ByteBufCodecs.list()), Beat::notes,
-                SongSerializer::Beat
-            )
-
-        }
-
-    }
+    )
 
     enum class Note(
         val note: Int,
