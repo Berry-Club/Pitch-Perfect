@@ -210,28 +210,26 @@ object SongSerializer {
 
         ;
 
-        val displayName: String = when (note) {
-            0 -> "C"
-            1 -> "C#"
-            2 -> "D"
-            3 -> "D#"
-            4 -> "E"
-            5 -> "F"
-            6 -> "F#"
-            7 -> "G"
-            8 -> "G#"
-            9 -> "A"
-            10 -> "A#"
-            11 -> "B"
-            else -> "X"
-        } + octave
-
         private val midiNoteNumber: Int = 21 + (octave * 12) + note
         private val frequency: Float = (440.0 * 2.0.pow(midiNoteNumber - 69.0) / 12.0).toFloat()
         val pitch: Float = 2.0.pow((midiNoteNumber - 69.0) / 12.0).toFloat()
 
         override fun getSerializedName(): String {
-            return this.displayName
+            return when (note) {
+                0 -> "C"
+                1 -> "C#"
+                2 -> "D"
+                3 -> "D#"
+                4 -> "E"
+                5 -> "F"
+                6 -> "F#"
+                7 -> "G"
+                8 -> "G#"
+                9 -> "A"
+                10 -> "A#"
+                11 -> "B"
+                else -> "X"
+            } + octave
         }
 
         fun getGoodPitch(): Float {
