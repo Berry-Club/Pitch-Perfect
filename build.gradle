@@ -29,6 +29,10 @@ runs {
         systemProperty 'forge.logging.console.level', 'debug'
 
         modSource project.sourceSets.main
+
+        dependencies {
+            runtime 'com.charleskorn.kaml:kaml:0.60.0'
+        }
     }
 
     client {
@@ -77,6 +81,9 @@ dependencies {
     // KubeJs
 //    implementation "curse.maven:kubejs-238086:5508982"
     implementation "curse.maven:rhino-416294:5499585"
+
+    // Kaml
+    implementation "com.charleskorn.kaml:kaml:0.60.0"
 }
 
 tasks.withType(ProcessResources).configureEach {

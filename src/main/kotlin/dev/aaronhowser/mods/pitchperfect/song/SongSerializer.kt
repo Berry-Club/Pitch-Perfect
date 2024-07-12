@@ -1,11 +1,10 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
+import com.charleskorn.kaml.Yaml
 import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import io.netty.buffer.ByteBuf
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.Mth
@@ -33,8 +32,8 @@ object SongSerializer {
                 }
 
                 return try {
-                    val jsonString = Files.readString(path)
-                    Json.decodeFromString(jsonString)
+                    val yamlString = Files.readString(path)
+                    Yaml.default.decodeFromString(serializer(), yamlString)
                 } catch (e: Exception) {
                     PitchPerfect.LOGGER.error("Failed to load song from $path", e)
                     null
@@ -44,8 +43,8 @@ object SongSerializer {
 
         fun saveToPath(path: Path) {
             try {
-                val jsonString = Json.encodeToString(this)
-                Files.write(path, jsonString.toByteArray())
+                val yamlString = Yaml.default.encodeToString(serializer(), this)
+                Files.writeString(path, yamlString)
             } catch (e: Exception) {
                 PitchPerfect.LOGGER.error("Failed to save song to $path", e)
             }
