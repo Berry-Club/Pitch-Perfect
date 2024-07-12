@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.pitchperfect.song
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -16,7 +15,6 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.neoforged.fml.loading.FMLPaths
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.function.Function
 import kotlin.math.pow
 
 object SongSerializer {
@@ -80,7 +78,7 @@ object SongSerializer {
             val CODEC: Codec<Beat> = RecordCodecBuilder.create { instance ->
                 instance.group(
                     Codec.INT.optionalFieldOf("at", 0).forGetter(Beat::at),
-                    Note.ONE_OR_MORE_CODEC.fieldOf("notes").forGetter(Beat::notes)
+                    Note.CODEC.listOf().fieldOf("notes").forGetter(Beat::notes)
                 ).apply(instance, SongSerializer::Beat)
             }
 
@@ -244,13 +242,6 @@ object SongSerializer {
             val CODEC: Codec<Note> = StringRepresentable.fromEnum { VALUES }
 
             val STREAM_CODEC: StreamCodec<ByteBuf, Note> = ByteBufCodecs.idMapper({ VALUES[it] }, Note::ordinal)
-
-            val ONE_OR_MORE_CODEC: Codec<List<Note>> = Codec
-                .either(CODEC, CODEC.listOf())
-                .xmap(
-                    { either: Either<Note, MutableList<Note>> -> either.map(::listOf, Function.identity()) },
-                    { list: List<Note> -> if (list.size == 1) Either.left(list.first()) else Either.right(list) }
-                )
 
             // F4S, which has a pitch of 1.0, is the reference Note
             private const val REFERENCE_NOTE = 6
