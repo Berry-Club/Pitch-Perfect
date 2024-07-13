@@ -23,7 +23,7 @@ import java.util.*
 
 
 data class Song(
-    val beats: HashMap<Holder<SoundEvent>, List<Beat>>
+    val beats: Map<Holder<SoundEvent>, List<Beat>>
 ) {
 
     companion object {
@@ -44,7 +44,7 @@ data class Song(
         }
 
         // What the hell does this even do Lat
-        private fun <K, V> beatMap(size: Int): HashMap<K, V> {
+        private fun <K, V> beatMap(size: Int): Map<K, V> {
             return HashMap(size)
         }
 
