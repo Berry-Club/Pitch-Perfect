@@ -58,14 +58,48 @@ object SongSerializer {
             private const val BEATS_TAG = "beats"
 
             fun fromCompoundTag(tag: CompoundTag): Song {
-                TODO()
+                val instruments: MutableMap<Instrument, List<Beat>> = mutableMapOf()
+
+                val instrumentsTag = tag.getList(INSTRUMENTS_TAG, Tag.TAG_COMPOUND.toInt())
+                for (instrumentCompound in instrumentsTag) {
+                    if (instrumentCompound !is CompoundTag) throw IllegalStateException("Expected a CompoundTag, but got $instrumentCompound")
+
+                    val instrumentString = instrumentCompound.getString(INSTRUMENT_TAG)
+                    val instrumentBeats = mutableListOf<Beat>()
+
+                    val beatsTag = instrumentCompound.getList(BEATS_TAG, Tag.TAG_COMPOUND.toInt())
+                    for (beatCompound in beatsTag) {
+                        if (beatCompound !is CompoundTag) throw IllegalStateException("Expected a CompoundTag, but got $beatCompound")
+
+                        val at = beatCompound.getInt(AT_TAG)
+                        val notesHere: MutableList<Note> = mutableListOf()
+
+                        val notesTag = beatCompound.getList(NOTES_TAG, Tag.TAG_STRING.toInt())
+                        for (noteTag in notesTag) {
+                            if (noteTag !is StringTag) throw IllegalStateException("Expected a StringTag, but got $noteTag")
+
+                            val noteString = noteTag.asString
+                            val note = Note.entries.first { it.serializedName == noteString }
+
+                            notesHere.add(note)
+                        }
+
+                        val beat = Beat(at, notesHere)
+                        instrumentBeats.add(beat)
+                    }
+
+                    val instrument = Instrument(instrumentString)
+                    instruments[instrument] = instrumentBeats
+                }
+
+                return Song(instruments)
             }
         }
 
         fun toCompoundTag(): CompoundTag {
             val compoundTag = CompoundTag()
 
-            val listTag = ListTag()
+            val instrumentsTag = ListTag()
 
             for ((instrument, beats) in instruments) {
                 val instrumentString = instrument.soundRl
@@ -86,11 +120,10 @@ object SongSerializer {
                 }
 
                 instrumentTag.put(BEATS_TAG, beatsTag)
-                listTag.add(instrumentTag)
+                instrumentsTag.add(instrumentTag)
             }
 
-            compoundTag.put(INSTRUMENTS_TAG, listTag)
-
+            compoundTag.put(INSTRUMENTS_TAG, instrumentsTag)
             return compoundTag
         }
 

@@ -34,13 +34,7 @@ object OtherEvents {
 
     @SubscribeEvent
     fun onChat(event: ServerChatEvent) {
-        val songPath = SongSerializer.Song.defaultPath
 
-        val song = SongSerializer.Song.fromFile(songPath) ?: return
-        val songCompoundTag = song.toCompoundTag()
-
-        val jsonAgain = SongSerializer.Song.fromCompoundTag(songCompoundTag)
-        println(jsonAgain)
     }
 
     val builders = mutableMapOf<Player, SongBuilder>()
