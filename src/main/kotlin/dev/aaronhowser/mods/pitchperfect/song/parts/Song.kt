@@ -6,7 +6,6 @@ import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.JsonOps
-import dev.aaronhowser.mods.pitchperfect.song.SongSerializer
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -121,11 +120,11 @@ data class Song(
 
         val GSON: Gson = GsonBuilder().disableHtmlEscaping().setLenient().create()
 
-        fun fromFile(path: Path): SongSerializer.Song? {
+        fun fromFile(path: Path): Song? {
             try {
                 val jsonString = Files.readString(path)
                 println(jsonString)
-                val jsonElement = GSON.fromJson(jsonString, SongSerializer.Song::class.java)
+                val jsonElement = GSON.fromJson(jsonString, Song::class.java)
 
                 return jsonElement
             } catch (e: Exception) {
@@ -153,9 +152,9 @@ data class Song(
             val instrument: NoteBlockInstrument? = SOUND_TO_INSTRUMENT[sound.key]
 
             if (instrument != null) {
-                stringBuilder.append(sound)
+                stringBuilder.append(instrument.serializedName)
             } else {
-                stringBuilder.append(sound.key)
+                stringBuilder.append(sound.key!!.location())
             }
 
             stringBuilder.append('=')

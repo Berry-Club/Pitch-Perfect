@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.SongSerializer
+import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
@@ -34,6 +35,10 @@ object OtherEvents {
 
     @SubscribeEvent
     fun onChat(event: ServerChatEvent) {
+
+        val file = SongSerializer.Song.defaultPath
+        val song = Song.fromFile(file)
+        println(song)
 
     }
 
