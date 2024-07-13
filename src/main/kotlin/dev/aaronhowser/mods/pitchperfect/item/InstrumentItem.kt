@@ -4,11 +4,12 @@ import dev.aaronhowser.mods.pitchperfect.config.CommonConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.BwaaapEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.HealingBeatEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.ModEnchantments
-import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
+import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionHand
@@ -27,11 +28,11 @@ import net.minecraft.world.phys.Vec3
 import kotlin.random.Random
 
 class InstrumentItem(
-    val instrument: NoteBlockInstrument
+    val instrument: SoundEvent
 ) : Item(
     Properties()
         .durability(100)
-        .component(InstrumentComponent.component, InstrumentComponent(instrument))
+        .component(SoundEventComponent.component, SoundEventComponent(instrument))
         .attributes(
             ItemAttributeModifiers.builder()
                 .add(
@@ -47,15 +48,13 @@ class InstrumentItem(
         )
 ) {
 
+    constructor(noteBlockInstrument: NoteBlockInstrument) : this(noteBlockInstrument.soundEvent.value())
+    constructor(holder: Holder<SoundEvent>) : this(holder.value())
+
     companion object {
 
-        fun getInstrument(itemStack: ItemStack): NoteBlockInstrument? {
-            return itemStack.get(InstrumentComponent.component)?.instrument
-        }
-
         fun getSoundEvent(itemStack: ItemStack): SoundEvent? {
-            val instrument = getInstrument(itemStack) ?: return null
-            return instrument.soundEvent.value()
+            return itemStack.get(SoundEventComponent.component)?.soundEvent
         }
 
         fun healingBeat(itemStack: ItemStack, player: Player) {

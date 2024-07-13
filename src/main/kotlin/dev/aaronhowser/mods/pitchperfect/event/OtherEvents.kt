@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
-import dev.aaronhowser.mods.pitchperfect.item.component.InstrumentComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -80,7 +80,7 @@ object OtherEvents {
         val armorStandItem = armorStand.mainHandItem
         if (armorStandItem.isEmpty) {
             val playerItem = player.getItemInHand(event.hand)
-            if (!playerItem.has(InstrumentComponent.component)) return
+            if (!playerItem.has(SoundEventComponent.component)) return
 
             armorStand.disabledSlots = -1
             armorStand.isShowArms = true
@@ -88,7 +88,7 @@ object OtherEvents {
             armorStand.setItemInHand(InteractionHand.MAIN_HAND, playerItem.copy())
             playerItem.shrink(1)
         } else {
-            if (!armorStandItem.has(InstrumentComponent.component)) return
+            if (!armorStandItem.has(SoundEventComponent.component)) return
 
             player.addItem(armorStandItem.copy())
             armorStandItem.shrink(1)

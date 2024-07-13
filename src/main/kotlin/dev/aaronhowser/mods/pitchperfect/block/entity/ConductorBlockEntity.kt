@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.block.entity
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
-import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
@@ -23,7 +23,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.phys.AABB
 import net.neoforged.fml.loading.FMLPaths
 import net.neoforged.neoforge.items.IItemHandler
@@ -142,15 +141,14 @@ class ConductorBlockEntity(
             AABB.ofSize(blockPos.toVec3(), 16.0, 16.0, 16.0)
         )
 
-        for (instrument in NoteBlockInstrument.entries) {
-            val soundEvent = instrument.soundEvent.value()
+        for (armorStand in armorStands) {
+            val heldItem = armorStand.mainHandItem
 
-            val instrumentStands =
-                armorStands.filter {
-                    InstrumentItem.getInstrument(it.mainHandItem) == instrument || InstrumentItem.getInstrument(it.offhandItem) == instrument
-                }
+            val itemSound = SoundEventComponent.getSoundEvent(heldItem) ?: continue
 
-            nearbyArmorStands[soundEvent] = instrumentStands
+            val armorStandsWithInstrument = nearbyArmorStands.getOrPut(itemSound) { emptyList() }.toMutableList()
+            armorStandsWithInstrument.add(armorStand)
+            nearbyArmorStands[itemSound] = armorStandsWithInstrument
         }
     }
 
