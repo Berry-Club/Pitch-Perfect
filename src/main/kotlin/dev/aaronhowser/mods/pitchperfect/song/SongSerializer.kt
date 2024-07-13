@@ -6,11 +6,13 @@ import io.netty.buffer.ByteBuf
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.util.Mth
 import net.minecraft.util.StringRepresentable
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.neoforged.fml.loading.FMLPaths
 import java.nio.file.Files
 import java.nio.file.Path
@@ -20,11 +22,15 @@ object SongSerializer {
 
     @Serializable
     data class Song(
-        val beats: Map<NoteBlockInstrument, List<Beat>>
+        val beats: Map<Instrument, List<Beat>>
     ) {
 
         companion object {
             val defaultPath: Path = FMLPaths.CONFIGDIR.get().resolve("song.json")
+
+            private val json = Json {
+                allowStructuredMapKeys = true
+            }
 
             fun fromFile(path: Path): Song? {
                 if (!Files.exists(path)) {
@@ -34,7 +40,7 @@ object SongSerializer {
 
                 return try {
                     val jsonString = Files.readString(path)
-                    Json.decodeFromString(jsonString)
+                    json.decodeFromString(jsonString)
                 } catch (e: Exception) {
                     PitchPerfect.LOGGER.error("Failed to load song from $path", e)
                     null
@@ -44,7 +50,7 @@ object SongSerializer {
 
         fun saveToPath(path: Path) {
             try {
-                val jsonString = Json.encodeToString(this)
+                val jsonString = json.encodeToString(this)
                 Files.write(path, jsonString.toByteArray())
             } catch (e: Exception) {
                 PitchPerfect.LOGGER.error("Failed to save song to $path", e)
@@ -230,6 +236,25 @@ object SongSerializer {
 
                 return note
             }
+        }
+
+    }
+
+    @Serializable
+    data class Instrument(
+        val soundRl: String
+    ) {
+
+        companion object {
+            fun fromSoundEvent(soundEvent: SoundEvent): Instrument {
+                return Instrument(soundEvent.location.toString())
+            }
+        }
+
+        fun getSoundEvent(): SoundEvent {
+            val soundRl = ResourceLocation.parse(soundRl)
+            return BuiltInRegistries.SOUND_EVENT.get(soundRl)
+                ?: throw IllegalArgumentException("SoundEvent $soundRl not found")
         }
 
     }

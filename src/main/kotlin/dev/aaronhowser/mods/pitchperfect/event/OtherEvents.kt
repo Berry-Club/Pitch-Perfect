@@ -47,7 +47,7 @@ object OtherEvents {
 
         val pitch = NoteBlock.getPitchFromNote(event.vanillaNoteId)
 
-        val instrument = event.instrument
+        val soundEvent = event.instrument.soundEvent.value()
 
         val currentWorldTick = (event.level as? Level)?.gameTime ?: throw IllegalStateException()
 
@@ -61,7 +61,7 @@ object OtherEvents {
 
             songBuilder.addNote(
                 currentWorldTick,
-                instrument,
+                soundEvent,
                 pitch
             )
         }

@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
+import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
@@ -14,6 +15,7 @@ import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -130,7 +132,7 @@ class ConductorBlockEntity(
         startPlaying()
     }
 
-    private val nearbyArmorStands: MutableMap<NoteBlockInstrument, List<ArmorStand>> = mutableMapOf()
+    private val nearbyArmorStands: MutableMap<SoundEvent, List<ArmorStand>> = mutableMapOf()
     private fun findNearbyArmorStands() {
         val level = level as? ServerLevel ?: return
         nearbyArmorStands.clear()
@@ -141,12 +143,14 @@ class ConductorBlockEntity(
         )
 
         for (instrument in NoteBlockInstrument.entries) {
+            val soundEvent = instrument.soundEvent.value()
+
             val instrumentStands =
                 armorStands.filter {
                     InstrumentItem.getInstrument(it.mainHandItem) == instrument || InstrumentItem.getInstrument(it.offhandItem) == instrument
                 }
 
-            nearbyArmorStands[instrument] = instrumentStands
+            nearbyArmorStands[soundEvent] = instrumentStands
         }
     }
 
@@ -155,9 +159,11 @@ class ConductorBlockEntity(
         val cachedSong = song ?: return
 
         for ((instrument, beats) in cachedSong.beats) {
-            val armorStands = nearbyArmorStands[instrument]
+            val soundEvent = instrument.getSoundEvent()
+
+            val armorStands = nearbyArmorStands[soundEvent]
             if (armorStands == null) {
-                println("No armor stands found for $instrument")
+                PitchPerfect.LOGGER.error("No armor stands found for $soundEvent")
                 continue
             }
 
@@ -174,7 +180,7 @@ class ConductorBlockEntity(
 
                         ModPacketHandler.messageNearbyPlayers(
                             SpawnNotePacket(
-                                instrument.soundEvent.value().location,
+                                soundEvent.location,
                                 pitch,
                                 x,
                                 y,

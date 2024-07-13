@@ -27,8 +27,6 @@ class SongPlayer(
         playing = true
         started = true
 
-        println(song)
-
         for ((instrument, beats) in song.beats) {
             for ((tick, notes) in beats) {
                 for (note in notes) {
@@ -41,7 +39,7 @@ class SongPlayer(
 
                         ModPacketHandler.messageNearbyPlayers(
                             SpawnNotePacket(
-                                instrument.soundEvent.value().location,
+                                instrument.getSoundEvent().location,
                                 pitch,
                                 x,
                                 y,

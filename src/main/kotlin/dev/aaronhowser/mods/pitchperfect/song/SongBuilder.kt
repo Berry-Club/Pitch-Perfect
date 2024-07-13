@@ -1,36 +1,39 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import net.minecraft.sounds.SoundEvent
 import java.nio.file.Path
 
 class SongBuilder(
     private val startingTick: Long
 ) {
 
-    private val notesMap: MutableMap<NoteBlockInstrument, Map<
+    private val notesMap: MutableMap<SoundEvent, Map<
             Int,            // Tick
             List<Float>>    // Pitches
             > = mutableMapOf()
 
     fun addNote(
         currentTick: Long,
-        instrument: NoteBlockInstrument,
+        sound: SoundEvent,
         pitch: Float
     ) {
         val ticksSinceStart = (currentTick - startingTick).toInt()
 
-        val previousInstrumentBeats = notesMap[instrument] ?: emptyMap()
+        val previousInstrumentBeats = notesMap[sound] ?: emptyMap()
         val previousBeatsThisTick = previousInstrumentBeats[ticksSinceStart] ?: emptyList()
         val withThisPitch = previousBeatsThisTick + pitch
         val newInstrumentBeats = previousInstrumentBeats + (ticksSinceStart to withThisPitch)
 
-        notesMap[instrument] = newInstrumentBeats
+        notesMap[sound] = newInstrumentBeats
     }
 
     fun build(path: Path? = null): SongSerializer.Song {
-        val instrumentBeatMap = mutableMapOf<NoteBlockInstrument, List<SongSerializer.Beat>>()
+        val instrumentBeatMap: MutableMap<SongSerializer.Instrument, List<SongSerializer.Beat>> = mutableMapOf()
 
-        for ((sound, map) in notesMap) {
+        for ((soundEvent, map) in notesMap) {
+
+            val instrument = SongSerializer.Instrument.fromSoundEvent(soundEvent)
+
             val instrumentBeats = mutableListOf<SongSerializer.Beat>()
 
             for ((tick, pitches) in map) {
@@ -44,7 +47,7 @@ class SongBuilder(
                 instrumentBeats.add(beat)
             }
 
-            instrumentBeatMap[sound] = instrumentBeats
+            instrumentBeatMap[instrument] = instrumentBeats
         }
 
         val song = SongSerializer.Song(instrumentBeatMap)
