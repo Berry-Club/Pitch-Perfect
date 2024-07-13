@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import net.neoforged.fml.loading.FMLPaths
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
@@ -26,6 +27,8 @@ data class Song(
 ) {
 
     companion object {
+
+        val defaultFile = FMLPaths.CONFIGDIR.get().resolve("song.txt")
 
         val ID_TO_INSTRUMENT: HashMap<String, NoteBlockInstrument> = HashMap()
         val SOUND_TO_INSTRUMENT: IdentityHashMap<ResourceKey<SoundEvent>, NoteBlockInstrument> = IdentityHashMap()

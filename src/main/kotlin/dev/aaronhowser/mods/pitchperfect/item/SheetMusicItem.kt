@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
-import dev.aaronhowser.mods.pitchperfect.song.SongSerializer
+import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -20,7 +20,7 @@ class SheetMusicItem : Item(
 
     companion object {
 
-        fun playSong(song: SongSerializer.Song, player: Player) {
+        fun playSong(song: Song, player: Player) {
             val serverLevel = player.level() as ServerLevel
 
             val songPlayer = SongPlayer(
@@ -44,7 +44,7 @@ class SheetMusicItem : Item(
 
             val songBuilder = OtherEvents.builders[player] ?: return
             OtherEvents.builders.remove(player)
-            songBuilder.build(SongSerializer.Song.defaultPath)
+            songBuilder.build(Song.defaultFile)
         }
 
         fun isRecording(stack: ItemStack): Boolean {
@@ -63,7 +63,7 @@ class SheetMusicItem : Item(
         }
 
         val song =
-            SongSerializer.Song.fromFile(SongSerializer.Song.defaultPath) ?: return InteractionResultHolder.fail(stack)
+            Song.fromFile(Song.defaultFile) ?: return InteractionResultHolder.fail(stack)
         playSong(song, pPlayer)
 
         return InteractionResultHolder.success(stack)

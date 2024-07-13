@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.song
 
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
+import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.ModServerScheduler
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
@@ -11,7 +12,7 @@ import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component3
 
 class SongPlayer(
     val level: ServerLevel,
-    val song: SongSerializer.Song,
+    val song: Song,
     val location: () -> Vec3
 ) {
 
@@ -26,33 +27,33 @@ class SongPlayer(
         if (started) return
         playing = true
         started = true
-
-        for ((instrument, beats) in song.instruments) {
-            for ((tick, notes) in beats) {
-                for (note in notes) {
-                    val pitch = note.getGoodPitch()
-
-                    ModServerScheduler.scheduleTaskInTicks(tick) {
-                        if (!playing) return@scheduleTaskInTicks
-
-                        val (x, y, z) = location()
-
-                        ModPacketHandler.messageNearbyPlayers(
-                            SpawnNotePacket(
-                                instrument.getSoundEvent().location,
-                                pitch,
-                                x,
-                                y,
-                                z,
-                                false
-                            ),
-                            level,
-                            location(),
-                            128.0
-                        )
-                    }
-                }
-            }
-        }
+//
+//        for ((instrument, beats) in song.instruments) {
+//            for ((tick, notes) in beats) {
+//                for (note in notes) {
+//                    val pitch = note.getGoodPitch()
+//
+//                    ModServerScheduler.scheduleTaskInTicks(tick) {
+//                        if (!playing) return@scheduleTaskInTicks
+//
+//                        val (x, y, z) = location()
+//
+//                        ModPacketHandler.messageNearbyPlayers(
+//                            SpawnNotePacket(
+//                                instrument.getSoundEvent().location,
+//                                pitch,
+//                                x,
+//                                y,
+//                                z,
+//                                false
+//                            ),
+//                            level,
+//                            location(),
+//                            128.0
+//                        )
+//                    }
+//                }
+//            }
+//        }
     }
 }

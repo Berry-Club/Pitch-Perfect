@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
+import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -7,7 +8,7 @@ import net.minecraft.world.level.saveddata.SavedData
 
 class SongSavedData : SavedData() {
 
-    private val songs: MutableList<Pair<String, SongSerializer.Song>> = mutableListOf()
+    private val songs: MutableList<Pair<String, Song>> = mutableListOf()
 
     companion object {
         fun create() = SongSavedData()
@@ -25,21 +26,21 @@ class SongSavedData : SavedData() {
         }
     }
 
-    fun addSong(name: String, song: SongSerializer.Song) {
+    fun addSong(name: String, song: Song) {
         songs.add(name to song)
         setDirty()
     }
 
-    fun removeSong(song: SongSerializer.Song) {
+    fun removeSong(song: Song) {
         val success = songs.removeIf { it.second == song }
         if (success) setDirty()
     }
 
-    fun getSongs(name: String): List<SongSerializer.Song> {
+    fun getSongs(name: String): List<Song> {
         return songs.filter { it.first == name }.map { it.second }
     }
 
-    fun getAllSongs(): List<Pair<String, SongSerializer.Song>> {
+    fun getAllSongs(): List<Pair<String, Song>> {
         return songs
     }
 
