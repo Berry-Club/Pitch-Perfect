@@ -8,7 +8,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.TagParser
+import net.minecraft.nbt.ListTag
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
@@ -56,8 +56,38 @@ object SongSerializer {
         }
 
         fun toCompoundTag(): CompoundTag {
-            val jsonString = json.encodeToString(this)
-            return TagParser.parseTag(jsonString)
+            val compoundTag = CompoundTag()
+
+            val listTag = ListTag()
+
+            for ((instrument, beats) in beats) {
+                val instrumentString = instrument.soundRl
+
+                val instrumentTag = CompoundTag()
+                instrumentTag.putString("instrument", instrumentString)
+
+                val beatsTag = ListTag()
+                for (beat in beats) {
+                    val beatTag = CompoundTag()
+                    beatTag.putInt("at", beat.at)
+
+                    val notesTag = ListTag()
+                    for (note in beat.notes) {
+                        val noteTag = CompoundTag()
+                        noteTag.putString("note", note.getSerializedName())
+                        notesTag.add(noteTag)
+                    }
+
+                    beatTag.put("notes", notesTag)
+                    beatsTag.add(beatTag)
+                }
+
+                instrumentTag.put("beats", beatsTag)
+                listTag.add(instrumentTag)
+            }
+            compoundTag.put("beats", listTag)
+
+            return compoundTag
         }
 
         fun saveToPath(path: Path) {
