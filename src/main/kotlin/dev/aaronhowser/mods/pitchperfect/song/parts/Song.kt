@@ -1,9 +1,12 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
+import com.mojang.serialization.JsonOps
+import dev.aaronhowser.mods.pitchperfect.song.SongSerializer
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -14,6 +17,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 
@@ -114,6 +118,22 @@ data class Song(
             reader.expect('}')
             return Song(beats)
         }
+
+        val GSON: Gson = GsonBuilder().disableHtmlEscaping().setLenient().create()
+
+        fun fromFile(path: Path): SongSerializer.Song? {
+            try {
+                val jsonString = Files.readString(path)
+                println(jsonString)
+                val jsonElement = GSON.fromJson(jsonString, SongSerializer.Song::class.java)
+
+                return jsonElement
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return null
+            }
+        }
+
     }
 
     override fun toString(): String {
@@ -162,9 +182,12 @@ data class Song(
     }
 
     fun saveToPath(path: Path) {
-        val gson = Gson().newBuilder().setPrettyPrinting().create()
-
-        path.toFile().writeText(gson.toJson(this))
+        try {
+            val jsonString = GSON.toJson(CODEC.encodeStart(JsonOps.INSTANCE, this).getOrThrow())
+            Files.writeString(path, jsonString)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 }
