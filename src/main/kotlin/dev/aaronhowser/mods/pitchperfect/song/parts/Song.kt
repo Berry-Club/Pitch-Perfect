@@ -43,7 +43,8 @@ data class Song(
             }
         }
 
-        fun <K, V> beatMap(size: Int): HashMap<K, V> {
+        // What the hell does this even do Lat
+        private fun <K, V> beatMap(size: Int): HashMap<K, V> {
             return HashMap(size)
         }
 
