@@ -124,8 +124,7 @@ class ConductorBlockEntity(
         val blockItem = itemHandler.getStackInSlot(0)
         if (blockItem.item != ModItems.MUSIC_SHEET.get()) return
 
-        val song = Song.fromFile(FMLPaths.CONFIGDIR.get().resolve("song.json"))
-        println(song)
+        val song = Song.fromFile(FMLPaths.CONFIGDIR.get().resolve("song.txt"))
         this.song = song
 
         startPlaying()
@@ -156,47 +155,47 @@ class ConductorBlockEntity(
         findNearbyArmorStands()
         val cachedSong = song ?: return
 
-//        for ((instrument, beats) in cachedSong.) {
-//            val soundEvent = instrument.getSoundEvent()
-//
-//            val armorStands = nearbyArmorStands[soundEvent]
-//            if (armorStands == null) {
-//                PitchPerfect.LOGGER.error("No armor stands found for $soundEvent")
-//                continue
-//            }
-//
-//            for ((delay, notes) in beats) {
-//
-//                for (note in notes) {
-//                    val pitch = note.getGoodPitch()
-//
-//                    val location = armorStands.randomOrNull()?.eyePosition ?: blockPos.toVec3().add(0.5, 1.5, 0.5)
-//
-//                    ModServerScheduler.scheduleTaskInTicks(delay) {
-//
-//                        val (x, y, z) = location
-//
-//                        ModPacketHandler.messageNearbyPlayers(
-//                            SpawnNotePacket(
-//                                soundEvent.location,
-//                                pitch,
-//                                x,
-//                                y,
-//                                z,
-//                                false
-//                            ),
-//                            level as ServerLevel,
-//                            location,
-//                            128.0
-//                        )
-//
-//                    }
-//
-//                }
-//
-//            }
-//
-//        }
+        for ((instrument, beats) in cachedSong.beats) {
+            val soundEvent = instrument.value()
+
+            val armorStands = nearbyArmorStands[soundEvent]
+            if (armorStands == null) {
+                PitchPerfect.LOGGER.error("No armor stands found for $soundEvent")
+                continue
+            }
+
+            for ((delay, notes) in beats) {
+
+                for (note in notes) {
+                    val pitch = note.getGoodPitch()
+
+                    val location = armorStands.randomOrNull()?.eyePosition ?: blockPos.toVec3().add(0.5, 1.5, 0.5)
+
+                    ModServerScheduler.scheduleTaskInTicks(delay) {
+
+                        val (x, y, z) = location
+
+                        ModPacketHandler.messageNearbyPlayers(
+                            SpawnNotePacket(
+                                soundEvent.location,
+                                pitch,
+                                x,
+                                y,
+                                z,
+                                false
+                            ),
+                            level as ServerLevel,
+                            location,
+                            128.0
+                        )
+
+                    }
+
+                }
+
+            }
+
+        }
 
     }
 

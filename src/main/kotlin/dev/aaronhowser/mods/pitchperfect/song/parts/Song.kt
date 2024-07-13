@@ -127,7 +127,6 @@ data class Song(
         fun fromFile(path: Path): Song? {
             try {
                 val jsonString = Files.readString(path)
-                println(jsonString)
                 val jsonElement = GSON.fromJson(jsonString, Song::class.java)
 
                 return jsonElement

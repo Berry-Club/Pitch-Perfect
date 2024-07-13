@@ -27,33 +27,34 @@ class SongPlayer(
         if (started) return
         playing = true
         started = true
-//
-//        for ((instrument, beats) in song.instruments) {
-//            for ((tick, notes) in beats) {
-//                for (note in notes) {
-//                    val pitch = note.getGoodPitch()
-//
-//                    ModServerScheduler.scheduleTaskInTicks(tick) {
-//                        if (!playing) return@scheduleTaskInTicks
-//
-//                        val (x, y, z) = location()
-//
-//                        ModPacketHandler.messageNearbyPlayers(
-//                            SpawnNotePacket(
-//                                instrument.getSoundEvent().location,
-//                                pitch,
-//                                x,
-//                                y,
-//                                z,
-//                                false
-//                            ),
-//                            level,
-//                            location(),
-//                            128.0
-//                        )
-//                    }
-//                }
-//            }
-//        }
+
+        for ((instrument, beats) in song.beats) {
+
+            for ((tick, notes) in beats) {
+                for (note in notes) {
+                    val pitch = note.getGoodPitch()
+
+                    ModServerScheduler.scheduleTaskInTicks(tick) {
+                        if (!playing) return@scheduleTaskInTicks
+
+                        val (x, y, z) = location()
+
+                        ModPacketHandler.messageNearbyPlayers(
+                            SpawnNotePacket(
+                                instrument.value().location,
+                                pitch,
+                                x,
+                                y,
+                                z,
+                                false
+                            ),
+                            level,
+                            location(),
+                            128.0
+                        )
+                    }
+                }
+            }
+        }
     }
 }
