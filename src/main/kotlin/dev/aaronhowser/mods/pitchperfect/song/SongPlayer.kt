@@ -27,7 +27,7 @@ class SongPlayer(
         playing = true
         started = true
 
-        for ((instrument, beats) in song.beats) {
+        for ((instrument, beats) in song.instruments) {
             for ((tick, notes) in beats) {
                 for (note in notes) {
                     val pitch = note.getGoodPitch()

@@ -21,7 +21,6 @@ import net.neoforged.neoforge.event.ServerChatEvent
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.NoteBlockEvent
-import java.nio.file.Files
 
 @EventBusSubscriber(
     modid = PitchPerfect.ID
@@ -36,13 +35,12 @@ object OtherEvents {
     @SubscribeEvent
     fun onChat(event: ServerChatEvent) {
         val songPath = SongSerializer.Song.defaultPath
-        println(Files.readString(songPath))
 
         val song = SongSerializer.Song.fromFile(songPath) ?: return
-        println(song)
-
         val songCompoundTag = song.toCompoundTag()
-        println(songCompoundTag)
+
+        val jsonAgain = SongSerializer.Song.fromCompoundTag(songCompoundTag)
+        println(jsonAgain)
     }
 
     val builders = mutableMapOf<Player, SongBuilder>()

@@ -9,6 +9,8 @@ import kotlinx.serialization.json.Json
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.StringTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
@@ -24,7 +26,7 @@ object SongSerializer {
 
     @Serializable
     data class Song(
-        val beats: Map<Instrument, List<Beat>>
+        val instruments: Map<Instrument, List<Beat>>
     ) {
 
         companion object {
@@ -50,8 +52,9 @@ object SongSerializer {
             }
 
             fun fromCompoundTag(tag: CompoundTag): Song {
-                val jsonString = tag.toString()
-                return json.decodeFromString(jsonString)
+                val instruments = tag.getList("instruments", Tag.TAG_COMPOUND.toInt())
+
+                TODO()
             }
         }
 
@@ -60,7 +63,7 @@ object SongSerializer {
 
             val listTag = ListTag()
 
-            for ((instrument, beats) in beats) {
+            for ((instrument, beats) in instruments) {
                 val instrumentString = instrument.soundRl
 
                 val instrumentTag = CompoundTag()
@@ -71,12 +74,8 @@ object SongSerializer {
                     val beatTag = CompoundTag()
                     beatTag.putInt("at", beat.at)
 
-                    val notesTag = ListTag()
-                    for (note in beat.notes) {
-                        val noteTag = CompoundTag()
-                        noteTag.putString("note", note.getSerializedName())
-                        notesTag.add(noteTag)
-                    }
+                    val notesTag = beatTag.getList("notes", Tag.TAG_STRING.toInt())
+                    notesTag.addAll(beat.notes.map { StringTag.valueOf(it.serializedName) })
 
                     beatTag.put("notes", notesTag)
                     beatsTag.add(beatTag)
@@ -85,7 +84,8 @@ object SongSerializer {
                 instrumentTag.put("beats", beatsTag)
                 listTag.add(instrumentTag)
             }
-            compoundTag.put("beats", listTag)
+
+            compoundTag.put("instruments", listTag)
 
             return compoundTag
         }

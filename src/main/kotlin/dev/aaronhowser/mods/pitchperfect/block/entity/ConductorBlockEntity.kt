@@ -156,7 +156,7 @@ class ConductorBlockEntity(
         findNearbyArmorStands()
         val cachedSong = song ?: return
 
-        for ((instrument, beats) in cachedSong.beats) {
+        for ((instrument, beats) in cachedSong.instruments) {
             val soundEvent = instrument.getSoundEvent()
 
             val armorStands = nearbyArmorStands[soundEvent]
