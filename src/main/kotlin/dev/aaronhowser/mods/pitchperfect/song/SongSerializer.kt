@@ -51,9 +51,13 @@ object SongSerializer {
                 }
             }
 
-            fun fromCompoundTag(tag: CompoundTag): Song {
-                val instruments = tag.getList("instruments", Tag.TAG_COMPOUND.toInt())
+            private const val INSTRUMENT_TAG = "instrument"
+            private const val INSTRUMENTS_TAG = "instruments"
+            private const val AT_TAG = "at"
+            private const val NOTES_TAG = "notes"
+            private const val BEATS_TAG = "beats"
 
+            fun fromCompoundTag(tag: CompoundTag): Song {
                 TODO()
             }
         }
@@ -67,25 +71,25 @@ object SongSerializer {
                 val instrumentString = instrument.soundRl
 
                 val instrumentTag = CompoundTag()
-                instrumentTag.putString("instrument", instrumentString)
+                instrumentTag.putString(INSTRUMENT_TAG, instrumentString)
 
                 val beatsTag = ListTag()
                 for (beat in beats) {
                     val beatTag = CompoundTag()
-                    beatTag.putInt("at", beat.at)
+                    beatTag.putInt(AT_TAG, beat.at)
 
-                    val notesTag = beatTag.getList("notes", Tag.TAG_STRING.toInt())
+                    val notesTag = beatTag.getList(NOTES_TAG, Tag.TAG_STRING.toInt())
                     notesTag.addAll(beat.notes.map { StringTag.valueOf(it.serializedName) })
 
-                    beatTag.put("notes", notesTag)
+                    beatTag.put(NOTES_TAG, notesTag)
                     beatsTag.add(beatTag)
                 }
 
-                instrumentTag.put("beats", beatsTag)
+                instrumentTag.put(BEATS_TAG, beatsTag)
                 listTag.add(instrumentTag)
             }
 
-            compoundTag.put("instruments", listTag)
+            compoundTag.put(INSTRUMENTS_TAG, listTag)
 
             return compoundTag
         }
