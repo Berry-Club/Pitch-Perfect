@@ -99,7 +99,7 @@ enum class Note(
 
             val firstChar = reader.read()
 
-            if (firstChar <= 'A' || firstChar >= 'G') {
+            if (firstChar !in 'A'..'G') {
                 throw INVALID_NOTE.createWithContext(reader)
             }
 
