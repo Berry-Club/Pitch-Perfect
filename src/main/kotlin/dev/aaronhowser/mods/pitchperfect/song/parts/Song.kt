@@ -1,11 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
-import com.mojang.serialization.JsonOps
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -49,9 +46,9 @@ data class Song(
         }
 
         val CODEC: Codec<Song> = Codec.STRING.flatXmap(
-            { s: String ->
+            { string: String ->
                 try {
-                    return@flatXmap DataResult.success(parse(StringReader(s)))
+                    return@flatXmap DataResult.success(parse(string))
                 } catch (exception: Exception) {
                     return@flatXmap DataResult.error { "Failed to parse song: " + exception.message }
                 }
@@ -67,6 +64,10 @@ data class Song(
             SoundEvent.STREAM_CODEC,
             Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
         ).map(::Song, Song::beats)
+
+        fun parse(string: String): Song {
+            return parse(StringReader(string))
+        }
 
         fun parse(reader: StringReader): Song {
 
@@ -122,14 +123,13 @@ data class Song(
             return Song(beats)
         }
 
-        val GSON: Gson = GsonBuilder().disableHtmlEscaping().setLenient().create()
-
         fun fromFile(path: Path): Song? {
             try {
-                val jsonString = Files.readString(path)
-                val jsonElement = GSON.fromJson(jsonString, Song::class.java)
 
-                return jsonElement
+                val string = Files.readString(path)
+                val song = parse(string)
+
+                return song
             } catch (e: Exception) {
                 e.printStackTrace()
                 return null
@@ -185,8 +185,8 @@ data class Song(
 
     fun saveToPath(path: Path) {
         try {
-            val jsonString = GSON.toJson(CODEC.encodeStart(JsonOps.INSTANCE, this).getOrThrow())
-            Files.writeString(path, jsonString)
+            val string = toString()
+            Files.write(path, string.toByteArray())
         } catch (e: Exception) {
             e.printStackTrace()
         }
