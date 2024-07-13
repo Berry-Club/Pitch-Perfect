@@ -62,21 +62,24 @@ object SongSerializer {
 
                 val instrumentsTag = tag.getList(INSTRUMENTS_TAG, Tag.TAG_COMPOUND.toInt())
                 for (instrumentCompound in instrumentsTag) {
-                    if (instrumentCompound !is CompoundTag) throw IllegalStateException("Expected a CompoundTag, but got $instrumentCompound")
+                    instrumentCompound as? CompoundTag
+                        ?: throw IllegalStateException("Expected a CompoundTag, but got $instrumentCompound")
 
                     val instrumentString = instrumentCompound.getString(INSTRUMENT_TAG)
                     val instrumentBeats = mutableListOf<Beat>()
 
                     val beatsTag = instrumentCompound.getList(BEATS_TAG, Tag.TAG_COMPOUND.toInt())
                     for (beatCompound in beatsTag) {
-                        if (beatCompound !is CompoundTag) throw IllegalStateException("Expected a CompoundTag, but got $beatCompound")
+                        beatCompound as? CompoundTag
+                            ?: throw IllegalStateException("Expected a CompoundTag, but got $beatCompound")
 
                         val at = beatCompound.getInt(AT_TAG)
                         val notesHere: MutableList<Note> = mutableListOf()
 
                         val notesTag = beatCompound.getList(NOTES_TAG, Tag.TAG_STRING.toInt())
                         for (noteTag in notesTag) {
-                            if (noteTag !is StringTag) throw IllegalStateException("Expected a StringTag, but got $noteTag")
+                            noteTag as? StringTag
+                                ?: throw IllegalStateException("Expected a StringTag, but got $noteTag")
 
                             val noteString = noteTag.asString
                             val note = Note.entries.first { it.serializedName == noteString }
