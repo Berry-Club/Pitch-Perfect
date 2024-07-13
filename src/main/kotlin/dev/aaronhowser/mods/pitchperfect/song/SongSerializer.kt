@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.TagParser
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
@@ -46,6 +48,16 @@ object SongSerializer {
                     null
                 }
             }
+
+            fun fromCompoundTag(tag: CompoundTag): Song {
+                val jsonString = tag.toString()
+                return json.decodeFromString(jsonString)
+            }
+        }
+
+        fun toCompoundTag(): CompoundTag {
+            val jsonString = json.encodeToString(this)
+            return TagParser.parseTag(jsonString)
         }
 
         fun saveToPath(path: Path) {

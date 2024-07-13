@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEncha
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
+import dev.aaronhowser.mods.pitchperfect.song.SongSerializer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
@@ -20,6 +21,7 @@ import net.neoforged.neoforge.event.ServerChatEvent
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.NoteBlockEvent
+import java.nio.file.Files
 
 @EventBusSubscriber(
     modid = PitchPerfect.ID
@@ -33,8 +35,14 @@ object OtherEvents {
 
     @SubscribeEvent
     fun onChat(event: ServerChatEvent) {
-        val player = event.player
-        val heldItem = player.mainHandItem
+        val songPath = SongSerializer.Song.defaultPath
+        println(Files.readString(songPath))
+
+        val song = SongSerializer.Song.fromFile(songPath) ?: return
+        println(song)
+
+        val songCompoundTag = song.toCompoundTag()
+        println(songCompoundTag)
     }
 
     val builders = mutableMapOf<Player, SongBuilder>()
