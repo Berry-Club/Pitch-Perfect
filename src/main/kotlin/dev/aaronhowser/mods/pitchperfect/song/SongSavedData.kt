@@ -1,53 +1,45 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
-import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.Tag
 import net.minecraft.world.level.saveddata.SavedData
-import java.util.*
 
 class SongSavedData : SavedData() {
 
-    private val songs: HashMap<UUID, SongSerializer.Song> = HashMap()
+    private val songs: MutableList<Pair<String, SongSerializer.Song>> = mutableListOf()
 
     companion object {
         fun create() = SongSavedData()
 
+        private const val SONGS_TAG = "songs"
+
         fun load(pTag: CompoundTag, provider: HolderLookup.Provider): SongSavedData {
             val songData = SongSavedData()
 
-            val songList = pTag.getList("songs", 10)
+            val songList = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
-            for (i in songList) {
-                if (i !is CompoundTag) throw IllegalStateException("Expected a CompoundTag, but got $i")
 
-            }
 
             return songData
         }
     }
 
-    fun addSong(pSong: SongSerializer.Song, uuid: UUID? = null): UUID {
-        val realUuid = uuid ?: UUID.randomUUID()
-        songs[realUuid] = pSong
+    fun addSong(name: String, song: SongSerializer.Song) {
+        songs.add(name to song)
         setDirty()
-        return realUuid
     }
 
-    fun removeSong(uuid: UUID) {
-        if (songs.containsKey(uuid)) {
-            songs.remove(uuid)
-            setDirty()
-        } else {
-            PitchPerfect.LOGGER.warn("Tried to remove song with UUID $uuid, but it does not exist.")
-        }
+    fun removeSong(song: SongSerializer.Song) {
+        val success = songs.removeIf { it.second == song }
+        if (success) setDirty()
     }
 
-    fun getSong(uuid: UUID): SongSerializer.Song? {
-        return songs[uuid]
+    fun getSongs(name: String): List<SongSerializer.Song> {
+        return songs.filter { it.first == name }.map { it.second }
     }
 
-    fun getAllSongs(): Map<UUID, SongSerializer.Song> {
+    fun getAllSongs(): List<Pair<String, SongSerializer.Song>> {
         return songs
     }
 
