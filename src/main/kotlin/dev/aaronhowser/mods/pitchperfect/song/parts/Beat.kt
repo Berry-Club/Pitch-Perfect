@@ -54,7 +54,7 @@ data class Beat(
         val stringBuilder = StringBuilder()
 
         if (notes.size == 1) {
-            stringBuilder.append(notes.first.serializedName)
+            stringBuilder.append(notes.first().serializedName)
         } else {
             stringBuilder.append('[')
 

@@ -3,10 +3,12 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
+import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.util.Mth
 import net.minecraft.util.StringRepresentable
 import java.util.*
 import java.util.function.Function
@@ -120,5 +122,34 @@ enum class Note(
 
             return note
         }
+
+        fun getFromPitch(pitch: Float): Note {
+            val note = VALUES.firstOrNull { it.getGoodPitch() == pitch }
+
+            if (note == null) {
+                val closestNote = VALUES.minByOrNull {
+                    Mth.abs(it.getGoodPitch() - pitch)
+                }
+
+                requireNotNull(closestNote) { "No note found for pitch $pitch (How did this happen????)" }
+
+                PitchPerfect.LOGGER.error("No note with exact pitch $pitch, using closest note: $closestNote (${closestNote.getGoodPitch()}")
+
+                return closestNote
+            }
+
+            return note
+        }
+
+    }
+
+    fun getGoodPitch(): Float {
+        // Refers to F#4, which has a Minecraft pitch of 1.0
+        val referenceNote = 6
+        val referenceOctave = 4
+
+        val refNoteValue = referenceNote + (referenceOctave * 12)
+        val noteValue = this.note + (this.octave * 12)
+        return 2f.pow((noteValue - refNoteValue) / 12f)
     }
 }

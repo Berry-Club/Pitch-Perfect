@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
+import com.google.gson.Gson
 import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
@@ -13,6 +14,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import java.nio.file.Path
 import java.util.*
 
 
@@ -157,6 +159,12 @@ data class Song(
 
         stringBuilder.append('}')
         return stringBuilder.toString()
+    }
+
+    fun saveToPath(path: Path) {
+        val gson = Gson().newBuilder().setPrettyPrinting().create()
+
+        path.toFile().writeText(gson.toJson(this))
     }
 
 }
