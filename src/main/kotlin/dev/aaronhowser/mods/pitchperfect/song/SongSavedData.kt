@@ -5,6 +5,7 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.saveddata.SavedData
 
 class SongSavedData : SavedData() {
@@ -12,11 +13,11 @@ class SongSavedData : SavedData() {
     private val songs: MutableList<Song> = mutableListOf()
 
     companion object {
-        fun create() = SongSavedData()
+        private fun create() = SongSavedData()
 
         private const val SONGS_TAG = "songs"
 
-        fun load(pTag: CompoundTag, provider: HolderLookup.Provider): SongSavedData {
+        private fun load(pTag: CompoundTag, provider: HolderLookup.Provider): SongSavedData {
             val songData = SongSavedData()
             songData.songs.clear()
 
@@ -29,6 +30,15 @@ class SongSavedData : SavedData() {
             }
 
             return songData
+        }
+
+        fun get(level: ServerLevel): SongSavedData {
+            require(level == level.server.overworld()) { "SongSavedData can only be accessed on the overworld" }
+
+            return level.dataStorage.computeIfAbsent(
+                Factory(::create, ::load),
+                "pitchperfect"
+            )
         }
     }
 
