@@ -1,8 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
 import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
-import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.BooleanItemComponent.Companion.isTrue
+import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent.Companion.isTrue
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.server.level.ServerLevel
@@ -35,12 +35,12 @@ class SheetMusicItem : Item(
             if (isRecording(stack)) {
                 stopRecording(stack, player)
             } else {
-                stack.set(BooleanItemComponent.isRecordingComponent, BooleanItemComponent(true))
+                stack.set(BooleanComponent.isRecordingComponent, BooleanComponent(true))
             }
         }
 
         private fun stopRecording(itemStack: ItemStack, player: Player) {
-            itemStack.remove(BooleanItemComponent.isRecordingComponent)
+            itemStack.remove(BooleanComponent.isRecordingComponent)
 
             val songBuilder = OtherEvents.builders[player] ?: return
             OtherEvents.builders.remove(player)
@@ -48,7 +48,7 @@ class SheetMusicItem : Item(
         }
 
         fun isRecording(stack: ItemStack): Boolean {
-            return stack.get(BooleanItemComponent.isRecordingComponent).isTrue
+            return stack.get(BooleanComponent.isRecordingComponent).isTrue
         }
     }
 
