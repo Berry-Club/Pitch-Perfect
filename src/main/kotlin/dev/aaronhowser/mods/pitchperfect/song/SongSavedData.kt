@@ -47,18 +47,25 @@ class SongSavedData : SavedData() {
         setDirty()
     }
 
-    override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
-        val tag = CompoundTag()
+    fun removeSong(song: Song) {
+        songs.remove(song)
+        setDirty()
+    }
 
-        val songListTag = tag.getList(SONGS_TAG, Tag.TAG_STRING.toInt())
+    fun getSongs(): List<Song> {
+        return songs.toList()
+    }
+
+    override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
+        val songListTag = pTag.getList(SONGS_TAG, Tag.TAG_STRING.toInt())
 
         for (song in songs) {
             val songString = song.toString()
             songListTag.add(StringTag.valueOf(songString))
         }
 
-        tag.put(SONGS_TAG, songListTag)
+        pTag.put(SONGS_TAG, songListTag)
 
-        return tag
+        return pTag
     }
 }
