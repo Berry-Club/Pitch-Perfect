@@ -26,7 +26,7 @@ data class Beat(
 
             val notes: MutableList<Note> = mutableListOf()
 
-            if (reader.peek() == '[') {
+            if (reader.read() == '[') {
                 reader.skipWhitespace()
 
                 while (reader.canRead() && reader.peek() != ']') {
@@ -46,7 +46,7 @@ data class Beat(
             reader.expect('@')
             val at: Int = reader.readInt()
 
-            return Beat(max(0.0, at.toDouble()).toInt(), java.util.List.copyOf(notes))
+            return Beat(max(0, at), notes.toList())
         }
     }
 

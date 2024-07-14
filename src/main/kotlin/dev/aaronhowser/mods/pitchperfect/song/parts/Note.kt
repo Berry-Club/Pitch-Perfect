@@ -110,13 +110,13 @@ enum class Note(
                 stringBuilder.append('#')
             }
 
-            val o = reader.read()
+            val octave = reader.read()
 
-            if (o < '3' || o > '5') {
+            if (octave !in '3'..'5') {
                 throw INVALID_OCTAVE.createWithContext(reader)
             }
 
-            stringBuilder.append(o)
+            stringBuilder.append(octave)
 
             val note = MAP[stringBuilder.toString()] ?: throw NOTE_NOT_FOUND.createWithContext(reader)
 
