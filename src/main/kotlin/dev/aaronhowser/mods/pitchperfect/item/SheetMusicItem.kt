@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.item
 import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent.Companion.isTrue
+import dev.aaronhowser.mods.pitchperfect.item.component.SongComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.server.level.ServerLevel
@@ -36,6 +37,7 @@ class SheetMusicItem : Item(
                 stopRecording(stack, player)
             } else {
                 stack.set(BooleanComponent.isRecordingComponent, BooleanComponent(true))
+                stack.remove(SongComponent.component)
             }
         }
 
@@ -44,7 +46,9 @@ class SheetMusicItem : Item(
 
             val songBuilder = OtherEvents.builders[player] ?: return
             OtherEvents.builders.remove(player)
-            songBuilder.build(Song.defaultFile)
+            val song = songBuilder.build(Song.defaultFile)
+
+            itemStack.set(SongComponent.component, SongComponent(song))
         }
 
         fun isRecording(stack: ItemStack): Boolean {
