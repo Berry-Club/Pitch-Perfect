@@ -97,6 +97,7 @@ data class Song(
                 val beatList = ArrayList<Beat>()
 
                 if (reader.canRead() && reader.peek() == '[') {
+                    reader.skip()
                     while (reader.canRead() && reader.peek() != ']') {
                         beatList.add(Beat.parse(reader))
 
