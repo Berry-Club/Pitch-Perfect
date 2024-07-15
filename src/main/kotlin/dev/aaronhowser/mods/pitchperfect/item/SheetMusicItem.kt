@@ -53,7 +53,7 @@ class SheetMusicItem : Item(
             val songData = SongSavedData.get(player.server.overworld())
             val songInfo = songData.addSong(song, "Untitled", player)
 
-            itemStack.set(UuidComponent.songUuidComponent, UuidComponent(songInfo.uuid))
+            itemStack.set(UuidComponent.songUuidComponent, UuidComponent(songInfo.song.uuid))
         }
 
         fun isRecording(stack: ItemStack): Boolean {

@@ -23,8 +23,9 @@ data class Song(
     val beats: Map<Holder<SoundEvent>, List<Beat>>
 ) {
 
-    companion object {
+    val uuid: UUID = UUID.nameUUIDFromBytes(toString().toByteArray())
 
+    companion object {
         val defaultFile = FMLPaths.CONFIGDIR.get().resolve("song.txt")
 
         val ID_TO_INSTRUMENT: HashMap<String, NoteBlockInstrument> = HashMap()

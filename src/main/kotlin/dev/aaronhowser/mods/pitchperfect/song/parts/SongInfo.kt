@@ -26,8 +26,6 @@ data class SongInfo(
         song: Song
     ) : this(title, author.uuid, author.gameProfile.name, song)
 
-    val uuid: UUID = UUID.nameUUIDFromBytes(song.toString().toByteArray())
-
     fun toCompoundTag(): CompoundTag {
         val tag = CompoundTag()
         tag.putString(TITLE, title)
@@ -40,23 +38,41 @@ data class SongInfo(
     fun getComponent(): Component {
         val component = Component.literal("$authorName - $title")
 
-        component.withStyle {
-            it
-                .withHoverEvent(
-                    HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        Component.literal("Click to copy raw song data.\n${song}")
+        val uuidComponent = Component.literal(" [UUID]")
+            .withStyle {
+                it
+                    .withHoverEvent(
+                        HoverEvent(
+                            HoverEvent.Action.SHOW_TEXT,
+                            Component.literal("Click to copy song UUID.\n${song.uuid}")
+                        )
                     )
-                )
-                .withClickEvent(
-                    ClickEvent(
-                        ClickEvent.Action.COPY_TO_CLIPBOARD,
-                        song.toString()
+                    .withClickEvent(
+                        ClickEvent(
+                            ClickEvent.Action.COPY_TO_CLIPBOARD,
+                            song.uuid.toString()
+                        )
                     )
-                )
-        }
+            }
 
-        return component
+        val songDataComponent = Component.literal(" [Raw]")
+            .withStyle {
+                it
+                    .withHoverEvent(
+                        HoverEvent(
+                            HoverEvent.Action.SHOW_TEXT,
+                            Component.literal("Click to copy raw song data.\n${song}")
+                        )
+                    )
+                    .withClickEvent(
+                        ClickEvent(
+                            ClickEvent.Action.COPY_TO_CLIPBOARD,
+                            song.toString()
+                        )
+                    )
+            }
+
+        return component.append(uuidComponent).append(songDataComponent)
     }
 
     companion object {

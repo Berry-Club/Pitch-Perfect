@@ -35,7 +35,7 @@ class SongSavedData : SavedData() {
                     continue
                 }
 
-                songData.songs[songInfo.uuid] = songInfo
+                songData.songs[songInfo.song.uuid] = songInfo
             }
 
             return songData
@@ -63,7 +63,7 @@ class SongSavedData : SavedData() {
     }
 
     fun addSong(songInfo: SongInfo) {
-        songs[songInfo.uuid] = songInfo
+        songs[songInfo.song.uuid] = songInfo
         setDirty()
     }
 
@@ -73,7 +73,7 @@ class SongSavedData : SavedData() {
     }
 
     fun removeSong(song: SongInfo) {
-        songs.remove(song.uuid)
+        songs.remove(song.song.uuid)
         setDirty()
     }
 
