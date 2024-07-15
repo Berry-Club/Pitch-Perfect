@@ -4,8 +4,10 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.network.chat.Component
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -40,6 +42,8 @@ class ComposerBlockEntity(
         Containers.dropContents(this.level!!, this.blockPos, inventory)
     }
 
-
+    fun playerClick(player: Player) {
+        player.sendSystemMessage(Component.literal("Hi!"))
+    }
 
 }

@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
+import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.core.HolderLookup
@@ -28,6 +29,11 @@ class SongSavedData : SavedData() {
             for (i in songInfoListTag.indices) {
                 val songInfoTag = songInfoListTag[i] as CompoundTag
                 val songInfo = SongInfo.fromCompoundTag(songInfoTag)
+
+                if (songInfo == null) {
+                    PitchPerfect.LOGGER.error("Failed to load song from tag: $songInfoTag")
+                    continue
+                }
 
                 songData.songs[songInfo.uuid] = songInfo
             }
