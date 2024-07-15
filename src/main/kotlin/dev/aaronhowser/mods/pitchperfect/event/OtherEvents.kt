@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
+import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
@@ -38,12 +39,12 @@ object OtherEvents {
         val player = event.player
         val handItem = player.getItemInHand(InteractionHand.MAIN_HAND)
 
-        val songUuid = handItem.get(UuidComponent.songUuidComponent) ?: return
+        val songUuid = handItem.get(UuidComponent.songUuidComponent)?.uuid ?: return
 
         val songSavedData = SongSavedData.get(player.server.overworld())
 
         val handSongInfo = songSavedData.getSong(songUuid) ?: return
-
+        player.sendSystemMessage(Component.literal(handSongInfo.toString()))
     }
 
     val builders = mutableMapOf<Player, SongBuilder>()

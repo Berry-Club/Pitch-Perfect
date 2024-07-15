@@ -7,7 +7,6 @@ import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import net.minecraft.core.component.DataComponentType
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
-import java.util.*
 
 object ModDataComponents {
 
@@ -24,7 +23,7 @@ object ModDataComponents {
             it.persistent(BooleanComponent.CODEC).networkSynchronized(BooleanComponent.STREAM_CODEC)
         }
 
-    val SONG_UUID_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<UUID>> =
+    val SONG_UUID_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<UuidComponent>> =
         DATA_COMPONENT_REGISTRY.registerComponentType("song_uuid") {
             it.persistent(UuidComponent.CODEC).networkSynchronized(UuidComponent.STREAM_CODEC)
         }

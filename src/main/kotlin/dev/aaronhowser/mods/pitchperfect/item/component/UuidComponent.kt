@@ -13,12 +13,18 @@ data class UuidComponent(
 ) {
 
     companion object {
-        val CODEC: Codec<UUID> =
+        val UUID_CODEC: Codec<UUID> =
             Codec.STRING.xmap(UUID::fromString, UUID::toString)
-        val STREAM_CODEC: StreamCodec<ByteBuf, UUID> =
+        val UUID_STREAM_CODEC: StreamCodec<ByteBuf, UUID> =
             ByteBufCodecs.STRING_UTF8.map(UUID::fromString, UUID::toString)
 
-        val songUuidComponent: DataComponentType<UUID> by lazy {
+        val CODEC: Codec<UuidComponent> =
+            UUID_CODEC.xmap(::UuidComponent, UuidComponent::uuid)
+
+        val STREAM_CODEC: StreamCodec<ByteBuf, UuidComponent> =
+            UUID_STREAM_CODEC.map(::UuidComponent, UuidComponent::uuid)
+
+        val songUuidComponent: DataComponentType<UuidComponent> by lazy {
             ModDataComponents.SONG_UUID_COMPONENT.get()
         }
     }

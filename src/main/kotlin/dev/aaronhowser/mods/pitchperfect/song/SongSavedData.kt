@@ -48,7 +48,7 @@ class SongSavedData : SavedData() {
     fun addSong(song: Song, title: String, author: Player): SongInfo {
         val songInfo = SongInfo(
             title,
-            author.uuid,
+            author,
             song
         )
 
@@ -84,7 +84,7 @@ class SongSavedData : SavedData() {
     }
 
     fun getSongsBy(author: UUID): List<SongInfo> {
-        return songs.values.filter { it.author == author }
+        return songs.values.filter { it.authorUuid == author }
     }
 
     override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
