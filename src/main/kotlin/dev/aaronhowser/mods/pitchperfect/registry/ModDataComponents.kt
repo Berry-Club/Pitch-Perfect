@@ -2,11 +2,12 @@ package dev.aaronhowser.mods.pitchperfect.registry
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.SongInfoComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import net.minecraft.core.component.DataComponentType
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
+import java.util.*
 
 object ModDataComponents {
 
@@ -23,9 +24,9 @@ object ModDataComponents {
             it.persistent(BooleanComponent.CODEC).networkSynchronized(BooleanComponent.STREAM_CODEC)
         }
 
-    val SONG_INFO_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SongInfoComponent>> =
-        DATA_COMPONENT_REGISTRY.registerComponentType("song_info") {
-            it.persistent(SongInfoComponent.CODEC).networkSynchronized(SongInfoComponent.STREAM_CODEC)
+    val SONG_UUID_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<UUID>> =
+        DATA_COMPONENT_REGISTRY.registerComponentType("song_uuid") {
+            it.persistent(UuidComponent.CODEC).networkSynchronized(UuidComponent.STREAM_CODEC)
         }
 
 }

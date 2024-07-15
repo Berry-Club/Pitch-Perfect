@@ -59,8 +59,6 @@ class SongBuilder(
             song.saveToPath(path)
         }
 
-        println(UUID.nameUUIDFromBytes(song.toString().toByteArray()))
-
         return song
     }
 

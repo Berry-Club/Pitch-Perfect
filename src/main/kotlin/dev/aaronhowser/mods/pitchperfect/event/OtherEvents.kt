@@ -4,8 +4,8 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
-import dev.aaronhowser.mods.pitchperfect.item.component.SongInfoComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
 import net.minecraft.sounds.SoundEvents
@@ -35,13 +35,14 @@ object OtherEvents {
 
     @SubscribeEvent
     fun onChat(event: ServerChatEvent) {
-
         val player = event.player
         val handItem = player.getItemInHand(InteractionHand.MAIN_HAND)
-        val handSongInfo = handItem.get(SongInfoComponent.component)?.songInfo ?: return
 
-        val songData = SongSavedData.get(event.player.server.overworld())
-        songData.addSong(handSongInfo)
+        val songUuid = handItem.get(UuidComponent.songUuidComponent) ?: return
+
+        val songSavedData = SongSavedData.get(player.server.overworld())
+
+        val handSongInfo = songSavedData.getSong(songUuid) ?: return
 
     }
 

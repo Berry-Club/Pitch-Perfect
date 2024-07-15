@@ -49,7 +49,6 @@ class SongSavedData : SavedData() {
         val songInfo = SongInfo(
             title,
             author.uuid,
-            UUID.nameUUIDFromBytes(song.toString().toByteArray()),
             song
         )
 
@@ -69,6 +68,10 @@ class SongSavedData : SavedData() {
     fun removeSong(song: SongInfo) {
         songs.remove(song)
         setDirty()
+    }
+
+    fun getSong(uuid: UUID): SongInfo? {
+        return songs.firstOrNull { it.uuid == uuid }
     }
 
     fun getSongs(): List<SongInfo> {

@@ -12,15 +12,15 @@ import java.util.*
 data class SongInfo(
     val title: String,
     val author: UUID,
-    val uuid: UUID,
     val song: Song
 ) {
+
+    val uuid: UUID = UUID.nameUUIDFromBytes(song.toString().toByteArray())
 
     fun toCompoundTag(): CompoundTag {
         val tag = CompoundTag()
         tag.putString("title", title)
         tag.putUUID("author", author)
-        tag.putUUID("uuid", uuid)
         tag.putString("song", song.toString())
         return tag
     }
@@ -36,7 +36,6 @@ data class SongInfo(
                 instance.group(
                     Codec.STRING.fieldOf("title").forGetter(SongInfo::title),
                     UUID_CODEC.fieldOf("author").forGetter(SongInfo::author),
-                    UUID_CODEC.fieldOf("uuid").forGetter(SongInfo::uuid),
                     Song.CODEC.fieldOf("song").forGetter(SongInfo::song)
                 ).apply(instance, ::SongInfo)
             }
@@ -45,7 +44,6 @@ data class SongInfo(
             StreamCodec.composite(
                 ByteBufCodecs.STRING_UTF8, SongInfo::title,
                 UUID_STREAM_CODEC, SongInfo::author,
-                UUID_STREAM_CODEC, SongInfo::uuid,
                 Song.STREAM_CODEC, SongInfo::song,
                 ::SongInfo
             )
@@ -53,9 +51,8 @@ data class SongInfo(
         fun fromCompoundTag(tag: CompoundTag): SongInfo {
             val title = tag.getString("title")
             val author = tag.getUUID("author")
-            val uuid = tag.getUUID("uuid")
             val song = Song.parse(tag.getString("song"))
-            return SongInfo(title, author, uuid, song)
+            return SongInfo(title, author, song)
         }
     }
 
