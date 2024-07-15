@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.event
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.command.ModCommands
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
@@ -19,6 +20,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.NoteBlock
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.ServerChatEvent
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
@@ -105,6 +107,11 @@ object OtherEvents {
         }
 
         event.level.playSound(null, armorStand.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS)
+    }
+
+    @SubscribeEvent
+    fun onRegisterCommands(event: RegisterCommandsEvent) {
+        ModCommands.register(event.dispatcher)
     }
 
 }
