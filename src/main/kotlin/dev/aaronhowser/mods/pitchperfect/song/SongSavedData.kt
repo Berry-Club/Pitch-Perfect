@@ -1,16 +1,15 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
-import dev.aaronhowser.mods.pitchperfect.song.parts.Song
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.saveddata.SavedData
 
 class SongSavedData : SavedData() {
 
-    private val songs: MutableList<Song> = mutableListOf()
+    private val songs: MutableList<SongInfo> = mutableListOf()
 
     companion object {
         private fun create() = SongSavedData()
@@ -21,12 +20,13 @@ class SongSavedData : SavedData() {
             val songData = SongSavedData()
             songData.songs.clear()
 
-            val songList = pTag.getList(SONGS_TAG, Tag.TAG_STRING.toInt())
+            val songInfoListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
-            for (i in songList.indices) {
-                val string = songList.getString(i)
-                val song = Song.parse(string)
-                songData.addSong(song)
+            for (i in songInfoListTag.indices) {
+                val songInfoTag = songInfoListTag[i] as CompoundTag
+                val songInfo = SongInfo.fromCompoundTag(songInfoTag)
+
+                songData.songs.add(songInfo)
             }
 
             return songData
@@ -42,26 +42,25 @@ class SongSavedData : SavedData() {
         }
     }
 
-    fun addSong(song: Song) {
+    fun addSong(song: SongInfo) {
         songs.add(song)
         setDirty()
     }
 
-    fun removeSong(song: Song) {
+    fun removeSong(song: SongInfo) {
         songs.remove(song)
         setDirty()
     }
 
-    fun getSongs(): List<Song> {
+    fun getSongs(): List<SongInfo> {
         return songs.toList()
     }
 
     override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
-        val songListTag = pTag.getList(SONGS_TAG, Tag.TAG_STRING.toInt())
+        val songListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
-        for (song in songs) {
-            val songString = song.toString()
-            songListTag.add(StringTag.valueOf(songString))
+        for (songInfo in songs) {
+            songListTag.add(songInfo.toCompoundTag())
         }
 
         pTag.put(SONGS_TAG, songListTag)
