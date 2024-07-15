@@ -12,7 +12,7 @@ import java.util.*
 
 class SongSavedData : SavedData() {
 
-    private val songs: MutableList<SongInfo> = mutableListOf()
+    private val songs: MutableMap<UUID, SongInfo> = mutableMapOf()
 
     companion object {
         private fun create() = SongSavedData()
@@ -29,7 +29,7 @@ class SongSavedData : SavedData() {
                 val songInfoTag = songInfoListTag[i] as CompoundTag
                 val songInfo = SongInfo.fromCompoundTag(songInfoTag)
 
-                songData.songs.add(songInfo)
+                songData.songs[songInfo.uuid] = songInfo
             }
 
             return songData
@@ -45,7 +45,7 @@ class SongSavedData : SavedData() {
         }
     }
 
-    fun addSong(song: Song, title: String, author: Player) {
+    fun addSong(song: Song, title: String, author: Player): SongInfo {
         val songInfo = SongInfo(
             title,
             author.uuid,
@@ -53,35 +53,36 @@ class SongSavedData : SavedData() {
         )
 
         addSong(songInfo)
+        return songInfo
     }
 
     fun addSong(songInfo: SongInfo) {
-        songs.add(songInfo)
+        songs[songInfo.uuid] = songInfo
         setDirty()
     }
 
     fun removeSong(uuid: UUID) {
-        val song = songs.firstOrNull { it.uuid == uuid } ?: return
+        val song = songs.getOrDefault(uuid, null) ?: return
         removeSong(song)
     }
 
     fun removeSong(song: SongInfo) {
-        songs.remove(song)
+        songs.remove(song.uuid)
         setDirty()
     }
 
     fun getSong(uuid: UUID): SongInfo? {
-        return songs.firstOrNull { it.uuid == uuid }
+        return songs.getOrDefault(uuid, null)
     }
 
     fun getSongs(): List<SongInfo> {
-        return songs.toList()
+        return songs.values.toList()
     }
 
     override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
         val songListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
-        for (songInfo in songs) {
+        for (songInfo in songs.values) {
             songListTag.add(songInfo.toCompoundTag())
         }
 

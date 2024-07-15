@@ -7,7 +7,6 @@ import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
-import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -51,14 +50,8 @@ class SheetMusicItem : Item(
             OtherEvents.builders.remove(player)
             val song = songBuilder.build(Song.defaultFile)
 
-            val songInfo = SongInfo(
-                song = song,
-                title = "Untitled",
-                author = player.uuid
-            )
-
             val songData = SongSavedData.get(player.server.overworld())
-            songData.addSong(songInfo)
+            val songInfo = songData.addSong(song, "Untitled", player)
 
             itemStack.set(UuidComponent.songUuidComponent, songInfo.uuid)
         }
