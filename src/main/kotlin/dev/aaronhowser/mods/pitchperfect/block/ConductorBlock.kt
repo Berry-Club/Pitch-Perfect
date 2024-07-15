@@ -285,7 +285,7 @@ class ConductorBlock(
             private object Parts {
                 val STAND: VoxelShape = Block.box(
                     7.0, 1.0, 7.0,
-                    7.0 + 2, 1.0 + 15, 7.0 + 2
+                    7.0 + 2, 1.0 + 14.8, 7.0 + 2
                 )
 
                 val BASE: VoxelShape = Block.box(
