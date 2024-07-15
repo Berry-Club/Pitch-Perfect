@@ -60,13 +60,18 @@ data class SongInfo(
                 ::SongInfo
             )
 
-        fun fromCompoundTag(tag: CompoundTag): SongInfo {
-            val title = tag.getString(TITLE)
-            val authorUuid = tag.getUUID(AUTHOR_UUID)
-            val authorName = tag.getString(AUTHOR_NAME)
-            val song = Song.parse(tag.getString(SONG))
+        fun fromCompoundTag(tag: CompoundTag): SongInfo? {
+            try {
+                val title = tag.getString(TITLE)
+                val authorUuid = tag.getUUID(AUTHOR_UUID)
+                val authorName = tag.getString(AUTHOR_NAME)
+                val song = Song.parse(tag.getString(SONG))
 
-            return SongInfo(title, authorUuid, authorName, song)
+                return SongInfo(title, authorUuid, authorName, song)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return null
+            }
         }
     }
 
