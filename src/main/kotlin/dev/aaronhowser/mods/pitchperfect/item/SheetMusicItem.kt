@@ -3,9 +3,10 @@ package dev.aaronhowser.mods.pitchperfect.item
 import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent.Companion.isTrue
-import dev.aaronhowser.mods.pitchperfect.item.component.SongComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.SongInfoComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import java.util.*
 
 class SheetMusicItem : Item(
     Properties()
@@ -37,7 +39,7 @@ class SheetMusicItem : Item(
                 stopRecording(stack, player)
             } else {
                 stack.set(BooleanComponent.isRecordingComponent, BooleanComponent(true))
-                stack.remove(SongComponent.component)
+                stack.remove(SongInfoComponent.component)
             }
         }
 
@@ -48,7 +50,14 @@ class SheetMusicItem : Item(
             OtherEvents.builders.remove(player)
             val song = songBuilder.build(Song.defaultFile)
 
-            itemStack.set(SongComponent.component, SongComponent(song))
+            val songInfo = SongInfo(
+                song = song,
+                title = "Untitled",
+                author = player.uuid,
+                uuid = UUID.nameUUIDFromBytes(song.toString().toByteArray())
+            )
+
+            itemStack.set(SongInfoComponent.component, SongInfoComponent(songInfo))
         }
 
         fun isRecording(stack: ItemStack): Boolean {

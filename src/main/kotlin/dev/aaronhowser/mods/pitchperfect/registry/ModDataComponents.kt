@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.registry
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.SongComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.SongInfoComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import net.minecraft.core.component.DataComponentType
 import net.neoforged.neoforge.registries.DeferredHolder
@@ -23,9 +23,9 @@ object ModDataComponents {
             it.persistent(BooleanComponent.CODEC).networkSynchronized(BooleanComponent.STREAM_CODEC)
         }
 
-    val SONG_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SongComponent>> =
-        DATA_COMPONENT_REGISTRY.registerComponentType("song") {
-            it.persistent(SongComponent.CODEC).networkSynchronized(SongComponent.STREAM_CODEC)
+    val SONG_INFO_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SongInfoComponent>> =
+        DATA_COMPONENT_REGISTRY.registerComponentType("song_info") {
+            it.persistent(SongInfoComponent.CODEC).networkSynchronized(SongInfoComponent.STREAM_CODEC)
         }
 
 }

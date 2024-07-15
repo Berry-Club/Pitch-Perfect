@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
-import dev.aaronhowser.mods.pitchperfect.item.component.SongComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.SongInfoComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
@@ -38,13 +38,10 @@ object OtherEvents {
 
         val player = event.player
         val handItem = player.getItemInHand(InteractionHand.MAIN_HAND)
-        val handSong = handItem.get(SongComponent.component)?.song ?: return
+        val handSongInfo = handItem.get(SongInfoComponent.component)?.songInfo ?: return
 
         val songData = SongSavedData.get(event.player.server.overworld())
-
-        println(songData.getSongs())
-        songData.addSong(handSong)
-        println(songData.getSongs())
+        songData.addSong(handSongInfo)
 
     }
 

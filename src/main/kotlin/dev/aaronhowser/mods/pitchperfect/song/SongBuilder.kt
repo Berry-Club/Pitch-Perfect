@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.core.Holder
 import net.minecraft.sounds.SoundEvent
 import java.nio.file.Path
+import java.util.*
 
 class SongBuilder(
     private val startingTick: Long
@@ -57,6 +58,8 @@ class SongBuilder(
         if (path != null) {
             song.saveToPath(path)
         }
+
+        println(UUID.nameUUIDFromBytes(song.toString().toByteArray()))
 
         return song
     }
