@@ -79,6 +79,14 @@ class SongSavedData : SavedData() {
         return songs.values.toList()
     }
 
+    fun getSongsBy(author: Player): List<SongInfo> {
+        return getSongsBy(author.uuid)
+    }
+
+    fun getSongsBy(author: UUID): List<SongInfo> {
+        return songs.values.filter { it.author == author }
+    }
+
     override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
         val songListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
