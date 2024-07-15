@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.registry
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.block.ComposerBlock
 import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
@@ -12,7 +13,7 @@ object ModBlocks {
     val BLOCK_REGISTRY: DeferredRegister.Blocks =
         DeferredRegister.createBlocks(PitchPerfect.ID)
 
-    val COMPOSER: DeferredBlock<Block> = registerBlock("composer") { Block(BlockBehaviour.Properties.of()) }
+    val COMPOSER: DeferredBlock<Block> = registerBlock("composer") { ComposerBlock() }
     val CONDUCTOR: DeferredBlock<ConductorBlock> = registerBlock("conductor", false) { ConductorBlock() }
 
     private fun <T : Block> registerBlock(

@@ -106,7 +106,11 @@ class ConductorBlock(
         return CODEC
     }
 
-    // Block Entity functions:
+    // Block Entity stuff
+
+    override fun newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity? {
+        return if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) ConductorBlockEntity(pPos, pState) else null
+    }
 
     override fun onRemove(
         pState: BlockState,
@@ -153,10 +157,6 @@ class ConductorBlock(
         blockEntity.playerClick(pPlayer)
 
         return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
-    }
-
-    override fun newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity? {
-        return if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) ConductorBlockEntity(pPos, pState) else null
     }
 
     override fun shouldCheckWeakPower(state: BlockState, level: SignalGetter, pos: BlockPos, side: Direction): Boolean {
