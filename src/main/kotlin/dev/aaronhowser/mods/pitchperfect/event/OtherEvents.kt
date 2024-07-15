@@ -37,13 +37,13 @@ object OtherEvents {
     @SubscribeEvent
     fun onChat(event: ServerChatEvent) {
         val player = event.player
-        val handItem = player.getItemInHand(InteractionHand.MAIN_HAND)
-
-        val songUuid = handItem.get(UuidComponent.songUuidComponent)?.uuid ?: return
 
         val songSavedData = SongSavedData.get(player.server.overworld())
 
+        val handItem = player.getItemInHand(InteractionHand.MAIN_HAND)
+        val songUuid = handItem.get(UuidComponent.songUuidComponent)?.uuid ?: return
         val handSongInfo = songSavedData.getSong(songUuid) ?: return
+
         player.sendSystemMessage(Component.literal(handSongInfo.toString()))
     }
 
