@@ -106,6 +106,8 @@ data class Song(
                             reader.skipWhitespace()
                         }
                     }
+
+                    reader.expect(']')
                 } else if (reader.canRead()) {
                     beatList.add(Beat.parse(reader))
                 }
