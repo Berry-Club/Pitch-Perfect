@@ -77,7 +77,7 @@ data class Song(
             reader.expect('{')
             reader.skipWhitespace()
 
-            if (reader.canRead() && reader.peek() != '}') {
+            while (reader.canRead() && reader.peek() != '}') {
                 val instrumentName: String = reader.readStringUntil('=')
                 val instrument: NoteBlockInstrument? = ID_TO_INSTRUMENT[instrumentName]
 
