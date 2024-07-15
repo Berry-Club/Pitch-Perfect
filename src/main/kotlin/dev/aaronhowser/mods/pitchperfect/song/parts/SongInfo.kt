@@ -5,6 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.chat.ClickEvent
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.player.Player
@@ -32,6 +35,28 @@ data class SongInfo(
         tag.putString(AUTHOR_NAME, authorName)
         tag.putString(SONG, song.toString())
         return tag
+    }
+
+    fun getComponent(): Component {
+        val component = Component.literal("$authorName - $title")
+
+        component.withStyle {
+            it
+                .withHoverEvent(
+                    HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        Component.literal("Click to copy raw song data.\n${song}")
+                    )
+                )
+                .withClickEvent(
+                    ClickEvent(
+                        ClickEvent.Action.COPY_TO_CLIPBOARD,
+                        song.toString()
+                    )
+                )
+        }
+
+        return component
     }
 
     companion object {

@@ -21,7 +21,7 @@ object PlayRawSongCommand {
             .then(
                 Commands
                     .argument(SONG_ARGUMENT, StringArgumentType.greedyString())
-                    .executes { cmd -> playSong(cmd) }
+                    .executes(::playSong)
             )
     }
 

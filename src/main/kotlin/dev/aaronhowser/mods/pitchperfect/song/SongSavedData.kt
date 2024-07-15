@@ -93,6 +93,11 @@ class SongSavedData : SavedData() {
         return songs.values.filter { it.authorUuid == author }
     }
 
+    fun getSongsGroupedByAuthor(): List<SongInfo> {
+        val compareBy: Comparator<SongInfo> = compareBy(SongInfo::authorName, SongInfo::title)
+        return songs.values.sortedWith(compareBy)
+    }
+
     override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
         val songListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
