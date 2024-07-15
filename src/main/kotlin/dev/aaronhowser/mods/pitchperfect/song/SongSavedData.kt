@@ -1,11 +1,14 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
+import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.saveddata.SavedData
+import java.util.*
 
 class SongSavedData : SavedData() {
 
@@ -42,9 +45,25 @@ class SongSavedData : SavedData() {
         }
     }
 
-    fun addSong(song: SongInfo) {
-        songs.add(song)
+    fun addSong(song: Song, title: String, author: Player) {
+        val songInfo = SongInfo(
+            title,
+            author.uuid,
+            UUID.nameUUIDFromBytes(song.toString().toByteArray()),
+            song
+        )
+
+        addSong(songInfo)
+    }
+
+    fun addSong(songInfo: SongInfo) {
+        songs.add(songInfo)
         setDirty()
+    }
+
+    fun removeSong(uuid: UUID) {
+        val song = songs.firstOrNull { it.uuid == uuid } ?: return
+        removeSong(song)
     }
 
     fun removeSong(song: SongInfo) {
