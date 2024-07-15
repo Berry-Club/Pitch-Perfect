@@ -27,6 +27,7 @@ data class Beat(
             val notes: MutableList<Note> = mutableListOf()
 
             if (reader.peek() == '[') {
+                reader.skip()
                 reader.skipWhitespace()
 
                 while (reader.canRead() && reader.peek() != ']') {

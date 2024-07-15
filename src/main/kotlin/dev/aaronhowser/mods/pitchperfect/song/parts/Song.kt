@@ -96,16 +96,12 @@ data class Song(
 
                 val beatList = ArrayList<Beat>()
 
-                val t = reader.peek()
                 if (reader.canRead() && reader.peek() == '[') {
-                    val t = reader.peek()
                     reader.skip()
                     while (reader.canRead() && reader.peek() != ']') {
-                        val t = reader.peek()
                         beatList.add(Beat.parse(reader))
 
                         while (reader.canRead() && reader.peek() == ',') {
-                            val t = reader.peek()
                             reader.skip()
                             reader.skipWhitespace()
                         }
