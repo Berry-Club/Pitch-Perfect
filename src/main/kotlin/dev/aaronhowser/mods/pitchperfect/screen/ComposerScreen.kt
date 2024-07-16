@@ -21,6 +21,8 @@ class ComposerScreen(
         const val BUFFER_SPACE = 5
     }
 
+    var selectedInstrument: Instrument? = null
+
     private val instrumentButtons: MutableList<Button> = mutableListOf()
     private val timeline = ComposerTimeline(this)
     private val buttons: List<Button>
@@ -52,7 +54,7 @@ class ComposerScreen(
         timeline.addButtons()
     }
 
-    private enum class Instruments(
+    enum class Instrument(
         val image: ResourceLocation
     ) {
         BANJO(ScreenTextures.Sprite.Instrument.BANJO),
@@ -77,8 +79,14 @@ class ComposerScreen(
         var x = leftPos + 5
         val y = topPos + 5
 
-        for (instrument in Instruments.entries) {
-            addIconButton(x, y, 18, 18, instrument.image)
+        for (instrument in Instrument.entries) {
+            addIconButton(x, y, 18, 18, instrument.image) {
+                selectedInstrument = if (selectedInstrument === instrument) {
+                    null
+                } else {
+                    instrument
+                }
+            }
             x += 19
         }
     }
