@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.Component
 
 class ComposerTimeline(
@@ -18,6 +19,7 @@ class ComposerTimeline(
     }
 
     val timelineButtons: MutableMap<Pair<Int, Int>, Button> = mutableMapOf()
+    val buttonInstruments: MutableMap<Button, ComposerScreen.Instrument?> = mutableMapOf()
     private val timelineTopPos by lazy { composerScreen.topPos + BUFFER_SPACE + INSTRUMENT_BUTTON_SIZE + BUFFER_SPACE + 20 }
 
     var scrollIndex: Int = 0
@@ -41,11 +43,20 @@ class ComposerTimeline(
         for (yIndex in 0 until ROW_COUNT) {
             for (xIndex in 0 until 24) {
 
-                val button = Button.Builder(Component.empty()) {}
+                val button = Button.Builder(Component.empty()) {
+                    this.buttonInstruments[it] = if (this.buttonInstruments[it] == null) {
+                        composerScreen.selectedInstrument
+                    } else {
+                        null
+                    }
+
+                    it.tooltip = Tooltip.create(Component.literal(buttonInstruments[it]?.name ?: "Empty"))
+                }
                     .size(width, height)
                     .build()
 
                 this.timelineButtons[Pair(xIndex, yIndex)] = button
+                this.buttonInstruments[button] = null
             }
         }
     }
