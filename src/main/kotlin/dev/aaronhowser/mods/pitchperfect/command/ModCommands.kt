@@ -16,6 +16,7 @@ object ModCommands {
                 .then(PlaySongCommand.register())
                 .then(ListSongsCommand.register())
                 .then(RemoveSongCommand.register())
+                .then(PasteSongCommand.register())
         )
 
     }
