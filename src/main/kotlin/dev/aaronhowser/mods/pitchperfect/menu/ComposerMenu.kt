@@ -1,14 +1,12 @@
 package dev.aaronhowser.mods.pitchperfect.menu
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
+import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModMenuTypes
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.inventory.AbstractContainerMenu
-import net.minecraft.world.inventory.ContainerData
-import net.minecraft.world.inventory.SimpleContainerData
-import net.minecraft.world.inventory.Slot
+import net.minecraft.world.inventory.*
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.neoforged.neoforge.items.SlotItemHandler
@@ -83,6 +81,10 @@ class ComposerMenu(
     }
 
     override fun stillValid(pPlayer: Player): Boolean {
-        TODO("Not yet implemented")
+        return stillValid(
+            ContainerLevelAccess.create(level, blockEntity.blockPos),
+            pPlayer,
+            ModBlocks.COMPOSER.get()
+        )
     }
 }
