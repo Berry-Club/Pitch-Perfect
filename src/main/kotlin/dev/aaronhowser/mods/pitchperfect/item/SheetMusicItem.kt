@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent.Companion.isTrue
@@ -7,7 +9,6 @@ import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -55,8 +56,10 @@ class SheetMusicItem : Item(
             val newSongInfo = songData.addSongInfo(song, "Untitled", player)
 
             if (!newSongInfo.success) {
-                player.sendSystemMessage(Component.literal("Failed to save song, an existing one already exists:"))
-                player.sendSystemMessage(newSongInfo.songInfo.getComponent())
+                player.sendSystemMessage(
+                    ModLanguageProvider.Message.SHEET_MUSIC_FAIL_DUPLICATE
+                        .toComponent(newSongInfo.songInfo.getComponent())
+                )
                 return
             }
 

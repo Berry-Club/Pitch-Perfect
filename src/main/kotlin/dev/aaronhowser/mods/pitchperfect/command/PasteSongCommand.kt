@@ -3,6 +3,8 @@ package dev.aaronhowser.mods.pitchperfect.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
@@ -10,7 +12,6 @@ import net.minecraft.client.Minecraft
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.network.chat.ClickEvent
-import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.world.entity.player.Player
 
@@ -40,7 +41,7 @@ object PasteSongCommand {
             val song = Song.fromString(clipboard)
 
             if (song == null) {
-                player.sendSystemMessage(Component.literal("Failed to parse song from clipboard:\n$clipboard"))
+                player.sendSystemMessage(ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE.toComponent(clipboard))
                 return 0
             }
 
@@ -51,17 +52,17 @@ object PasteSongCommand {
             )
 
             val songSavedData = SongSavedData.get(player)
-            val newSongInfo = songSavedData.addSongInfo(songInfo)
+            val result = songSavedData.addSongInfo(songInfo)
 
-            val component = if (newSongInfo.success) {
-                Component
-                    .literal("Song added: $title")
+            val component = if (result.success) {
+                ModLanguageProvider.Message.SONG_PASTE_ADDED
+                    .toComponent(title)
                     .withStyle {
                         it
                             .withHoverEvent(
                                 HoverEvent(
                                     HoverEvent.Action.SHOW_TEXT,
-                                    Component.literal("Click to copy UUID")
+                                    ModLanguageProvider.Message.CLICK_COPY_SONG_UUID.toComponent(song.uuid.toString())
                                 )
                             )
                             .withClickEvent(
@@ -72,13 +73,13 @@ object PasteSongCommand {
                             )
                     }
             } else {
-                Component.literal("Failed to add song, as an identical song already exists!\n")
-                    .append(newSongInfo.songInfo.getComponent())
+                ModLanguageProvider.Message.SONG_PASTE_FAIL_DUPLICATE.toComponent(title)
+                    .append(result.songInfo.getComponent())
             }
 
             player.sendSystemMessage(component)
 
-            return if (newSongInfo.success) 1 else 0
+            return if (result.success) 1 else 0
         } catch (e: Exception) {
             e.printStackTrace()
             return 0

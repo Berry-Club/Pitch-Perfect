@@ -2,11 +2,12 @@ package dev.aaronhowser.mods.pitchperfect.command
 
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.UuidArgument
-import net.minecraft.network.chat.Component
 
 object RemoveSongCommand {
 
@@ -30,7 +31,12 @@ object RemoveSongCommand {
         val songInfo = songSavedData.getSongInfo(uuid) ?: return 0
         songSavedData.removeSongInfo(uuid)
 
-        player.sendSystemMessage(Component.literal("Song removed: ${songInfo.title} by ${songInfo.authorName}"))
+        player.sendSystemMessage(
+            ModLanguageProvider.Message.SONG_REMOVED.toComponent(
+                songInfo.title,
+                songInfo.authorName
+            )
+        )
 
         return 1
     }

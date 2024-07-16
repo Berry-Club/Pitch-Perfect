@@ -3,11 +3,12 @@ package dev.aaronhowser.mods.pitchperfect.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
@@ -34,7 +35,10 @@ object PlayRawSongCommand {
             val player = context.source.entity as? ServerPlayer ?: return 0
 
             if (song == null) {
-                player.sendSystemMessage(Component.literal("Failed to parse song"), false)
+                player.sendSystemMessage(
+                    ModLanguageProvider.Message.SONG_RAW_FAIL_TO_PARSE.toComponent(songString),
+                    false
+                )
                 return 0
             }
 

@@ -1,11 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
+import com.mojang.brigadier.LiteralMessage
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import io.netty.buffer.ByteBuf
-import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.Mth
@@ -87,9 +87,9 @@ enum class Note(
             { b: Int -> VALUES[b] },
             { obj: Note -> obj.ordinal })
 
-        private val INVALID_NOTE = SimpleCommandExceptionType(Component.literal("Invalid note"))
-        private val INVALID_OCTAVE = SimpleCommandExceptionType(Component.literal("Invalid octave"))
-        private val NOTE_NOT_FOUND = SimpleCommandExceptionType(Component.literal("Note not found"))
+        private val INVALID_NOTE = SimpleCommandExceptionType(LiteralMessage("Invalid note"))
+        private val INVALID_OCTAVE = SimpleCommandExceptionType(LiteralMessage("Invalid octave"))
+        private val NOTE_NOT_FOUND = SimpleCommandExceptionType(LiteralMessage("Note not found"))
 
         @Throws(CommandSyntaxException::class)
         fun parse(reader: StringReader): Note {

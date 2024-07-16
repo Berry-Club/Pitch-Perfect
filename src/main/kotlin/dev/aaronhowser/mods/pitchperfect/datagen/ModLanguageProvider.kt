@@ -29,6 +29,11 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         const val SHEET_MUSIC = "item.pitchperfect.sheet_music"
     }
 
+    object Block {
+        const val COMPOSER = "block.pitchperfect.composer"
+        const val CONDUCTOR = "block.pitchperfect.conductor"
+    }
+
     object Enchantment {
         const val HEALING_BEAT = "enchantment.pitchperfect.healing_beat"
         const val HEALING_BEAT_DESC = "enchantment.pitchperfect.healing_beat.desc"
@@ -38,10 +43,22 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         const val AND_HIS_MUSIC_WAS_ELECTRIC_DESC = "enchantment.pitchperfect.and_his_music_was_electric.desc"
     }
 
+    object Message {
+        const val INSTRUMENT_BROKEN = "subtitle.pitchperfect.instrument_broken"
+        const val SONGS_LIST = "message.pitchperfect.songs_list"
+        const val SONG_PASTE_ADDED = "message.pitchperfect.song_paste_added"
+        const val CLICK_COPY_SONG_UUID = "message.pitchperfect.click_copy_song_uuid"
+        const val CLICK_COPY_RAW_SONG = "message.pitchperfect.click_copy_raw_song"
+        const val CLICK_PLAY_SONG = "message.pitchperfect.song_play"
+        const val SONG_PASTE_FAIL_DUPLICATE = "message.pitchperfect.song_paste_fail_duplicate"
+        const val SONG_PASTE_FAIL_TO_PARSE = "message.pitchperfect.song_paste_fail_to_parse"
+        const val SONG_RAW_FAIL_TO_PARSE = "message.pitchperfect.song_raw_fail_to_parse"
+        const val SONG_REMOVED = "message.pitchperfect.song_removed"
+        const val SHEET_MUSIC_FAIL_DUPLICATE = "message.pitchperfect.sheet_music_fail_duplicate"
+    }
+
     object Misc {
         const val CREATIVE_TAB = "itemGroup.pitchperfect"
-
-        const val INSTRUMENT_BROKEN = "subtitle.pitchperfect.instrument_broken"
     }
 
     companion object {
@@ -68,6 +85,9 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         add(Item.XYLOPHONE, "Xylophone")
         add(Item.SHEET_MUSIC, "Sheet Music")
 
+        add(Block.COMPOSER, "Composer")
+        add(Block.CONDUCTOR, "Conductor")
+
         add(Enchantment.HEALING_BEAT, "Healing Beat")
         add(Enchantment.HEALING_BEAT_DESC, "Heals nearby mobs when used")
         add(Enchantment.BWAAAP, "BWAAAP")
@@ -78,8 +98,18 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
             "When anywhere in your inventory,\ndealing damage will chain to other mobs\nNOTE: Damages the item"
         )
 
-        add(Misc.CREATIVE_TAB, "Pitch Perfect")
+        add(Message.INSTRUMENT_BROKEN, "Your instrument has broken!")
+        add(Message.SONGS_LIST, "Songs:")
+        add(Message.SONG_PASTE_ADDED, "Song added: %s")
+        add(Message.CLICK_COPY_SONG_UUID, "Click to copy UUID:\n%s")
+        add(Message.CLICK_COPY_RAW_SONG, "Click to copy raw song data:\n%s")
+        add(Message.CLICK_PLAY_SONG, "Click to play song.")
+        add(Message.SONG_PASTE_FAIL_DUPLICATE, "Failed to add song, as an identical song already exists!\n")
+        add(Message.SONG_PASTE_FAIL_TO_PARSE, "Failed to parse song from clipboard:\n%s")
+        add(Message.SONG_RAW_FAIL_TO_PARSE, "Failed to parse song:\n%s")
+        add(Message.SONG_REMOVED, "Song removed: %s by %s")
+        add(Message.SHEET_MUSIC_FAIL_DUPLICATE, "Failed to save song, as it is a duplicate of an existing song:%s")
 
-        add(Misc.INSTRUMENT_BROKEN, "Your instrument has broken!")
+        add(Misc.CREATIVE_TAB, "Pitch Perfect")
     }
 }

@@ -2,10 +2,11 @@ package dev.aaronhowser.mods.pitchperfect.command
 
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-import net.minecraft.network.chat.Component
 
 object ListSongsCommand {
 
@@ -21,7 +22,7 @@ object ListSongsCommand {
         val songSavedData = SongSavedData.get(player)
         val songs = songSavedData.getSongInfosGroupedByAuthor()
 
-        player.sendSystemMessage(Component.literal("Songs:"))
+        player.sendSystemMessage(ModLanguageProvider.Message.SONGS_LIST.toComponent())
         for (songInfo in songs) {
             val component = songInfo.getComponent()
 

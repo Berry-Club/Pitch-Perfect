@@ -1,4 +1,6 @@
 {
+  "block.pitchperfect.composer": "Composer",
+  "block.pitchperfect.conductor": "Conductor",
   "enchantment.pitchperfect.and_his_music_was_electric": "And His Music Was Electric",
   "enchantment.pitchperfect.and_his_music_was_electric.desc": "When anywhere in your inventory,\ndealing damage will chain to other mobs\nNOTE: Damages the item",
   "enchantment.pitchperfect.bwaaap": "BWAAAP",
@@ -23,5 +25,15 @@
   "item.pitchperfect.vibraphone": "Vibraphone",
   "item.pitchperfect.xylophone": "Xylophone",
   "itemGroup.pitchperfect": "Pitch Perfect",
+  "message.pitchperfect.click_copy_raw_song": "Click to copy raw song data:\n%s",
+  "message.pitchperfect.click_copy_song_uuid": "Click to copy UUID:\n%s",
+  "message.pitchperfect.sheet_music_fail_duplicate": "Failed to save song, as it is a duplicate of an existing song:%s",
+  "message.pitchperfect.song_paste_added": "Song added: %s",
+  "message.pitchperfect.song_paste_fail_duplicate": "Failed to add song, as an identical song already exists!\n",
+  "message.pitchperfect.song_paste_fail_to_parse": "Failed to parse song from clipboard:\n%s",
+  "message.pitchperfect.song_play": "Click to play song.",
+  "message.pitchperfect.song_raw_fail_to_parse": "Failed to parse song:\n%s",
+  "message.pitchperfect.song_removed": "Song removed: %s by %s",
+  "message.pitchperfect.songs_list": "Songs:",
   "subtitle.pitchperfect.instrument_broken": "Your instrument has broken!"
 }

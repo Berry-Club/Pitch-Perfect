@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.menu.ComposerMenu
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
@@ -75,7 +77,7 @@ class ComposerBlockEntity(
     }
 
     override fun getDisplayName(): Component {
-        return Component.literal("ComposerAAAAAAAAAAA")
+        return ModLanguageProvider.Block.COMPOSER.toComponent()
     }
 
 }

@@ -3,6 +3,8 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -45,7 +47,7 @@ data class SongInfo(
                     .withHoverEvent(
                         HoverEvent(
                             HoverEvent.Action.SHOW_TEXT,
-                            Component.literal("Click to copy song UUID.\n${song.uuid}")
+                            ModLanguageProvider.Message.CLICK_COPY_SONG_UUID.toComponent(song.uuid.toString())
                         )
                     )
                     .withClickEvent(
@@ -62,7 +64,7 @@ data class SongInfo(
                     .withHoverEvent(
                         HoverEvent(
                             HoverEvent.Action.SHOW_TEXT,
-                            Component.literal("Click to copy raw song data.\n${song}")
+                            ModLanguageProvider.Message.CLICK_COPY_RAW_SONG.toComponent(song.toString())
                         )
                     )
                     .withClickEvent(
@@ -79,7 +81,7 @@ data class SongInfo(
                     .withHoverEvent(
                         HoverEvent(
                             HoverEvent.Action.SHOW_TEXT,
-                            Component.literal("Click to play song.")
+                            ModLanguageProvider.Message.CLICK_PLAY_SONG.toComponent()
                         )
                     )
                     .withClickEvent(
