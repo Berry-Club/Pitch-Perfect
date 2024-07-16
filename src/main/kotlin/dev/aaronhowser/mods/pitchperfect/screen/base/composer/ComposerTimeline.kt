@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.screen.base.composer
 import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
 import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen.Companion.BUFFER_SPACE
 import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen.Companion.INSTRUMENT_BUTTON_SIZE
+import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -12,15 +13,62 @@ class ComposerTimeline(
     private val composerScreen: ComposerScreen
 ) {
 
-    private val timelineButtons: MutableMap<Pair<Int, Int>, Button> = mutableMapOf()
-
+    val timelineButtons: MutableMap<Pair<Int, Int>, Button> = mutableMapOf()
     private val timelineTopPos by lazy { composerScreen.topPos + BUFFER_SPACE + INSTRUMENT_BUTTON_SIZE + BUFFER_SPACE + 20 }
 
-    fun addTimelineButtons() {
+    private lateinit var scrollUpButton: Button
+    private lateinit var scrollDownButton: Button
+    private var scrollIndex: Int = 0
+        set(value) {
+            field = value.coerceIn(0, 24)
+        }
+
+    fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        renderButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        renderNoteNames(pGuiGraphics)
+    }
+
+    fun addButtons() {
+        addTimelineButtons()
+        addScrollButtons()
+    }
+
+    private fun addScrollButtons() {
         val width = 16
         val height = 16
 
-        for (yIndex in 0 until 24) {
+        val x = composerScreen.leftPos + 5
+        val y = timelineTopPos - 18
+
+        scrollUpButton = Button.Builder(Component.empty()) {
+            scrollIndex--
+            println(scrollIndex)
+        }
+            .size(width, height)
+            .build()
+            .apply {
+                this.x = x
+                this.y = y
+            }
+
+        scrollDownButton = Button.Builder(Component.empty()) {
+            scrollIndex++
+            println(scrollIndex)
+        }
+            .size(width, height)
+            .build()
+            .apply {
+                this.x = x + 18
+                this.y = y
+            }
+
+    }
+
+    private fun addTimelineButtons() {
+        val width = 16
+        val height = 16
+
+        for (yIndex in 0 until 8) {
             for (xIndex in 0 until 24) {
 
                 val button = Button.Builder(Component.empty()) {}
@@ -32,28 +80,14 @@ class ComposerTimeline(
         }
     }
 
-    fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        renderButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        renderNoteNames(pGuiGraphics)
-    }
-
     private fun renderNoteNames(pGuiGraphics: GuiGraphics) {
         val x = composerScreen.leftPos + 5 + 4
 
         for (yIndex in 0 until 8) {
             val y = timelineTopPos + 3 + yIndex * 16
 
-            val noteString = when (yIndex) {
-                0 -> "C"
-                1 -> "D"
-                2 -> "E"
-                3 -> "F"
-                4 -> "G"
-                5 -> "A"
-                6 -> "B"
-                7 -> "C"
-                else -> "X"
-            }
+            val noteIndex = yIndex + scrollIndex
+            val noteString = Note.entries[noteIndex].displayName
 
             pGuiGraphics.drawString(
                 Minecraft.getInstance().font,
@@ -66,7 +100,12 @@ class ComposerTimeline(
     }
 
     private fun renderButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        renderNoteButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        renderScrollButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+    }
 
+    // TODO: Cache this instead of iterating every frame(?)
+    private fun renderNoteButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         val width = 16
         val height = 16
 
@@ -82,7 +121,11 @@ class ComposerTimeline(
                 render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
             }
         }
+    }
 
+    private fun renderScrollButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        scrollUpButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        scrollDownButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
 }

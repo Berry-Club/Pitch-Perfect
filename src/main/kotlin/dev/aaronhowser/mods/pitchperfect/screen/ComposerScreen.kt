@@ -21,9 +21,10 @@ class ComposerScreen(
         const val BUFFER_SPACE = 5
     }
 
-    private val buttons: MutableList<Button> = mutableListOf()
-
+    private val instrumentButtons: MutableList<Button> = mutableListOf()
     private val timeline = ComposerTimeline(this)
+    private val buttons: List<Button>
+        get() = instrumentButtons + timeline.timelineButtons.values
 
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
@@ -48,7 +49,7 @@ class ComposerScreen(
         topPos = (height - ScreenTextures.Background.COMPOSER_HEIGHT) / 2
 
         addInstrumentButtons()
-        timeline.addTimelineButtons()
+        timeline.addButtons()
     }
 
     private enum class Instruments(
@@ -99,7 +100,7 @@ class ComposerScreen(
                 this.y = y
             }
 
-        this.buttons.add(button)
+        this.instrumentButtons.add(button)
     }
 
     override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
@@ -109,12 +110,22 @@ class ComposerScreen(
     }
 
     private fun renderButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        for (button in buttons) {
-            button.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        }
-
+        renderInstrumentButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         timeline.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
+    private fun renderInstrumentButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        for (button in instrumentButtons) {
+            button.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        }
+    }
+
+    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+        val button = buttons.firstOrNull { it.isHoveredOrFocused }
+        if (button == null) return false
+
+        button.onPress()
+        return true
+    }
 
 }
