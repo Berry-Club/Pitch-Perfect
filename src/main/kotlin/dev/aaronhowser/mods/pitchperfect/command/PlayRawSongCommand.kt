@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
@@ -31,6 +32,11 @@ object PlayRawSongCommand {
             val song = Song.parse(songString)
 
             val player = context.source.entity as? ServerPlayer ?: return 0
+
+            if (song == null) {
+                player.sendSystemMessage(Component.literal("Failed to parse song"), false)
+                return 0
+            }
 
             val songPlayer = SongPlayer(player.level() as ServerLevel, song) { player.eyePosition }
 

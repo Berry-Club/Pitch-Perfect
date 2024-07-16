@@ -66,65 +66,71 @@ data class Song(
             Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
         ).map(::Song, Song::beats)
 
-        fun parse(string: String): Song {
+        fun parse(string: String): Song? {
             return parse(StringReader(string))
         }
 
-        fun parse(reader: StringReader): Song {
+        fun parse(reader: StringReader): Song? {
 
-            val beats: HashMap<Holder<SoundEvent>, List<Beat>> = HashMap()
+            try {
 
-            reader.skipWhitespace()
-            reader.expect('{')
-            reader.skipWhitespace()
-
-            while (reader.canRead() && reader.peek() != '}') {
-                val instrumentName: String = reader.readStringUntil('=')
-                val instrument: NoteBlockInstrument? = ID_TO_INSTRUMENT[instrumentName]
-
-                val sound: Holder<SoundEvent> = if (instrument == null) {
-                    BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(
-                        ResourceKey.create(
-                            Registries.SOUND_EVENT,
-                            ResourceLocation.parse(instrumentName)
-                        )
-                    )
-                } else {
-                    instrument.soundEvent
-                }
+                val beats: HashMap<Holder<SoundEvent>, List<Beat>> = HashMap()
 
                 reader.skipWhitespace()
+                reader.expect('{')
+                reader.skipWhitespace()
 
-                val beatList = ArrayList<Beat>()
+                while (reader.canRead() && reader.peek() != '}') {
+                    val instrumentName: String = reader.readStringUntil('=')
+                    val instrument: NoteBlockInstrument? = ID_TO_INSTRUMENT[instrumentName]
 
-                if (reader.canRead() && reader.peek() == '[') {
-                    reader.skip()
-                    while (reader.canRead() && reader.peek() != ']') {
-                        beatList.add(Beat.parse(reader))
-
-                        while (reader.canRead() && reader.peek() == ',') {
-                            reader.skip()
-                            reader.skipWhitespace()
-                        }
+                    val sound: Holder<SoundEvent> = if (instrument == null) {
+                        BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(
+                            ResourceKey.create(
+                                Registries.SOUND_EVENT,
+                                ResourceLocation.parse(instrumentName)
+                            )
+                        )
+                    } else {
+                        instrument.soundEvent
                     }
 
-                    reader.expect(']')
-                } else if (reader.canRead()) {
-                    beatList.add(Beat.parse(reader))
-                }
-
-                if (beatList.isNotEmpty()) {
-                    beats[sound] = beatList
-                }
-
-                while (reader.canRead() && reader.peek() == ',') {
-                    reader.skip()
                     reader.skipWhitespace()
-                }
-            }
 
-            reader.expect('}')
-            return Song(beats)
+                    val beatList = ArrayList<Beat>()
+
+                    if (reader.canRead() && reader.peek() == '[') {
+                        reader.skip()
+                        while (reader.canRead() && reader.peek() != ']') {
+                            beatList.add(Beat.parse(reader))
+
+                            while (reader.canRead() && reader.peek() == ',') {
+                                reader.skip()
+                                reader.skipWhitespace()
+                            }
+                        }
+
+                        reader.expect(']')
+                    } else if (reader.canRead()) {
+                        beatList.add(Beat.parse(reader))
+                    }
+
+                    if (beatList.isNotEmpty()) {
+                        beats[sound] = beatList
+                    }
+
+                    while (reader.canRead() && reader.peek() == ',') {
+                        reader.skip()
+                        reader.skipWhitespace()
+                    }
+                }
+
+                reader.expect('}')
+                return Song(beats)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return null
+            }
         }
 
         fun fromFile(path: Path): Song? {

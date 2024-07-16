@@ -39,6 +39,11 @@ object PasteSongCommand {
 
             val song = Song.parse(clipboard)
 
+            if (song == null) {
+                player.sendSystemMessage(Component.literal("Failed to parse song from clipboard"))
+                return 0
+            }
+
             val songInfo = SongInfo(
                 title,
                 player,

@@ -70,8 +70,14 @@ class SongSavedData : SavedData() {
     }
 
     fun addSongInfo(songInfo: SongInfo) {
-        songs[songInfo.song.uuid] = songInfo
-        setDirty()
+        val existingSong = songs.getOrDefault(songInfo.song.uuid, null)
+
+        if (existingSong == null) {
+            songs[songInfo.song.uuid] = songInfo
+            setDirty()
+        } else {
+            PitchPerfect.LOGGER.error("Attempted to add a song that already exists! $songInfo")
+        }
     }
 
     fun removeSongInfo(uuid: UUID) {

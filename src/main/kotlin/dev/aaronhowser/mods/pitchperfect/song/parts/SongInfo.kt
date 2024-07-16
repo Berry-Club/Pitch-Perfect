@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -124,6 +125,11 @@ data class SongInfo(
                 val authorUuid = tag.getUUID(AUTHOR_UUID)
                 val authorName = tag.getString(AUTHOR_NAME)
                 val song = Song.parse(tag.getString(SONG))
+
+                if (song == null) {
+                    PitchPerfect.LOGGER.error("Failed to parse song from tag: $tag")
+                    return null
+                }
 
                 return SongInfo(title, authorUuid, authorName, song)
             } catch (e: Exception) {
