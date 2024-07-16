@@ -17,10 +17,12 @@ class ComposerScreen(
             ScreenTextures.Backgrounds.COMPOSER,
             0,
             0,
-            0,
-            0,
-            256,
-            256
+            0f,
+            0f,
+            512,
+            512,
+            512,
+            512
         )
     }
 
