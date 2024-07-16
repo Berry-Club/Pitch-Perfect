@@ -42,12 +42,38 @@ class ComposerScreen(
         addButtons()
     }
 
-    private fun addButtons() {
-        addSpriteIconButton(0, 0, 20, 20, ScreenTextures.Sprite.Instrument.BANJO)
-        addSpriteIconButton(20, 0, 30, 30, ScreenTextures.Sprite.Instrument.BASS)
+    private enum class Instruments(
+        val image: ResourceLocation
+    ) {
+        BANJO(ScreenTextures.Sprite.Instrument.BANJO),
+        BASS(ScreenTextures.Sprite.Instrument.BASS),
+        BASS_DRUM(ScreenTextures.Sprite.Instrument.BASS_DRUM),
+        BIT(ScreenTextures.Sprite.Instrument.BIT),
+        CHIMES(ScreenTextures.Sprite.Instrument.CHIMES),
+        COW_BELL(ScreenTextures.Sprite.Instrument.COW_BELL),
+        DIDGERIDOO(ScreenTextures.Sprite.Instrument.DIDGERIDOO),
+        ELECTRIC_PIANO(ScreenTextures.Sprite.Instrument.ELECTRIC_PIANO),
+        FLUTE(ScreenTextures.Sprite.Instrument.FLUTE),
+        GLOCKENSPIEL(ScreenTextures.Sprite.Instrument.GLOCKENSPIEL),
+        GUITAR(ScreenTextures.Sprite.Instrument.GUITAR),
+        HARP(ScreenTextures.Sprite.Instrument.HARP),
+        SNARE_DRUM(ScreenTextures.Sprite.Instrument.SNARE_DRUM),
+        STICKS(ScreenTextures.Sprite.Instrument.STICKS),
+        VIBRAPHONE(ScreenTextures.Sprite.Instrument.VIBRAPHONE),
+        XYLOPHONE(ScreenTextures.Sprite.Instrument.XYLOPHONE)
     }
 
-    private fun addSpriteIconButton(
+    private fun addButtons() {
+        var x = leftPos + 5
+        val y = topPos + 5
+
+        for (instrument in Instruments.entries) {
+            addButton(x, y, 18, 18, instrument.image)
+            x += 19
+        }
+    }
+
+    private fun addButton(
         x: Int, y: Int,
         width: Int, height: Int,
         image: ResourceLocation,
