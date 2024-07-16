@@ -24,13 +24,21 @@ class ComposerBlockEntity(
     pBlockState: BlockState
 ) : BlockEntity(ModBlockEntities.COMPOSER.get(), pPos, pBlockState), MenuProvider {
 
-    private val itemHandler: ItemStackHandler = object : ItemStackHandler(1) {
+    companion object {
+        const val AMOUNT_SLOTS = 1
+        const val SHEET_MUSIC_SLOT = 0
+    }
+
+    private val itemHandler: ItemStackHandler = object : ItemStackHandler(AMOUNT_SLOTS) {
         override fun onContentsChanged(slot: Int) {
             setChanged()
         }
 
         override fun isItemValid(slot: Int, stack: ItemStack): Boolean {
-            return stack.item == ModItems.MUSIC_SHEET.get()
+            return when (slot) {
+                SHEET_MUSIC_SLOT -> stack.item == ModItems.MUSIC_SHEET.get()
+                else -> false
+            }
         }
     }
 
@@ -47,11 +55,7 @@ class ComposerBlockEntity(
         Containers.dropContents(this.level!!, this.blockPos, inventory)
     }
 
-
-    fun playerClick(player: Player) {
-        player.sendSystemMessage(Component.literal("Hi!"))
-    }
-
+    // What actually needs to get synced?
     private val containerData = object : ContainerData {
 
         override fun get(pIndex: Int): Int {
