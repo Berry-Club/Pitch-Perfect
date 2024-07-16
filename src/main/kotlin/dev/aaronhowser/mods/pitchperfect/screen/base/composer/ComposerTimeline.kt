@@ -13,14 +13,18 @@ class ComposerTimeline(
     private val composerScreen: ComposerScreen
 ) {
 
+    companion object {
+        private const val ROW_COUNT = 12
+    }
+
     val timelineButtons: MutableMap<Pair<Int, Int>, Button> = mutableMapOf()
     private val timelineTopPos by lazy { composerScreen.topPos + BUFFER_SPACE + INSTRUMENT_BUTTON_SIZE + BUFFER_SPACE + 20 }
 
-    private lateinit var scrollUpButton: Button
-    private lateinit var scrollDownButton: Button
+    lateinit var scrollUpButton: Button
+    lateinit var scrollDownButton: Button
     private var scrollIndex: Int = 0
         set(value) {
-            field = value.coerceIn(0, 24)
+            field = value.coerceIn(0, Note.entries.size - ROW_COUNT)
         }
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
@@ -40,10 +44,7 @@ class ComposerTimeline(
         val x = composerScreen.leftPos + 5
         val y = timelineTopPos - 18
 
-        scrollUpButton = Button.Builder(Component.empty()) {
-            scrollIndex--
-            println(scrollIndex)
-        }
+        scrollUpButton = Button.Builder(Component.empty()) { scrollIndex-- }
             .size(width, height)
             .build()
             .apply {
@@ -51,10 +52,7 @@ class ComposerTimeline(
                 this.y = y
             }
 
-        scrollDownButton = Button.Builder(Component.empty()) {
-            scrollIndex++
-            println(scrollIndex)
-        }
+        scrollDownButton = Button.Builder(Component.empty()) { scrollIndex++ }
             .size(width, height)
             .build()
             .apply {
@@ -68,7 +66,7 @@ class ComposerTimeline(
         val width = 16
         val height = 16
 
-        for (yIndex in 0 until 8) {
+        for (yIndex in 0 until ROW_COUNT) {
             for (xIndex in 0 until 24) {
 
                 val button = Button.Builder(Component.empty()) {}
@@ -83,11 +81,11 @@ class ComposerTimeline(
     private fun renderNoteNames(pGuiGraphics: GuiGraphics) {
         val x = composerScreen.leftPos + 5 + 4
 
-        for (yIndex in 0 until 8) {
+        for (yIndex in 0 until ROW_COUNT) {
             val y = timelineTopPos + 3 + yIndex * 16
 
             val noteIndex = yIndex + scrollIndex
-            val noteString = Note.entries[noteIndex].displayName
+            val noteString = Note.entries.getOrNull(noteIndex)?.displayName ?: "YOU FUCKED UP"
 
             pGuiGraphics.drawString(
                 Minecraft.getInstance().font,

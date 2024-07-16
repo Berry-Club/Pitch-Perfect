@@ -24,7 +24,7 @@ class ComposerScreen(
     private val instrumentButtons: MutableList<Button> = mutableListOf()
     private val timeline = ComposerTimeline(this)
     private val buttons: List<Button>
-        get() = instrumentButtons + timeline.timelineButtons.values
+        get() = instrumentButtons + timeline.timelineButtons.values + timeline.scrollUpButton + timeline.scrollDownButton
 
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
