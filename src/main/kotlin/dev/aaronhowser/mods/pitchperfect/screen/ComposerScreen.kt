@@ -23,6 +23,8 @@ class ComposerScreen(
 
     private val buttons: MutableList<Button> = mutableListOf()
 
+    private val timelineButtons: MutableMap<Pair<Int, Int>, Button> = mutableMapOf()
+
     private var leftPos by Delegates.notNull<Int>()
     private var topPos by Delegates.notNull<Int>()
 
@@ -102,33 +104,20 @@ class ComposerScreen(
         this.buttons.add(button)
     }
 
-    // Do 3 vertically-scrolling pages of 8 buttons each
     private fun addTimelineButtons() {
         val width = 16
         val height = 16
 
-        for (yIndex in 0 until 8) {
-            val y = timelineTopPos + yIndex * height
-
+        for (yIndex in 0 until 24) {
             for (xIndex in 0 until 24) {
-                val x = leftPos + 5 + 16 + xIndex * width
 
-                addRegularButton(x, y, width, height)
+                val button = Button.Builder(Component.empty()) {}
+                    .size(width, height)
+                    .build()
+
+                this.timelineButtons[Pair(xIndex, yIndex)] = button
             }
-
         }
-    }
-
-    private fun addRegularButton(
-        x: Int, y: Int,
-        width: Int, height: Int,
-        onPress: (Button) -> Unit = {},
-    ) {
-        val button = Button.builder(Component.empty(), onPress)
-            .bounds(x, y, width, height)
-            .build()
-
-        this.buttons.add(button)
     }
 
     override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
