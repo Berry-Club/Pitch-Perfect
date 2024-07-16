@@ -13,6 +13,7 @@ object ModCommands {
             Commands
                 .literal(PitchPerfect.ID)
                 .then(PlayRawSongCommand.register())
+                .then(PlaySongCommand.register())
                 .then(ListSongsCommand.register())
                 .then(RemoveSongCommand.register())
         )

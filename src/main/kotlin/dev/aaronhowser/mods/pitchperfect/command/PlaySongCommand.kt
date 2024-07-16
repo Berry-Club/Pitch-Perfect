@@ -16,7 +16,7 @@ object PlaySongCommand {
 
     fun register(): ArgumentBuilder<CommandSourceStack, *> {
         return Commands
-            .literal("playRawSong")
+            .literal("playSong")
             .requires { it.hasPermission(2) }
             .then(
                 Commands
