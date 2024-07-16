@@ -40,11 +40,11 @@ object OtherEvents {
     fun onChat(event: ServerChatEvent) {
         val player = event.player
 
-        val songSavedData = SongSavedData.get(player.server.overworld())
+        val songSavedData = SongSavedData.get(player)
 
         val handItem = player.getItemInHand(InteractionHand.MAIN_HAND)
         val songUuid = handItem.get(UuidComponent.songUuidComponent)?.uuid ?: return
-        val handSongInfo = songSavedData.getSong(songUuid) ?: return
+        val handSongInfo = songSavedData.getSongInfo(songUuid) ?: return
 
         player.sendSystemMessage(Component.literal(handSongInfo.toString()))
     }

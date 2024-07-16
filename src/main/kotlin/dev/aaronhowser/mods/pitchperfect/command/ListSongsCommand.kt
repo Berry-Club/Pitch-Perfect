@@ -18,10 +18,8 @@ object ListSongsCommand {
     private fun listSongs(context: CommandContext<CommandSourceStack>): Int {
         val player = context.source.entity ?: return 0
 
-        val overworld = context.source.server.overworld()
-        val songSavedData = SongSavedData.get(overworld)
-
-        val songs = songSavedData.getSongsGroupedByAuthor()
+        val songSavedData = SongSavedData.get(player)
+        val songs = songSavedData.getSongInfosGroupedByAuthor()
 
         player.sendSystemMessage(Component.literal("Songs:"))
         for (songInfo in songs) {

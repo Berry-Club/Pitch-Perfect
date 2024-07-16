@@ -7,6 +7,7 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.saveddata.SavedData
 import java.util.*
@@ -49,51 +50,57 @@ class SongSavedData : SavedData() {
                 "pitchperfect"
             )
         }
+
+        fun get(entity: Entity): SongSavedData {
+            val level = entity.server?.overworld() ?: throw IllegalArgumentException("Entity must be serverside")
+
+            return get(level)
+        }
     }
 
-    fun addSong(song: Song, title: String, author: Player): SongInfo {
+    fun addSongInfo(song: Song, title: String, author: Player): SongInfo {
         val songInfo = SongInfo(
             title,
             author,
             song
         )
 
-        addSong(songInfo)
+        addSongInfo(songInfo)
         return songInfo
     }
 
-    fun addSong(songInfo: SongInfo) {
+    fun addSongInfo(songInfo: SongInfo) {
         songs[songInfo.song.uuid] = songInfo
         setDirty()
     }
 
-    fun removeSong(uuid: UUID) {
+    fun removeSongInfo(uuid: UUID) {
         val song = songs.getOrDefault(uuid, null) ?: return
-        removeSong(song)
+        removeSongInfo(song)
     }
 
-    fun removeSong(song: SongInfo) {
+    fun removeSongInfo(song: SongInfo) {
         songs.remove(song.song.uuid)
         setDirty()
     }
 
-    fun getSong(uuid: UUID): SongInfo? {
+    fun getSongInfo(uuid: UUID): SongInfo? {
         return songs.getOrDefault(uuid, null)
     }
 
-    fun getSongs(): List<SongInfo> {
+    fun getSongInfos(): List<SongInfo> {
         return songs.values.toList()
     }
 
-    fun getSongsBy(author: Player): List<SongInfo> {
-        return getSongsBy(author.uuid)
+    fun getSongInfosBy(author: Player): List<SongInfo> {
+        return getSongInfosBy(author.uuid)
     }
 
-    fun getSongsBy(author: UUID): List<SongInfo> {
+    fun getSongInfosBy(author: UUID): List<SongInfo> {
         return songs.values.filter { it.authorUuid == author }
     }
 
-    fun getSongsGroupedByAuthor(): List<SongInfo> {
+    fun getSongInfosGroupedByAuthor(): List<SongInfo> {
         val compareBy: Comparator<SongInfo> = compareBy(SongInfo::authorName, SongInfo::title)
         return songs.values.sortedWith(compareBy)
     }

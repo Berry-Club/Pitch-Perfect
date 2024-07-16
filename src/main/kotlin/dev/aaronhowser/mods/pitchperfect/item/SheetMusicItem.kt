@@ -50,8 +50,8 @@ class SheetMusicItem : Item(
             OtherEvents.builders.remove(player)
             val song = songBuilder.build(Song.defaultFile)
 
-            val songData = SongSavedData.get(player.server.overworld())
-            val songInfo = songData.addSong(song, "Untitled", player)
+            val songData = SongSavedData.get(player)
+            val songInfo = songData.addSongInfo(song, "Untitled", player)
 
             itemStack.set(UuidComponent.songUuidComponent, UuidComponent(songInfo.song.uuid))
         }
