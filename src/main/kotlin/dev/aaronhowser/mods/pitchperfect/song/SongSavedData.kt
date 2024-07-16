@@ -6,8 +6,8 @@ import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.saveddata.SavedData
 import java.util.*
@@ -51,11 +51,10 @@ class SongSavedData : SavedData() {
             )
         }
 
-        fun get(entity: Entity): SongSavedData {
-            val level = entity.server?.overworld() ?: throw IllegalArgumentException("Entity must be serverside")
-
-            return get(level)
-        }
+        val ServerLevel.songData: SongSavedData
+            get() = get(this.server.overworld())
+        val MinecraftServer.songData: SongSavedData
+            get() = get(this.overworld())
     }
 
     data class AddSongResult(

@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
+import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -40,7 +40,7 @@ object OtherEvents {
     fun onChat(event: ServerChatEvent) {
         val player = event.player
 
-        val songSavedData = SongSavedData.get(player)
+        val songSavedData = player.server.songData
 
         val handItem = player.getItemInHand(InteractionHand.MAIN_HAND)
         val songUuid = handItem.get(UuidComponent.songUuidComponent)?.uuid ?: return

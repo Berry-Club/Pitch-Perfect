@@ -4,10 +4,11 @@ import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
+import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.UuidArgument
+import net.minecraft.server.level.ServerPlayer
 
 object RemoveSongCommand {
 
@@ -24,8 +25,8 @@ object RemoveSongCommand {
     }
 
     private fun removeSong(context: CommandContext<CommandSourceStack>): Int {
-        val player = context.source.entity ?: return 0
-        val songSavedData = SongSavedData.get(player)
+        val player = context.source.entity as? ServerPlayer ?: return 0
+        val songSavedData = player.server.songData
 
         val uuid = UuidArgument.getUuid(context, SONG_ARGUMENT)
         val songInfo = songSavedData.getSongInfo(uuid) ?: return 0

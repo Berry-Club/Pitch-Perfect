@@ -1,12 +1,13 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
+import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
-import net.minecraft.world.inventory.ContainerData
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -47,6 +48,17 @@ class ComposerBlockEntity(
         }
 
         Containers.dropContents(this.level!!, this.blockPos, inventory)
+    }
+
+    fun getItem(): ItemStack {
+        return itemHandler.getStackInSlot(SHEET_MUSIC_SLOT)
+    }
+
+    fun getSongInfo(): SongInfo? {
+        val server = level?.server ?: return null
+        val uuid = getItem().get(UuidComponent.songUuidComponent)?.uuid ?: return null
+
+        return null
     }
 
 }

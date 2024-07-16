@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.command
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
+import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.UuidArgument
@@ -30,7 +30,7 @@ object PlaySongCommand {
             val songUuid = UuidArgument.getUuid(context, SONG_ARGUMENT)
             val player = context.source.entity as? ServerPlayer ?: return 0
 
-            val songSavedData = SongSavedData.get(player)
+            val songSavedData = player.server.songData
             val songInfo = songSavedData.getSongInfo(songUuid) ?: return 0
 
             val songPlayer = SongPlayer(player.level() as ServerLevel, songInfo.song) { player.eyePosition }

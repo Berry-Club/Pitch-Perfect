@@ -7,7 +7,7 @@ import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent.Companion.isTrue
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
+import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -52,7 +52,7 @@ class SheetMusicItem : Item(
             OtherEvents.builders.remove(player)
             val song = songBuilder.build(Song.defaultFile)
 
-            val songData = SongSavedData.get(player)
+            val songData = player.server.songData
             val newSongInfo = songData.addSongInfo(song, "Untitled", player)
 
             if (!newSongInfo.success) {

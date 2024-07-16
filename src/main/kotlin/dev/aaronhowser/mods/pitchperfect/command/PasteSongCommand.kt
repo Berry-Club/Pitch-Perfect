@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
+import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.client.Minecraft
@@ -13,7 +13,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.HoverEvent
-import net.minecraft.world.entity.player.Player
+import net.minecraft.server.level.ServerPlayer
 
 object PasteSongCommand {
 
@@ -33,7 +33,7 @@ object PasteSongCommand {
 
         try {
             val title = StringArgumentType.getString(context, TITLE_ARGUMENT)
-            val player = context.source.entity as? Player ?: return 0
+            val player = context.source.entity as? ServerPlayer ?: return 0
 
             //TODO: See if this works on servers
             val clipboard = Minecraft.getInstance().keyboardHandler.clipboard
@@ -51,7 +51,7 @@ object PasteSongCommand {
                 song
             )
 
-            val songSavedData = SongSavedData.get(player)
+            val songSavedData = player.server.songData
             val result = songSavedData.addSongInfo(songInfo)
 
             val component = if (result.success) {
