@@ -49,19 +49,4 @@ class ComposerBlockEntity(
         Containers.dropContents(this.level!!, this.blockPos, inventory)
     }
 
-    // What actually needs to get synced?
-    private val containerData = object : ContainerData {
-
-        override fun get(pIndex: Int): Int {
-            return 0
-        }
-
-        override fun set(pIndex: Int, pValue: Int) {
-        }
-
-        override fun getCount(): Int {
-            return 0
-        }
-    }
-
 }

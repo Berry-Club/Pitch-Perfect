@@ -30,7 +30,7 @@ object ModBusEvents {
 
         event.registerBlockEntity(
             Capabilities.ItemHandler.BLOCK,
-            ModBlockEntities.CONDUCTOR.get()
+            ModBlockEntities.COMPOSER.get()
         ) { blockEntity, direction -> blockEntity.getItemHandler(direction) }
 
     }
