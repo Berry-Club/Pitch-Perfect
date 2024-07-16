@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.screen
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.SpriteIconButton
@@ -94,17 +95,20 @@ class ComposerScreen(
         this.buttons.add(button)
     }
 
+    // Do 3 vertically-scrolling pages of 8 buttons each
     private fun addTimelineButtons() {
         val width = 16
-        val height = 8
+        val height = 16
 
-        for (i in 0 until 32) {
-            for (j in 0 until 24) {
-                val x = leftPos + 5 + i * width
-                val y = topPos + 25 + j * height
+        for (yIndex in 0 until 8) {
+            val y = topPos + 25 + yIndex * height
+
+            for (xIndex in 0 until 24) {
+                val x = leftPos + 5 + 16 + xIndex * width
 
                 addRegularButton(x, y, width, height)
             }
+
         }
     }
 
@@ -124,12 +128,42 @@ class ComposerScreen(
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
         renderButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        renderNoteNames(pGuiGraphics)
     }
 
     private fun renderButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         for (button in buttons) {
             button.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         }
+    }
+
+    private fun renderNoteNames(pGuiGraphics: GuiGraphics) {
+        val x = leftPos + 5 + 4
+
+        for (yIndex in 0 until 8) {
+            val y = topPos + 28 + yIndex * 16
+
+            val noteString = when (yIndex) {
+                0 -> "C"
+                1 -> "D"
+                2 -> "E"
+                3 -> "F"
+                4 -> "G"
+                5 -> "A"
+                6 -> "B"
+                7 -> "C"
+                else -> "X"
+            }
+
+            pGuiGraphics.drawString(
+                Minecraft.getInstance().font,
+                noteString,
+                x,
+                y,
+                0xFFFFFF
+            )
+        }
+
     }
 
 
