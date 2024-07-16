@@ -72,7 +72,24 @@ data class SongInfo(
                     )
             }
 
-        return component.append(uuidComponent).append(songDataComponent)
+        val playComponent = Component.literal(" [Play]")
+            .withStyle {
+                it
+                    .withHoverEvent(
+                        HoverEvent(
+                            HoverEvent.Action.SHOW_TEXT,
+                            Component.literal("Click to play song.")
+                        )
+                    )
+                    .withClickEvent(
+                        ClickEvent(
+                            ClickEvent.Action.RUN_COMMAND,
+                            "/pitchperfect playSong ${song.uuid}"
+                        )
+                    )
+            }
+
+        return component.append(uuidComponent).append(songDataComponent).append(playComponent)
     }
 
     companion object {

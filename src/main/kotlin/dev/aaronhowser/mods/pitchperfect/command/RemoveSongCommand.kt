@@ -27,9 +27,10 @@ object RemoveSongCommand {
         val songSavedData = SongSavedData.get(player)
 
         val uuid = UuidArgument.getUuid(context, SONG_ARGUMENT)
+        val songInfo = songSavedData.getSongInfo(uuid) ?: return 0
         songSavedData.removeSongInfo(uuid)
 
-        player.sendSystemMessage(Component.literal("Song removed"))
+        player.sendSystemMessage(Component.literal("Song removed: ${songInfo.title} by ${songInfo.authorName}"))
 
         return 1
     }
