@@ -37,7 +37,7 @@ object PasteSongCommand {
             //TODO: See if this works on servers
             val clipboard = Minecraft.getInstance().keyboardHandler.clipboard
 
-            val song = Song.parse(clipboard)
+            val song = Song.fromString(clipboard)
 
             if (song == null) {
                 player.sendSystemMessage(Component.literal("Failed to parse song from clipboard"))

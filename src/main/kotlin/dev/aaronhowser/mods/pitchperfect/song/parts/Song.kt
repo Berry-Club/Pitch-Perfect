@@ -49,7 +49,7 @@ data class Song(
         val CODEC: Codec<Song> = Codec.STRING.flatXmap(
             { string: String ->
                 try {
-                    return@flatXmap DataResult.success(parse(string))
+                    return@flatXmap DataResult.success(fromString(string))
                 } catch (exception: Exception) {
                     return@flatXmap DataResult.error { "Failed to parse song: " + exception.message }
                 }
@@ -66,11 +66,11 @@ data class Song(
             Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
         ).map(::Song, Song::beats)
 
-        fun parse(string: String): Song? {
-            return parse(StringReader(string))
+        fun fromString(string: String): Song? {
+            return FromStringReader(StringReader(string))
         }
 
-        fun parse(reader: StringReader): Song? {
+        fun FromStringReader(reader: StringReader): Song? {
 
             try {
 
@@ -137,7 +137,7 @@ data class Song(
             try {
 
                 val string = Files.readString(path)
-                val song = parse(string)
+                val song = fromString(string)
 
                 return song
             } catch (e: Exception) {

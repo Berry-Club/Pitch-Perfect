@@ -29,7 +29,7 @@ object PlayRawSongCommand {
     private fun playSong(context: CommandContext<CommandSourceStack>): Int {
         try {
             val songString = StringArgumentType.getString(context, SONG_ARGUMENT)
-            val song = Song.parse(songString)
+            val song = Song.fromString(songString)
 
             val player = context.source.entity as? ServerPlayer ?: return 0
 

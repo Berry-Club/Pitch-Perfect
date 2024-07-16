@@ -124,7 +124,7 @@ data class SongInfo(
                 val title = tag.getString(TITLE)
                 val authorUuid = tag.getUUID(AUTHOR_UUID)
                 val authorName = tag.getString(AUTHOR_NAME)
-                val song = Song.parse(tag.getString(SONG))
+                val song = Song.fromString(tag.getString(SONG))
 
                 if (song == null) {
                     PitchPerfect.LOGGER.error("Failed to parse song from tag: $tag")
