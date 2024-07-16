@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.pitchperfect.menu.base
+package dev.aaronhowser.mods.pitchperfect.screen.base
 
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 

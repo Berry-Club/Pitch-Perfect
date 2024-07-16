@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -79,10 +80,7 @@ class ComposerBlock(
         pPlayer: Player,
         pHitResult: BlockHitResult
     ): InteractionResult {
-        val blockEntity = pLevel.getBlockEntity(pPos)
-                as? ComposerBlockEntity ?: throw IllegalStateException("No block entity found at $pPos")
-
-        pPlayer.openMenu(blockEntity, pPos)
+        pPlayer.sendSystemMessage(Component.literal("Hi!"))
 
         return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
     }

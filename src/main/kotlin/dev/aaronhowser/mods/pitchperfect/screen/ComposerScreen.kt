@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.pitchperfect.menu
+package dev.aaronhowser.mods.pitchperfect.screen
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import net.minecraft.client.gui.screens.Screen
