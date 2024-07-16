@@ -20,9 +20,7 @@ class ComposerTimeline(
     val timelineButtons: MutableMap<Pair<Int, Int>, Button> = mutableMapOf()
     private val timelineTopPos by lazy { composerScreen.topPos + BUFFER_SPACE + INSTRUMENT_BUTTON_SIZE + BUFFER_SPACE + 20 }
 
-    lateinit var scrollUpButton: Button
-    lateinit var scrollDownButton: Button
-    private var scrollIndex: Int = 0
+    var scrollIndex: Int = 0
         set(value) {
             field = value.coerceIn(0, Note.entries.size - ROW_COUNT)
         }
@@ -34,32 +32,6 @@ class ComposerTimeline(
 
     fun addButtons() {
         addTimelineButtons()
-        addScrollButtons()
-    }
-
-    private fun addScrollButtons() {
-        val width = 16
-        val height = 16
-
-        val x = composerScreen.leftPos + 5
-        val y = timelineTopPos - 18
-
-        scrollUpButton = Button.Builder(Component.empty()) { scrollIndex-- }
-            .size(width, height)
-            .build()
-            .apply {
-                this.x = x
-                this.y = y
-            }
-
-        scrollDownButton = Button.Builder(Component.empty()) { scrollIndex++ }
-            .size(width, height)
-            .build()
-            .apply {
-                this.x = x + 18
-                this.y = y
-            }
-
     }
 
     private fun addTimelineButtons() {
@@ -101,7 +73,6 @@ class ComposerTimeline(
 
     private fun renderButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         renderNoteButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        renderScrollButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
     // TODO: Cache this instead of iterating every frame(?)
@@ -121,11 +92,6 @@ class ComposerTimeline(
                 render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
             }
         }
-    }
-
-    private fun renderScrollButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        scrollUpButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        scrollDownButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
 }

@@ -24,7 +24,7 @@ class ComposerScreen(
     private val instrumentButtons: MutableList<Button> = mutableListOf()
     private val timeline = ComposerTimeline(this)
     private val buttons: List<Button>
-        get() = instrumentButtons + timeline.timelineButtons.values + timeline.scrollUpButton + timeline.scrollDownButton
+        get() = instrumentButtons + timeline.timelineButtons.values
 
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
@@ -130,9 +130,9 @@ class ComposerScreen(
 
     override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pScrollX: Double, pScrollY: Double): Boolean {
         if (pScrollY > 0) {
-            timeline.scrollUpButton.onPress()
+            timeline.scrollIndex--
         } else if (pScrollY < 0) {
-            timeline.scrollDownButton.onPress()
+            timeline.scrollIndex++
         }
 
         return super.mouseScrolled(pMouseX, pMouseY, pScrollX, pScrollY)
