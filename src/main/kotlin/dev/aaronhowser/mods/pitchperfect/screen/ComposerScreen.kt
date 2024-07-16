@@ -128,4 +128,14 @@ class ComposerScreen(
         return true
     }
 
+    override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pScrollX: Double, pScrollY: Double): Boolean {
+        if (pScrollY > 0) {
+            timeline.scrollUpButton.onPress()
+        } else if (pScrollY < 0) {
+            timeline.scrollDownButton.onPress()
+        }
+
+        return super.mouseScrolled(pMouseX, pMouseY, pScrollX, pScrollY)
+    }
+
 }
