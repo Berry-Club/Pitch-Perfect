@@ -16,10 +16,17 @@ class ComposerScreen(
     pTitle: Component
 ) : Screen(pTitle) {
 
+    companion object {
+        const val INSTRUMENT_BUTTON_SIZE = 18
+        const val BUFFER_SPACE = 5
+    }
+
     private val buttons: MutableList<Button> = mutableListOf()
 
     private var leftPos by Delegates.notNull<Int>()
     private var topPos by Delegates.notNull<Int>()
+
+    private val timelineTopPos by lazy { topPos + BUFFER_SPACE + INSTRUMENT_BUTTON_SIZE + BUFFER_SPACE + 20 }
 
     override fun renderBackground(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         this.renderTransparentBackground(pGuiGraphics)
@@ -101,7 +108,7 @@ class ComposerScreen(
         val height = 16
 
         for (yIndex in 0 until 8) {
-            val y = topPos + 25 + yIndex * height
+            val y = timelineTopPos + yIndex * height
 
             for (xIndex in 0 until 24) {
                 val x = leftPos + 5 + 16 + xIndex * width
@@ -141,7 +148,7 @@ class ComposerScreen(
         val x = leftPos + 5 + 4
 
         for (yIndex in 0 until 8) {
-            val y = topPos + 28 + yIndex * 16
+            val y = timelineTopPos + 3 + yIndex * 16
 
             val noteString = when (yIndex) {
                 0 -> "C"
