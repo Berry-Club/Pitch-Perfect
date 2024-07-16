@@ -40,7 +40,7 @@ class ComposerTimeline(
         val width = 16
         val height = 16
 
-        for (yIndex in 0 until ROW_COUNT) {
+        for (yIndex in 0 until 24) {
             for (xIndex in 0 until 24) {
 
                 val button = Button.Builder(Component.empty()) {
@@ -93,8 +93,14 @@ class ComposerTimeline(
 
         for ((pos, button) in timelineButtons) {
 
-            val x = composerScreen.leftPos + 5 + 16 + pos.first * width
-            val y = timelineTopPos + 3 + pos.second * height
+            val (gridX, gridY) = pos
+
+            if (gridY !in scrollIndex until scrollIndex + ROW_COUNT) {
+                continue
+            }
+
+            val x = composerScreen.leftPos + 5 + 16 + gridX * width
+            val y = timelineTopPos + 3 + (gridY - scrollIndex) * height
 
             button.apply {
                 this.x = x
