@@ -85,14 +85,16 @@ class ComposerTimeline(
             val y = timelineTopPos + 3 + yIndex * 16
 
             val noteIndex = yIndex + scrollIndex
-            val noteString = Note.entries.getOrNull(noteIndex)?.displayName ?: "YOU FUCKED UP"
+            val note = Note.entries.getOrNull(noteIndex)
+            val noteString = note?.displayName ?: "YOU FUCKED UP"
+            val noteColor = note?.color ?: 0xFFFFFF
 
             pGuiGraphics.drawString(
                 Minecraft.getInstance().font,
                 noteString,
                 x,
                 y,
-                0xFFFFFF
+                noteColor
             )
         }
     }
