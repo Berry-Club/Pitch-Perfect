@@ -14,7 +14,7 @@ import net.neoforged.neoforge.items.SlotItemHandler
 class ComposerMenu(
     id: Int,
     inventory: Inventory,
-    val blockEntity: ComposerBlockEntity,
+    private val blockEntity: ComposerBlockEntity,
     private val containerData: ContainerData
 ) : AbstractContainerMenu(ModMenuTypes.COMPOSER.get(), id) {
 
@@ -43,8 +43,10 @@ class ComposerMenu(
 
     val level: Level = inventory.player.level()
 
-    private val topLeftInventoryX = 8
-    private val topLeftInventoryY = 84
+    companion object {
+        private const val topLeftInventoryX = 8
+        private const val topLeftInventoryY = 84
+    }
 
     // Adds the 27 slots of the player inventory
     private fun addPlayerInventory(playerInventory: Inventory) {
@@ -64,13 +66,16 @@ class ComposerMenu(
 
     // Adds the 9 slots of the player hotbar
     private fun addPlayerHotbar(playerInventory: Inventory) {
+
+        val hotbarGapHeight = 4
+
         for (column in 0 until 9) {
             addSlot(
                 Slot(
                     playerInventory,
                     column,
-                    topLeftInventoryX + column * 18,
-                    topLeftInventoryY + 4 + 3 * 18
+                    column * 18,
+                    topLeftInventoryY + hotbarGapHeight + 3 * 18
                 )
             )
         }
