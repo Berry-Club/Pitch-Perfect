@@ -13,14 +13,10 @@ class ComposerScreen(
 ) : AbstractContainerScreen<ComposerMenu>(pMenu, pPlayerInventory, pTitle) {
 
     override fun renderBg(pGuiGraphics: GuiGraphics, pPartialTick: Float, pMouseX: Int, pMouseY: Int) {
-
-        val x = (width - imageWidth) / 2
-        val y = (height - imageHeight) / 2
-
         pGuiGraphics.blit(
             ScreenTextures.Backgrounds.COMPOSER,
-            x,
-            y,
+            leftPos,
+            topPos,
             0,
             0,
             ScreenTextures.Backgrounds.TEXTURE_SIZE,
