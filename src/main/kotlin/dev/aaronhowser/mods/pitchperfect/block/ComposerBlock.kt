@@ -80,9 +80,9 @@ class ComposerBlock(
         pHitResult: BlockHitResult
     ): InteractionResult {
         val blockEntity = pLevel.getBlockEntity(pPos)
-                as? ComposerBlockEntity ?: return InteractionResult.FAIL
+                as? ComposerBlockEntity ?: throw IllegalStateException("No block entity found at $pPos")
 
-        blockEntity.playerClick(pPlayer)
+        pPlayer.openMenu(blockEntity, pPos)
 
         return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
     }

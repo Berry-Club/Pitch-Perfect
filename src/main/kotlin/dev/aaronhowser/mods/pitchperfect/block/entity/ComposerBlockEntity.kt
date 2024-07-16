@@ -71,7 +71,7 @@ class ComposerBlockEntity(
     }
 
     override fun getDisplayName(): Component {
-        TODO("Not yet implemented")
+        return Component.literal("ComposerAAAAAAAAAAA")
     }
 
 }
