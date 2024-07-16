@@ -8,6 +8,7 @@ import net.minecraft.client.gui.components.SpriteIconButton
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import kotlin.properties.Delegates
 
 class ComposerScreen(
     val composerBlockEntity: ComposerBlockEntity,
@@ -16,12 +17,15 @@ class ComposerScreen(
 
     private val buttons: MutableList<Button> = mutableListOf()
 
+    private var leftPos by Delegates.notNull<Int>()
+    private var topPos by Delegates.notNull<Int>()
+
     override fun renderBackground(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         this.renderTransparentBackground(pGuiGraphics)
         pGuiGraphics.blit(
             ScreenTextures.Background.COMPOSER,
-            (width - 512) / 2,
-            (height - 256) / 2,
+            leftPos,
+            topPos,
             0f,
             0f,
             512,
@@ -32,6 +36,9 @@ class ComposerScreen(
     }
 
     override fun init() {
+        leftPos = (width - ScreenTextures.Background.COMPOSER_WIDTH) / 2
+        topPos = (height - ScreenTextures.Background.COMPOSER_HEIGHT) / 2
+
         addButtons()
     }
 

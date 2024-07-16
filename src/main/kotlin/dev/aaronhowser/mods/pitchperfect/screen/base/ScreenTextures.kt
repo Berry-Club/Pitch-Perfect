@@ -8,6 +8,9 @@ object ScreenTextures {
         val COMPOSER = OtherUtil.modResource("textures/gui/container/composer.png")
 
         const val TEXTURE_SIZE = 256
+
+        const val COMPOSER_WIDTH = 512
+        const val COMPOSER_HEIGHT = 256
     }
 
     object Sprite {
