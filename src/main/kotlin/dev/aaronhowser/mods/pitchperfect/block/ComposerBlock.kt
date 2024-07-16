@@ -2,6 +2,9 @@ package dev.aaronhowser.mods.pitchperfect.block
 
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
+import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
+import net.minecraft.client.Minecraft
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
@@ -80,7 +83,13 @@ class ComposerBlock(
         pPlayer: Player,
         pHitResult: BlockHitResult
     ): InteractionResult {
-        pPlayer.sendSystemMessage(Component.literal("Hi!"))
+        val blockEntity = pLevel.getBlockEntity(pPos)
+                as? ComposerBlockEntity ?: return InteractionResult.PASS
+
+        if (pPlayer is LocalPlayer) {
+            val screen = ComposerScreen(blockEntity, Component.literal("test"))
+            Minecraft.getInstance().setScreen(screen)
+        }
 
         return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
     }
