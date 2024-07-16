@@ -51,29 +51,34 @@ object PasteSongCommand {
             )
 
             val songSavedData = SongSavedData.get(player)
-            songSavedData.addSongInfo(songInfo)
+            val newSongInfo = songSavedData.addSongInfo(songInfo)
 
-            val component = Component
-                .literal("Song added: $title")
-                .withStyle {
-                    it
-                        .withHoverEvent(
-                            HoverEvent(
-                                HoverEvent.Action.SHOW_TEXT,
-                                Component.literal("Click to copy UUID")
+            val component = if (newSongInfo.success) {
+                Component
+                    .literal("Song added: $title")
+                    .withStyle {
+                        it
+                            .withHoverEvent(
+                                HoverEvent(
+                                    HoverEvent.Action.SHOW_TEXT,
+                                    Component.literal("Click to copy UUID")
+                                )
                             )
-                        )
-                        .withClickEvent(
-                            ClickEvent(
-                                ClickEvent.Action.COPY_TO_CLIPBOARD,
-                                songInfo.song.uuid.toString()
+                            .withClickEvent(
+                                ClickEvent(
+                                    ClickEvent.Action.COPY_TO_CLIPBOARD,
+                                    songInfo.song.uuid.toString()
+                                )
                             )
-                        )
-                }
+                    }
+            } else {
+                Component.literal("Failed to add song, as an identical song already exists!\n")
+                    .append(newSongInfo.songInfo.getComponent())
+            }
 
             player.sendSystemMessage(component)
 
-            return 1
+            return if (newSongInfo.success) 1 else 0
         } catch (e: Exception) {
             e.printStackTrace()
             return 0

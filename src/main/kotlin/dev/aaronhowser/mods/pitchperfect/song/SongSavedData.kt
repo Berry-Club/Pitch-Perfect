@@ -58,25 +58,31 @@ class SongSavedData : SavedData() {
         }
     }
 
-    fun addSongInfo(song: Song, title: String, author: Player): SongInfo {
+    data class AddSongResult(
+        val songInfo: SongInfo,
+        val success: Boolean
+    )
+
+    fun addSongInfo(song: Song, title: String, author: Player): AddSongResult {
         val songInfo = SongInfo(
             title,
             author,
             song
         )
 
-        addSongInfo(songInfo)
-        return songInfo
+        return addSongInfo(songInfo)
     }
 
-    fun addSongInfo(songInfo: SongInfo) {
-        val existingSong = songs.getOrDefault(songInfo.song.uuid, null)
+    fun addSongInfo(songInfo: SongInfo): AddSongResult {
+        val existingSong = songs[songInfo.song.uuid]
 
         if (existingSong == null) {
             songs[songInfo.song.uuid] = songInfo
             setDirty()
+            return AddSongResult(songInfo, true)
         } else {
             PitchPerfect.LOGGER.error("Attempted to add a song that already exists! $songInfo")
+            return AddSongResult(existingSong, false)
         }
     }
 

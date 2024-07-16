@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -51,9 +52,15 @@ class SheetMusicItem : Item(
             val song = songBuilder.build(Song.defaultFile)
 
             val songData = SongSavedData.get(player)
-            val songInfo = songData.addSongInfo(song, "Untitled", player)
+            val newSongInfo = songData.addSongInfo(song, "Untitled", player)
 
-            itemStack.set(UuidComponent.songUuidComponent, UuidComponent(songInfo.song.uuid))
+            if (!newSongInfo.success) {
+                player.sendSystemMessage(Component.literal("Failed to save song, an existing one already exists:"))
+                player.sendSystemMessage(newSongInfo.songInfo.getComponent())
+                return
+            }
+
+            itemStack.set(UuidComponent.songUuidComponent, UuidComponent(newSongInfo.songInfo.song.uuid))
         }
 
         fun isRecording(stack: ItemStack): Boolean {
