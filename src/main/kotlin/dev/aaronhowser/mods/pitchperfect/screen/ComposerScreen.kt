@@ -39,7 +39,8 @@ class ComposerScreen(
         leftPos = (width - ScreenTextures.Background.COMPOSER_WIDTH) / 2
         topPos = (height - ScreenTextures.Background.COMPOSER_HEIGHT) / 2
 
-        addButtons()
+        addInstrumentButtons()
+        addTimelineButtons()
     }
 
     private enum class Instruments(
@@ -63,17 +64,17 @@ class ComposerScreen(
         XYLOPHONE(ScreenTextures.Sprite.Instrument.XYLOPHONE)
     }
 
-    private fun addButtons() {
+    private fun addInstrumentButtons() {
         var x = leftPos + 5
         val y = topPos + 5
 
         for (instrument in Instruments.entries) {
-            addButton(x, y, 18, 18, instrument.image)
+            addIconButton(x, y, 18, 18, instrument.image)
             x += 19
         }
     }
 
-    private fun addButton(
+    private fun addIconButton(
         x: Int, y: Int,
         width: Int, height: Int,
         image: ResourceLocation,
@@ -89,6 +90,32 @@ class ComposerScreen(
                 this.x = x
                 this.y = y
             }
+
+        this.buttons.add(button)
+    }
+
+    private fun addTimelineButtons() {
+        val width = 16
+        val height = 8
+
+        for (i in 0 until 32) {
+            for (j in 0 until 24) {
+                val x = leftPos + 5 + i * width
+                val y = topPos + 25 + j * height
+
+                addRegularButton(x, y, width, height)
+            }
+        }
+    }
+
+    private fun addRegularButton(
+        x: Int, y: Int,
+        width: Int, height: Int,
+        onPress: (Button) -> Unit = {},
+    ) {
+        val button = Button.builder(Component.empty(), onPress)
+            .bounds(x, y, width, height)
+            .build()
 
         this.buttons.add(button)
     }
