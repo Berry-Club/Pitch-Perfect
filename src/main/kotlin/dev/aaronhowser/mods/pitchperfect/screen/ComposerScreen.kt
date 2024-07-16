@@ -15,12 +15,12 @@ class ComposerScreen(
         this.renderTransparentBackground(pGuiGraphics)
         pGuiGraphics.blit(
             ScreenTextures.Backgrounds.COMPOSER,
-            0,
-            0,
+            (width - 512) / 2,
+            (height - 256) / 2,
             0f,
             0f,
             512,
-            512,
+            256,
             512,
             512
         )
