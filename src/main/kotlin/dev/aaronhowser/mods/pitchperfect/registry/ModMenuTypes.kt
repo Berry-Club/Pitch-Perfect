@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.registry
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import dev.aaronhowser.mods.pitchperfect.menu.ComposerMenu
 import dev.aaronhowser.mods.pitchperfect.menu.ComposerScreen
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.inventory.MenuType
