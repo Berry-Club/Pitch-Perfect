@@ -1,14 +1,9 @@
 package dev.aaronhowser.mods.pitchperfect.screen.base.composer
 
 import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
-import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen.Companion.BUFFER_SPACE
-import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen.Companion.INSTRUMENT_BUTTON_SIZE
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.Button
-import net.minecraft.client.gui.components.Tooltip
-import net.minecraft.network.chat.Component
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.api.distmarker.OnlyIn
 
@@ -21,7 +16,8 @@ class ComposerTimeline(
         private const val ROW_COUNT = 12
     }
 
-    private val timelineTopPos by lazy { composerScreen.topPos + BUFFER_SPACE + INSTRUMENT_BUTTON_SIZE + BUFFER_SPACE + 20 }
+    private val timelineTopPos by lazy { composerScreen.topPos + 85 }
+    private val timelineLeftPos by lazy { composerScreen.leftPos + 84 }
 
     var scrollIndex: Int = 0
         set(value) {
@@ -33,10 +29,10 @@ class ComposerTimeline(
     }
 
     private fun renderNoteNames(pGuiGraphics: GuiGraphics) {
-        val x = composerScreen.leftPos + 5 + 4
+        val x = timelineLeftPos - 20
 
         for (yIndex in 0 until ROW_COUNT) {
-            val y = timelineTopPos + 3 + yIndex * 16
+            val y = timelineTopPos + yIndex * 13
 
             val noteIndex = yIndex + scrollIndex
             val note = Note.entries.getOrNull(noteIndex)
