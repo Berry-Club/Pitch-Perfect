@@ -9,8 +9,11 @@ import net.minecraft.client.gui.components.SpriteIconButton
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.neoforged.api.distmarker.Dist
+import net.neoforged.api.distmarker.OnlyIn
 import kotlin.properties.Delegates
 
+@OnlyIn(Dist.CLIENT)
 class ComposerScreen(
     val composerBlockEntity: ComposerBlockEntity,
     pTitle: Component
@@ -26,7 +29,7 @@ class ComposerScreen(
     private val instrumentButtons: MutableList<Button> = mutableListOf()
     private val timeline = ComposerTimeline(this)
     private val buttons: List<Button>
-        get() = instrumentButtons + timeline.timelineButtons.values
+        get() = instrumentButtons + timeline.timelineButtons.values.mapNotNull { it.button }
 
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()

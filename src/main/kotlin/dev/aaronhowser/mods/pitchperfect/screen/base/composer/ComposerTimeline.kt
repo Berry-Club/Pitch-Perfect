@@ -9,7 +9,10 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.Component
+import net.neoforged.api.distmarker.Dist
+import net.neoforged.api.distmarker.OnlyIn
 
+@OnlyIn(Dist.CLIENT)
 class ComposerTimeline(
     private val composerScreen: ComposerScreen
 ) {
@@ -18,8 +21,12 @@ class ComposerTimeline(
         private const val ROW_COUNT = 12
     }
 
-    val timelineButtons: MutableMap<Pair<Int, Int>, Button> = mutableMapOf()
-    val buttonInstruments: MutableMap<Button, ComposerScreen.Instrument?> = mutableMapOf()
+    data class TimelineButton(
+        var button: Button? = null,
+        var instruments: MutableList<ComposerScreen.Instrument> = mutableListOf()
+    )
+
+    val timelineButtons: MutableMap<Pair<Int, Int>, TimelineButton> = mutableMapOf()
     private val timelineTopPos by lazy { composerScreen.topPos + BUFFER_SPACE + INSTRUMENT_BUTTON_SIZE + BUFFER_SPACE + 20 }
 
     var scrollIndex: Int = 0
@@ -42,21 +49,27 @@ class ComposerTimeline(
 
         for (yIndex in 0 until 24) {
             for (xIndex in 0 until 24) {
+                var timelineButton = TimelineButton()
 
-                val button = Button.Builder(Component.empty()) {
-                    this.buttonInstruments[it] = if (this.buttonInstruments[it] == null) {
-                        composerScreen.selectedInstrument
-                    } else {
-                        null
+                val button = Button.Builder(Component.empty()) { button ->
+                    val selectedInstrument = composerScreen.selectedInstrument
+                    if (selectedInstrument != null) {
+                        if (timelineButton.instruments.contains(selectedInstrument)) {
+                            timelineButton.instruments.remove(selectedInstrument)
+                        } else {
+                            timelineButton.instruments.add(selectedInstrument)
+                        }
                     }
 
-                    it.tooltip = Tooltip.create(Component.literal(buttonInstruments[it]?.name ?: "Empty"))
+                    val component =
+                        Component.empty().append(timelineButton.instruments.map { it.name }.joinToString("\n"))
+                    button.tooltip = Tooltip.create(component)
                 }
                     .size(width, height)
                     .build()
 
-                this.timelineButtons[Pair(xIndex, yIndex)] = button
-                this.buttonInstruments[button] = null
+                timelineButton = TimelineButton(button)
+                timelineButtons[Pair(xIndex, yIndex)] = timelineButton
             }
         }
     }
@@ -86,12 +99,11 @@ class ComposerTimeline(
         renderNoteButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
-    // TODO: Cache this instead of iterating every frame(?)
     private fun renderNoteButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         val width = 16
         val height = 16
 
-        for ((pos, button) in timelineButtons) {
+        for ((pos, timelineButton) in timelineButtons) {
 
             val (gridX, gridY) = pos
 
@@ -102,7 +114,7 @@ class ComposerTimeline(
             val x = composerScreen.leftPos + 5 + 16 + gridX * width
             val y = timelineTopPos + 3 + (gridY - scrollIndex) * height
 
-            button.apply {
+            timelineButton.button?.apply {
                 this.x = x
                 this.y = y
 
