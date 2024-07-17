@@ -21,12 +21,6 @@ class ComposerTimeline(
         private const val ROW_COUNT = 12
     }
 
-    data class TimelineButton(
-        var button: Button? = null,
-        var instruments: MutableList<ComposerScreen.Instrument> = mutableListOf()
-    )
-
-    val timelineButtons: MutableMap<Pair<Int, Int>, TimelineButton> = mutableMapOf()
     private val timelineTopPos by lazy { composerScreen.topPos + BUFFER_SPACE + INSTRUMENT_BUTTON_SIZE + BUFFER_SPACE + 20 }
 
     var scrollIndex: Int = 0
@@ -35,43 +29,7 @@ class ComposerTimeline(
         }
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        renderButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         renderNoteNames(pGuiGraphics)
-    }
-
-    fun addButtons() {
-        addTimelineButtons()
-    }
-
-    private fun addTimelineButtons() {
-        val width = 16
-        val height = 16
-
-        for (yIndex in 0 until 24) {
-            for (xIndex in 0 until 24) {
-                var timelineButton = TimelineButton()
-
-                val button = Button.Builder(Component.empty()) { button ->
-                    val selectedInstrument = composerScreen.selectedInstrument
-                    if (selectedInstrument != null) {
-                        if (timelineButton.instruments.contains(selectedInstrument)) {
-                            timelineButton.instruments.remove(selectedInstrument)
-                        } else {
-                            timelineButton.instruments.add(selectedInstrument)
-                        }
-                    }
-
-                    val component =
-                        Component.empty().append(timelineButton.instruments.map { it.name }.joinToString("\n"))
-                    button.tooltip = Tooltip.create(component)
-                }
-                    .size(width, height)
-                    .build()
-
-                timelineButton = TimelineButton(button)
-                timelineButtons[Pair(xIndex, yIndex)] = timelineButton
-            }
-        }
     }
 
     private fun renderNoteNames(pGuiGraphics: GuiGraphics) {
@@ -95,32 +53,5 @@ class ComposerTimeline(
         }
     }
 
-    private fun renderButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        renderNoteButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-    }
-
-    private fun renderNoteButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        val width = 16
-        val height = 16
-
-        for ((pos, timelineButton) in timelineButtons) {
-
-            val (gridX, gridY) = pos
-
-            if (gridY !in scrollIndex until scrollIndex + ROW_COUNT) {
-                continue
-            }
-
-            val x = composerScreen.leftPos + 5 + 16 + gridX * width
-            val y = timelineTopPos + 3 + (gridY - scrollIndex) * height
-
-            timelineButton.button?.apply {
-                this.x = x
-                this.y = y
-
-                render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-            }
-        }
-    }
 
 }

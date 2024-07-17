@@ -29,7 +29,7 @@ class ComposerScreen(
     private val instrumentButtons: MutableList<Button> = mutableListOf()
     private val timeline = ComposerTimeline(this)
     private val buttons: List<Button> by lazy {
-        instrumentButtons + timeline.timelineButtons.values.mapNotNull { it.button }
+        instrumentButtons
     }
 
     var leftPos: Int by Delegates.notNull()
@@ -55,7 +55,6 @@ class ComposerScreen(
         topPos = (height - ScreenTextures.Background.COMPOSER_HEIGHT) / 2
 
         addInstrumentButtons()
-        timeline.addButtons()
     }
 
     enum class Instrument(
