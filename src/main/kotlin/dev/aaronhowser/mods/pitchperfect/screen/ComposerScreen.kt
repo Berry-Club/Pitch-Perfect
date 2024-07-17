@@ -28,8 +28,9 @@ class ComposerScreen(
 
     private val instrumentButtons: MutableList<Button> = mutableListOf()
     private val timeline = ComposerTimeline(this)
-    private val buttons: List<Button>
-        get() = instrumentButtons + timeline.timelineButtons.values.mapNotNull { it.button }
+    private val buttons: List<Button> by lazy {
+        instrumentButtons + timeline.timelineButtons.values.mapNotNull { it.button }
+    }
 
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
