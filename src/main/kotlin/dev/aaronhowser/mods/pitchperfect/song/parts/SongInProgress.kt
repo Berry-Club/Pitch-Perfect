@@ -10,13 +10,13 @@ class SongInProgress(
     private val authorName: String
 ) {
 
-    private data class DelayPitch(
+    private data class Coordinate(
         val delay: Int,
         val pitch: Int
     )
 
     private val instrumentCounts: MutableMap<
-            DelayPitch,
+            Coordinate,
             MutableMap<Holder<SoundEvent>, Int>
             > = mutableMapOf()
 
@@ -25,13 +25,13 @@ class SongInProgress(
         pitch: Int,
         sound: Holder<SoundEvent>
     ) {
-        val delayPitch = DelayPitch(delay, pitch)
-        val instrumentCount = instrumentCounts[delayPitch] ?: mutableMapOf()
+        val coordinate = Coordinate(delay, pitch)
+        val instrumentCount = instrumentCounts[coordinate] ?: mutableMapOf()
 
         val currentCount = instrumentCount[sound] ?: 0
         instrumentCount[sound] = currentCount + 1
 
-        instrumentCounts[delayPitch] = instrumentCount
+        instrumentCounts[coordinate] = instrumentCount
     }
 
     fun decrementInstrument(
@@ -39,8 +39,8 @@ class SongInProgress(
         pitch: Int,
         sound: Holder<SoundEvent>
     ) {
-        val delayPitch = DelayPitch(delay, pitch)
-        val instrumentCount = instrumentCounts[delayPitch] ?: mutableMapOf()
+        val coordinate = Coordinate(delay, pitch)
+        val instrumentCount = instrumentCounts[coordinate] ?: mutableMapOf()
 
         val currentCount = instrumentCount[sound] ?: 0
         instrumentCount[sound] = currentCount - 1
@@ -48,7 +48,7 @@ class SongInProgress(
         if (instrumentCount[sound] == 0) {
             instrumentCount.remove(sound)
         } else {
-            instrumentCounts[delayPitch] = instrumentCount
+            instrumentCounts[coordinate] = instrumentCount
         }
     }
 
