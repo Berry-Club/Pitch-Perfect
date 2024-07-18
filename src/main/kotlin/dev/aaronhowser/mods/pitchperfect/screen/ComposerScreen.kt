@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.screen
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.ComposerTimeline
 import net.minecraft.client.gui.GuiGraphics
@@ -9,8 +11,6 @@ import net.minecraft.client.gui.components.SpriteIconButton
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundEvents
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.api.distmarker.OnlyIn
 import kotlin.properties.Delegates
@@ -62,24 +62,24 @@ class ComposerScreen(
 
     enum class Instrument(
         val image: ResourceLocation,
-        val soundEvent: SoundEvent
+        val instrumentItem: InstrumentItem
     ) {
-        BANJO(ScreenTextures.Sprite.Instrument.BANJO, SoundEvents.NOTE_BLOCK_BANJO.value()),
-        BASS(ScreenTextures.Sprite.Instrument.BASS, SoundEvents.NOTE_BLOCK_BASS.value()),
-        BASS_DRUM(ScreenTextures.Sprite.Instrument.BASS_DRUM, SoundEvents.NOTE_BLOCK_BASEDRUM.value()),
-        BIT(ScreenTextures.Sprite.Instrument.BIT, SoundEvents.NOTE_BLOCK_BIT.value()),
-        CHIMES(ScreenTextures.Sprite.Instrument.CHIMES, SoundEvents.NOTE_BLOCK_CHIME.value()),
-        COW_BELL(ScreenTextures.Sprite.Instrument.COW_BELL, SoundEvents.NOTE_BLOCK_COW_BELL.value()),
-        DIDGERIDOO(ScreenTextures.Sprite.Instrument.DIDGERIDOO, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value()),
-        ELECTRIC_PIANO(ScreenTextures.Sprite.Instrument.ELECTRIC_PIANO, SoundEvents.NOTE_BLOCK_PLING.value()),
-        FLUTE(ScreenTextures.Sprite.Instrument.FLUTE, SoundEvents.NOTE_BLOCK_FLUTE.value()),
-        GLOCKENSPIEL(ScreenTextures.Sprite.Instrument.GLOCKENSPIEL, SoundEvents.NOTE_BLOCK_BELL.value()),
-        GUITAR(ScreenTextures.Sprite.Instrument.GUITAR, SoundEvents.NOTE_BLOCK_GUITAR.value()),
-        HARP(ScreenTextures.Sprite.Instrument.HARP, SoundEvents.NOTE_BLOCK_HARP.value()),
-        SNARE_DRUM(ScreenTextures.Sprite.Instrument.SNARE_DRUM, SoundEvents.NOTE_BLOCK_SNARE.value()),
-        STICKS(ScreenTextures.Sprite.Instrument.STICKS, SoundEvents.NOTE_BLOCK_HAT.value()),
-        VIBRAPHONE(ScreenTextures.Sprite.Instrument.VIBRAPHONE, SoundEvents.NOTE_BLOCK_IRON_XYLOPHONE.value()),
-        XYLOPHONE(ScreenTextures.Sprite.Instrument.XYLOPHONE, SoundEvents.NOTE_BLOCK_XYLOPHONE.value())
+        BANJO(ScreenTextures.Sprite.Instrument.BANJO, ModItems.BANJO.get()),
+        BASS(ScreenTextures.Sprite.Instrument.BASS, ModItems.BASS.get()),
+        BASS_DRUM(ScreenTextures.Sprite.Instrument.BASS_DRUM, ModItems.BASS_DRUM.get()),
+        BIT(ScreenTextures.Sprite.Instrument.BIT, ModItems.BIT.get()),
+        CHIMES(ScreenTextures.Sprite.Instrument.CHIMES, ModItems.CHIMES.get()),
+        COW_BELL(ScreenTextures.Sprite.Instrument.COW_BELL, ModItems.COW_BELL.get()),
+        DIDGERIDOO(ScreenTextures.Sprite.Instrument.DIDGERIDOO, ModItems.DIDGERIDOO.get()),
+        ELECTRIC_PIANO(ScreenTextures.Sprite.Instrument.ELECTRIC_PIANO, ModItems.ELECTRIC_PIANO.get()),
+        FLUTE(ScreenTextures.Sprite.Instrument.FLUTE, ModItems.FLUTE.get()),
+        GLOCKENSPIEL(ScreenTextures.Sprite.Instrument.GLOCKENSPIEL, ModItems.GLOCKENSPIEL.get()),
+        GUITAR(ScreenTextures.Sprite.Instrument.GUITAR, ModItems.GUITAR.get()),
+        HARP(ScreenTextures.Sprite.Instrument.HARP, ModItems.HARP.get()),
+        SNARE_DRUM(ScreenTextures.Sprite.Instrument.SNARE_DRUM, ModItems.SNARE_DRUM.get()),
+        STICKS(ScreenTextures.Sprite.Instrument.STICKS, ModItems.STICKS.get()),
+        VIBRAPHONE(ScreenTextures.Sprite.Instrument.VIBRAPHONE, ModItems.VIBRAPHONE.get()),
+        XYLOPHONE(ScreenTextures.Sprite.Instrument.XYLOPHONE, ModItems.XYLOPHONE.get())
     }
 
     private fun addInstrumentButtons() {
