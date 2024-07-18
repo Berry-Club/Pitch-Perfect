@@ -136,6 +136,8 @@ class ComposerScreen(
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+        timeline.mouseClicked(pMouseX, pMouseY, pButton)
+
         val button = buttons.firstOrNull { it.isHoveredOrFocused }
         if (button == null) return false
 

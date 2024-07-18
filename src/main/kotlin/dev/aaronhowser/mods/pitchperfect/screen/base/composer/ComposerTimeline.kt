@@ -34,6 +34,8 @@ class ComposerTimeline(
         addNoteCells()
     }
 
+    private var noteCells: List<Cell> = emptyList()
+
     data class Cell(
         val timeline: ComposerTimeline,
         val gridX: Int,
@@ -60,14 +62,7 @@ class ComposerTimeline(
             get() = gridY + timeline.verticalScrollIndex
 
         fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
-            if (isMouseOver(pMouseX, pMouseY)) {
-                pGuiGraphics.renderTooltip(
-                    Minecraft.getInstance().font,
-                    Component.literal("$delayX, $pitchY"),
-                    pMouseX,
-                    pMouseY
-                )
-            }
+            if (isMouseOver(pMouseX, pMouseY)) renderTooltip(pGuiGraphics, pMouseX, pMouseY)
 
             val color = if (isMouseOver(pMouseX, pMouseY)) colorHover else colorDefault
             pGuiGraphics.fill(
@@ -79,13 +74,41 @@ class ComposerTimeline(
             )
         }
 
+        private fun renderTooltip(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
+
+            val components = mutableListOf<Component>()
+
+            components.add(Component.literal("Delay: $delayX"))
+            components.add(Component.literal("Pitch: $pitchY"))
+
+            for ((instrument, count) in instruments) {
+                components.add(Component.literal("${instrument.name}: $count"))
+            }
+
+            pGuiGraphics.renderComponentTooltip(
+                Minecraft.getInstance().font,
+                components,
+                pMouseX,
+                pMouseY
+            )
+        }
+
+        fun click(mouseX: Int, mouseY: Int, button: Int) {
+            if (!isMouseOver(mouseX, mouseY)) return
+
+            val instrument = timeline.composerScreen.selectedInstrument ?: return
+
+            val current = instruments.getOrDefault(instrument, 0)
+            instruments[instrument] = (if (button == 0) current + 1 else current - 1).coerceAtLeast(0)
+            if (instruments[instrument] == 0) instruments.remove(instrument)
+        }
+
         private fun isMouseOver(mouseX: Int, mouseY: Int): Boolean {
             return mouseX in renderX..renderX + WIDTH && mouseY in renderY..renderY + HEIGHT
         }
 
     }
 
-    private var noteCells: List<Cell> = emptyList()
     private fun addNoteCells() {
         for (yIndex in 0 until ROW_COUNT) {
             for (xIndex in 0 until 40) {
@@ -137,5 +160,13 @@ class ComposerTimeline(
         )
     }
 
+    fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
+        if (composerScreen.selectedInstrument == null) return
+
+        for (cell in noteCells) {
+            cell.click(pMouseX.toInt(), pMouseY.toInt(), pButton)
+        }
+
+    }
 
 }
