@@ -6,7 +6,6 @@ import dev.aaronhowser.mods.pitchperfect.screen.base.composer.InstrumentArea
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.neoforged.api.distmarker.Dist
@@ -20,9 +19,9 @@ class ComposerScreen(
 ) : Screen(pTitle) {
 
     var selectedInstrument: ScreenInstrument? = null
-    private val timeline by lazy { Timeline(this, this.font) }
-    private val instrumentArea by lazy { InstrumentArea(this) }
 
+    private lateinit var timeline: Timeline
+    private lateinit var instrumentArea: InstrumentArea
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
 
@@ -40,6 +39,9 @@ class ComposerScreen(
     override fun init() {
         leftPos = (width - ScreenTextures.Background.COMPOSER_WIDTH) / 2
         topPos = (height - ScreenTextures.Background.COMPOSER_HEIGHT) / 2
+
+        timeline = Timeline(this, this.font)
+        instrumentArea = InstrumentArea(this)
 
         timeline.init()
         instrumentArea.init()
