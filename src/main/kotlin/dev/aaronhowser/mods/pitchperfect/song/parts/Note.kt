@@ -123,6 +123,9 @@ enum class Note(
             return note
         }
 
+        /**
+         * Gets the Note from SoundEvent pitch
+         */
         fun getFromPitch(pitch: Float): Note {
             val note = VALUES.firstOrNull { it.getGoodPitch() == pitch }
 
@@ -139,6 +142,14 @@ enum class Note(
             }
 
             return note
+        }
+
+        /**
+         * Gets the Note from the index
+         */
+        fun getFromPitch(pitch: Int): Note {
+            require(pitch in 0..24) { "Pitch must be between 0 and 24" }
+            return VALUES[pitch]
         }
 
     }

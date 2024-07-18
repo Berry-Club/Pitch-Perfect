@@ -54,25 +54,51 @@ class SongInProgress(
 
     fun toSongInfo(): SongInfo {
 
-        val instrumentBeatMap: MutableMap<Holder<SoundEvent>, List<Beat>> = mutableMapOf()
-
-        for ((delayPitch: DelayPitch, soundAmounts: MutableMap<Holder<SoundEvent>, Int>) in instrumentCounts) {
-            val (delay, pitch) = delayPitch
-
-            for ((sound, amount) in soundAmounts) {
-                val beats = instrumentBeatMap[sound]?.toMutableList() ?: mutableListOf()
-
-                val note = Note.getFromPitch(pitch.toFloat())
-                val beat = Beat(delay, listOf(note))
-
-                for (i in 0 until amount) {
-                    beats.add(beat)
-                }
-
-                instrumentBeatMap[sound] = beats
+        data class MutableBeat(
+            val at: Int,
+            val notes: MutableList<Note>
+        ) {
+            fun toBeat(): Beat {
+                return Beat(at, notes.toList())
             }
         }
 
+        val instrumentMutableBeatMap: MutableMap<Holder<SoundEvent>, List<MutableBeat>> = mutableMapOf()
+
+        for ((delayPitch, map) in instrumentCounts) {
+            val (tick, pitch) = delayPitch
+
+            val note = Note.getFromPitch(pitch)
+
+            for ((soundEvent, count) in map) {
+                val instrumentBeats = instrumentMutableBeatMap[soundEvent]?.toMutableList() ?: mutableListOf()
+
+                val beatsThisTIck = instrumentBeats.find { it.at == tick } ?: MutableBeat(tick, mutableListOf())
+
+                for (i in 0 until count) {
+                    beatsThisTIck.notes.add(note)
+                }
+
+                if (beatsThisTIck !in instrumentBeats) {
+                    instrumentBeats.add(beatsThisTIck)
+                }
+            }
+
+        }
+
+        val instrumentBeatMap: HashMap<Holder<SoundEvent>, List<Beat>> = HashMap()
+
+        for ((soundEvent, mutableBeats) in instrumentMutableBeatMap) {
+            val beats = mutableBeats.map { it.toBeat() }
+            instrumentBeatMap[soundEvent] = beats
+        }
+
+        return SongInfo(
+            title,
+            authorUuid,
+            authorName,
+            Song(instrumentBeatMap)
+        )
     }
 
 }
