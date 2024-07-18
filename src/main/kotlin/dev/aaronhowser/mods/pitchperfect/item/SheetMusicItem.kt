@@ -48,8 +48,8 @@ class SheetMusicItem : Item(
         private fun stopRecording(itemStack: ItemStack, player: ServerPlayer) {
             itemStack.remove(BooleanComponent.isRecordingComponent)
 
-            val songBuilder = OtherEvents.builders[player] ?: return
-            OtherEvents.builders.remove(player)
+            val songBuilder = OtherEvents.songRecorders[player] ?: return
+            OtherEvents.songRecorders.remove(player)
             val song = songBuilder.build(Song.defaultFile)
 
             val songData = player.server.songData

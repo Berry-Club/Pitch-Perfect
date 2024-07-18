@@ -8,7 +8,8 @@ import net.minecraft.sounds.SoundEvent
 import java.nio.file.Path
 import java.util.*
 
-class SongBuilder(
+//TODO: Move this to SongInProgress
+class SongRecorder(
     private val startingTick: Long
 ) {
 

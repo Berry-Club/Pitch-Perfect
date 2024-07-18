@@ -7,7 +7,7 @@ import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEncha
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
-import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
+import dev.aaronhowser.mods.pitchperfect.song.SongRecorder
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
@@ -49,7 +49,7 @@ object OtherEvents {
         player.sendSystemMessage(Component.literal(handSongInfo.toString()))
     }
 
-    val builders = mutableMapOf<Player, SongBuilder>()
+    val songRecorders = mutableMapOf<Player, SongRecorder>()
 
     @SubscribeEvent
     fun onNoteBlock(event: NoteBlockEvent.Play) {
@@ -69,9 +69,9 @@ object OtherEvents {
         }
 
         for (player in nearbyRecordingPlayers) {
-            val songBuilder = builders.getOrPut(player) { SongBuilder(currentWorldTick) }
+            val songRecorder = songRecorders.getOrPut(player) { SongRecorder(currentWorldTick) }
 
-            songBuilder.addNote(
+            songRecorder.addNote(
                 currentWorldTick,
                 soundEvent,
                 pitch
