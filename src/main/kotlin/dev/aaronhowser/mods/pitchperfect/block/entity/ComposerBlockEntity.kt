@@ -1,12 +1,12 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
-import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
-import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongInProgress
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.Holder
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.item.ItemStack
@@ -55,11 +55,15 @@ class ComposerBlockEntity(
         return itemHandler.getStackInSlot(SHEET_MUSIC_SLOT)
     }
 
-    fun getSongInfo(): SongInfo? {
-        val server = level?.server ?: return null
-        val uuid = getItem().get(UuidComponent.songUuidComponent)?.uuid ?: return null
+    var inProgressSong: SongInProgress? = null
 
-        return server.songData.getSongInfo(uuid)
+    fun clickCell(
+        delay: Int,
+        pitch: Int,
+        leftClick: Boolean,
+        instrument: Holder<SoundEvent>
+    ) {
+
     }
 
 }

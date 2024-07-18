@@ -5,9 +5,9 @@ import net.minecraft.sounds.SoundEvent
 import java.util.*
 
 class SongInProgress(
-    val title: String,
-    val authorUuid: UUID,
-    val authorName: String
+    private val title: String,
+    private val authorUuid: UUID,
+    private val authorName: String
 ) {
 
     private data class DelayPitch(
