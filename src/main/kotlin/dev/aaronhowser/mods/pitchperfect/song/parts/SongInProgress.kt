@@ -1,9 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
+import net.minecraft.core.Holder
 import net.minecraft.sounds.SoundEvent
 import java.util.*
 
 class SongInProgress(
+    val title: String,
     val authorUuid: UUID,
     val authorName: String
 ) {
@@ -15,13 +17,13 @@ class SongInProgress(
 
     private val instrumentCounts: MutableMap<
             DelayPitch,
-            MutableMap<SoundEvent, Int>
+            MutableMap<Holder<SoundEvent>, Int>
             > = mutableMapOf()
 
     fun incrementInstrument(
         delay: Int,
         pitch: Int,
-        sound: SoundEvent
+        sound: Holder<SoundEvent>
     ) {
         val delayPitch = DelayPitch(delay, pitch)
         val instrumentCount = instrumentCounts[delayPitch] ?: mutableMapOf()
@@ -35,7 +37,7 @@ class SongInProgress(
     fun decrementInstrument(
         delay: Int,
         pitch: Int,
-        sound: SoundEvent
+        sound: Holder<SoundEvent>
     ) {
         val delayPitch = DelayPitch(delay, pitch)
         val instrumentCount = instrumentCounts[delayPitch] ?: mutableMapOf()
@@ -48,6 +50,29 @@ class SongInProgress(
         } else {
             instrumentCounts[delayPitch] = instrumentCount
         }
+    }
+
+    fun toSongInfo(): SongInfo {
+
+        val instrumentBeatMap: MutableMap<Holder<SoundEvent>, List<Beat>> = mutableMapOf()
+
+        for ((delayPitch: DelayPitch, soundAmounts: MutableMap<Holder<SoundEvent>, Int>) in instrumentCounts) {
+            val (delay, pitch) = delayPitch
+
+            for ((sound, amount) in soundAmounts) {
+                val beats = instrumentBeatMap[sound]?.toMutableList() ?: mutableListOf()
+
+                val note = Note.getFromPitch(pitch.toFloat())
+                val beat = Beat(delay, listOf(note))
+
+                for (i in 0 until amount) {
+                    beats.add(beat)
+                }
+
+                instrumentBeatMap[sound] = beats
+            }
+        }
+
     }
 
 }
