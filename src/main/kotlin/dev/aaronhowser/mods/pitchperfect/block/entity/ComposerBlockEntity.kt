@@ -69,7 +69,7 @@ class ComposerBlockEntity(
                 blockPos.y.toDouble(),
                 blockPos.z.toDouble(),
                 10.0,
-                true
+                false
             ) ?: return
 
             inProgressSong = SongInProgress(
