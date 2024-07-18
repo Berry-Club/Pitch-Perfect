@@ -29,7 +29,7 @@ class ComposerScreen(
     var selectedInstrument: Instrument? = null
 
     private val instrumentButtons: MutableList<Button> = mutableListOf()
-    private val timeline = Timeline(this, super.font)
+    private val timeline by lazy { Timeline(this, this.font) }
     private val buttons: List<Button> by lazy { instrumentButtons }
 
     var leftPos: Int by Delegates.notNull()
