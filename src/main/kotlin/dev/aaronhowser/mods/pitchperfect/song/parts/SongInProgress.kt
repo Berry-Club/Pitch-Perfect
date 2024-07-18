@@ -10,49 +10,28 @@ class SongInProgress(
     private val authorName: String
 ) {
 
-    private data class Coordinate(
+    private data class DelayPitch(
         val delay: Int,
         val pitch: Int
     )
 
-    private data class SoundCount(
-        val sound: Holder<SoundEvent>,
-        var count: Int
-    )
-
-    private object SoundCounts {
-
-        private val instrumentCounts: MutableMap<
-                Coordinate,
-                MutableSet<SoundCount>
-                > = mutableMapOf()
-
-        fun getSoundCounts(coordinate: Coordinate): MutableSet<SoundCount> {
-            return instrumentCounts[coordinate] ?: mutableSetOf()
-        }
-
-        fun getSoundCount(coordinate: Coordinate, sound: Holder<SoundEvent>): SoundCount {
-            return getSoundCounts(coordinate).find { it.sound.value() == sound.value() } ?: SoundCount(sound, 0)
-        }
-
-        fun getAllSoundCounts(): Map<Coordinate, MutableSet<SoundCount>> {
-            return instrumentCounts
-        }
-
-    }
+    private val instrumentCounts: MutableMap<
+            DelayPitch,
+            MutableMap<Holder<SoundEvent>, Int>
+            > = mutableMapOf()
 
     fun incrementInstrument(
         delay: Int,
         pitch: Int,
         sound: Holder<SoundEvent>
     ) {
-        val coordinate = Coordinate(delay, pitch)
-        val soundCount = SoundCounts.getSoundCount(coordinate, sound)
+        val delayPitch = DelayPitch(delay, pitch)
+        val instrumentCount = instrumentCounts[delayPitch] ?: mutableMapOf()
 
-        soundCount.count++
+        val currentCount = instrumentCount[sound] ?: 0
+        instrumentCount[sound] = currentCount + 1
 
-
-
+        instrumentCounts[delayPitch] = instrumentCount
     }
 
     fun decrementInstrument(
@@ -60,28 +39,17 @@ class SongInProgress(
         pitch: Int,
         sound: Holder<SoundEvent>
     ) {
-        val coordinate = Coordinate(delay, pitch)
-        val instrumentCount = instrumentCounts[coordinate] ?: return
+        val delayPitch = DelayPitch(delay, pitch)
+        val instrumentCount = instrumentCounts[delayPitch] ?: mutableMapOf()
 
-        val currentCount = instrumentCount[sound] ?: return
+        val currentCount = instrumentCount[sound] ?: 0
+        instrumentCount[sound] = currentCount - 1
 
-        if (currentCount == 1) {
+        if (instrumentCount[sound] == 0) {
             instrumentCount.remove(sound)
         } else {
-            instrumentCount[sound] = currentCount - 1
+            instrumentCounts[delayPitch] = instrumentCount
         }
-
-        instrumentCounts[coordinate] = instrumentCount
-
-        //debug print all
-        for ((coord, map) in instrumentCounts) {
-            println("($coord)")
-            for ((soundDebug, count) in map) {
-                println("   ${soundDebug.value().location} -> $count")
-            }
-        }
-
-        toSongInfo()
     }
 
     fun toSongInfo(): SongInfo {
