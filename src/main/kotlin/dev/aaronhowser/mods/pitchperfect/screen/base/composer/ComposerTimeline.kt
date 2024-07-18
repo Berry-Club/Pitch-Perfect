@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.api.distmarker.OnlyIn
 import kotlin.random.Random
@@ -17,8 +18,8 @@ class ComposerTimeline(
         private const val ROW_COUNT = 12
     }
 
-    private val timelineTopPos by lazy { composerScreen.topPos + 84 }
-    private val timelineLeftPos by lazy { composerScreen.leftPos + 85 }
+    private val topPos by lazy { composerScreen.topPos + 84 }
+    private val leftPos by lazy { composerScreen.leftPos + 85 }
 
     var verticalScrollIndex: Int = 0
         set(value) {
@@ -34,9 +35,10 @@ class ComposerTimeline(
     }
 
     data class Cell(
-        val x: Int,
-        val y: Int,
-        val instruments: List<ComposerScreen.Instrument>
+        val timeline: ComposerTimeline,
+        val gridX: Int,
+        val gridY: Int,
+        val instruments: MutableMap<ComposerScreen.Instrument, Int>
     ) {
 
         companion object {
@@ -47,24 +49,47 @@ class ComposerTimeline(
         private val colorDefault = Random.nextInt(0x66000000, 0x66FFFFFF)
         private val colorHover = Random.nextInt(0x66000000, 0x66FFFFFF)
 
+        // Render position
+        private val renderX = timeline.leftPos + 1 + gridX * (WIDTH + 1)
+        private val renderY = timeline.topPos + 1 + gridY * (HEIGHT + 4)
+
+        // Timeline position
+        private val delayX: Int
+            get() = gridX + timeline.horizontalScrollIndex
+        private val pitchY: Int
+            get() = gridY + timeline.verticalScrollIndex
+
         fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
+            if (isMouseOver(pMouseX, pMouseY)) {
+                pGuiGraphics.renderTooltip(
+                    Minecraft.getInstance().font,
+                    Component.literal("$delayX, $pitchY"),
+                    pMouseX,
+                    pMouseY
+                )
+            }
+
             val color = if (isMouseOver(pMouseX, pMouseY)) colorHover else colorDefault
-            pGuiGraphics.fill(x, y, x + WIDTH, y + HEIGHT, color)
+            pGuiGraphics.fill(
+                renderX,
+                renderY,
+                renderX + WIDTH,
+                renderY + HEIGHT,
+                color
+            )
         }
 
         private fun isMouseOver(mouseX: Int, mouseY: Int): Boolean {
-            return mouseX in x..x + WIDTH && mouseY in y..y + HEIGHT
+            return mouseX in renderX..renderX + WIDTH && mouseY in renderY..renderY + HEIGHT
         }
+
     }
 
     private var noteCells: List<Cell> = emptyList()
     private fun addNoteCells() {
         for (yIndex in 0 until ROW_COUNT) {
             for (xIndex in 0 until 40) {
-                val x = timelineLeftPos + 1 + xIndex * (Cell.WIDTH + 1)
-                val y = timelineTopPos + 1 + yIndex * (Cell.HEIGHT + 4)
-
-                noteCells += Cell(x, y, emptyList())
+                noteCells += Cell(this, xIndex, yIndex, mutableMapOf())
             }
         }
     }
@@ -82,10 +107,10 @@ class ComposerTimeline(
     }
 
     private fun renderNoteNames(pGuiGraphics: GuiGraphics) {
-        val x = timelineLeftPos - 20
+        val x = leftPos - 20
 
         for (yIndex in 0 until ROW_COUNT) {
-            val y = timelineTopPos + yIndex * 13
+            val y = topPos + yIndex * 13
 
             val noteIndex = yIndex + verticalScrollIndex
             val note = Note.entries.getOrNull(noteIndex)
@@ -106,8 +131,8 @@ class ComposerTimeline(
         pGuiGraphics.drawString(
             Minecraft.getInstance().font,
             "$horizontalScrollIndex $verticalScrollIndex",
-            timelineLeftPos,
-            timelineTopPos - 20,
+            leftPos,
+            topPos - 20,
             0xFFFFFF
         )
     }
