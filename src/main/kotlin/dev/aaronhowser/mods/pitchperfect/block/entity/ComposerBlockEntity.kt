@@ -9,6 +9,7 @@ import net.minecraft.core.Holder
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -58,24 +59,17 @@ class ComposerBlockEntity(
     private var inProgressSong: SongInProgress? = null
 
     fun clickCell(
+        player: Player,
         delay: Int,
         pitch: Int,
         leftClick: Boolean,
         instrument: Holder<SoundEvent>
     ) {
         if (inProgressSong == null) {
-            val nearestPlayer = level?.getNearestPlayer(
-                blockPos.x.toDouble(),
-                blockPos.y.toDouble(),
-                blockPos.z.toDouble(),
-                10.0,
-                false
-            ) ?: return
-
             inProgressSong = SongInProgress(
                 "Untitled",
-                nearestPlayer.uuid,
-                nearestPlayer.gameProfile.name
+                player.uuid,
+                player.gameProfile.name
             )
         }
 

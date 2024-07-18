@@ -31,7 +31,7 @@ class ClickComposerCellPacket(
             val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
             if (!player.canInteractWithBlock(blockPos, playerReach)) return@enqueueWork
 
-            composerBlockEntity.clickCell(delay, pitch, leftClick, selectedInstrument)
+            composerBlockEntity.clickCell(player, delay, pitch, leftClick, selectedInstrument)
         }
     }
 
