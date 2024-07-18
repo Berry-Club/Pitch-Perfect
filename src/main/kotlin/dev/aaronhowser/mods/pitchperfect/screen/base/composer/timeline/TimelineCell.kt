@@ -1,6 +1,9 @@
 package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
 
 data class TimelineCell(
@@ -71,19 +74,21 @@ data class TimelineCell(
     fun click(mouseX: Int, mouseY: Int, button: Int) {
         if (!isMouseOver(mouseX, mouseY)) return
 
-        val adding = when (button) {
+        val leftClick = when (button) {
             0 -> true
             1 -> false
             else -> return
         }
 
-        if (adding) {
-            timeline.data.increment(delayX, pitchY)
-        } else {
-            timeline.data.decrement(delayX, pitchY)
-        }
-
-        return
+        ModPacketHandler.messageServer(
+            ClickComposerCellPacket(
+                delayX,
+                pitchY,
+                leftClick,
+                Holder.direct(timeline.composerScreen.selectedInstrument!!.instrumentItem.instrument),
+                timeline.composerScreen.composerBlockEntity.blockPos
+            )
+        )
     }
 
     private fun isMouseOver(mouseX: Int, mouseY: Int): Boolean {

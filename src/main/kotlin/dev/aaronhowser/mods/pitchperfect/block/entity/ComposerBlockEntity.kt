@@ -55,7 +55,7 @@ class ComposerBlockEntity(
         return itemHandler.getStackInSlot(SHEET_MUSIC_SLOT)
     }
 
-    var inProgressSong: SongInProgress? = null
+    private var inProgressSong: SongInProgress? = null
 
     fun clickCell(
         delay: Int,
@@ -63,7 +63,27 @@ class ComposerBlockEntity(
         leftClick: Boolean,
         instrument: Holder<SoundEvent>
     ) {
+        if (inProgressSong == null) {
+            val nearestPlayer = level?.getNearestPlayer(
+                blockPos.x.toDouble(),
+                blockPos.y.toDouble(),
+                blockPos.z.toDouble(),
+                10.0,
+                true
+            ) ?: return
 
+            inProgressSong = SongInProgress(
+                "Untitled",
+                nearestPlayer.uuid,
+                nearestPlayer.gameProfile.name
+            )
+        }
+
+        if (leftClick) {
+            inProgressSong?.incrementInstrument(delay, pitch, instrument)
+        } else {
+            inProgressSong?.decrementInstrument(delay, pitch, instrument)
+        }
     }
 
 }
