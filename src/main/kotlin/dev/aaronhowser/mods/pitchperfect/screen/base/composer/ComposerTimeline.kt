@@ -20,9 +20,13 @@ class ComposerTimeline(
     private val timelineTopPos by lazy { composerScreen.topPos + 84 }
     private val timelineLeftPos by lazy { composerScreen.leftPos + 85 }
 
-    var scrollIndex: Int = 0
+    var verticalScrollIndex: Int = 0
         set(value) {
             field = value.coerceIn(0, Note.entries.size - ROW_COUNT)
+        }
+    var horizontalScrollIndex: Int = 0
+        set(value) {
+            field = value.coerceAtLeast(0)
         }
 
     fun init() {
@@ -68,6 +72,7 @@ class ComposerTimeline(
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         renderNoteCells(pGuiGraphics, pMouseX, pMouseY)
         renderNoteNames(pGuiGraphics)
+        renderScrollIndex(pGuiGraphics)
     }
 
     private fun renderNoteCells(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
@@ -82,7 +87,7 @@ class ComposerTimeline(
         for (yIndex in 0 until ROW_COUNT) {
             val y = timelineTopPos + yIndex * 13
 
-            val noteIndex = yIndex + scrollIndex
+            val noteIndex = yIndex + verticalScrollIndex
             val note = Note.entries.getOrNull(noteIndex)
             val noteString = note?.displayName ?: "YOU FUCKED UP"
             val noteColor = note?.color ?: 0xFFFFFF
@@ -95,6 +100,16 @@ class ComposerTimeline(
                 noteColor
             )
         }
+    }
+
+    private fun renderScrollIndex(pGuiGraphics: GuiGraphics) {
+        pGuiGraphics.drawString(
+            Minecraft.getInstance().font,
+            "$horizontalScrollIndex $verticalScrollIndex",
+            timelineLeftPos,
+            timelineTopPos - 20,
+            0xFFFFFF
+        )
     }
 
 
