@@ -60,12 +60,12 @@ class ComposerTimeline {
         private const val SOUND_RL = "sound_rl"
         private const val SOUND_COUNT = "sound_count"
 
-        fun fromCompoundTag(compoundTag: CompoundTag): ComposerTimeline {
-
-            val timeline = ComposerTimeline()
-
-
-        }
+//        fun fromCompoundTag(compoundTag: CompoundTag): ComposerTimeline {
+//
+//            val timeline = ComposerTimeline()
+//
+//
+//        }
 
     }
 
