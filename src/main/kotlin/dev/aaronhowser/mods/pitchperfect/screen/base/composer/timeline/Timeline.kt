@@ -18,6 +18,8 @@ class Timeline(
         private const val ROW_COUNT = 12
     }
 
+    val data = TimelineData()
+
     val topPos by lazy { composerScreen.topPos + 84 }
     val leftPos by lazy { composerScreen.leftPos + 85 }
 
