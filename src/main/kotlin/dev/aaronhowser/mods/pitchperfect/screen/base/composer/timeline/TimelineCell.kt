@@ -55,12 +55,22 @@ data class TimelineCell(
         )
     }
 
-    fun click(mouseX: Int, mouseY: Int, button: Int): Boolean {
-        if (!isMouseOver(mouseX, mouseY)) return false
+    fun click(mouseX: Int, mouseY: Int, button: Int) {
+        if (!isMouseOver(mouseX, mouseY)) return
 
-        //TODO
+        val adding = when (button) {
+            0 -> true
+            1 -> false
+            else -> return
+        }
 
-        return true
+        if (adding) {
+            timeline.data.increment(delayX, pitchY)
+        } else {
+            timeline.data.decrement(delayX, pitchY)
+        }
+
+        return
     }
 
     private fun isMouseOver(mouseX: Int, mouseY: Int): Boolean {

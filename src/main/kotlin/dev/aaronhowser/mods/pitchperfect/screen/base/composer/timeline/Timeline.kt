@@ -10,7 +10,7 @@ import net.neoforged.api.distmarker.OnlyIn
 
 @OnlyIn(Dist.CLIENT)
 class Timeline(
-    private val composerScreen: ComposerScreen,
+    val composerScreen: ComposerScreen,
     val font: Font
 ) {
 
@@ -18,7 +18,7 @@ class Timeline(
         private const val ROW_COUNT = 12
     }
 
-    val data = TimelineData()
+    val data = TimelineData(this)
 
     val topPos by lazy { composerScreen.topPos + 84 }
     val leftPos by lazy { composerScreen.leftPos + 85 }
