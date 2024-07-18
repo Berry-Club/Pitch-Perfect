@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
-import dev.aaronhowser.mods.pitchperfect.screen.base.composer.ComposerTimeline
+import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.SpriteIconButton
@@ -29,10 +29,8 @@ class ComposerScreen(
     var selectedInstrument: Instrument? = null
 
     private val instrumentButtons: MutableList<Button> = mutableListOf()
-    private val timeline = ComposerTimeline(this)
-    private val buttons: List<Button> by lazy {
-        instrumentButtons
-    }
+    private val timeline = Timeline(this, super.font)
+    private val buttons: List<Button> by lazy { instrumentButtons }
 
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
