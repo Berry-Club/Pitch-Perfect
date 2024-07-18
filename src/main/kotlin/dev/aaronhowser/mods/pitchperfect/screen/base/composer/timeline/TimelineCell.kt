@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
-import kotlin.random.Random
 
 data class TimelineCell(
     val timeline: Timeline,
@@ -13,10 +12,10 @@ data class TimelineCell(
     companion object {
         const val WIDTH = 9
         const val HEIGHT = 9
-    }
 
-    private val colorDefault = Random.nextInt(0x66000000, 0x66FFFFFF)
-    private val colorHover = Random.nextInt(0x66000000, 0x66FFFFFF)
+        private const val COLOR_EMPTY = 0x66333333
+        private const val COLOR_NOT_EMPTY = 0x66FFFFFF
+    }
 
     // Render position
     private val renderX = timeline.leftPos + 1 + gridX * (WIDTH + 1)
@@ -28,10 +27,16 @@ data class TimelineCell(
     private val pitchY: Int
         get() = gridY + timeline.verticalScrollIndex
 
+    private val cellData: TimelineData.CellData?
+        get() = timeline.data.getCellData(delayX, pitchY)
+
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
         if (isMouseOver(pMouseX, pMouseY)) renderTooltip(pGuiGraphics, pMouseX, pMouseY)
 
-        val color = if (isMouseOver(pMouseX, pMouseY)) colorHover else colorDefault
+        val hasData = cellData != null
+
+        val color = if (hasData) COLOR_NOT_EMPTY else COLOR_EMPTY
+
         pGuiGraphics.fill(
             renderX,
             renderY,
@@ -46,6 +51,14 @@ data class TimelineCell(
 
         components.add(Component.literal("Delay: $delayX"))
         components.add(Component.literal("Pitch: $pitchY"))
+
+        if (cellData != null) {
+            val instrumentCounts = cellData?.getAllCounts() ?: emptyMap()
+
+            for ((instrument, count) in instrumentCounts) {
+                components.add(Component.literal("${instrument.name}: $count"))
+            }
+        }
 
         pGuiGraphics.renderComponentTooltip(
             timeline.font,

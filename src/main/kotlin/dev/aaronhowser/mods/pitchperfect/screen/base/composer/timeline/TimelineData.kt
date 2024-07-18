@@ -6,7 +6,7 @@ class TimelineData(
     private val timeline: Timeline
 ) {
 
-    private data class CellData(
+    data class CellData(
         private val instrumentsCounter: MutableMap<ScreenInstrument, Int>
     ) {
         fun increment(instrument: ScreenInstrument) {
@@ -17,13 +17,15 @@ class TimelineData(
         fun decrement(instrument: ScreenInstrument) {
             val current = instrumentsCounter[instrument] ?: return
             instrumentsCounter[instrument] = current - 1
+
+            if (instrumentsCounter[instrument] == 0) instrumentsCounter.remove(instrument)
         }
 
         fun get(instrument: ScreenInstrument): Int {
             return instrumentsCounter.getOrDefault(instrument, 0)
         }
 
-        fun getAll(): Map<ScreenInstrument, Int> {
+        fun getAllCounts(): Map<ScreenInstrument, Int> {
             return instrumentsCounter.toMap()
         }
 
@@ -46,6 +48,10 @@ class TimelineData(
             cellData.decrement(instrument)
             if (cellData.isEmpty()) cells.remove(Pair(delay, pitch))
         }
+
+        fun getCell(delay: Int, pitch: Int): CellData? {
+            return cells[Pair(delay, pitch)]
+        }
     }
 
     fun increment(delay: Int, pitch: Int) {
@@ -56,6 +62,10 @@ class TimelineData(
     fun decrement(delay: Int, pitch: Int) {
         val instrument = timeline.composerScreen.selectedInstrument ?: return
         Cells.decrement(delay, pitch, instrument)
+    }
+
+    fun getCellData(delay: Int, pitch: Int): CellData? {
+        return Cells.getCell(delay, pitch)
     }
 
 }
