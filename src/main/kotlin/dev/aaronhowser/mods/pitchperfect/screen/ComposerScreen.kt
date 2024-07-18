@@ -9,6 +9,8 @@ import net.minecraft.client.gui.components.SpriteIconButton
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.api.distmarker.OnlyIn
 import kotlin.properties.Delegates
@@ -54,28 +56,30 @@ class ComposerScreen(
         leftPos = (width - ScreenTextures.Background.COMPOSER_WIDTH) / 2
         topPos = (height - ScreenTextures.Background.COMPOSER_HEIGHT) / 2
 
+        timeline.init()
         addInstrumentButtons()
     }
 
     enum class Instrument(
-        val image: ResourceLocation
+        val image: ResourceLocation,
+        val soundEvent: SoundEvent
     ) {
-        BANJO(ScreenTextures.Sprite.Instrument.BANJO),
-        BASS(ScreenTextures.Sprite.Instrument.BASS),
-        BASS_DRUM(ScreenTextures.Sprite.Instrument.BASS_DRUM),
-        BIT(ScreenTextures.Sprite.Instrument.BIT),
-        CHIMES(ScreenTextures.Sprite.Instrument.CHIMES),
-        COW_BELL(ScreenTextures.Sprite.Instrument.COW_BELL),
-        DIDGERIDOO(ScreenTextures.Sprite.Instrument.DIDGERIDOO),
-        ELECTRIC_PIANO(ScreenTextures.Sprite.Instrument.ELECTRIC_PIANO),
-        FLUTE(ScreenTextures.Sprite.Instrument.FLUTE),
-        GLOCKENSPIEL(ScreenTextures.Sprite.Instrument.GLOCKENSPIEL),
-        GUITAR(ScreenTextures.Sprite.Instrument.GUITAR),
-        HARP(ScreenTextures.Sprite.Instrument.HARP),
-        SNARE_DRUM(ScreenTextures.Sprite.Instrument.SNARE_DRUM),
-        STICKS(ScreenTextures.Sprite.Instrument.STICKS),
-        VIBRAPHONE(ScreenTextures.Sprite.Instrument.VIBRAPHONE),
-        XYLOPHONE(ScreenTextures.Sprite.Instrument.XYLOPHONE)
+        BANJO(ScreenTextures.Sprite.Instrument.BANJO, SoundEvents.NOTE_BLOCK_BANJO.value()),
+        BASS(ScreenTextures.Sprite.Instrument.BASS, SoundEvents.NOTE_BLOCK_BASS.value()),
+        BASS_DRUM(ScreenTextures.Sprite.Instrument.BASS_DRUM, SoundEvents.NOTE_BLOCK_BASEDRUM.value()),
+        BIT(ScreenTextures.Sprite.Instrument.BIT, SoundEvents.NOTE_BLOCK_BIT.value()),
+        CHIMES(ScreenTextures.Sprite.Instrument.CHIMES, SoundEvents.NOTE_BLOCK_CHIME.value()),
+        COW_BELL(ScreenTextures.Sprite.Instrument.COW_BELL, SoundEvents.NOTE_BLOCK_COW_BELL.value()),
+        DIDGERIDOO(ScreenTextures.Sprite.Instrument.DIDGERIDOO, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value()),
+        ELECTRIC_PIANO(ScreenTextures.Sprite.Instrument.ELECTRIC_PIANO, SoundEvents.NOTE_BLOCK_PLING.value()),
+        FLUTE(ScreenTextures.Sprite.Instrument.FLUTE, SoundEvents.NOTE_BLOCK_FLUTE.value()),
+        GLOCKENSPIEL(ScreenTextures.Sprite.Instrument.GLOCKENSPIEL, SoundEvents.NOTE_BLOCK_BELL.value()),
+        GUITAR(ScreenTextures.Sprite.Instrument.GUITAR, SoundEvents.NOTE_BLOCK_GUITAR.value()),
+        HARP(ScreenTextures.Sprite.Instrument.HARP, SoundEvents.NOTE_BLOCK_HARP.value()),
+        SNARE_DRUM(ScreenTextures.Sprite.Instrument.SNARE_DRUM, SoundEvents.NOTE_BLOCK_SNARE.value()),
+        STICKS(ScreenTextures.Sprite.Instrument.STICKS, SoundEvents.NOTE_BLOCK_HAT.value()),
+        VIBRAPHONE(ScreenTextures.Sprite.Instrument.VIBRAPHONE, SoundEvents.NOTE_BLOCK_IRON_XYLOPHONE.value()),
+        XYLOPHONE(ScreenTextures.Sprite.Instrument.XYLOPHONE, SoundEvents.NOTE_BLOCK_XYLOPHONE.value())
     }
 
     private fun addInstrumentButtons() {
