@@ -27,24 +27,7 @@ class ModItemTagsProvider(
     override fun addTags(pProvider: HolderLookup.Provider) {
 
         this.tag(INSTRUMENTS_TAG)
-            .add(
-                ModItems.BANJO.get(),
-                ModItems.BASS_DRUM.get(),
-                ModItems.BASS.get(),
-                ModItems.BIT.get(),
-                ModItems.CHIMES.get(),
-                ModItems.COW_BELL.get(),
-                ModItems.DIDGERIDOO.get(),
-                ModItems.ELECTRIC_PIANO.get(),
-                ModItems.FLUTE.get(),
-                ModItems.GLOCKENSPIEL.get(),
-                ModItems.GUITAR.get(),
-                ModItems.HARP.get(),
-                ModItems.SNARE_DRUM.get(),
-                ModItems.STICKS.get(),
-                ModItems.VIBRAPHONE.get(),
-                ModItems.XYLOPHONE.get()
-            )
+            .add(*ModItems.instruments.map { it.get() }.toTypedArray())
 
     }
 

@@ -53,4 +53,23 @@ object ModItems {
     val CONDUCTOR_BOCK_ITEM: DeferredItem<DoubleHighBlockItem> =
         ITEM_REGISTRY.registerItem("conductor") { DoubleHighBlockItem(ModBlocks.CONDUCTOR.get(), Item.Properties()) }
 
+    val instruments = mutableListOf(
+        BANJO,
+        BASS_DRUM,
+        BASS,
+        BIT,
+        CHIMES,
+        COW_BELL,
+        DIDGERIDOO,
+        ELECTRIC_PIANO,
+        FLUTE,
+        GLOCKENSPIEL,
+        GUITAR,
+        HARP,
+        SNARE_DRUM,
+        STICKS,
+        VIBRAPHONE,
+        XYLOPHONE
+    )
+
 }
