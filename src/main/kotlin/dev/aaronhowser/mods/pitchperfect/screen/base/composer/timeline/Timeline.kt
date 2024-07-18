@@ -98,7 +98,6 @@ class Timeline(
         for (cell in timelineCells) {
             cell.click(pMouseX.toInt(), pMouseY.toInt(), pButton)
         }
-
     }
 
 }

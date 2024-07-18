@@ -55,8 +55,12 @@ data class TimelineCell(
         )
     }
 
-    fun click(mouseX: Int, mouseY: Int, button: Int) {
-        if (!isMouseOver(mouseX, mouseY)) return
+    fun click(mouseX: Int, mouseY: Int, button: Int): Boolean {
+        if (!isMouseOver(mouseX, mouseY)) return false
+
+        //TODO
+
+        return true
     }
 
     private fun isMouseOver(mouseX: Int, mouseY: Int): Boolean {
