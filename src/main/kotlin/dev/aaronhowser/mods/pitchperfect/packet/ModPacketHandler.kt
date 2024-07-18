@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.packet
 
+import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnElectricLinePacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import net.minecraft.server.level.ServerLevel
@@ -27,6 +28,15 @@ object ModPacketHandler {
         registrar.playToClient(
             SpawnElectricLinePacket.TYPE,
             SpawnElectricLinePacket.STREAM_CODEC,
+            DirectionalPayloadHandler(
+                { packet, context -> packet.receiveMessage(context) },
+                { packet, context -> packet.receiveMessage(context) }
+            )
+        )
+
+        registrar.playToServer(
+            ClickComposerCellPacket.TYPE,
+            ClickComposerCellPacket.STREAM_CODEC,
             DirectionalPayloadHandler(
                 { packet, context -> packet.receiveMessage(context) },
                 { packet, context -> packet.receiveMessage(context) }
