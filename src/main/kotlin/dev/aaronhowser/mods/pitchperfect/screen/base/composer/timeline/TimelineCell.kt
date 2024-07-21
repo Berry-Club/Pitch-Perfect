@@ -33,14 +33,15 @@ data class TimelineCell(
 
     val sounds: List<Holder<SoundEvent>>
         get() {
-            val blockEntity = timeline.composerScreen.composerBlockEntity
+            val timeline = timeline.composerScreen.composerBlockEntity.composerTimeline ?: return emptyList()
+            return timeline.getSoundsAt(delay, pitch)
         }
 
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
         if (isMouseOver(pMouseX, pMouseY)) renderTooltip(pGuiGraphics, pMouseX, pMouseY)
 
-        val hasData = cellData != null
+        val hasData = sounds.isNotEmpty()
 
         val color = if (hasData) COLOR_NOT_EMPTY else COLOR_EMPTY
 
@@ -59,11 +60,10 @@ data class TimelineCell(
         components.add(Component.literal("Delay: $delay"))
         components.add(Component.literal("Pitch: $pitch"))
 
-        if (cellData != null) {
-            val instrumentCounts = cellData?.getAllCounts() ?: emptyMap()
-
-            for ((instrument, count) in instrumentCounts) {
-                components.add(Component.literal("${instrument.name}: $count"))
+        if (sounds.isNotEmpty()) {
+            components.add(Component.literal("Sounds:"))
+            for (sound in sounds) {
+                components.add(Component.literal("  - ${sound.value().location}"))
             }
         }
 

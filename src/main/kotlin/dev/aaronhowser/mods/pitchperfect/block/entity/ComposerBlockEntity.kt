@@ -1,8 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
+import dev.aaronhowser.mods.pitchperfect.block.entity.composer.ComposerTimeline
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
-import dev.aaronhowser.mods.pitchperfect.song.parts.SongInProgress
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
@@ -56,7 +56,7 @@ class ComposerBlockEntity(
         return itemHandler.getStackInSlot(SHEET_MUSIC_SLOT)
     }
 
-    private var inProgressSong: SongInProgress? = null
+    var composerTimeline: ComposerTimeline? = null
 
     fun clickCell(
         player: Player,
@@ -65,18 +65,17 @@ class ComposerBlockEntity(
         leftClick: Boolean,
         instrument: Holder<SoundEvent>
     ) {
-        if (inProgressSong == null) {
-            inProgressSong = SongInProgress(
-                "Untitled",
-                player.uuid,
-                player.gameProfile.name
-            )
+
+        if (composerTimeline == null) {
+            composerTimeline = ComposerTimeline()
         }
 
-        if (leftClick) {
-            inProgressSong?.incrementInstrument(delay, pitch, instrument)
-        } else {
-            inProgressSong?.decrementInstrument(delay, pitch, instrument)
+        composerTimeline?.apply {
+            if (leftClick) {
+                addSoundAt(delay, pitch, instrument)
+            } else {
+                removeSoundAt(delay, pitch, instrument)
+            }
         }
     }
 
