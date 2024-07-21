@@ -56,6 +56,14 @@ class ComposerScreen(
 
         instrumentArea.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         timeline.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+
+        pGuiGraphics.drawString(
+            font,
+            selectedInstrument?.name ?: "",
+            leftPos + 5,
+            topPos + 5 + 20,
+            0xFFFFFF
+        )
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
