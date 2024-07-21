@@ -10,16 +10,8 @@ class ComposerTimeline {
         val delay: Int,
         val pitch: Int
     ) {
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other !is DelayPitch) return false
-            return delay == other.delay && pitch == other.pitch
-        }
-
-        override fun hashCode(): Int {
-            var result = delay
-            result = 31 * result + pitch
-            return result
+        fun matches(delay: Int, pitch: Int): Boolean {
+            return this.delay == delay && this.pitch == pitch
         }
     }
 
@@ -55,12 +47,16 @@ class ComposerTimeline {
         delay: Int,
         pitch: Int
     ): List<String> {
-        val delayPitch = DelayPitch(delay, pitch)
+        val sounds = mutableListOf<String>()
+        for ((sound, delayPitches) in soundCounts) {
+            for (delayPitch in delayPitches) {
+                if (delayPitch.matches(delay, pitch)) {
+                    sounds.add(sound)
+                }
+            }
+        }
 
-        return soundCounts
-            .filter { delayPitch in it.value }
-            .keys
-            .toList()
+        return sounds
     }
 
     fun toTag(): Tag {
