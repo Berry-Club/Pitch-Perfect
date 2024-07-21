@@ -6,7 +6,7 @@ import net.minecraft.nbt.Tag
 
 class ComposerTimeline {
 
-    private data class DelayPitch(
+    data class DelayPitch(
         val delay: Int,
         val pitch: Int
     ) {
@@ -23,7 +23,7 @@ class ComposerTimeline {
         }
     }
 
-    private val soundCounts: MutableMap<String, MutableList<DelayPitch>> = mutableMapOf()
+    val soundCounts: MutableMap<String, MutableList<DelayPitch>> = mutableMapOf()
 
     fun addSoundAt(
         delay: Int,

@@ -5,6 +5,8 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.player.Player
@@ -22,6 +24,8 @@ class ComposerBlockEntity(
     companion object {
         const val AMOUNT_SLOTS = 1
         const val SHEET_MUSIC_SLOT = 0
+
+        const val TIMELINE = "timeline"
     }
 
     private val itemHandler: ItemStackHandler = object : ItemStackHandler(AMOUNT_SLOTS) {
@@ -56,6 +60,23 @@ class ComposerBlockEntity(
 
     var composerTimeline: ComposerTimeline? = null
 
+    override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
+        super.loadAdditional(pTag, pRegistries)
+
+        composerTimeline = ComposerTimeline.fromCompoundTag(pTag.getCompound(TIMELINE))
+        println("Loaded composer timeline: $composerTimeline with soundcounts:\n${composerTimeline?.soundCounts}")
+    }
+
+    override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
+        super.saveAdditional(pTag, pRegistries)
+
+        val timeline = composerTimeline
+        if (timeline != null) {
+            pTag.put(TIMELINE, timeline.toTag())
+            println("Saved composer timeline: $timeline with soundcounts:\n${timeline.soundCounts}")
+        }
+    }
+
     fun clickCell(
         player: Player,
         delay: Int,
@@ -74,6 +95,8 @@ class ComposerBlockEntity(
             } else {
                 removeSoundAt(delay, pitch, instrument)
             }
+
+            setChanged()
         }
     }
 
