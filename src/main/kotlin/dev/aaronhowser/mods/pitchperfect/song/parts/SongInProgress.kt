@@ -10,7 +10,7 @@ class SongInProgress(
     private val authorName: String
 ) {
 
-    private data class Coordinate(
+    data class Coordinate(
         val delay: Int,
         val pitch: Int
     )

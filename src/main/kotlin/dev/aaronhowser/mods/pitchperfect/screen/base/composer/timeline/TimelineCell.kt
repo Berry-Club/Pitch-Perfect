@@ -30,8 +30,6 @@ data class TimelineCell(
     private val pitchY: Int
         get() = gridY + timeline.verticalScrollIndex
 
-    private val cellData: TimelineData.CellData?
-        get() = timeline.data.getCellData(delayX, pitchY)
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
         if (isMouseOver(pMouseX, pMouseY)) renderTooltip(pGuiGraphics, pMouseX, pMouseY)
