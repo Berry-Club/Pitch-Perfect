@@ -120,19 +120,17 @@ data class SongInfo(
 
         fun fromCompoundTag(tag: CompoundTag): SongInfo? {
             try {
-                val title = tag.getString(TITLE)
-                val authorUuid = tag.getUUID(AUTHOR_UUID)
-                val authorName = tag.getString(AUTHOR_NAME)
-                val song = Song.fromString(tag.getString(SONG))
-
-                if (song == null) {
-                    PitchPerfect.LOGGER.error("Failed to parse song from tag: $tag")
+                val dataResult = CODEC.decode(NbtOps.INSTANCE, tag)
+                val pair = dataResult.getOrThrow()
+                if (pair == null) {
+                    PitchPerfect.LOGGER.error("Failed to decode SongInfo from tag: $tag")
                     return null
                 }
 
-                return SongInfo(title, authorUuid, authorName, song)
-            } catch (e: Exception) {
-                e.printStackTrace()
+                println("SongInfo.fromTag: ${pair.first}")
+                return pair.first
+            } catch (e: Throwable) {
+                PitchPerfect.LOGGER.error("Failed to decode SongInfo from tag: $tag", e)
                 return null
             }
         }
