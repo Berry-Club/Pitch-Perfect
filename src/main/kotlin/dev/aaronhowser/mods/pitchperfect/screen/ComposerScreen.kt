@@ -47,6 +47,10 @@ class ComposerScreen(
         instrumentArea.init()
     }
 
+    override fun isPauseScreen(): Boolean {
+        return false
+    }
+
     override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
