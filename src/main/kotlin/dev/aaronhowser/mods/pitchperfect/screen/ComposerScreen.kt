@@ -25,17 +25,6 @@ class ComposerScreen(
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
 
-    override fun renderBackground(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        this.renderTransparentBackground(pGuiGraphics)
-        pGuiGraphics.blit(
-            ScreenTextures.Background.COMPOSER,
-            leftPos, topPos,
-            0f, 0f,              // Texture offset
-            512, 256,             // Texture size
-            512, 512    // Texture sheet size
-        )
-    }
-
     override fun init() {
         leftPos = (width - ScreenTextures.Background.COMPOSER_WIDTH) / 2
         topPos = (height - ScreenTextures.Background.COMPOSER_HEIGHT) / 2
@@ -47,8 +36,17 @@ class ComposerScreen(
         instrumentArea.init()
     }
 
-    override fun isPauseScreen(): Boolean {
-        return false
+    // Rendering
+
+    override fun renderBackground(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        this.renderTransparentBackground(pGuiGraphics)
+        pGuiGraphics.blit(
+            ScreenTextures.Background.COMPOSER,
+            leftPos, topPos,
+            0f, 0f,              // Texture offset
+            512, 256,             // Texture size
+            512, 512    // Texture sheet size
+        )
     }
 
     override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
@@ -65,6 +63,14 @@ class ComposerScreen(
             0xFFFFFF
         )
     }
+
+    // Behavior
+
+    override fun isPauseScreen(): Boolean {
+        return false
+    }
+
+    // Controls
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         instrumentArea.mouseClicked(pMouseX, pMouseY, pButton)
