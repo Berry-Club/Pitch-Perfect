@@ -34,8 +34,6 @@ class ComposerTimeline {
         val soundList = soundCounts.getOrDefault(soundName, mutableListOf())
         soundList.add(delayPitch)
         soundCounts[soundName] = soundList
-
-        println(soundCounts)
     }
 
     fun removeSoundAt(
@@ -51,9 +49,6 @@ class ComposerTimeline {
         if (soundList.isEmpty()) {
             soundCounts.remove(soundName)
         }
-
-        println(soundCounts)
-        println(toTag())
     }
 
     fun getSoundsAt(
@@ -93,14 +88,27 @@ class ComposerTimeline {
         private const val DELAY = "delay"
         private const val PITCH = "pitch"
 
-//        fun fromTag(tag: CompoundTag): ComposerTimeline? {
-//
-//            val timeline = ComposerTimeline()
-//
-//
-//
-//
-//        }
+        fun fromCompoundTag(tag: CompoundTag): ComposerTimeline? {
+            try {
+                val composerTimeline = ComposerTimeline()
+
+                for (soundString in tag.allKeys) {
+                    val soundsList = tag.get(soundString) as ListTag
+                    for (soundTag in soundsList) {
+                        soundTag as CompoundTag
+                        val delay = soundTag.getInt(DELAY)
+                        val pitch = soundTag.getInt(PITCH)
+
+                        composerTimeline.addSoundAt(delay, pitch, soundString)
+                    }
+                }
+
+                return composerTimeline
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                return null
+            }
+        }
     }
 
 }
