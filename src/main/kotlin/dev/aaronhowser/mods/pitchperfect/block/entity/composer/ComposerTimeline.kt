@@ -33,6 +33,8 @@ class ComposerTimeline {
         val soundList = soundCounts.getOrDefault(sound, mutableListOf())
         soundList.add(delayPitch)
         soundCounts[sound] = soundList
+
+        println(soundCounts)
     }
 
     fun removeSoundAt(
@@ -44,6 +46,8 @@ class ComposerTimeline {
         val soundList = soundCounts.getOrDefault(sound, mutableListOf())
         soundList.remove(delayPitch)
         soundCounts[sound] = soundList
+
+        println(soundCounts)
     }
 
     fun getSoundsAt(
