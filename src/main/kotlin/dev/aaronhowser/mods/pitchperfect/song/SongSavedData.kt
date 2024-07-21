@@ -120,7 +120,7 @@ class SongSavedData : SavedData() {
         val songListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
         for (songInfo in songs.values) {
-            songListTag.add(songInfo.toCompoundTag())
+            songListTag.add(songInfo.toTag())
         }
 
         pTag.put(SONGS_TAG, songListTag)

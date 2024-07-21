@@ -31,7 +31,7 @@ data class SongInfo(
         song: Song
     ) : this(title, author.uuid, author.gameProfile.name, song)
 
-    fun toCompoundTag(): Tag {
+    fun toTag(): Tag {
         return CODEC.encodeStart(NbtOps.INSTANCE, this).getOrThrow()
     }
 
