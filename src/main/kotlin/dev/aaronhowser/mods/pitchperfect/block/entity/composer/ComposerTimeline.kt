@@ -33,12 +33,12 @@ class ComposerTimeline {
         pitch: Int,
         soundName: String
     ) {
-        val delayPitch = DelayPitch(delay, pitch)
-        val soundList = soundCounts.getOrDefault(soundName, mutableListOf())
-        soundList.remove(delayPitch)
-        soundCounts[soundName] = soundList
+        val list = soundCounts.getOrDefault(soundName, mutableListOf())
+        val first = list.firstOrNull { it.matches(delay, pitch) } ?: return
+        list.remove(first)
+        soundCounts[soundName] = list
 
-        if (soundList.isEmpty()) {
+        if (list.isEmpty()) {
             soundCounts.remove(soundName)
         }
     }
