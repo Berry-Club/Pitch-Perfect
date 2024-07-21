@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCe
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
+import net.minecraft.sounds.SoundEvent
 
 data class TimelineCell(
     val timeline: Timeline,
@@ -25,10 +26,15 @@ data class TimelineCell(
     private val renderY = timeline.topPos + 1 + gridY * (HEIGHT + 4)
 
     // Timeline position
-    private val delayX: Int
+    private val delay: Int
         get() = gridX + timeline.horizontalScrollIndex
-    private val pitchY: Int
+    private val pitch: Int
         get() = gridY + timeline.verticalScrollIndex
+
+    val sounds: List<Holder<SoundEvent>>
+        get() {
+            val blockEntity = timeline.composerScreen.composerBlockEntity
+        }
 
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
@@ -50,8 +56,8 @@ data class TimelineCell(
     private fun renderTooltip(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
         val components = mutableListOf<Component>()
 
-        components.add(Component.literal("Delay: $delayX"))
-        components.add(Component.literal("Pitch: $pitchY"))
+        components.add(Component.literal("Delay: $delay"))
+        components.add(Component.literal("Pitch: $pitch"))
 
         if (cellData != null) {
             val instrumentCounts = cellData?.getAllCounts() ?: emptyMap()
@@ -80,8 +86,8 @@ data class TimelineCell(
 
         ModPacketHandler.messageServer(
             ClickComposerCellPacket(
-                delayX,
-                pitchY,
+                delay,
+                pitch,
                 leftClick,
                 Holder.direct(timeline.composerScreen.selectedInstrument!!.instrumentItem.instrument),
                 timeline.composerScreen.composerBlockEntity.blockPos

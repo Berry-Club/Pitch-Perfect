@@ -46,6 +46,18 @@ class ComposerTimeline {
         soundCounts[sound] = soundList
     }
 
+    fun getSoundsAt(
+        delay: Int,
+        pitch: Int
+    ): List<Holder<SoundEvent>> {
+        val delayPitch = DelayPitch(delay, pitch)
+
+        return soundCounts
+            .filter { delayPitch in it.value }
+            .keys
+            .toList()
+    }
+
     companion object {
 
         private const val DELAY = "delay"
