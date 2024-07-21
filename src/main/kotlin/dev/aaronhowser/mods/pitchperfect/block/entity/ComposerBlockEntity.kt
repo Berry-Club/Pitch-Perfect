@@ -67,7 +67,6 @@ class ComposerBlockEntity(
         super.loadAdditional(pTag, pRegistries)
 
         composerTimeline = ComposerTimeline.fromCompoundTag(pTag.getCompound(TIMELINE))
-        println("Loaded composer timeline: $composerTimeline with soundcounts:\n${composerTimeline?.soundCounts}")
     }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
@@ -76,7 +75,6 @@ class ComposerBlockEntity(
         val timeline = composerTimeline
         if (timeline != null) {
             pTag.put(TIMELINE, timeline.toTag())
-            println("Saved composer timeline: $timeline with soundcounts:\n${timeline.soundCounts}")
         }
     }
 
