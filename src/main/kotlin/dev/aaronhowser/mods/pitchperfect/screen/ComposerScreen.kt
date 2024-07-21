@@ -70,6 +70,12 @@ class ComposerScreen(
         return false
     }
 
+    override fun tick() {
+        if (composerBlockEntity.isRemoved) {
+            minecraft?.player?.closeContainer()
+        }
+    }
+
     // Controls
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
