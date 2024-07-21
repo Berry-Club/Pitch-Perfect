@@ -5,8 +5,6 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.Holder
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.player.Player
@@ -63,7 +61,7 @@ class ComposerBlockEntity(
         delay: Int,
         pitch: Int,
         leftClick: Boolean,
-        instrument: Holder<SoundEvent>
+        instrument: String
     ) {
 
         if (composerTimeline == null) {

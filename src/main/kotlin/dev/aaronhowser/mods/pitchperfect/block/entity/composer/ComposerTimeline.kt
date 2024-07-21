@@ -1,7 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity.composer
 
-import net.minecraft.core.Holder
-import net.minecraft.sounds.SoundEvent
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.Tag
 
 class ComposerTimeline {
 
@@ -22,17 +23,17 @@ class ComposerTimeline {
         }
     }
 
-    private val soundCounts: MutableMap<Holder<SoundEvent>, MutableList<DelayPitch>> = mutableMapOf()
+    private val soundCounts: MutableMap<String, MutableList<DelayPitch>> = mutableMapOf()
 
     fun addSoundAt(
         delay: Int,
         pitch: Int,
-        sound: Holder<SoundEvent>
+        soundName: String
     ) {
         val delayPitch = DelayPitch(delay, pitch)
-        val soundList = soundCounts.getOrDefault(sound, mutableListOf())
+        val soundList = soundCounts.getOrDefault(soundName, mutableListOf())
         soundList.add(delayPitch)
-        soundCounts[sound] = soundList
+        soundCounts[soundName] = soundList
 
         println(soundCounts)
     }
@@ -40,20 +41,25 @@ class ComposerTimeline {
     fun removeSoundAt(
         delay: Int,
         pitch: Int,
-        sound: Holder<SoundEvent>
+        soundName: String
     ) {
         val delayPitch = DelayPitch(delay, pitch)
-        val soundList = soundCounts.getOrDefault(sound, mutableListOf())
+        val soundList = soundCounts.getOrDefault(soundName, mutableListOf())
         soundList.remove(delayPitch)
-        soundCounts[sound] = soundList
+        soundCounts[soundName] = soundList
+
+        if (soundList.isEmpty()) {
+            soundCounts.remove(soundName)
+        }
 
         println(soundCounts)
+        println(toTag())
     }
 
     fun getSoundsAt(
         delay: Int,
         pitch: Int
-    ): List<Holder<SoundEvent>> {
+    ): List<String> {
         val delayPitch = DelayPitch(delay, pitch)
 
         return soundCounts
@@ -62,14 +68,39 @@ class ComposerTimeline {
             .toList()
     }
 
-    companion object {
+    fun toTag(): Tag {
+        val tag = CompoundTag()
 
+        for ((soundString, delayPitches) in soundCounts) {
+
+            val soundsList = tag.getList(SOUNDS, ListTag.TAG_LIST.toInt())
+            for ((delay, pitch) in delayPitches) {
+                val soundTag = CompoundTag()
+                soundTag.putInt(DELAY, delay)
+                soundTag.putInt(PITCH, pitch)
+
+                soundsList.add(soundTag)
+            }
+
+            tag.put(soundString, soundsList)
+        }
+
+        return tag
+    }
+
+    companion object {
+        private const val SOUNDS = "sounds"
         private const val DELAY = "delay"
         private const val PITCH = "pitch"
-        private const val SOUND_RL = "sound_rl"
-        private const val SOUND_COUNT = "sound_count"
 
-
+//        fun fromTag(tag: CompoundTag): ComposerTimeline? {
+//
+//            val timeline = ComposerTimeline()
+//
+//
+//
+//
+//        }
     }
 
 }

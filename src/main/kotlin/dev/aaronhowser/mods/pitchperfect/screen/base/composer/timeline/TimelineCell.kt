@@ -3,9 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
-import net.minecraft.sounds.SoundEvent
 
 data class TimelineCell(
     val timeline: Timeline,
@@ -31,7 +29,7 @@ data class TimelineCell(
     private val pitch: Int
         get() = gridY + timeline.verticalScrollIndex
 
-    val sounds: List<Holder<SoundEvent>>
+    val sounds: List<String>
         get() {
             val timeline = timeline.composerScreen.composerBlockEntity.composerTimeline ?: return emptyList()
             return timeline.getSoundsAt(delay, pitch)
@@ -62,8 +60,8 @@ data class TimelineCell(
 
         if (sounds.isNotEmpty()) {
             components.add(Component.literal("Sounds:"))
-            for (sound in sounds) {
-                components.add(Component.literal("  - ${sound.value().location}"))
+            for (soundString in sounds) {
+                components.add(Component.literal("  - $soundString"))
             }
         }
 
@@ -84,12 +82,14 @@ data class TimelineCell(
             else -> return
         }
 
+        val selectedInstrument = timeline.composerScreen.selectedInstrument?.name ?: return
+
         ModPacketHandler.messageServer(
             ClickComposerCellPacket(
                 delay,
                 pitch,
                 leftClick,
-                Holder.direct(timeline.composerScreen.selectedInstrument!!.instrumentItem.instrument),
+                selectedInstrument,
                 timeline.composerScreen.composerBlockEntity.blockPos
             )
         )

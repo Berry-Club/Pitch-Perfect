@@ -4,12 +4,10 @@ import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Holder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
@@ -17,7 +15,7 @@ class ClickComposerCellPacket(
     val delay: Int,
     val pitch: Int,
     val leftClick: Boolean,
-    val selectedInstrument: Holder<SoundEvent>,
+    val selectedInstrument: String,
     val blockPos: BlockPos
 ) : IModPacket {
 
@@ -48,7 +46,7 @@ class ClickComposerCellPacket(
                 ByteBufCodecs.VAR_INT, ClickComposerCellPacket::delay,
                 ByteBufCodecs.VAR_INT, ClickComposerCellPacket::pitch,
                 ByteBufCodecs.BOOL, ClickComposerCellPacket::leftClick,
-                SoundEvent.STREAM_CODEC, ClickComposerCellPacket::selectedInstrument,
+                ByteBufCodecs.STRING_UTF8, ClickComposerCellPacket::selectedInstrument,
                 BlockPos.STREAM_CODEC, ClickComposerCellPacket::blockPos,
                 ::ClickComposerCellPacket
             )
