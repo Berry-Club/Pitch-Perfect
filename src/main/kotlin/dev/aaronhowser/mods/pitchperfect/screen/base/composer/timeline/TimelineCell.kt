@@ -26,7 +26,7 @@ data class TimelineCell(
 
     // Timeline position
     private val delay: Int
-        get() = gridX + timeline.horizontalScrollIndex
+        get() = (gridX + timeline.horizontalScrollIndex) * 4
     private val pitch: Int
         get() = gridY + timeline.verticalScrollIndex
 
