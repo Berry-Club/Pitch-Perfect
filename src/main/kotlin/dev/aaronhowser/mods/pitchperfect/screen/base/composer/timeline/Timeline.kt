@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
-import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.neoforged.api.distmarker.Dist
@@ -26,8 +25,11 @@ class Timeline(
             field = value.coerceAtLeast(0)
         }
 
+    private var lastBeatDelay: Int = 0
+
     fun init() {
         addTimelineCells()
+        setLastBeatDelay()
     }
 
     private val timelineCells: MutableList<TimelineCell> = mutableListOf()
@@ -64,6 +66,14 @@ class Timeline(
             topPos - 20,
             0xFFFFFF
         )
+
+        pGuiGraphics.drawString(
+            font,
+            "$lastBeatDelay",
+            leftPos + 100,
+            topPos - 20,
+            0xFFFFFF
+        )
     }
 
     fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
@@ -72,6 +82,14 @@ class Timeline(
         for (cell in timelineCells) {
             cell.click(pMouseX.toInt(), pMouseY.toInt(), pButton)
         }
+
+        setLastBeatDelay()
+    }
+
+    private fun setLastBeatDelay() {
+        val songWip = composerScreen.composerBlockEntity.songWip ?: return
+        val lastBeat = songWip.song.beats.flatMap { it.value }.maxByOrNull { it.at } ?: return
+        lastBeatDelay = lastBeat.at
     }
 
 }
