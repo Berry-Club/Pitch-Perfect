@@ -63,25 +63,31 @@ class SongWip(
         song = song.copy(beats = updatedBeats)
     }
 
-    fun getSoundStringsAt(
+    fun getSoundsAt(
         delay: Int,
         pitch: Int
-    ): MutableList<String> {
+    ): List<Holder<SoundEvent>> {
         val note = Note.getFromPitch(pitch)
+        val list = mutableListOf<Holder<SoundEvent>>()
 
-        val soundStrings = mutableListOf<String>()
-
-        for ((instrument, beats) in song.beats) {
+        for ((soundHolder, beats) in song.beats) {
             val beat = beats.find { it.at == delay } ?: continue
 
             for (beatNote in beat.notes) {
                 if (beatNote == note) {
-                    soundStrings.add(instrument.value().location.toString())
+                    list.add(soundHolder)
                 }
             }
         }
 
-        return soundStrings
+        return list
+    }
+
+    fun getSoundStringsAt(
+        delay: Int,
+        pitch: Int
+    ): List<String> {
+        return getSoundsAt(delay, pitch).map { it.value().location.toString() }
     }
 
     fun toTag(): Tag {

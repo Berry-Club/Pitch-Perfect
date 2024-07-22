@@ -6,7 +6,9 @@ import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
+import net.minecraft.sounds.SoundEvent
 
 data class TimelineCell(
     val timeline: Timeline,
@@ -30,21 +32,27 @@ data class TimelineCell(
 
     // Timeline position
     val delay: Int
-        get() = (gridX + timeline.horizontalScrollIndex) * 2
+        get() = (gridX + timeline.horizontalScrollIndex) * Timeline.TICKS_PER_BEAT
     private val pitchInt: Int
         get() = gridY
-    private val noteName: String
-        get() = Note.getFromPitch(pitchInt).displayName
+    val note: Note
+        get() = Note.getFromPitch(pitchInt)
 
-    val sounds: List<String>
+    private val soundStrings: List<String>
         get() {
             val songWip = timeline.composerScreen.composerBlockEntity.songWip ?: return emptyList()
             return songWip.getSoundStringsAt(delay, pitchInt)
         }
 
+    val sounds: List<Holder<SoundEvent>>
+        get() {
+            val songWip = timeline.composerScreen.composerBlockEntity.songWip ?: return emptyList()
+            return songWip.getSoundsAt(delay, pitchInt)
+        }
+
     private val argb: Int
         get() {
-            if (sounds.isEmpty()) return COLOR_EMPTY
+            if (soundStrings.isEmpty()) return COLOR_EMPTY
 
             val noteColor = Note.getFromPitch(pitchInt).withAlpha(0.8f)
 
@@ -68,11 +76,11 @@ data class TimelineCell(
         val components = mutableListOf<Component>()
 
         components.add(Component.literal("Delay: $delay"))
-        components.add(Component.literal("Pitch: $noteName"))
+        components.add(Component.literal("Pitch: ${note.displayName}"))
 
-        if (sounds.isNotEmpty()) {
+        if (soundStrings.isNotEmpty()) {
             components.add(Component.literal("Sounds:"))
-            for (soundString in sounds) {
+            for (soundString in soundStrings) {
                 components.add(Component.literal("  - $soundString"))
             }
         }

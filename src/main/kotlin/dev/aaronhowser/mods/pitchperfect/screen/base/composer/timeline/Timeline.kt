@@ -15,6 +15,8 @@ class Timeline(
 
     companion object {
         private const val ROW_COUNT = 25
+
+        const val TICKS_PER_BEAT = 2
     }
 
     val timelineStepper = TimelineStepper(this)

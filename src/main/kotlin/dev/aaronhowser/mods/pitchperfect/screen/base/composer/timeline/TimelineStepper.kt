@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 
+import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
+import dev.aaronhowser.mods.pitchperfect.util.ModClientScheduler
 import net.minecraft.client.gui.GuiGraphics
 
 class TimelineStepper(
@@ -43,11 +45,44 @@ class TimelineStepper(
     fun startPlaying() {
         if (playing) return
         playing = true
+
+        playBeat()
     }
 
     fun stopPlaying() {
         if (!playing) return
         playing = false
+    }
+
+    private fun playBeat() {
+        if (!playing) return
+
+        val blockPos = timeline.composerScreen.composerBlockEntity.blockPos
+
+        for (cell in cellsAtBeat) {
+            val note = cell.note
+
+            for (soundHolder in cell.sounds) {
+                ClientUtil.playNote(
+                    soundHolder.value(),
+                    note.getGoodPitch(),
+                    blockPos.x + 0.5,
+                    blockPos.y + 1.5,
+                    blockPos.z + 0.5,
+                    false
+                )
+            }
+
+        }
+
+        ModClientScheduler.scheduleTaskInTicks(Timeline.TICKS_PER_BEAT) {
+            if (currentDelay >= timeline.lastBeatDelay) {
+                stopPlaying()
+            } else {
+                currentDelay += Timeline.TICKS_PER_BEAT
+                playBeat()
+            }
+        }
     }
 
 }

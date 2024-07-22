@@ -64,7 +64,8 @@ class PlayStopButtons(
     }
 
     fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
-
+        if (playButton.isMouseOver(pMouseX, pMouseY)) playButton.onPress()
+        if (stopButton.isMouseOver(pMouseX, pMouseY)) stopButton.onPress()
     }
 
 }
