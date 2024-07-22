@@ -103,7 +103,7 @@ class ComposerBlockEntity(
 
         val note = Note.getFromPitch(pitch)
 
-        val soundHolder = Song.getSoundHolder(instrument)
+        val soundHolder = Song.getSoundHolder(instrument.lowercase())
 
         songWip?.apply {
             if (leftClick) {

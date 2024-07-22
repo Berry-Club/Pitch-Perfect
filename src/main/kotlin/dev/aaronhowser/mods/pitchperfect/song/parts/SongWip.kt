@@ -34,7 +34,7 @@ class SongWip(
         note: Note,
         instrument: Holder<SoundEvent>
     ) {
-
+        println("Song before adding: $song")
         val updatedBeats = song.beats.toMutableMap()
 
         val currentBeats = updatedBeats[instrument].orEmpty()
@@ -44,6 +44,7 @@ class SongWip(
 
         updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
         song = song.copy(beats = updatedBeats)
+        println("Song after adding: $song")
     }
 
     fun removeBeat(
@@ -51,6 +52,7 @@ class SongWip(
         note: Note,
         instrument: Holder<SoundEvent>
     ) {
+        println("Song before removing: $song")
         val updatedBeats = song.beats.toMutableMap()
 
         val currentBeats = updatedBeats[instrument] ?: return
@@ -61,6 +63,7 @@ class SongWip(
         updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
 
         song = song.copy(beats = updatedBeats)
+        println("Song after removing: $song")
     }
 
     fun toTag(): Tag {
