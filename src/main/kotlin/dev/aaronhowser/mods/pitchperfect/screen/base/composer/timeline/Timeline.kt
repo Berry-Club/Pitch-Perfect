@@ -33,9 +33,12 @@ class Timeline(
     fun init() {
         addTimelineCells()
         setLastBeatDelay()
+
+        timelineStepper.init()
     }
 
-    private val timelineCells: MutableList<TimelineCell> = mutableListOf()
+    var timelineCells: List<TimelineCell> = listOf()
+        private set
 
     private fun addTimelineCells() {
         if (timelineCells.isNotEmpty()) {
@@ -43,14 +46,20 @@ class Timeline(
             return
         }
 
+        val tempList = mutableListOf<TimelineCell>()
+
         for (yIndex in 0 until ROW_COUNT) {
             for (xIndex in 0 until 40) {
-                timelineCells += TimelineCell(this, xIndex, yIndex)
+                tempList += TimelineCell(this, xIndex, yIndex)
             }
         }
+
+        timelineCells = tempList
     }
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        timelineStepper.render(pGuiGraphics)
+
         renderTimelineCells(pGuiGraphics, pMouseX, pMouseY)
         renderScrollIndex(pGuiGraphics)
     }

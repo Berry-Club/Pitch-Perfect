@@ -23,13 +23,13 @@ data class TimelineCell(
     }
 
     // Render position
-    private val renderLeft = timeline.leftPos + 1 + gridX * (WIDTH + 1)
-    private val renderRight = renderLeft + WIDTH
-    private val renderTop = timeline.topPos + 1 + gridY * (HEIGHT + 2)
-    private val renderBottom = renderTop + HEIGHT
+    val renderLeft = timeline.leftPos + 1 + gridX * (WIDTH + 1)
+    val renderRight = renderLeft + WIDTH
+    val renderTop = timeline.topPos + 1 + gridY * (HEIGHT + 2)
+    val renderBottom = renderTop + HEIGHT
 
     // Timeline position
-    private val delay: Int
+    val delay: Int
         get() = (gridX + timeline.horizontalScrollIndex) * 2
     private val pitchInt: Int
         get() = gridY
