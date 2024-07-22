@@ -70,8 +70,22 @@ data class Song(
             return FromStringReader(StringReader(string))
         }
 
-        fun FromStringReader(reader: StringReader): Song? {
+        fun getSoundHolder(instrumentName: String): Holder<SoundEvent> {
+            val instrument: NoteBlockInstrument? = ID_TO_INSTRUMENT[instrumentName]
 
+            return if (instrument == null) {
+                BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(
+                    ResourceKey.create(
+                        Registries.SOUND_EVENT,
+                        ResourceLocation.parse(instrumentName)
+                    )
+                )
+            } else {
+                instrument.soundEvent
+            }
+        }
+
+        fun FromStringReader(reader: StringReader): Song? {
             try {
 
                 val beats: HashMap<Holder<SoundEvent>, List<Beat>> = HashMap()
@@ -82,18 +96,7 @@ data class Song(
 
                 while (reader.canRead() && reader.peek() != '}') {
                     val instrumentName: String = reader.readStringUntil('=')
-                    val instrument: NoteBlockInstrument? = ID_TO_INSTRUMENT[instrumentName]
-
-                    val sound: Holder<SoundEvent> = if (instrument == null) {
-                        BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(
-                            ResourceKey.create(
-                                Registries.SOUND_EVENT,
-                                ResourceLocation.parse(instrumentName)
-                            )
-                        )
-                    } else {
-                        instrument.soundEvent
-                    }
+                    val sound = getSoundHolder(instrumentName)
 
                     reader.skipWhitespace()
 
