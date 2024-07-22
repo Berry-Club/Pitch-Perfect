@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 
-class TimelinePlaying(
+class TimelineStepper(
     private val timeline: Timeline
 ) {
 

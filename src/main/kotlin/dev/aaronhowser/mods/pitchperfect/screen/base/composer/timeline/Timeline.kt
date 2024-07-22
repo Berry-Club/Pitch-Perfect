@@ -17,6 +17,8 @@ class Timeline(
         private const val ROW_COUNT = 25
     }
 
+    val timelineStepper = TimelineStepper(this)
+
     val topPos by lazy { composerScreen.topPos + 60 }
     val leftPos by lazy { composerScreen.leftPos + 85 }
 
