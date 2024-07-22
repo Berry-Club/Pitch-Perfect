@@ -36,13 +36,15 @@ object OtherEvents {
 
     @SubscribeEvent
     fun onPunchBlock(event: LeftClickBlock) {
-        val pos = event.pos
+        if (event.action != LeftClickBlock.Action.START) return
 
+        val pos = event.pos
         val blockEntity = event.level.getBlockEntity(pos) as? ComposerBlockEntity ?: return
 
         println(
             """
             client: ${event.level.isClientSide}
+            nbt: ${blockEntity.saveWithFullMetadata(event.level.registryAccess())}
             sounds: ${blockEntity.songInProgress?.soundCounts}
         """.trimIndent()
         )
