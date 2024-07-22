@@ -41,7 +41,9 @@ class TimelineStepper(
         )
     }
 
-    private var playing = false
+    var playing = false
+        private set
+
     fun startPlaying() {
         if (playing) return
         playing = true
@@ -57,8 +59,10 @@ class TimelineStepper(
     private fun playBeat() {
         if (!playing) return
 
-        val blockPos = timeline.composerScreen.composerBlockEntity.blockPos
+        val idealScrollIndex = currentDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2
+        timeline.horizontalScrollIndex = idealScrollIndex
 
+        val blockPos = timeline.composerScreen.composerBlockEntity.blockPos
         for (cell in cellsAtBeat) {
             val note = cell.note
 
@@ -75,13 +79,15 @@ class TimelineStepper(
 
         }
 
+        if (currentDelay >= timeline.lastBeatDelay) {
+            stopPlaying()
+            return
+        }
+
+        currentDelay += Timeline.TICKS_PER_BEAT
+
         ModClientScheduler.scheduleTaskInTicks(Timeline.TICKS_PER_BEAT) {
-            if (currentDelay >= timeline.lastBeatDelay) {
-                stopPlaying()
-            } else {
-                currentDelay += Timeline.TICKS_PER_BEAT
-                playBeat()
-            }
+            playBeat()
         }
     }
 

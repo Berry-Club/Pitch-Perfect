@@ -15,6 +15,7 @@ class Timeline(
 
     companion object {
         private const val ROW_COUNT = 25
+        const val COLUMN_COUNT = 40
 
         const val TICKS_PER_BEAT = 2
     }
@@ -52,7 +53,7 @@ class Timeline(
         val tempList = mutableListOf<TimelineCell>()
 
         for (yIndex in 0 until ROW_COUNT) {
-            for (xIndex in 0 until 40) {
+            for (xIndex in 0 until COLUMN_COUNT) {
                 tempList += TimelineCell(this, xIndex, yIndex)
             }
         }
