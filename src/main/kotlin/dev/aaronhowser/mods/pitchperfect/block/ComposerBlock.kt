@@ -21,6 +21,7 @@ import net.minecraft.world.phys.BlockHitResult
 
 class ComposerBlock(
     private val properties: Properties = Properties.of()
+        .strength(2f, 2f)
         .mapColor(MapColor.METAL)
         .sound(SoundType.METAL)
 ) : HorizontalDirectionalBlock(properties), EntityBlock {

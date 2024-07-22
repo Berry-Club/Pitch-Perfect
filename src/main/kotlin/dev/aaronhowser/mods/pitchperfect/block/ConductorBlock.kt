@@ -28,6 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape
 
 class ConductorBlock(
     private val properties: Properties = Properties.of()
+        .strength(2f, 2f)
         .mapColor(MapColor.METAL)
         .sound(SoundType.METAL)
         .noOcclusion()
