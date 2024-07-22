@@ -1,8 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
-import dev.aaronhowser.mods.pitchperfect.block.entity.composer.ComposerTimeline
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongInProgress
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -61,18 +61,19 @@ class ComposerBlockEntity(
         return itemHandler.getStackInSlot(SHEET_MUSIC_SLOT)
     }
 
-    var composerTimeline: ComposerTimeline? = null
+    var songInProgress: SongInProgress? = null
+        private set
 
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
 
-        composerTimeline = ComposerTimeline.fromCompoundTag(pTag.getCompound(TIMELINE))
+        songInProgress = SongInProgress.fromCompoundTag(pTag.getCompound(TIMELINE))
     }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
 
-        val timeline = composerTimeline
+        val timeline = songInProgress
         if (timeline != null) {
             pTag.put(TIMELINE, timeline.toTag())
         }
@@ -94,11 +95,11 @@ class ComposerBlockEntity(
         instrument: String
     ) {
 
-        if (composerTimeline == null) {
-            composerTimeline = ComposerTimeline()
+        if (songInProgress == null) {
+            songInProgress = SongInProgress()
         }
 
-        composerTimeline?.apply {
+        songInProgress?.apply {
             if (leftClick) {
                 addSoundAt(delay, pitch, instrument)
             } else {

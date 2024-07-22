@@ -1,10 +1,15 @@
-package dev.aaronhowser.mods.pitchperfect.block.entity.composer
+package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
+import java.util.*
 
-class ComposerTimeline {
+class SongInProgress(
+    val uuid: UUID
+) {
+
+    constructor() : this(UUID.randomUUID())
 
     data class DelayPitch(
         val delay: Int,
@@ -64,11 +69,11 @@ class ComposerTimeline {
 
         for ((soundString, delayPitches) in soundCounts) {
 
-            val soundsList = tag.getList(SOUNDS, ListTag.TAG_LIST.toInt())
+            val soundsList = tag.getList(SOUNDS_TAG, ListTag.TAG_LIST.toInt())
             for ((delay, pitch) in delayPitches) {
                 val soundTag = CompoundTag()
-                soundTag.putInt(DELAY, delay)
-                soundTag.putInt(PITCH, pitch)
+                soundTag.putInt(DELAY_TAG, delay)
+                soundTag.putInt(PITCH_TAG, pitch)
 
                 soundsList.add(soundTag)
             }
@@ -80,20 +85,22 @@ class ComposerTimeline {
     }
 
     companion object {
-        private const val SOUNDS = "sounds"
-        private const val DELAY = "delay"
-        private const val PITCH = "pitch"
+        private const val SOUNDS_TAG = "sounds"
+        private const val DELAY_TAG = "delay"
+        private const val PITCH_TAG = "pitch"
+        private const val UUID_TAG = "uuid"
 
-        fun fromCompoundTag(tag: CompoundTag): ComposerTimeline? {
+        fun fromCompoundTag(tag: CompoundTag): SongInProgress? {
             try {
-                val composerTimeline = ComposerTimeline()
+                val uuid = tag.getUUID(UUID_TAG)
+                val composerTimeline = SongInProgress(uuid)
 
                 for (soundString in tag.allKeys) {
                     val soundsList = tag.get(soundString) as ListTag
                     for (soundTag in soundsList) {
                         soundTag as CompoundTag
-                        val delay = soundTag.getInt(DELAY)
-                        val pitch = soundTag.getInt(PITCH)
+                        val delay = soundTag.getInt(DELAY_TAG)
+                        val pitch = soundTag.getInt(PITCH_TAG)
 
                         composerTimeline.addSoundAt(delay, pitch, soundString)
                     }
