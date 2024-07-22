@@ -25,7 +25,8 @@ class Timeline(
             field = value.coerceAtLeast(0)
         }
 
-    private var lastBeatDelay: Int = 0
+    var lastBeatDelay: Int = 0
+        private set
 
     fun init() {
         addTimelineCells()
