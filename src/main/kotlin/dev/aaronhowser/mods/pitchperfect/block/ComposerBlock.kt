@@ -75,6 +75,8 @@ class ComposerBlock(
                 blockEntity.dropDrops()
             }
         }
+
+        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston)
     }
 
     override fun useWithoutItem(

@@ -126,6 +126,8 @@ class ConductorBlock(
                 blockEntity.dropDrops()
             }
         }
+
+        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston)
     }
 
     override fun useItemOn(
