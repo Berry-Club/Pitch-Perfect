@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.screen
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
+import dev.aaronhowser.mods.pitchperfect.screen.base.composer.CopyPasteButtons
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.InstrumentArea
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
@@ -22,8 +23,10 @@ class ComposerScreen(
 
     private lateinit var timeline: Timeline
     private lateinit var instrumentArea: InstrumentArea
+    private lateinit var copyPasteButtons: CopyPasteButtons
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
+
 
     override fun init() {
         leftPos = (width - ScreenTextures.Background.COMPOSER_WIDTH) / 2
@@ -31,9 +34,11 @@ class ComposerScreen(
 
         timeline = Timeline(this, this.font)
         instrumentArea = InstrumentArea(this)
+        copyPasteButtons = CopyPasteButtons(this, this.font)
 
         timeline.init()
         instrumentArea.init()
+        copyPasteButtons.init()
     }
 
     // Rendering
@@ -54,6 +59,7 @@ class ComposerScreen(
 
         instrumentArea.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         timeline.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        copyPasteButtons.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
         pGuiGraphics.drawString(
             font,
@@ -81,6 +87,7 @@ class ComposerScreen(
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         instrumentArea.mouseClicked(pMouseX, pMouseY, pButton)
         timeline.mouseClicked(pMouseX, pMouseY, pButton)
+        copyPasteButtons.mouseClicked(pMouseX, pMouseY, pButton)
 
         return super.mouseClicked(pMouseX, pMouseY, pButton)
     }

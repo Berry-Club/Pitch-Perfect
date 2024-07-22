@@ -8,10 +8,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvent
 
-class SongWip(song: Song) {
-
-    var song: Song = song
-        private set
+class SongWip(
+    var song: Song
+) {
 
     companion object {
         val CODEC: Codec<SongWip> =
