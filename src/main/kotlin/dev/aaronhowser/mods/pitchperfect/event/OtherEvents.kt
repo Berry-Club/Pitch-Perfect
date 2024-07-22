@@ -45,7 +45,6 @@ object OtherEvents {
             """
             client: ${event.level.isClientSide}
             nbt: ${blockEntity.saveWithFullMetadata(event.level.registryAccess())}
-            sounds: ${blockEntity.songInProgress?.soundCounts}
         """.trimIndent()
         )
     }

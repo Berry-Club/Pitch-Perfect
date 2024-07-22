@@ -2,7 +2,9 @@ package dev.aaronhowser.mods.pitchperfect.block.entity
 
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
-import dev.aaronhowser.mods.pitchperfect.song.parts.SongInProgress
+import dev.aaronhowser.mods.pitchperfect.song.parts.Note
+import dev.aaronhowser.mods.pitchperfect.song.parts.Song
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -28,7 +30,7 @@ class ComposerBlockEntity(
         const val AMOUNT_SLOTS = 1
         const val SHEET_MUSIC_SLOT = 0
 
-        const val SONG_IN_PROGRESS_TAG = "song_wip"
+        const val SONG_WIP_TAG = "song_wip"
     }
 
     private val itemHandler: ItemStackHandler = object : ItemStackHandler(AMOUNT_SLOTS) {
@@ -61,22 +63,22 @@ class ComposerBlockEntity(
         return itemHandler.getStackInSlot(SHEET_MUSIC_SLOT)
     }
 
-    var songInProgress: SongInProgress? = null
+    var songWip: SongWip? = null
         private set
 
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
 
-        val timelineTag = pTag.getCompound(SONG_IN_PROGRESS_TAG)
-        songInProgress = SongInProgress.fromCompoundTag(timelineTag)
+        val songWipTag = pTag.getCompound(SONG_WIP_TAG)
+        songWip = SongWip.fromCompoundTag(songWipTag)
     }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
 
-        val timeline = songInProgress
+        val timeline = songWip
         if (timeline != null) {
-            pTag.put(SONG_IN_PROGRESS_TAG, timeline.toTag())
+            pTag.put(SONG_WIP_TAG, timeline.toTag())
         }
     }
 
@@ -95,15 +97,19 @@ class ComposerBlockEntity(
         leftClick: Boolean,
         instrument: String
     ) {
-        if (songInProgress == null) {
-            songInProgress = SongInProgress()
+        if (songWip == null) {
+            songWip = SongWip()
         }
 
-        songInProgress?.apply {
+        val note = Note.getFromPitch(pitch)
+
+        val soundHolder = Song.getSoundHolder(instrument)
+
+        songWip?.apply {
             if (leftClick) {
-                addSoundAt(delay, pitch, instrument)
+                addBeat(delay, note, soundHolder)
             } else {
-                removeSoundAt(delay, pitch, instrument)
+                removeBeat(delay, note, soundHolder)
             }
 
             setChanged()
