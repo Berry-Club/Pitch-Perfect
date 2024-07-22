@@ -13,7 +13,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
-class PasteComposerSongPacket(
+class ComposerPasteSongPacket(
     val songString: String,
     val composerPos: BlockPos
 ) : IModPacket {
@@ -45,14 +45,14 @@ class PasteComposerSongPacket(
     }
 
     companion object {
-        val TYPE: CustomPacketPayload.Type<PasteComposerSongPacket> =
-            CustomPacketPayload.Type(OtherUtil.modResource("paste_composer_song"))
+        val TYPE: CustomPacketPayload.Type<ComposerPasteSongPacket> =
+            CustomPacketPayload.Type(OtherUtil.modResource("composer_paste_song"))
 
-        val STREAM_CODEC: StreamCodec<ByteBuf, PasteComposerSongPacket> =
+        val STREAM_CODEC: StreamCodec<ByteBuf, ComposerPasteSongPacket> =
             StreamCodec.composite(
-                ByteBufCodecs.STRING_UTF8, PasteComposerSongPacket::songString,
-                BlockPos.STREAM_CODEC, PasteComposerSongPacket::composerPos,
-                ::PasteComposerSongPacket
+                ByteBufCodecs.STRING_UTF8, ComposerPasteSongPacket::songString,
+                BlockPos.STREAM_CODEC, ComposerPasteSongPacket::composerPos,
+                ::ComposerPasteSongPacket
             )
     }
 

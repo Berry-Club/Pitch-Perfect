@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.packet
 
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
-import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.PasteComposerSongPacket
+import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ComposerPasteSongPacket
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.SongPasteCommandResponsePacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SongPasteCommandRequestPacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnElectricLinePacket
@@ -47,8 +47,8 @@ object ModPacketHandler {
         )
 
         registrar.playToServer(
-            PasteComposerSongPacket.TYPE,
-            PasteComposerSongPacket.STREAM_CODEC,
+            ComposerPasteSongPacket.TYPE,
+            ComposerPasteSongPacket.STREAM_CODEC,
             DirectionalPayloadHandler(
                 { packet, context -> packet.receiveMessage(context) },
                 { packet, context -> packet.receiveMessage(context) }
