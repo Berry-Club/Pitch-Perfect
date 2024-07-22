@@ -22,6 +22,7 @@ class SongWip(
 
         fun fromCompoundTag(tag: CompoundTag): SongWip? {
             val songString = tag.getString(SONG_NBT)
+            if (songString.isEmpty()) return null
             val song = Song.fromString(songString) ?: return null
             return SongWip(song)
         }
