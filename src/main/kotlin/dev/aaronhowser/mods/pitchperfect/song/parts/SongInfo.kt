@@ -7,7 +7,6 @@ import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.ClickEvent
@@ -32,7 +31,13 @@ data class SongInfo(
     ) : this(title, author.uuid, author.gameProfile.name, song)
 
     fun toTag(): Tag {
-        return CODEC.encodeStart(NbtOps.INSTANCE, this).getOrThrow()
+        val compoundTag = CompoundTag()
+        compoundTag.putString(TITLE, title)
+        compoundTag.putUUID(AUTHOR_UUID, authorUuid)
+        compoundTag.putString(AUTHOR_NAME, authorName)
+        compoundTag.putString(SONG, song.toString())
+
+        return compoundTag
     }
 
     fun getComponent(): Component {
