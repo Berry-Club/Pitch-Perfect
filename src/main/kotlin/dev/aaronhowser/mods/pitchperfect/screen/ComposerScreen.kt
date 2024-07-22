@@ -22,7 +22,8 @@ class ComposerScreen(
 
     var selectedInstrument: ScreenInstrument? = null
 
-    private lateinit var timeline: Timeline
+    lateinit var timeline: Timeline
+        private set
     private lateinit var instrumentArea: InstrumentArea
     private lateinit var copyPasteButtons: CopyPasteButtons
     private lateinit var playStopButtons: PlayStopButtons

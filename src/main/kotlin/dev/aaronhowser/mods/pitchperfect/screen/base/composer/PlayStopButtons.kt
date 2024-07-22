@@ -38,28 +38,29 @@ class PlayStopButtons(
         }
 
         playButton = textButton(
-            composerScreen.leftPos + 5,
+            composerScreen.leftPos + 5 + 40,
             composerScreen.topPos + 5 + 19 + 19,
             16,
             16,
-            Component.literal("Copy")
+            Component.literal("Play")
         ) {
-            val song = composerScreen.composerBlockEntity.songWip?.song ?: return@textButton
+            composerScreen.timeline.timelineStepper.startPlaying()
         }
 
         stopButton = textButton(
-            composerScreen.leftPos + 5,
+            composerScreen.leftPos + 5 + 40,
             composerScreen.topPos + 5 + 19 + 19 + 19,
             16,
             16,
-            Component.literal("Paste")
+            Component.literal("Stop")
         ) {
-            val song = composerScreen.composerBlockEntity.songWip?.song ?: return@textButton
+            composerScreen.timeline.timelineStepper.stopPlaying()
         }
     }
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-
+        playButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        stopButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
     fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {

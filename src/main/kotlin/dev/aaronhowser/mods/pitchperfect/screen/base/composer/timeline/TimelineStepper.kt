@@ -37,7 +37,17 @@ class TimelineStepper(
             bottomCellY + 1,
             0x66FF6666
         )
+    }
 
+    private var playing = false
+    fun startPlaying() {
+        if (playing) return
+        playing = true
+    }
+
+    fun stopPlaying() {
+        if (!playing) return
+        playing = false
     }
 
 }
