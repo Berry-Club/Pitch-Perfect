@@ -48,7 +48,7 @@ class CopyPasteButtons(
             16,
             Component.literal("Copy")
         ) {
-            val song = composerScreen.composerBlockEntity.songWip?.song ?: return@textButton
+            val song = composerScreen.songWip?.song ?: return@textButton
 
             composerScreen.minecraft.keyboardHandler.clipboard = song.toString()
 

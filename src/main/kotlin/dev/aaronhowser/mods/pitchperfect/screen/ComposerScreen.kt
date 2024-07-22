@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.pitchperfect.screen.base.composer.InstrumentArea
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.PlayStopButtons
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
@@ -29,7 +30,6 @@ class ComposerScreen(
     private lateinit var playStopButtons: PlayStopButtons
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
-
 
     override fun init() {
         leftPos = (width - ScreenTextures.Background.COMPOSER_WIDTH) / 2
@@ -82,9 +82,17 @@ class ComposerScreen(
         return false
     }
 
+    var songWip: SongWip? = null
+        private set
+
     override fun tick() {
         if (composerBlockEntity.isRemoved) {
             minecraft?.player?.closeContainer()
+        }
+
+        if (songWip != composerBlockEntity.songWip) {
+            songWip = composerBlockEntity.songWip
+            timeline.setLastBeatDelay()
         }
     }
 

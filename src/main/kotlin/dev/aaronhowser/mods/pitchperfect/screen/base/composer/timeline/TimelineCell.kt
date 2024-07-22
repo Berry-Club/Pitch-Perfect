@@ -40,13 +40,13 @@ data class TimelineCell(
 
     private val soundStrings: List<String>
         get() {
-            val songWip = timeline.composerScreen.composerBlockEntity.songWip ?: return emptyList()
+            val songWip = timeline.composerScreen.songWip ?: return emptyList()
             return songWip.getSoundStringsAt(delay, pitchInt)
         }
 
     val sounds: List<Holder<SoundEvent>>
         get() {
-            val songWip = timeline.composerScreen.composerBlockEntity.songWip ?: return emptyList()
+            val songWip = timeline.composerScreen.songWip ?: return emptyList()
             return songWip.getSoundsAt(delay, pitchInt)
         }
 
