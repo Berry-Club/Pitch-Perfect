@@ -19,7 +19,7 @@ import kotlin.math.pow
 enum class Note(
     val note: Int,
     val octave: Int,
-    val color: Int
+    val rgb: Int
 ) : StringRepresentable {
     F3S(6, 3, 0x77D700),
     G3(7, 3, 0x95C000),
@@ -75,6 +75,9 @@ enum class Note(
     override fun toString(): String {
         return displayName
     }
+
+    val argb: Int
+        get() = 0xFF shl 24 or rgb
 
     companion object {
         val VALUES: Array<Note> = entries.toTypedArray()

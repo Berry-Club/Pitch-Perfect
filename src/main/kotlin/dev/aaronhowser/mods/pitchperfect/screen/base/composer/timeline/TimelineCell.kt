@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
+import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.client.gui.GuiGraphics
@@ -28,22 +29,29 @@ data class TimelineCell(
     // Timeline position
     private val delay: Int
         get() = (gridX + timeline.horizontalScrollIndex) * 4
-    private val pitch: Int
+    private val pitchInt: Int
         get() = gridY
+    private val noteName: String
+        get() = Note.getFromPitch(pitchInt).displayName
 
     val sounds: List<String>
         get() {
             val songWip = timeline.composerScreen.composerBlockEntity.songWip ?: return emptyList()
-            return songWip.getSoundStringsAt(delay, pitch)
+            return songWip.getSoundStringsAt(delay, pitchInt)
+        }
+
+    val color: Int
+        get() {
+            if (sounds.isEmpty()) return COLOR_EMPTY
+
+            val noteColor = Note.getFromPitch(pitchInt).argb
+
+            return noteColor
         }
 
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
         if (isMouseOver(pMouseX, pMouseY)) renderTooltip(pGuiGraphics, pMouseX, pMouseY)
-
-        val hasData = sounds.isNotEmpty()
-
-        val color = if (hasData) COLOR_NOT_EMPTY else COLOR_EMPTY
 
         pGuiGraphics.fill(
             renderX,
@@ -58,7 +66,7 @@ data class TimelineCell(
         val components = mutableListOf<Component>()
 
         components.add(Component.literal("Delay: $delay"))
-        components.add(Component.literal("Pitch: $pitch"))
+        components.add(Component.literal("Pitch: $noteName"))
 
         if (sounds.isNotEmpty()) {
             components.add(Component.literal("Sounds:"))
@@ -90,7 +98,7 @@ data class TimelineCell(
         ModPacketHandler.messageServer(
             ClickComposerCellPacket(
                 delay,
-                pitch,
+                pitchInt,
                 leftClick,
                 soundString,
                 timeline.composerScreen.composerBlockEntity.blockPos
@@ -101,7 +109,7 @@ data class TimelineCell(
             timeline.composerScreen.minecraft.player?.playSound(
                 soundHolder.value(),
                 1f,
-                pitch.map(0f, 24f, 0.5f, 2f)
+                pitchInt.map(0f, 24f, 0.5f, 2f)
             )
         }
     }
