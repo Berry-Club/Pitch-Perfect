@@ -15,7 +15,7 @@ data class TimelineCell(
 
     companion object {
         const val WIDTH = 9
-        const val HEIGHT = 9
+        const val HEIGHT = 5
 
         private const val COLOR_EMPTY = 0x66333333
         private const val COLOR_NOT_EMPTY = 0x66FFFFFF
@@ -23,7 +23,7 @@ data class TimelineCell(
 
     // Render position
     private val renderX = timeline.leftPos + 1 + gridX * (WIDTH + 1)
-    private val renderY = timeline.topPos + 1 + gridY * (HEIGHT + 4)
+    private val renderY = timeline.topPos + 1 + gridY * (HEIGHT + 2)
 
     // Timeline position
     private val delay: Int

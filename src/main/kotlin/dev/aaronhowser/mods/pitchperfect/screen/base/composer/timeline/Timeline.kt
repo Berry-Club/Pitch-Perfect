@@ -15,10 +15,10 @@ class Timeline(
 ) {
 
     companion object {
-        private const val ROW_COUNT = 12
+        private const val ROW_COUNT = 25
     }
 
-    val topPos by lazy { composerScreen.topPos + 84 }
+    val topPos by lazy { composerScreen.topPos + 60 }
     val leftPos by lazy { composerScreen.leftPos + 85 }
 
     var verticalScrollIndex: Int = 0
@@ -51,34 +51,12 @@ class Timeline(
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         renderTimelineCells(pGuiGraphics, pMouseX, pMouseY)
-        renderPitchName(pGuiGraphics)
         renderScrollIndex(pGuiGraphics)
     }
 
     private fun renderTimelineCells(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
         for (cell in timelineCells) {
             cell.render(pGuiGraphics, pMouseX, pMouseY)
-        }
-    }
-
-    private fun renderPitchName(pGuiGraphics: GuiGraphics) {
-        val x = leftPos - 20
-
-        for (yIndex in 0 until ROW_COUNT) {
-            val y = topPos + yIndex * 13
-
-            val noteIndex = yIndex + verticalScrollIndex
-            val note = Note.entries.getOrNull(noteIndex)
-            val noteString = note?.displayName ?: "YOU FUCKED UP"
-            val noteColor = note?.color ?: 0xFFFFFF
-
-            pGuiGraphics.drawString(
-                font,
-                noteString,
-                x,
-                y,
-                noteColor
-            )
         }
     }
 
