@@ -23,8 +23,10 @@ data class TimelineCell(
     }
 
     // Render position
-    private val renderX = timeline.leftPos + 1 + gridX * (WIDTH + 1)
-    private val renderY = timeline.topPos + 1 + gridY * (HEIGHT + 2)
+    private val renderLeft = timeline.leftPos + 1 + gridX * (WIDTH + 1)
+    private val renderRight = renderLeft + WIDTH
+    private val renderTop = timeline.topPos + 1 + gridY * (HEIGHT + 2)
+    private val renderBottom = renderTop + HEIGHT
 
     // Timeline position
     private val delay: Int
@@ -54,10 +56,10 @@ data class TimelineCell(
         if (isMouseOver(pMouseX, pMouseY)) renderTooltip(pGuiGraphics, pMouseX, pMouseY)
 
         pGuiGraphics.fill(
-            renderX,
-            renderY,
-            renderX + WIDTH,
-            renderY + HEIGHT,
+            renderLeft,
+            renderTop,
+            renderRight,
+            renderBottom,
             argb
         )
     }
@@ -115,7 +117,7 @@ data class TimelineCell(
     }
 
     private fun isMouseOver(mouseX: Int, mouseY: Int): Boolean {
-        return mouseX in renderX..renderX + WIDTH && mouseY in renderY..renderY + HEIGHT
+        return mouseX in renderLeft..renderRight && mouseY in renderTop..renderBottom
     }
 
 
