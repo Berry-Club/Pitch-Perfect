@@ -31,7 +31,7 @@ data class TimelineCell(
 
     val sounds: List<String>
         get() {
-            val timeline = timeline.composerScreen.composerBlockEntity.composerTimeline ?: return emptyList()
+            val timeline = timeline.composerScreen.composerBlockEntity.songInProgress ?: return emptyList()
             return timeline.getSoundsAt(delay, pitch)
         }
 

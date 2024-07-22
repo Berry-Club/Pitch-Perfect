@@ -28,7 +28,7 @@ class ComposerBlockEntity(
         const val AMOUNT_SLOTS = 1
         const val SHEET_MUSIC_SLOT = 0
 
-        const val TIMELINE = "timeline"
+        const val SONG_IN_PROGRESS_TAG = "song_wip"
     }
 
     private val itemHandler: ItemStackHandler = object : ItemStackHandler(AMOUNT_SLOTS) {
@@ -67,7 +67,8 @@ class ComposerBlockEntity(
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
 
-        songInProgress = SongInProgress.fromCompoundTag(pTag.getCompound(TIMELINE))
+        val timelineTag = pTag.getCompound(SONG_IN_PROGRESS_TAG)
+        songInProgress = SongInProgress.fromCompoundTag(timelineTag)
     }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
@@ -75,7 +76,7 @@ class ComposerBlockEntity(
 
         val timeline = songInProgress
         if (timeline != null) {
-            pTag.put(TIMELINE, timeline.toTag())
+            pTag.put(SONG_IN_PROGRESS_TAG, timeline.toTag())
         }
     }
 

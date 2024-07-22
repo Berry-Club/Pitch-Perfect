@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import java.util.*
 
@@ -65,23 +64,23 @@ class SongInProgress(
     }
 
     fun toTag(): Tag {
-        val tag = CompoundTag()
+        val fullTag = CompoundTag()
 
+        fullTag.putUUID(UUID_TAG, uuid)
+
+        val soundsTag = CompoundTag()
         for ((soundString, delayPitches) in soundCounts) {
-
-            val soundsList = tag.getList(SOUNDS_TAG, ListTag.TAG_LIST.toInt())
             for ((delay, pitch) in delayPitches) {
                 val soundTag = CompoundTag()
                 soundTag.putInt(DELAY_TAG, delay)
                 soundTag.putInt(PITCH_TAG, pitch)
 
-                soundsList.add(soundTag)
+                soundsTag.put(soundString, soundTag)
             }
-
-            tag.put(soundString, soundsList)
         }
+        fullTag.put(SOUNDS_TAG, soundsTag)
 
-        return tag
+        return fullTag
     }
 
     companion object {
@@ -95,20 +94,17 @@ class SongInProgress(
                 val uuid = tag.getUUID(UUID_TAG)
                 val composerTimeline = SongInProgress(uuid)
 
-                for (soundString in tag.allKeys) {
-                    val soundsList = tag.get(soundString) as ListTag
-                    for (soundTag in soundsList) {
-                        soundTag as CompoundTag
-                        val delay = soundTag.getInt(DELAY_TAG)
-                        val pitch = soundTag.getInt(PITCH_TAG)
+                val soundsTag = tag.getCompound(SOUNDS_TAG)
+                for (soundString in soundsTag.allKeys) {
+                    val soundTag = soundsTag.getCompound(soundString)
+                    val delay = soundTag.getInt(DELAY_TAG)
+                    val pitch = soundTag.getInt(PITCH_TAG)
 
-                        composerTimeline.addSoundAt(delay, pitch, soundString)
-                    }
+                    composerTimeline.addSoundAt(delay, pitch, soundString)
                 }
 
                 return composerTimeline
             } catch (e: Throwable) {
-                e.printStackTrace()
                 return null
             }
         }
