@@ -1,15 +1,13 @@
 package dev.aaronhowser.mods.pitchperfect.event
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.command.ModCommands
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.song.SongRecorder
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
-import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
@@ -21,9 +19,9 @@ import net.minecraft.world.level.block.NoteBlock
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.RegisterCommandsEvent
-import net.neoforged.neoforge.event.ServerChatEvent
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.LeftClickBlock
 import net.neoforged.neoforge.event.level.NoteBlockEvent
 
 @EventBusSubscriber(
@@ -37,16 +35,17 @@ object OtherEvents {
     }
 
     @SubscribeEvent
-    fun onChat(event: ServerChatEvent) {
-        val player = event.player
+    fun onPunchBlock(event: LeftClickBlock) {
+        val pos = event.pos
 
-        val songSavedData = player.server.songData
+        val blockEntity = event.level.getBlockEntity(pos) as? ComposerBlockEntity ?: return
 
-        val handItem = player.getItemInHand(InteractionHand.MAIN_HAND)
-        val songUuid = handItem.get(UuidComponent.songUuidComponent)?.uuid ?: return
-        val handSongInfo = songSavedData.getSongInfo(songUuid) ?: return
-
-        player.sendSystemMessage(Component.literal(handSongInfo.toString()))
+        println(
+            """
+            client: ${event.level.isClientSide}
+            sounds: ${blockEntity.songInProgress?.soundCounts}
+        """.trimIndent()
+        )
     }
 
     val songRecorders = mutableMapOf<Player, SongRecorder>()

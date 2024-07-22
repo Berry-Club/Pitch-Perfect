@@ -95,7 +95,6 @@ class ComposerBlockEntity(
         leftClick: Boolean,
         instrument: String
     ) {
-
         if (songInProgress == null) {
             songInProgress = SongInProgress()
         }
