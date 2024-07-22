@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 
@@ -83,8 +84,8 @@ data class TimelineCell(
             else -> return
         }
 
-        val soundEvent = timeline.composerScreen.selectedInstrument?.noteBlockInstrument?.soundEvent ?: return
-        val soundString = Song.getSoundString(soundEvent)
+        val soundHolder = timeline.composerScreen.selectedInstrument?.noteBlockInstrument?.soundEvent ?: return
+        val soundString = Song.getSoundString(soundHolder)
 
         ModPacketHandler.messageServer(
             ClickComposerCellPacket(
@@ -95,6 +96,14 @@ data class TimelineCell(
                 timeline.composerScreen.composerBlockEntity.blockPos
             )
         )
+
+        if (leftClick) {
+            timeline.composerScreen.minecraft.player?.playSound(
+                soundHolder.value(),
+                1f,
+                pitch.map(0f, 24f, 0.5f, 2f)
+            )
+        }
     }
 
     private fun isMouseOver(mouseX: Int, mouseY: Int): Boolean {
