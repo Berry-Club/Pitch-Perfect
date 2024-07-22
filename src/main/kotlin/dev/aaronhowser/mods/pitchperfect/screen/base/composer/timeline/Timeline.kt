@@ -25,6 +25,7 @@ class Timeline(
     var horizontalScrollIndex: Int = 0
         set(value) {
             field = value.coerceAtLeast(0)
+            timelineStepper.setCellsAtBeat()
         }
 
     var lastBeatDelay: Int = 0

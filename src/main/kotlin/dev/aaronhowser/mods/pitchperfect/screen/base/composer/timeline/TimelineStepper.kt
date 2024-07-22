@@ -14,7 +14,7 @@ class TimelineStepper(
 
     private var cellsAtBeat: List<TimelineCell> = listOf()
 
-    private fun setCellsAtBeat() {
+    fun setCellsAtBeat() {
         cellsAtBeat = timeline.timelineCells.filter { it.delay == currentDelay }
     }
 
@@ -23,6 +23,8 @@ class TimelineStepper(
     }
 
     fun render(pGuiGraphics: GuiGraphics) {
+        if (cellsAtBeat.isEmpty()) return
+
         val topCellY = cellsAtBeat.minOf { it.renderTop }
         val bottomCellY = cellsAtBeat.maxOf { it.renderBottom }
         val left = cellsAtBeat.first().renderLeft
