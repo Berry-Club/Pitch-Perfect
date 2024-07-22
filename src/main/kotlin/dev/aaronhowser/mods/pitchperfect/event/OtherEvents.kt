@@ -34,21 +34,6 @@ object OtherEvents {
         AndHisMusicWasElectricEnchantment.handleElectric(event)
     }
 
-    @SubscribeEvent
-    fun onPunchBlock(event: LeftClickBlock) {
-        if (event.action != LeftClickBlock.Action.START) return
-
-        val pos = event.pos
-        val blockEntity = event.level.getBlockEntity(pos) as? ComposerBlockEntity ?: return
-
-        println(
-            """
-            client: ${event.level.isClientSide}
-            nbt: ${blockEntity.saveWithFullMetadata(event.level.registryAccess())}
-        """.trimIndent()
-        )
-    }
-
     val songRecorders = mutableMapOf<Player, SongRecorder>()
 
     @SubscribeEvent
