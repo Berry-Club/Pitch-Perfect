@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.screen.base.composer
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.PasteComposerSongPacket
 import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.client.gui.Font
@@ -63,7 +65,12 @@ class CopyPasteButtons(
             val clipboard = composerScreen.minecraft.keyboardHandler.clipboard
             val song = Song.fromString(clipboard) ?: return@textButton
 
-            composerScreen.composerBlockEntity.songWip?.song = song
+            ModPacketHandler.messageServer(
+                PasteComposerSongPacket(
+                    song,
+                    composerScreen.composerBlockEntity.blockPos
+                )
+            )
 
             PitchPerfect.LOGGER.info("Pasted song from clipboard!\n$song")
         }

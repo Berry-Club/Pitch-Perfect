@@ -121,4 +121,9 @@ class ComposerBlockEntity(
         }
     }
 
+    fun setSong(song: Song) {
+        songWip = SongWip(song)
+        setChanged()
+    }
+
 }
