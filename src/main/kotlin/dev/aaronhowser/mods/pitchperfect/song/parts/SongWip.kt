@@ -12,16 +12,16 @@ class SongWip(
         note: Note,
         instrument: Holder<SoundEvent>
     ): Song {
-        val currentBeatsWithThisInstrument = this.beats.getOrDefault(instrument, listOf())
-        val beatAtDelay = currentBeatsWithThisInstrument.find { it.at == delay } ?: Beat(delay, listOf())
 
-        val newNotes = beatAtDelay.notes + note
+        val updatedBeats = this.beats.toMutableMap()
+
+        val currentBeats = updatedBeats[instrument].orEmpty()
+        val currentBeat = currentBeats.find { it.at == delay } ?: Beat(delay, emptyList())
+        val newNotes = currentBeat.notes + note
         val newBeat = Beat(delay, newNotes)
-        val newBeats = currentBeatsWithThisInstrument - beatAtDelay + newBeat
 
-        val allOtherInstruments = this.beats - instrument
-        val finalMap = allOtherInstruments + (instrument to newBeats)
-        return Song(finalMap)
+        updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
+        return this.copy(beats = updatedBeats)
     }
 
     private fun Song.removeBeat(
@@ -29,16 +29,16 @@ class SongWip(
         note: Note,
         instrument: Holder<SoundEvent>
     ): Song {
-        val currentBeatsWithThisInstrument = this.beats.getOrElse(instrument) { return this }
-        val beatAtDelay = currentBeatsWithThisInstrument.find { it.at == delay } ?: return this
+        val updatedBeats = this.beats.toMutableMap()
 
-        val newNotes = beatAtDelay.notes - note
+        val currentBeats = updatedBeats[instrument] ?: return this
+        val currentBeat = currentBeats.find { it.at == delay } ?: return this
+        val newNotes = currentBeat.notes - note
         val newBeat = Beat(delay, newNotes)
-        val newBeats = currentBeatsWithThisInstrument - beatAtDelay + newBeat
 
-        val allOtherInstruments = this.beats - instrument
-        val finalMap = allOtherInstruments + (instrument to newBeats)
-        return Song(finalMap)
+        updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
+
+        return this.copy(beats = updatedBeats)
     }
 
 }
