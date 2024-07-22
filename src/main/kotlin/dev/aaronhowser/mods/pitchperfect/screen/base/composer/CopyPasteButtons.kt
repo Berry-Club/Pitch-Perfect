@@ -63,7 +63,12 @@ class CopyPasteButtons(
             Component.literal("Paste")
         ) {
             val clipboard = composerScreen.minecraft.keyboardHandler.clipboard
-            val song = Song.fromString(clipboard) ?: return@textButton
+            val song = Song.fromString(clipboard)
+
+            if (song == null) {
+                composerScreen.minecraft.player?.sendSystemMessage(Component.literal("Failed to parse song:\n$clipboard"))
+                return@textButton
+            }
 
             ModPacketHandler.messageServer(
                 PasteComposerSongPacket(
