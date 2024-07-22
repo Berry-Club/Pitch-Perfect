@@ -21,10 +21,6 @@ class Timeline(
     val topPos by lazy { composerScreen.topPos + 60 }
     val leftPos by lazy { composerScreen.leftPos + 85 }
 
-    var verticalScrollIndex: Int = 0
-        set(value) {
-            field = value.coerceIn(0, Note.entries.size - ROW_COUNT)
-        }
     var horizontalScrollIndex: Int = 0
         set(value) {
             field = value.coerceAtLeast(0)
@@ -63,7 +59,7 @@ class Timeline(
     private fun renderScrollIndex(pGuiGraphics: GuiGraphics) {
         pGuiGraphics.drawString(
             font,
-            "$horizontalScrollIndex $verticalScrollIndex",
+            "$horizontalScrollIndex",
             leftPos,
             topPos - 20,
             0xFFFFFF

@@ -99,15 +99,9 @@ class ComposerScreen(
     }
 
     override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pScrollX: Double, pScrollY: Double): Boolean {
-        if (pScrollY > 0) {
-            timeline.verticalScrollIndex--
-        } else if (pScrollY < 0) {
-            timeline.verticalScrollIndex++
-        }
-
-        if (pScrollX > 0) {
+        if (pScrollY > 0 || pScrollX > 0) {
             timeline.horizontalScrollIndex--
-        } else if (pScrollX < 0) {
+        } else if (pScrollY < 0 || pScrollX < 0) {
             timeline.horizontalScrollIndex++
         }
 

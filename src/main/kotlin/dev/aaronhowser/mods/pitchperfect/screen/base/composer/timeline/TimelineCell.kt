@@ -29,7 +29,7 @@ data class TimelineCell(
     private val delay: Int
         get() = (gridX + timeline.horizontalScrollIndex) * 4
     private val pitch: Int
-        get() = gridY + timeline.verticalScrollIndex
+        get() = gridY
 
     val sounds: List<String>
         get() {
