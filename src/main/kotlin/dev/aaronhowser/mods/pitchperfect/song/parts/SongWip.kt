@@ -66,6 +66,27 @@ class SongWip(
         println("Song after removing: $song")
     }
 
+    fun getSoundStringsAt(
+        delay: Int,
+        pitch: Int
+    ): MutableList<String> {
+        val note = Note.getFromPitch(pitch)
+
+        val soundStrings = mutableListOf<String>()
+
+        for ((instrument, beats) in song.beats) {
+            val beat = beats.find { it.at == delay } ?: continue
+
+            for (beatNote in beat.notes) {
+                if (beatNote == note) {
+                    soundStrings.add(instrument.value().location.toString())
+                }
+            }
+        }
+
+        return soundStrings
+    }
+
     fun toTag(): Tag {
         val tag = CompoundTag()
         tag.putString(SONG_NBT, song.toString())
