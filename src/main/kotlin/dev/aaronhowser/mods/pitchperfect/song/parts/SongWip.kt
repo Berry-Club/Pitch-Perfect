@@ -7,13 +7,15 @@ class SongWip(
     private var song: Song
 ) {
 
-    private fun Song.addBeat(
+    constructor() : this(Song(emptyMap()))
+
+    private fun addBeat(
         delay: Int,
         note: Note,
         instrument: Holder<SoundEvent>
-    ): Song {
+    ) {
 
-        val updatedBeats = this.beats.toMutableMap()
+        val updatedBeats = song.beats.toMutableMap()
 
         val currentBeats = updatedBeats[instrument].orEmpty()
         val currentBeat = currentBeats.find { it.at == delay } ?: Beat(delay, emptyList())
@@ -21,24 +23,24 @@ class SongWip(
         val newBeat = Beat(delay, newNotes)
 
         updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
-        return this.copy(beats = updatedBeats)
+        song = song.copy(beats = updatedBeats)
     }
 
-    private fun Song.removeBeat(
+    private fun removeBeat(
         delay: Int,
         note: Note,
         instrument: Holder<SoundEvent>
-    ): Song {
-        val updatedBeats = this.beats.toMutableMap()
+    ) {
+        val updatedBeats = song.beats.toMutableMap()
 
-        val currentBeats = updatedBeats[instrument] ?: return this
-        val currentBeat = currentBeats.find { it.at == delay } ?: return this
+        val currentBeats = updatedBeats[instrument] ?: return
+        val currentBeat = currentBeats.find { it.at == delay } ?: return
         val newNotes = currentBeat.notes - note
         val newBeat = Beat(delay, newNotes)
 
         updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
 
-        return this.copy(beats = updatedBeats)
+        song = song.copy(beats = updatedBeats)
     }
 
 }
