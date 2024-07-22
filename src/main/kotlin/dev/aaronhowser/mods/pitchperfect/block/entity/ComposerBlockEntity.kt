@@ -90,6 +90,11 @@ class ComposerBlockEntity(
         return ClientboundBlockEntityDataPacket.create(this)
     }
 
+    override fun setChanged() {
+        super.setChanged()
+        level?.sendBlockUpdated(blockPos, blockState, blockState, 3)
+    }
+
     fun clickCell(
         player: Player,
         delay: Int,
