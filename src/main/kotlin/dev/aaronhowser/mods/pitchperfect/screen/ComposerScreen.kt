@@ -57,7 +57,7 @@ class ComposerScreen(
 
         pGuiGraphics.drawString(
             font,
-            selectedInstrument?.name ?: "",
+            selectedInstrument?.noteBlockInstrument?.name ?: "",
             leftPos + 5,
             topPos + 5 + 20,
             0xFFFFFF

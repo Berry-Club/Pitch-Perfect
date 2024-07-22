@@ -82,7 +82,7 @@ data class TimelineCell(
             else -> return
         }
 
-        val selectedInstrument = timeline.composerScreen.selectedInstrument?.name ?: return
+        val selectedInstrument = timeline.composerScreen.selectedInstrument?.noteBlockInstrument?.name ?: return
 
         ModPacketHandler.messageServer(
             ClickComposerCellPacket(
