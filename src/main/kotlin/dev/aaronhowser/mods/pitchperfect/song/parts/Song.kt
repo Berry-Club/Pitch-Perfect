@@ -70,6 +70,16 @@ data class Song(
             return FromStringReader(StringReader(string))
         }
 
+        fun getSoundString(sound: Holder<SoundEvent>): String {
+            val instrument: NoteBlockInstrument? = SOUND_TO_INSTRUMENT[sound.key]
+
+            return if (instrument == null) {
+                sound.key!!.location().toString()
+            } else {
+                instrument.serializedName
+            }
+        }
+
         fun getSoundHolder(instrumentName: String): Holder<SoundEvent> {
             val instrument: NoteBlockInstrument? = ID_TO_INSTRUMENT[instrumentName]
 
@@ -165,13 +175,8 @@ data class Song(
                 stringBuilder.append(',')
             }
 
-            val instrument: NoteBlockInstrument? = SOUND_TO_INSTRUMENT[sound.key]
-
-            if (instrument != null) {
-                stringBuilder.append(instrument.serializedName)
-            } else {
-                stringBuilder.append(sound.key!!.location())
-            }
+            val soundString = getSoundString(sound)
+            stringBuilder.append(soundString)
 
             stringBuilder.append('=')
 

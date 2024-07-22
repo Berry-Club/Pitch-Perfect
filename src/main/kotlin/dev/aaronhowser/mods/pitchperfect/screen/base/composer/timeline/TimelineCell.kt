@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
+import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 
@@ -82,14 +83,15 @@ data class TimelineCell(
             else -> return
         }
 
-        val selectedInstrument = timeline.composerScreen.selectedInstrument?.noteBlockInstrument?.name ?: return
+        val soundEvent = timeline.composerScreen.selectedInstrument?.noteBlockInstrument?.soundEvent ?: return
+        val soundString = Song.getSoundString(soundEvent)
 
         ModPacketHandler.messageServer(
             ClickComposerCellPacket(
                 delay,
                 pitch,
                 leftClick,
-                selectedInstrument,
+                soundString,
                 timeline.composerScreen.composerBlockEntity.blockPos
             )
         )
