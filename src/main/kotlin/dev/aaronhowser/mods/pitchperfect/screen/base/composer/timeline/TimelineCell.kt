@@ -40,11 +40,11 @@ data class TimelineCell(
             return songWip.getSoundStringsAt(delay, pitchInt)
         }
 
-    val color: Int
+    private val argb: Int
         get() {
             if (sounds.isEmpty()) return COLOR_EMPTY
 
-            val noteColor = Note.getFromPitch(pitchInt).argb
+            val noteColor = Note.getFromPitch(pitchInt).withAlpha(0.8f)
 
             return noteColor
         }
@@ -58,7 +58,7 @@ data class TimelineCell(
             renderY,
             renderX + WIDTH,
             renderY + HEIGHT,
-            color
+            argb
         )
     }
 

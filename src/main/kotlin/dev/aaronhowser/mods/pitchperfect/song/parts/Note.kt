@@ -76,8 +76,11 @@ enum class Note(
         return displayName
     }
 
-    val argb: Int
-        get() = 0xFF shl 24 or rgb
+    fun withAlpha(opacity: Float): Int {
+        require(opacity in 0f..1f) { "Opacity must be between 0 and 1" }
+        val alpha = (opacity * 255f).toInt()
+        return rgb and 0xFFFFFF or (alpha shl 24)
+    }
 
     companion object {
         val VALUES: Array<Note> = entries.toTypedArray()
