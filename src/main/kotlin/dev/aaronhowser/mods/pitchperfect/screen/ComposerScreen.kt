@@ -96,6 +96,11 @@ class ComposerScreen(
         }
     }
 
+    override fun onClose() {
+        timeline.timelineStepper.stopPlaying()
+        super.onClose()
+    }
+
     // Controls
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
