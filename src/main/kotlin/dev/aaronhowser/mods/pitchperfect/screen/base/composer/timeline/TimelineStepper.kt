@@ -52,7 +52,11 @@ class TimelineStepper(
     }
 
     fun stopPlaying() {
-        if (!playing) return
+        if (!playing) {
+            timeline.horizontalScrollIndex = 0
+            currentDelay = 0
+            return
+        }
         playing = false
     }
 
