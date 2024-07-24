@@ -26,7 +26,8 @@ class ComposerScreen(
     lateinit var timeline: Timeline
         private set
     private lateinit var instrumentArea: InstrumentArea
-    private lateinit var composerControls: ComposerControls
+    lateinit var composerControls: ComposerControls
+        private set
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
 

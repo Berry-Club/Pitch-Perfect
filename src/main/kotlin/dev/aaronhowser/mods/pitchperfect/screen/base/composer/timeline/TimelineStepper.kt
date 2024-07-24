@@ -12,6 +12,7 @@ class TimelineStepper(
         set(value) {
             field = value.coerceIn(0, timeline.lastBeatDelay)
             setCellsAtBeat()
+            timeline.composerScreen.composerControls.setBoxValue(currentDelay.toString(), fromStepper = true)
         }
 
     private var cellsAtBeat: List<TimelineCell> = listOf()

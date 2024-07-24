@@ -22,7 +22,7 @@ class ComposerControls(
     private lateinit var copyButton: Button
     private lateinit var pasteButton: Button
 
-    private lateinit var jumpToBeatBox: EditBox
+    lateinit var jumpToBeatBox: EditBox
 
     fun init() {
         createWidgets()
@@ -120,19 +120,27 @@ class ComposerControls(
         jumpToBeatBox.setHint(Component.literal("Jump to beat"))
 
         jumpToBeatBox.setResponder { newValue ->
-            if (newValue.any { !it.isDigit() }) {
-                jumpToBeatBox.value = newValue.filter { it.isDigit() }
-            }
-
-            val intValue = newValue.toIntOrNull() ?: 0
-            val newDelay = intValue - (intValue % Timeline.TICKS_PER_BEAT)
-            composerScreen.timeline.timelineStepper.currentDelay = newDelay
-
-            val idealScrollIndex = newDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2 + 1
-            composerScreen.timeline.horizontalScrollIndex = idealScrollIndex
+            setBoxValue(newValue)
         }
 
         composerScreen.addRenderableWidgets(playButton, stopButton, copyButton, pasteButton, jumpToBeatBox)
+    }
+
+    private var changedThisTick = false
+    fun setBoxValue(string: String, fromStepper: Boolean = false) {
+        if (changedThisTick) return
+        changedThisTick = true
+        jumpToBeatBox.value = string.filter { it.isDigit() }
+        changedThisTick = false
+
+        if (fromStepper) return
+
+        val intValue = string.toIntOrNull() ?: 0
+        val newDelay = intValue - (intValue % Timeline.TICKS_PER_BEAT)
+        composerScreen.timeline.timelineStepper.currentDelay = newDelay
+
+        val idealScrollIndex = newDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2 + 1
+        composerScreen.timeline.horizontalScrollIndex = idealScrollIndex
     }
 
 }
