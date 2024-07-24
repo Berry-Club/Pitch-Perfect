@@ -109,18 +109,18 @@ class ComposerControls(
             font,
             composerScreen.leftPos + 80,
             composerScreen.topPos + 40,
-            70,
+            72,
             14,
             Component.literal("Jump to beat")
         )
 
-        jumpToBeatBox.setEditable(true)
-        jumpToBeatBox.setMaxLength(5)
+        jumpToBeatBox.apply {
+            setMaxLength(9)
+            setHint(Component.literal("Jump to beat"))
 
-        jumpToBeatBox.setHint(Component.literal("Jump to beat"))
-
-        jumpToBeatBox.setResponder { newValue ->
-            setBoxValue(newValue)
+            setResponder { newValue ->
+                setBoxValue(newValue)
+            }
         }
 
         composerScreen.addRenderableWidgets(playButton, stopButton, copyButton, pasteButton, jumpToBeatBox)
