@@ -11,11 +11,14 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.PlainTextButton
 import net.minecraft.network.chat.Component
 
-class CopyPasteButtons(
+class ComposerControls(
     private val composerScreen: ComposerScreen,
     private val font: Font
 ) {
 
+
+    private lateinit var playButton: Button
+    private lateinit var stopButton: Button
     private lateinit var copyButton: Button
     private lateinit var pasteButton: Button
 
@@ -39,6 +42,26 @@ class CopyPasteButtons(
                 onPress,
                 font
             )
+        }
+
+        playButton = textButton(
+            composerScreen.leftPos + 5 + 40,
+            composerScreen.topPos + 5 + 19 + 19,
+            16,
+            16,
+            Component.literal("Play")
+        ) {
+            composerScreen.timeline.timelineStepper.startPlaying()
+        }
+
+        stopButton = textButton(
+            composerScreen.leftPos + 5 + 40,
+            composerScreen.topPos + 5 + 19 + 19 + 19,
+            16,
+            16,
+            Component.literal("Stop")
+        ) {
+            composerScreen.timeline.timelineStepper.stopPlaying()
         }
 
         copyButton = textButton(
@@ -79,18 +102,19 @@ class CopyPasteButtons(
 
             PitchPerfect.LOGGER.info("Pasted song from clipboard!\n$song")
         }
+
     }
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        renderButtons(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-    }
-
-    private fun renderButtons(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        playButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        stopButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         copyButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         pasteButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
     fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
+        if (playButton.isMouseOver(pMouseX, pMouseY)) playButton.onPress()
+        if (stopButton.isMouseOver(pMouseX, pMouseY)) stopButton.onPress()
         if (copyButton.isHoveredOrFocused) copyButton.onPress()
         if (pasteButton.isHoveredOrFocused) pasteButton.onPress()
     }

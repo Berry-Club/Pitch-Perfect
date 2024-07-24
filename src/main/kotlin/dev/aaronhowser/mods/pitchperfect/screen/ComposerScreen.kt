@@ -2,9 +2,8 @@ package dev.aaronhowser.mods.pitchperfect.screen
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
-import dev.aaronhowser.mods.pitchperfect.screen.base.composer.CopyPasteButtons
+import dev.aaronhowser.mods.pitchperfect.screen.base.composer.ComposerControls
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.InstrumentArea
-import dev.aaronhowser.mods.pitchperfect.screen.base.composer.PlayStopButtons
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
@@ -26,8 +25,7 @@ class ComposerScreen(
     lateinit var timeline: Timeline
         private set
     private lateinit var instrumentArea: InstrumentArea
-    private lateinit var copyPasteButtons: CopyPasteButtons
-    private lateinit var playStopButtons: PlayStopButtons
+    private lateinit var composerControls: ComposerControls
     var leftPos: Int by Delegates.notNull()
     var topPos: Int by Delegates.notNull()
 
@@ -37,13 +35,11 @@ class ComposerScreen(
 
         timeline = Timeline(this, this.font)
         instrumentArea = InstrumentArea(this)
-        copyPasteButtons = CopyPasteButtons(this, this.font)
-        playStopButtons = PlayStopButtons(this, this.font)
+        composerControls = ComposerControls(this, this.font)
 
         timeline.init()
         instrumentArea.init()
-        copyPasteButtons.init()
-        playStopButtons.init()
+        composerControls.init()
     }
 
     // Rendering
@@ -64,8 +60,7 @@ class ComposerScreen(
 
         instrumentArea.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         timeline.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        copyPasteButtons.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        playStopButtons.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        composerControls.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
         pGuiGraphics.drawString(
             font,
@@ -106,8 +101,7 @@ class ComposerScreen(
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         instrumentArea.mouseClicked(pMouseX, pMouseY, pButton)
         timeline.mouseClicked(pMouseX, pMouseY, pButton)
-        copyPasteButtons.mouseClicked(pMouseX, pMouseY, pButton)
-        playStopButtons.mouseClicked(pMouseX, pMouseY, pButton)
+        composerControls.mouseClicked(pMouseX, pMouseY, pButton)
 
         return super.mouseClicked(pMouseX, pMouseY, pButton)
     }
