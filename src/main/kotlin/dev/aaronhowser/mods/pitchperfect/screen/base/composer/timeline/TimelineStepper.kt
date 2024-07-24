@@ -8,7 +8,7 @@ class TimelineStepper(
     private val timeline: Timeline
 ) {
 
-    private var currentDelay = 0
+    var currentDelay = 0
         set(value) {
             field = value.coerceIn(0, timeline.lastBeatDelay)
             setCellsAtBeat()

@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ComposerPasteSongPacket
 import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
+import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
@@ -124,7 +125,11 @@ class ComposerControls(
                 jumpToTickBox.value = newValue.filter { it.isDigit() }
             }
 
-            println(newValue)
+            val newDelay = (newValue.toIntOrNull() ?: 0) * Timeline.TICKS_PER_BEAT
+            composerScreen.timeline.timelineStepper.currentDelay = newDelay
+
+            val idealScrollIndex = newDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2 + 1
+            composerScreen.timeline.horizontalScrollIndex = idealScrollIndex
         }
 
         composerScreen.addWidgets(playButton, stopButton, copyButton, pasteButton, jumpToTickBox)
