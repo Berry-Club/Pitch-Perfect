@@ -3,10 +3,11 @@ package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
 import dev.aaronhowser.mods.pitchperfect.util.ModClientScheduler
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.Renderable
 
 class TimelineStepper(
     private val timeline: Timeline
-) {
+) : Renderable {
     private var currentDelay = 0
 
     fun setDelay(value: Int, fromEditBox: Boolean = false) {
@@ -27,9 +28,11 @@ class TimelineStepper(
 
     fun init() {
         setCellsAtBeat()
+
+        timeline.composerScreen.addRenderable(this)
     }
 
-    fun render(pGuiGraphics: GuiGraphics) {
+    override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         if (cellsAtBeat.isEmpty()) return
 
         val topCellY = cellsAtBeat.minOf { it.renderTop }

@@ -9,6 +9,7 @@ import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.neoforged.api.distmarker.Dist
@@ -120,6 +121,10 @@ class ComposerScreen(
         }
 
         return super.mouseScrolled(pMouseX, pMouseY, pScrollX, pScrollY)
+    }
+
+    fun addRenderable(renderable: Renderable) {
+        super.addRenderableOnly(renderable)
     }
 
     fun addRenderableWidgets(vararg widgets: AbstractWidget) {

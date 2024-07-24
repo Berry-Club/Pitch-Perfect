@@ -62,8 +62,6 @@ class Timeline(
     }
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        timelineStepper.render(pGuiGraphics)
-
         renderTimelineCells(pGuiGraphics, pMouseX, pMouseY)
     }
 
