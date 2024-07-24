@@ -102,6 +102,10 @@ data class TimelineCell(
         )
     }
 
+    override fun isValidClickButton(pButton: Int): Boolean {
+        return pButton == 0 || pButton == 1
+    }
+
     override fun onClick(mouseX: Double, mouseY: Double, button: Int) {
         val leftClick = when (button) {
             0 -> true
