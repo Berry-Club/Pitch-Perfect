@@ -17,7 +17,6 @@ class ComposerControls(
     private val font: Font
 ) {
 
-
     private lateinit var playButton: Button
     private lateinit var stopButton: Button
     private lateinit var copyButton: Button
@@ -120,8 +119,10 @@ class ComposerControls(
         jumpToTickBox.setMaxLength(5)
 
         jumpToTickBox.setResponder { newValue ->
-            println(newValue)
+            jumpToTickBox.value = newValue.filter { it.isDigit() }
         }
+
+        composerScreen.addWidgets(playButton, stopButton, copyButton, pasteButton, jumpToTickBox)
     }
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {

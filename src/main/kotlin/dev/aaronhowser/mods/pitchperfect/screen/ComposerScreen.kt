@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.screen.base.composer.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.neoforged.api.distmarker.Dist
@@ -119,6 +120,12 @@ class ComposerScreen(
     override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
         composerControls.keyPressed(pKeyCode, pScanCode, pModifiers)
         return super.keyPressed(pKeyCode, pScanCode, pModifiers)
+    }
+
+    fun addWidgets(vararg widgets: AbstractWidget) {
+        for (widget in widgets) {
+            this.addWidget(widget)
+        }
     }
 
 }

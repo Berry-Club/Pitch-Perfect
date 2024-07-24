@@ -29,8 +29,11 @@ class InstrumentArea(
                     instrument
                 }
             }
+
             x += 19
         }
+
+        composerScreen.addWidgets(*buttons.toTypedArray())
     }
 
     private fun addIconButton(
