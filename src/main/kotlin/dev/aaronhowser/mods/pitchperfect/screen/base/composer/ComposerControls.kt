@@ -109,17 +109,22 @@ class ComposerControls(
             font,
             composerScreen.leftPos + 80,
             composerScreen.topPos + 40,
-            30,
-            10,
+            70,
+            14,
             Component.literal("Jump to tick")
         )
 
-        jumpToTickBox.value = "000"
         jumpToTickBox.setEditable(true)
         jumpToTickBox.setMaxLength(5)
 
+        jumpToTickBox.setHint(Component.literal("Jump to tick"))
+
         jumpToTickBox.setResponder { newValue ->
-            jumpToTickBox.value = newValue.filter { it.isDigit() }
+            if (newValue.any { !it.isDigit() }) {
+                jumpToTickBox.value = newValue.filter { it.isDigit() }
+            }
+
+            println(newValue)
         }
 
         composerScreen.addWidgets(playButton, stopButton, copyButton, pasteButton, jumpToTickBox)
