@@ -101,6 +101,10 @@ class ComposerScreen(
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         timeline.mouseClicked(pMouseX, pMouseY, pButton)
 
+        if (!composerControls.jumpToBeatBox.isHovered) {
+            composerControls.jumpToBeatBox.isFocused = false
+        }
+
         return super.mouseClicked(pMouseX, pMouseY, pButton)
     }
 
