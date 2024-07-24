@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
 import net.minecraft.client.gui.Font
-import net.minecraft.client.gui.GuiGraphics
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.api.distmarker.OnlyIn
 
@@ -59,24 +58,26 @@ class Timeline(
         }
 
         timelineCells = tempList
+
+        composerScreen.addRenderableWidgets(timelineCells)
     }
 
-    fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        renderTimelineCells(pGuiGraphics, pMouseX, pMouseY)
-    }
-
-    private fun renderTimelineCells(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
-        for (cell in timelineCells) {
-            cell.render(pGuiGraphics, pMouseX, pMouseY)
-        }
-    }
+//    fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+//        renderTimelineCells(pGuiGraphics, pMouseX, pMouseY)
+//    }
+//
+//    private fun renderTimelineCells(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
+//        for (cell in timelineCells) {
+//            cell.render(pGuiGraphics, pMouseX, pMouseY)
+//        }
+//    }
 
 
     fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
         if (composerScreen.selectedInstrument == null) return
 
         for (cell in timelineCells) {
-            cell.click(pMouseX.toInt(), pMouseY.toInt(), pButton)
+//            cell.click(pMouseX.toInt(), pMouseY.toInt(), pButton)
         }
 
         setLastBeatDelay()

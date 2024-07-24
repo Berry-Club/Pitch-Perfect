@@ -6,6 +6,8 @@ import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
@@ -14,6 +16,12 @@ data class TimelineCell(
     val timeline: Timeline,
     val gridX: Int,
     val gridY: Int,
+) : AbstractWidget(
+    getLeftPos(timeline, gridX),
+    getTopPos(timeline, gridY),
+    WIDTH,
+    HEIGHT,
+    Component.empty()
 ) {
 
     companion object {
@@ -21,13 +29,15 @@ data class TimelineCell(
         const val HEIGHT = 5
 
         private const val COLOR_EMPTY = 0x66333333
-        private const val COLOR_NOT_EMPTY = 0x66FFFFFF
+
+        private fun getLeftPos(timeline: Timeline, gridX: Int) = timeline.leftPos + 1 + gridX * (WIDTH + 1)
+        private fun getTopPos(timeline: Timeline, gridY: Int) = timeline.topPos + 1 + gridY * (HEIGHT + 2)
     }
 
     // Render position
-    val renderLeft = timeline.leftPos + 1 + gridX * (WIDTH + 1)
+    val renderLeft = getLeftPos(timeline, gridX)
     val renderRight = renderLeft + WIDTH
-    val renderTop = timeline.topPos + 1 + gridY * (HEIGHT + 2)
+    val renderTop = getTopPos(timeline, gridY)
     val renderBottom = renderTop + HEIGHT
 
     // Timeline position
@@ -59,8 +69,7 @@ data class TimelineCell(
             return noteColor
         }
 
-
-    fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
+    override fun renderWidget(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         if (isMouseOver(pMouseX, pMouseY)) renderTooltip(pGuiGraphics, pMouseX, pMouseY)
 
         pGuiGraphics.fill(
@@ -93,9 +102,7 @@ data class TimelineCell(
         )
     }
 
-    fun click(mouseX: Int, mouseY: Int, button: Int) {
-        if (!isMouseOver(mouseX, mouseY)) return
-
+    override fun onClick(mouseX: Double, mouseY: Double, button: Int) {
         val leftClick = when (button) {
             0 -> true
             1 -> false
@@ -126,6 +133,10 @@ data class TimelineCell(
 
     private fun isMouseOver(mouseX: Int, mouseY: Int): Boolean {
         return mouseX in renderLeft..renderRight && mouseY in renderTop..renderBottom
+    }
+
+    override fun updateWidgetNarration(pNarrationElementOutput: NarrationElementOutput) {
+        this.defaultButtonNarrationText(pNarrationElementOutput)
     }
 
 

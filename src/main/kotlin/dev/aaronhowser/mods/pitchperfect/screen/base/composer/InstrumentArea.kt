@@ -33,7 +33,7 @@ class InstrumentArea(
             x += 19
         }
 
-        composerScreen.addRenderableWidgets(*buttons.toTypedArray())
+        composerScreen.addRenderableWidgets(buttons)
     }
 
     private fun addIconButton(

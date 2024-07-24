@@ -61,7 +61,7 @@ class ComposerScreen(
     override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
-        timeline.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+//        timeline.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
         pGuiGraphics.drawString(
             font,
@@ -127,10 +127,14 @@ class ComposerScreen(
         super.addRenderableOnly(renderable)
     }
 
-    fun addRenderableWidgets(vararg widgets: AbstractWidget) {
+    fun addRenderableWidgets(widgets: Collection<AbstractWidget>) {
         for (widget in widgets) {
             this.addRenderableWidget(widget)
         }
+    }
+
+    fun addRenderableWidgets(vararg widgets: AbstractWidget) {
+        addRenderableWidgets(widgets.toList())
     }
 
 }
