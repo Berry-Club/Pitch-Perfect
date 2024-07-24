@@ -114,9 +114,15 @@ class ComposerControls(
             10,
             Component.literal("Jump to tick")
         )
-        jumpToTickBox.value = "0"
-        jumpToTickBox.setResponder { text ->
-            println(text)
+
+        jumpToTickBox.apply {
+            value = "000"
+            setEditable(true)
+            setMaxLength(5)
+
+            setResponder { text ->
+                println(text)
+            }
         }
     }
 
@@ -133,7 +139,12 @@ class ComposerControls(
         if (stopButton.isHoveredOrFocused) stopButton.onPress()
         if (copyButton.isHoveredOrFocused) copyButton.onPress()
         if (pasteButton.isHoveredOrFocused) pasteButton.onPress()
-        if (jumpToTickBox.isHoveredOrFocused) jumpToTickBox.mouseClicked(pMouseX, pMouseY, pButton)
+
+        if (jumpToTickBox.isHoveredOrFocused) {
+            jumpToTickBox.isFocused = true
+        } else {
+            jumpToTickBox.isFocused = false
+        }
     }
 
 }
