@@ -114,6 +114,7 @@ object AndHisMusicWasElectricEnchantment {
             )
 
             if (attacker is Player) {
+                //FIXME: WAY TOO HIGH
                 instrumentStack.hurtAndBreak(80, level, attacker) {
                     level.playSound(
                         null,
