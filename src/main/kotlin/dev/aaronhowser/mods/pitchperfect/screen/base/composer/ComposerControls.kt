@@ -115,14 +115,12 @@ class ComposerControls(
             Component.literal("Jump to tick")
         )
 
-        jumpToTickBox.apply {
-            value = "000"
-            setEditable(true)
-            setMaxLength(5)
+        jumpToTickBox.value = "000"
+        jumpToTickBox.setEditable(true)
+        jumpToTickBox.setMaxLength(5)
 
-            setResponder { text ->
-                println(text)
-            }
+        jumpToTickBox.setResponder { newValue ->
+            println(newValue)
         }
     }
 
@@ -145,6 +143,10 @@ class ComposerControls(
         } else {
             jumpToTickBox.isFocused = false
         }
+    }
+
+    fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int) {
+        jumpToTickBox.keyPressed(pKeyCode, pScanCode, pModifiers)
     }
 
 }

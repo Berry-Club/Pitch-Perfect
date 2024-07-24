@@ -116,4 +116,9 @@ class ComposerScreen(
         return super.mouseScrolled(pMouseX, pMouseY, pScrollX, pScrollY)
     }
 
+    override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+        composerControls.keyPressed(pKeyCode, pScanCode, pModifiers)
+        return super.keyPressed(pKeyCode, pScanCode, pModifiers)
+    }
+
 }
