@@ -135,8 +135,4 @@ class ComposerControls(
         composerScreen.addRenderableWidgets(playButton, stopButton, copyButton, pasteButton, jumpToTickBox)
     }
 
-    fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int) {
-        jumpToTickBox.keyPressed(pKeyCode, pScanCode, pModifiers)
-    }
-
 }
