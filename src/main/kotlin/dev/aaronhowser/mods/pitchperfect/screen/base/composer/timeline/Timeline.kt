@@ -9,8 +9,7 @@ import net.neoforged.api.distmarker.OnlyIn
 
 @OnlyIn(Dist.CLIENT)
 class Timeline(
-    val composerScreen: ComposerScreen,
-    val font: Font
+    val composerScreen: ComposerScreen
 ) {
 
     companion object {
@@ -76,7 +75,7 @@ class Timeline(
 
     private fun renderScrollIndex(pGuiGraphics: GuiGraphics) {
         pGuiGraphics.drawString(
-            font,
+            composerScreen.font,
             "$horizontalScrollIndex",
             leftPos,
             topPos - 20,
@@ -84,7 +83,7 @@ class Timeline(
         )
 
         pGuiGraphics.drawString(
-            font,
+            composerScreen.font,
             "$lastBeatDelay",
             leftPos + 100,
             topPos - 20,

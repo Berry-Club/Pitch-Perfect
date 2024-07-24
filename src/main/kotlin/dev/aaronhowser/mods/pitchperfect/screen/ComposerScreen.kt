@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.screen.base.composer.PlayStopButtons
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
+import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
@@ -21,6 +22,8 @@ class ComposerScreen(
     pTitle: Component
 ) : Screen(pTitle) {
 
+    val font: Font = super.font
+
     var selectedInstrument: ScreenInstrument? = null
 
     lateinit var timeline: Timeline
@@ -29,16 +32,18 @@ class ComposerScreen(
     private lateinit var copyPasteButtons: CopyPasteButtons
     private lateinit var playStopButtons: PlayStopButtons
     var leftPos: Int by Delegates.notNull()
+        private set
     var topPos: Int by Delegates.notNull()
+        private set
 
     override fun init() {
         leftPos = (width - ScreenTextures.Background.COMPOSER_WIDTH) / 2
         topPos = (height - ScreenTextures.Background.COMPOSER_HEIGHT) / 2
 
-        timeline = Timeline(this, this.font)
+        timeline = Timeline(this)
         instrumentArea = InstrumentArea(this)
-        copyPasteButtons = CopyPasteButtons(this, this.font)
-        playStopButtons = PlayStopButtons(this, this.font)
+        copyPasteButtons = CopyPasteButtons(this)
+        playStopButtons = PlayStopButtons(this)
 
         timeline.init()
         instrumentArea.init()
