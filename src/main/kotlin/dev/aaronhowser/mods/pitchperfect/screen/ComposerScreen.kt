@@ -59,9 +59,7 @@ class ComposerScreen(
     override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
-        instrumentArea.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         timeline.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        composerControls.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
         pGuiGraphics.drawString(
             font,
@@ -100,9 +98,7 @@ class ComposerScreen(
     // Controls
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        instrumentArea.mouseClicked(pMouseX, pMouseY, pButton)
         timeline.mouseClicked(pMouseX, pMouseY, pButton)
-        composerControls.mouseClicked(pMouseX, pMouseY, pButton)
 
         return super.mouseClicked(pMouseX, pMouseY, pButton)
     }
@@ -122,9 +118,9 @@ class ComposerScreen(
         return super.keyPressed(pKeyCode, pScanCode, pModifiers)
     }
 
-    fun addWidgets(vararg widgets: AbstractWidget) {
+    fun addRenderableWidgets(vararg widgets: AbstractWidget) {
         for (widget in widgets) {
-            this.addWidget(widget)
+            this.addRenderableWidget(widget)
         }
     }
 

@@ -132,28 +132,7 @@ class ComposerControls(
             composerScreen.timeline.horizontalScrollIndex = idealScrollIndex
         }
 
-        composerScreen.addWidgets(playButton, stopButton, copyButton, pasteButton, jumpToTickBox)
-    }
-
-    fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        playButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        stopButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        copyButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        pasteButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        jumpToTickBox.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-    }
-
-    fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
-        if (playButton.isHoveredOrFocused) playButton.onPress()
-        if (stopButton.isHoveredOrFocused) stopButton.onPress()
-        if (copyButton.isHoveredOrFocused) copyButton.onPress()
-        if (pasteButton.isHoveredOrFocused) pasteButton.onPress()
-
-        if (jumpToTickBox.isHoveredOrFocused) {
-            jumpToTickBox.isFocused = true
-        } else {
-            jumpToTickBox.isFocused = false
-        }
+        composerScreen.addRenderableWidgets(playButton, stopButton, copyButton, pasteButton, jumpToTickBox)
     }
 
     fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int) {

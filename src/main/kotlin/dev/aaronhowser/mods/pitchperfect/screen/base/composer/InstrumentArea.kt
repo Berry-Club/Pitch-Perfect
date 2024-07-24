@@ -33,7 +33,7 @@ class InstrumentArea(
             x += 19
         }
 
-        composerScreen.addWidgets(*buttons.toTypedArray())
+        composerScreen.addRenderableWidgets(*buttons.toTypedArray())
     }
 
     private fun addIconButton(
@@ -54,18 +54,6 @@ class InstrumentArea(
             }
 
         this.buttons.add(button)
-    }
-
-    fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        for (button in buttons) {
-            button.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-        }
-    }
-
-    fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
-        val button = buttons.firstOrNull { it.isHoveredOrFocused }
-
-        button?.onPress()
     }
 
 }

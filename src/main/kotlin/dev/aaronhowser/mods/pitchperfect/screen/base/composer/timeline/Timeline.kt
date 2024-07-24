@@ -65,7 +65,6 @@ class Timeline(
         timelineStepper.render(pGuiGraphics)
 
         renderTimelineCells(pGuiGraphics, pMouseX, pMouseY)
-//        renderScrollIndex(pGuiGraphics)
     }
 
     private fun renderTimelineCells(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
@@ -74,23 +73,6 @@ class Timeline(
         }
     }
 
-    private fun renderScrollIndex(pGuiGraphics: GuiGraphics) {
-        pGuiGraphics.drawString(
-            font,
-            "$horizontalScrollIndex",
-            leftPos,
-            topPos - 20,
-            0xFFFFFF
-        )
-
-        pGuiGraphics.drawString(
-            font,
-            "$lastBeatDelay",
-            leftPos + 100,
-            topPos - 20,
-            0xFFFFFF
-        )
-    }
 
     fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
         if (composerScreen.selectedInstrument == null) return
