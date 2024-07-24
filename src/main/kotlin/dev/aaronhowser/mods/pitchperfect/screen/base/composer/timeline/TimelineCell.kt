@@ -34,7 +34,7 @@ data class TimelineCell(
     val delay: Int
         get() = (gridX + timeline.horizontalScrollIndex) * Timeline.TICKS_PER_BEAT
     private val pitchInt: Int
-        get() = gridY
+        get() = Timeline.ROW_COUNT - gridY - 1
     val note: Note
         get() = Note.getFromPitch(pitchInt)
 

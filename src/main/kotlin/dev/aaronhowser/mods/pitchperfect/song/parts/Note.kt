@@ -154,7 +154,7 @@ enum class Note(
          * Gets the Note from the index
          */
         fun getFromPitch(pitch: Int): Note {
-            require(pitch in 0..24) { "Pitch must be between 0 and 24" }
+            require(pitch in 0..24) { "Pitch must be between 0 and 24, was instead $pitch" }
             return VALUES[pitch]
         }
 
