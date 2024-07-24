@@ -65,7 +65,7 @@ class Timeline(
         timelineStepper.render(pGuiGraphics)
 
         renderTimelineCells(pGuiGraphics, pMouseX, pMouseY)
-        renderScrollIndex(pGuiGraphics)
+//        renderScrollIndex(pGuiGraphics)
     }
 
     private fun renderTimelineCells(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {

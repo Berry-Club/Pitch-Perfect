@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.PlainTextButton
 import net.minecraft.network.chat.Component
 
@@ -22,11 +23,13 @@ class ComposerControls(
     private lateinit var copyButton: Button
     private lateinit var pasteButton: Button
 
+    private lateinit var jumpToTickBox: EditBox
+
     fun init() {
-        addButtons()
+        createWidgets()
     }
 
-    private fun addButtons() {
+    private fun createWidgets() {
         fun textButton(
             x: Int,
             y: Int,
@@ -103,6 +106,18 @@ class ComposerControls(
             PitchPerfect.LOGGER.info("Pasted song from clipboard!\n$song")
         }
 
+        jumpToTickBox = EditBox(
+            font,
+            composerScreen.leftPos + 80,
+            composerScreen.topPos + 40,
+            30,
+            10,
+            Component.literal("Jump to tick")
+        )
+        jumpToTickBox.value = "0"
+        jumpToTickBox.setResponder { text ->
+            println(text)
+        }
     }
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
@@ -110,13 +125,15 @@ class ComposerControls(
         stopButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         copyButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
         pasteButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+        jumpToTickBox.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
     fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
-        if (playButton.isMouseOver(pMouseX, pMouseY)) playButton.onPress()
-        if (stopButton.isMouseOver(pMouseX, pMouseY)) stopButton.onPress()
+        if (playButton.isHoveredOrFocused) playButton.onPress()
+        if (stopButton.isHoveredOrFocused) stopButton.onPress()
         if (copyButton.isHoveredOrFocused) copyButton.onPress()
         if (pasteButton.isHoveredOrFocused) pasteButton.onPress()
+        if (jumpToTickBox.isHoveredOrFocused) jumpToTickBox.mouseClicked(pMouseX, pMouseY, pButton)
     }
 
 }
