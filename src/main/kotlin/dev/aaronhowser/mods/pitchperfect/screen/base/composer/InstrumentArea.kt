@@ -11,7 +11,7 @@ class InstrumentArea(
     private val composerScreen: ComposerScreen
 ) {
 
-    private val buttons: MutableList<Button> = mutableListOf()
+    val buttons: MutableList<Button> = mutableListOf()
 
     fun init() {
         addInstrumentButtons()

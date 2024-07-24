@@ -1,13 +1,15 @@
 package dev.aaronhowser.mods.pitchperfect.screen.base.composer
 
 import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
+import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.PlainTextButton
 import net.minecraft.network.chat.Component
 
 class PlayStopButtons(
-    private val composerScreen: ComposerScreen
+    private val composerScreen: ComposerScreen,
+    private val font: Font
 ) {
 
     private lateinit var playButton: Button
@@ -31,7 +33,7 @@ class PlayStopButtons(
                 width, height,
                 component,
                 onPress,
-                composerScreen.font
+                font
             )
         }
 
