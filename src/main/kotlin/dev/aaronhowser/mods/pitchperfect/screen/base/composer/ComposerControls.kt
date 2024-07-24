@@ -130,12 +130,14 @@ class ComposerControls(
     fun setBoxValue(string: String, fromStepper: Boolean = false) {
         if (changedThisTick) return
         changedThisTick = true
-        jumpToBeatBox.value = string.filter { it.isDigit() }
+        var finalString = string.trim().filter { it.isDigit() }
+        if (finalString == "0") finalString = ""
+        jumpToBeatBox.value = finalString
         changedThisTick = false
 
         if (fromStepper) return
 
-        val intValue = string.toIntOrNull() ?: 0
+        val intValue = finalString.toIntOrNull() ?: 0
         val newDelay = intValue - (intValue % Timeline.TICKS_PER_BEAT)
         composerScreen.timeline.timelineStepper.currentDelay = newDelay
 
