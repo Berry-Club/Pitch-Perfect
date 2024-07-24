@@ -15,7 +15,7 @@ class Timeline(
 
     companion object {
         const val ROW_COUNT = 25
-        const val COLUMN_COUNT = 40
+        const val COLUMN_COUNT = 41
 
         const val TICKS_PER_BEAT = 2
     }

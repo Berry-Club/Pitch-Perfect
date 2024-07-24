@@ -63,7 +63,7 @@ class TimelineStepper(
     private fun playBeat() {
         if (!playing) return
 
-        val idealScrollIndex = currentDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2
+        val idealScrollIndex = currentDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2 + 1
         timeline.horizontalScrollIndex = idealScrollIndex
 
         val blockPos = timeline.composerScreen.composerBlockEntity.blockPos
