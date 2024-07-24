@@ -103,6 +103,10 @@ class ComposerScreen(
 
         if (!composerControls.jumpToBeatBox.isHovered) {
             composerControls.jumpToBeatBox.isFocused = false
+        } else {
+            if (pButton == 1) {
+                composerControls.jumpToBeatBox.value = ""
+            }
         }
 
         return super.mouseClicked(pMouseX, pMouseY, pButton)
