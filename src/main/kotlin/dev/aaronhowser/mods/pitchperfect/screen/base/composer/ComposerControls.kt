@@ -137,7 +137,7 @@ class ComposerControls(
 
         val intValue = string.toIntOrNull() ?: 0
         val newDelay = intValue - (intValue % Timeline.TICKS_PER_BEAT)
-        composerScreen.timeline.timelineStepper.currentDelay = newDelay
+        composerScreen.timeline.timelineStepper.setDelay(newDelay, fromEditBox = true)
 
         val idealScrollIndex = newDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2 + 1
         composerScreen.timeline.horizontalScrollIndex = idealScrollIndex

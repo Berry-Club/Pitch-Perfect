@@ -7,13 +7,17 @@ import net.minecraft.client.gui.GuiGraphics
 class TimelineStepper(
     private val timeline: Timeline
 ) {
+    private var currentDelay = 0
 
-    var currentDelay = 0
-        set(value) {
-            field = value.coerceIn(0, timeline.lastBeatDelay)
-            setCellsAtBeat()
-            timeline.composerScreen.composerControls.setBoxValue(currentDelay.toString(), fromStepper = true)
+    fun setDelay(value: Int, fromEditBox: Boolean = false) {
+        currentDelay = value.coerceIn(0, timeline.lastBeatDelay)
+        setCellsAtBeat()
+
+        if (!fromEditBox) {
+            timeline.composerScreen.composerControls
+                .setBoxValue(currentDelay.toString(), fromStepper = true)
         }
+    }
 
     private var cellsAtBeat: List<TimelineCell> = listOf()
 
@@ -55,7 +59,7 @@ class TimelineStepper(
     fun stopPlaying() {
         if (!playing) {
             timeline.horizontalScrollIndex = 0
-            currentDelay = 0
+            setDelay(0)
             return
         }
         playing = false
@@ -89,7 +93,7 @@ class TimelineStepper(
             return
         }
 
-        currentDelay += Timeline.TICKS_PER_BEAT
+        setDelay(currentDelay + Timeline.TICKS_PER_BEAT)
 
         ModClientScheduler.scheduleTaskInTicks(Timeline.TICKS_PER_BEAT) {
             playBeat()
