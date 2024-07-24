@@ -130,7 +130,10 @@ class ComposerControls(
     fun setBoxValue(string: String, fromStepper: Boolean = false) {
         if (changedThisTick) return
         changedThisTick = true
-        jumpToBeatBox.value = string.filter { it.isDigit() }
+
+        val theString = string.filter { it.isDigit() }
+        jumpToBeatBox.value = if (theString == "0") "" else theString
+
         changedThisTick = false
 
         if (fromStepper) return
