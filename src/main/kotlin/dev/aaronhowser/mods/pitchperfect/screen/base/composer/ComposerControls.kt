@@ -7,7 +7,6 @@ import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
 import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.client.gui.Font
-import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.PlainTextButton
@@ -23,7 +22,7 @@ class ComposerControls(
     private lateinit var copyButton: Button
     private lateinit var pasteButton: Button
 
-    private lateinit var jumpToTickBox: EditBox
+    private lateinit var jumpToBeatBox: EditBox
 
     fun init() {
         createWidgets()
@@ -106,33 +105,34 @@ class ComposerControls(
             PitchPerfect.LOGGER.info("Pasted song from clipboard!\n$song")
         }
 
-        jumpToTickBox = EditBox(
+        jumpToBeatBox = EditBox(
             font,
             composerScreen.leftPos + 80,
             composerScreen.topPos + 40,
             70,
             14,
-            Component.literal("Jump to tick")
+            Component.literal("Jump to beat")
         )
 
-        jumpToTickBox.setEditable(true)
-        jumpToTickBox.setMaxLength(5)
+        jumpToBeatBox.setEditable(true)
+        jumpToBeatBox.setMaxLength(5)
 
-        jumpToTickBox.setHint(Component.literal("Jump to tick"))
+        jumpToBeatBox.setHint(Component.literal("Jump to beat"))
 
-        jumpToTickBox.setResponder { newValue ->
+        jumpToBeatBox.setResponder { newValue ->
             if (newValue.any { !it.isDigit() }) {
-                jumpToTickBox.value = newValue.filter { it.isDigit() }
+                jumpToBeatBox.value = newValue.filter { it.isDigit() }
             }
 
-            val newDelay = (newValue.toIntOrNull() ?: 0) * Timeline.TICKS_PER_BEAT
+            val intValue = newValue.toIntOrNull() ?: 0
+            val newDelay = intValue - (intValue % Timeline.TICKS_PER_BEAT)
             composerScreen.timeline.timelineStepper.currentDelay = newDelay
 
             val idealScrollIndex = newDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2 + 1
             composerScreen.timeline.horizontalScrollIndex = idealScrollIndex
         }
 
-        composerScreen.addRenderableWidgets(playButton, stopButton, copyButton, pasteButton, jumpToTickBox)
+        composerScreen.addRenderableWidgets(playButton, stopButton, copyButton, pasteButton, jumpToBeatBox)
     }
 
 }
