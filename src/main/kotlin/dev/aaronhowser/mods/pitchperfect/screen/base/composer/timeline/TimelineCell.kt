@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
+import net.minecraft.client.sounds.SoundManager
 import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
@@ -104,6 +105,10 @@ data class TimelineCell(
 
     override fun isValidClickButton(pButton: Int): Boolean {
         return pButton == 0 || pButton == 1
+    }
+
+    override fun playDownSound(pHandler: SoundManager) {
+        // No sound
     }
 
     override fun onClick(mouseX: Double, mouseY: Double, button: Int) {
