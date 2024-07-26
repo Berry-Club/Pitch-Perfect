@@ -61,8 +61,6 @@ class ComposerScreen(
     override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
-//        timeline.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
-
         pGuiGraphics.drawString(
             font,
             selectedInstrument?.noteBlockInstrument?.name ?: "",
@@ -70,6 +68,20 @@ class ComposerScreen(
             topPos + 5 + 20,
             0xFFFFFF
         )
+    }
+
+    fun addRenderable(renderable: Renderable) {
+        super.addRenderableOnly(renderable)
+    }
+
+    fun addRenderableWidgets(widgets: Collection<AbstractWidget>) {
+        for (widget in widgets) {
+            this.addRenderableWidget(widget)
+        }
+    }
+
+    fun addRenderableWidgets(vararg widgets: AbstractWidget) {
+        addRenderableWidgets(widgets.toList())
     }
 
     // Behavior
@@ -121,20 +133,6 @@ class ComposerScreen(
         }
 
         return super.mouseScrolled(pMouseX, pMouseY, pScrollX, pScrollY)
-    }
-
-    fun addRenderable(renderable: Renderable) {
-        super.addRenderableOnly(renderable)
-    }
-
-    fun addRenderableWidgets(widgets: Collection<AbstractWidget>) {
-        for (widget in widgets) {
-            this.addRenderableWidget(widget)
-        }
-    }
-
-    fun addRenderableWidgets(vararg widgets: AbstractWidget) {
-        addRenderableWidgets(widgets.toList())
     }
 
 }
