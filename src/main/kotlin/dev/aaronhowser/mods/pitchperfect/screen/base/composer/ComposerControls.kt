@@ -28,6 +28,41 @@ class ComposerControls(
         createWidgets()
     }
 
+    fun copySong() {
+        val song = composerScreen.songWip?.song ?: return
+
+        composerScreen.minecraft.keyboardHandler.clipboard = song.toString()
+
+        PitchPerfect.LOGGER.info("Copied song to clipboard!\n$song")
+    }
+
+    fun pasteSong() {
+        val clipboard = composerScreen.minecraft.keyboardHandler.clipboard
+        val song = Song.fromString(clipboard)
+
+        if (song == null) {
+            composerScreen.minecraft.player?.sendSystemMessage(Component.literal("Failed to parse song:\n$clipboard"))
+            return
+        }
+
+        ModPacketHandler.messageServer(
+            ComposerPasteSongPacket(
+                song,
+                composerScreen.composerBlockEntity.blockPos
+            )
+        )
+
+        PitchPerfect.LOGGER.info("Pasted song from clipboard!\n$song")
+    }
+
+    fun startPlaying() {
+        composerScreen.timeline.timelineStepper.startPlaying()
+    }
+
+    fun stopPlaying() {
+        composerScreen.timeline.timelineStepper.stopPlaying()
+    }
+
     private fun createWidgets() {
         fun textButton(
             x: Int,
@@ -52,9 +87,7 @@ class ComposerControls(
             16,
             16,
             Component.literal("Play")
-        ) {
-            composerScreen.timeline.timelineStepper.startPlaying()
-        }
+        ) { startPlaying() }
 
         stopButton = textButton(
             composerScreen.leftPos + 5 + 40,
@@ -62,9 +95,7 @@ class ComposerControls(
             16,
             16,
             Component.literal("Stop")
-        ) {
-            composerScreen.timeline.timelineStepper.stopPlaying()
-        }
+        ) { stopPlaying() }
 
         copyButton = textButton(
             composerScreen.leftPos + 5,
@@ -72,13 +103,7 @@ class ComposerControls(
             16,
             16,
             Component.literal("Copy")
-        ) {
-            val song = composerScreen.songWip?.song ?: return@textButton
-
-            composerScreen.minecraft.keyboardHandler.clipboard = song.toString()
-
-            PitchPerfect.LOGGER.info("Copied song to clipboard!\n$song")
-        }
+        ) { copySong() }
 
         pasteButton = textButton(
             composerScreen.leftPos + 5,
@@ -86,24 +111,7 @@ class ComposerControls(
             16,
             16,
             Component.literal("Paste")
-        ) {
-            val clipboard = composerScreen.minecraft.keyboardHandler.clipboard
-            val song = Song.fromString(clipboard)
-
-            if (song == null) {
-                composerScreen.minecraft.player?.sendSystemMessage(Component.literal("Failed to parse song:\n$clipboard"))
-                return@textButton
-            }
-
-            ModPacketHandler.messageServer(
-                ComposerPasteSongPacket(
-                    song,
-                    composerScreen.composerBlockEntity.blockPos
-                )
-            )
-
-            PitchPerfect.LOGGER.info("Pasted song from clipboard!\n$song")
-        }
+        ) { pasteSong() }
 
         jumpToBeatBox = EditBox(
             font,

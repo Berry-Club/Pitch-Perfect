@@ -135,4 +135,15 @@ class ComposerScreen(
         return super.mouseScrolled(pMouseX, pMouseY, pScrollX, pScrollY)
     }
 
+    override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+
+        if (isCopy(pKeyCode) || isCut(pKeyCode)) {
+            composerControls.copySong()
+        } else if (isPaste(pKeyCode)) {
+            composerControls.pasteSong()
+        }
+
+        return super.keyPressed(pKeyCode, pScanCode, pModifiers)
+    }
+
 }
