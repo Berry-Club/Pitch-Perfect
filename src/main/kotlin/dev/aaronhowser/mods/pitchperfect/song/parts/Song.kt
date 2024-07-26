@@ -66,10 +66,6 @@ data class Song(
             Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
         ).map(::Song, Song::beats)
 
-        fun fromString(string: String): Song? {
-            return fromStringReader(StringReader(string))
-        }
-
         fun getSoundString(sound: Holder<SoundEvent>): String {
             val instrument: NoteBlockInstrument? = SOUND_TO_INSTRUMENT[sound.key]
 
@@ -95,9 +91,12 @@ data class Song(
             }
         }
 
+        fun fromString(string: String): Song? {
+            return fromStringReader(StringReader(string))
+        }
+
         fun fromStringReader(reader: StringReader): Song? {
             try {
-
                 val beats: HashMap<Holder<SoundEvent>, List<Beat>> = HashMap()
 
                 reader.skipWhitespace()
@@ -180,21 +179,17 @@ data class Song(
 
             stringBuilder.append('=')
 
-            if (beats.size == 1) {
-                stringBuilder.append(beats.first())
-            } else {
-                stringBuilder.append('[')
+            stringBuilder.append('[')
 
-                for (i in beats.indices) {
-                    if (i != 0) {
-                        stringBuilder.append(',')
-                    }
-
-                    stringBuilder.append(beats[i])
+            for (i in beats.indices) {
+                if (i != 0) {
+                    stringBuilder.append(',')
                 }
 
-                stringBuilder.append(']')
+                stringBuilder.append(beats[i])
             }
+
+            stringBuilder.append(']')
         }
 
         stringBuilder.append('}')
