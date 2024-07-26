@@ -87,14 +87,16 @@ class ComposerBlock(
         pHitResult: BlockHitResult
     ): InteractionResult {
         val blockEntity = pLevel.getBlockEntity(pPos)
-                as? ComposerBlockEntity ?: return InteractionResult.PASS
+                as? ComposerBlockEntity ?: return InteractionResult.CONSUME
 
         if (pPlayer is LocalPlayer) {
-            val screen = ComposerScreen(blockEntity, Component.literal("test"))
+            val screen = ComposerScreen(blockEntity, Component.empty())
             Minecraft.getInstance().setScreen(screen)
         }
 
-        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
+        super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
+
+        return InteractionResult.CONSUME
     }
 
 }

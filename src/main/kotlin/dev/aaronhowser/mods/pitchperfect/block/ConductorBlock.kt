@@ -140,11 +140,12 @@ class ConductorBlock(
         pHitResult: BlockHitResult
     ): ItemInteractionResult {
         val mainPos = if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) pPos else pPos.below()
-        val blockEntity = pLevel.getBlockEntity(mainPos) as? ConductorBlockEntity ?: return ItemInteractionResult.FAIL
+        val blockEntity =
+            pLevel.getBlockEntity(mainPos) as? ConductorBlockEntity ?: return ItemInteractionResult.CONSUME
 
         blockEntity.playerClick(pPlayer)
 
-        return ItemInteractionResult.SUCCESS
+        return ItemInteractionResult.CONSUME
     }
 
     override fun useWithoutItem(
