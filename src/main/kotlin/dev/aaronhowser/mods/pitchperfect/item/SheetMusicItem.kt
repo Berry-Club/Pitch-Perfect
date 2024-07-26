@@ -53,17 +53,17 @@ class SheetMusicItem : Item(
             val song = songBuilder.build(Song.defaultFile)
 
             val songData = player.server.songData
-            val newSongInfo = songData.addSongInfo(song, "Untitled", player)
+            val addSongResult = songData.addSongInfo(song, "Untitled", player)
 
-            if (!newSongInfo.success) {
+            if (!addSongResult.success) {
                 player.sendSystemMessage(
                     ModLanguageProvider.Message.SHEET_MUSIC_FAIL_DUPLICATE
-                        .toComponent(newSongInfo.songInfo.getComponent())
+                        .toComponent(addSongResult.songInfo.getComponent())
                 )
                 return
             }
 
-            itemStack.set(UuidComponent.songUuidComponent, UuidComponent(newSongInfo.songInfo.song.uuid))
+            itemStack.set(UuidComponent.songUuidComponent, UuidComponent(addSongResult.songInfo.song.uuid))
         }
 
         fun isRecording(stack: ItemStack): Boolean {
