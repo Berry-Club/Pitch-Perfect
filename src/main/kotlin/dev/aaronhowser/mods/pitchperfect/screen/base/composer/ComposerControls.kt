@@ -33,7 +33,8 @@ class ComposerControls(
 
         composerScreen.minecraft.keyboardHandler.clipboard = song.toString()
 
-        PitchPerfect.LOGGER.info("Copied song to clipboard!\n$song")
+        PitchPerfect.LOGGER.info("Copied song to clipboard!")
+        PitchPerfect.LOGGER.info(song.toString())
     }
 
     fun pasteSong() {
@@ -52,7 +53,8 @@ class ComposerControls(
             )
         )
 
-        PitchPerfect.LOGGER.info("Pasted song from clipboard!\n$song")
+        PitchPerfect.LOGGER.info("Pasted song from clipboard!")
+        PitchPerfect.LOGGER.info(song.toString())
     }
 
     fun startPlaying() {
