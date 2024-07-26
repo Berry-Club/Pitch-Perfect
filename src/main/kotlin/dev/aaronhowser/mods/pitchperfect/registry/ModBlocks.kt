@@ -14,7 +14,8 @@ object ModBlocks {
         DeferredRegister.createBlocks(PitchPerfect.ID)
 
     val COMPOSER: DeferredBlock<Block> = registerBlock("composer") { ComposerBlock() }
-    val CONDUCTOR: DeferredBlock<ConductorBlock> = registerBlock("conductor", false) { ConductorBlock() }
+    val CONDUCTOR: DeferredBlock<ConductorBlock> =
+        registerBlock("conductor", makeBlockItem = false) { ConductorBlock() }
 
     private fun <T : Block> registerBlock(
         name: String,
