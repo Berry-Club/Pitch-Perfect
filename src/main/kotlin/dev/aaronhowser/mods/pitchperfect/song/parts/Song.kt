@@ -67,7 +67,7 @@ data class Song(
         ).map(::Song, Song::beats)
 
         fun fromString(string: String): Song? {
-            return FromStringReader(StringReader(string))
+            return fromStringReader(StringReader(string))
         }
 
         fun getSoundString(sound: Holder<SoundEvent>): String {
@@ -95,7 +95,7 @@ data class Song(
             }
         }
 
-        fun FromStringReader(reader: StringReader): Song? {
+        fun fromStringReader(reader: StringReader): Song? {
             try {
 
                 val beats: HashMap<Holder<SoundEvent>, List<Beat>> = HashMap()
