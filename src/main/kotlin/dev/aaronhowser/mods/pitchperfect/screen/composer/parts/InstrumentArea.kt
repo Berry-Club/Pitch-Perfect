@@ -1,7 +1,6 @@
-package dev.aaronhowser.mods.pitchperfect.screen.base.composer
+package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
-import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
-import net.minecraft.client.gui.GuiGraphics
+import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.SpriteIconButton
 import net.minecraft.network.chat.Component

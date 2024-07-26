@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.pitchperfect.screen.base.composer
+package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import net.minecraft.resources.ResourceLocation

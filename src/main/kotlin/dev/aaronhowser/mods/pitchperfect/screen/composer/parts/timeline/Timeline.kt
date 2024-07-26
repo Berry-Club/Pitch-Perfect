@@ -1,7 +1,7 @@
-package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
+package dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
+import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.gui.Font
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.api.distmarker.OnlyIn

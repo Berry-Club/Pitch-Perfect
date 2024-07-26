@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline
+package dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline
 
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket

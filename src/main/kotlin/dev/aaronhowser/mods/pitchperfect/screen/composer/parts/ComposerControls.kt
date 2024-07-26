@@ -1,10 +1,10 @@
-package dev.aaronhowser.mods.pitchperfect.screen.base.composer
+package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ComposerPasteSongPacket
-import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
-import dev.aaronhowser.mods.pitchperfect.screen.base.composer.timeline.Timeline
+import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
+import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline.Timeline
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.components.Button

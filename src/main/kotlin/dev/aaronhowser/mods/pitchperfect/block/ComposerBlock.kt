@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.block
 
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
-import dev.aaronhowser.mods.pitchperfect.screen.ComposerScreen
+import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
