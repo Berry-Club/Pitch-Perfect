@@ -56,9 +56,17 @@ class SongWip(
         val currentBeats = updatedBeats[instrument] ?: return
         val currentBeat = currentBeats.find { it.at == delay } ?: return
         val newNotes = currentBeat.notes - note
-        val newBeat = Beat(delay, newNotes)
 
-        updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
+        if (newNotes.isNotEmpty()) {
+            val newBeat = Beat(delay, newNotes)
+
+            updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
+        } else {
+            updatedBeats[instrument] = currentBeats.filterNot { it.at == delay }
+            if (updatedBeats[instrument].isNullOrEmpty()) {
+                updatedBeats.remove(instrument)
+            }
+        }
 
         song = song.copy(beats = updatedBeats)
     }
