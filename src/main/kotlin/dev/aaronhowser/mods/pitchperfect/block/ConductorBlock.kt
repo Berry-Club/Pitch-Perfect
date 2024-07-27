@@ -130,6 +130,18 @@ class ConductorBlock(
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston)
     }
 
+    override fun spawnDestroyParticles(pLevel: Level, pPlayer: Player, pPos: BlockPos, pState: BlockState) {
+        if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) {
+            super.spawnDestroyParticles(pLevel, pPlayer, pPos, pState)
+            return
+        }
+
+        val posBelow = pPos.below()
+        val stateBelow = pLevel.getBlockState(posBelow)
+
+        super.spawnDestroyParticles(pLevel, pPlayer, posBelow, stateBelow)
+    }
+
     override fun useItemOn(
         pStack: ItemStack,
         pState: BlockState,
@@ -165,18 +177,6 @@ class ConductorBlock(
 
     override fun shouldCheckWeakPower(state: BlockState, level: SignalGetter, pos: BlockPos, side: Direction): Boolean {
         return true
-    }
-
-    override fun spawnDestroyParticles(pLevel: Level, pPlayer: Player, pPos: BlockPos, pState: BlockState) {
-        if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-            super.spawnDestroyParticles(pLevel, pPlayer, pPos, pState)
-            return
-        }
-
-        val posBelow = pPos.below()
-        val stateBelow = pLevel.getBlockState(posBelow)
-
-        super.spawnDestroyParticles(pLevel, pPlayer, posBelow, stateBelow)
     }
 
     override fun neighborChanged(
