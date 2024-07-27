@@ -33,6 +33,8 @@ data class TimelineCell(
         private const val COLOR_DEFAULT_LIGHT = 0x66111111
         private const val COLOR_DEFAULT_DARK = 0x66444444
 
+        private const val COLOR_HAS_INSTRUMENT = 0x88000000.toInt()
+
         private fun getLeftPos(timeline: Timeline, gridX: Int) = timeline.leftPos + 1 + gridX * (WIDTH + 1)
         private fun getTopPos(timeline: Timeline, gridY: Int) = timeline.topPos + 1 + gridY * (HEIGHT + 2)
     }
@@ -98,7 +100,7 @@ data class TimelineCell(
             renderTop - 1,
             WIDTH + 2,
             HEIGHT + 2,
-            0x88000000.toInt()
+            COLOR_HAS_INSTRUMENT
         )
     }
 
