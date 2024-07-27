@@ -78,12 +78,27 @@ data class TimelineCell(
     override fun renderWidget(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         if (isMouseOver(pMouseX, pMouseY)) renderTooltip(pGuiGraphics, pMouseX, pMouseY)
 
+        renderIndicator(pGuiGraphics)
+
         pGuiGraphics.fill(
             renderLeft,
             renderTop,
             renderRight,
             renderBottom,
             argb
+        )
+    }
+
+    private fun renderIndicator(pGuiGraphics: GuiGraphics) {
+        val selectedInstrument = selectedInstrument ?: return
+        if (selectedInstrument.noteBlockInstrument.soundEvent !in sounds) return
+
+        pGuiGraphics.renderOutline(
+            renderLeft - 1,
+            renderTop - 1,
+            WIDTH + 2,
+            HEIGHT + 2,
+            0x88000000.toInt()
         )
     }
 
