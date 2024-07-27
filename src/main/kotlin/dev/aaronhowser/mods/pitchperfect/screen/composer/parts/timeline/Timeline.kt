@@ -19,6 +19,8 @@ class Timeline(
         const val TICKS_PER_BEAT = 2
     }
 
+    //TODO: Scroll bar at the bottom
+
     val timelineStepper = TimelineStepper(this)
 
     val topPos by lazy { composerScreen.topPos + 60 }
