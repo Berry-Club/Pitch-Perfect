@@ -17,7 +17,7 @@ class InstrumentArea(
     }
 
     private fun addInstrumentButtons() {
-        var x = composerScreen.leftPos + 192
+        var x = composerScreen.leftPos + 160
         val y = composerScreen.topPos + 35
 
         for (instrument in ScreenInstrument.entries) {

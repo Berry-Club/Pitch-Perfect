@@ -27,7 +27,7 @@ data class TimelineCell(
 ) {
 
     companion object {
-        const val WIDTH = 9
+        const val WIDTH = 7
         const val HEIGHT = 5
 
         private const val COLOR_DEFAULT_LIGHT = 0x66111111
