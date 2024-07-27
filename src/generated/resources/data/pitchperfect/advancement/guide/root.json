@@ -174,51 +174,21 @@
   },
   "requirements": [
     [
-      "has_banjo"
-    ],
-    [
-      "has_bass_drum"
-    ],
-    [
-      "has_bass"
-    ],
-    [
-      "has_bit"
-    ],
-    [
-      "has_chimes"
-    ],
-    [
-      "has_cow_bell"
-    ],
-    [
-      "has_didgeridoo"
-    ],
-    [
-      "has_electric_piano"
-    ],
-    [
-      "has_flute"
-    ],
-    [
-      "has_glockenspiel"
-    ],
-    [
-      "has_guitar"
-    ],
-    [
-      "has_harp"
-    ],
-    [
-      "has_snare_drum"
-    ],
-    [
-      "has_sticks"
-    ],
-    [
-      "has_vibraphone"
-    ],
-    [
+      "has_banjo",
+      "has_bass_drum",
+      "has_bass",
+      "has_bit",
+      "has_chimes",
+      "has_cow_bell",
+      "has_didgeridoo",
+      "has_electric_piano",
+      "has_flute",
+      "has_glockenspiel",
+      "has_guitar",
+      "has_harp",
+      "has_snare_drum",
+      "has_sticks",
+      "has_vibraphone",
       "has_xylophone"
     ]
   ],

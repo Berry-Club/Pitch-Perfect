@@ -3,10 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.datagen
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
-import net.minecraft.advancements.Advancement
-import net.minecraft.advancements.AdvancementHolder
-import net.minecraft.advancements.AdvancementType
-import net.minecraft.advancements.CriteriaTriggers
+import net.minecraft.advancements.*
 import net.minecraft.advancements.critereon.ImpossibleTrigger
 import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.core.HolderLookup
@@ -38,29 +35,7 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
         this.saver = saver
         this.existingFileHelper = existingFileHelper
 
-        val rootBuilder =
-            Advancement.Builder.advancement()
-                .display(
-                    ModItems.BANJO.get(),
-                    Component.literal("Pitch Perfect"),
-                    ModLanguageProvider.Advancement.ROOT_DESC.toComponent(),
-                    OtherUtil.modResource("textures/block/machine_bottom.png"),
-                    AdvancementType.TASK,
-                    true,
-                    true,
-                    false
-                )
-
-        for (instrumentItem in ModItems.instruments) {
-            rootBuilder.addCriterion(
-                "has_${instrumentItem.id.path}",
-                InventoryChangeTrigger.TriggerInstance.hasItems(instrumentItem.get())
-            )
-        }
-
-        val root = rootBuilder
-            .build(guide("root"))
-            .add()
+        val root = makeRoot()
 
         val hitMob =
             Advancement.Builder.advancement()
@@ -80,5 +55,32 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                 .build(guide("hit_mob"))
                 .add()
 
+    }
+
+    private fun makeRoot(): AdvancementHolder {
+        val rootBuilder =
+            Advancement.Builder.advancement()
+                .display(
+                    ModItems.BANJO.get(),
+                    Component.literal("Pitch Perfect"),
+                    ModLanguageProvider.Advancement.ROOT_DESC.toComponent(),
+                    OtherUtil.modResource("textures/block/machine_bottom.png"),
+                    AdvancementType.TASK,
+                    true,
+                    true,
+                    false
+                )
+                .requirements(AdvancementRequirements.Strategy.OR)
+
+        for (instrumentItem in ModItems.instruments) {
+            rootBuilder.addCriterion(
+                "has_${instrumentItem.id.path}",
+                InventoryChangeTrigger.TriggerInstance.hasItems(instrumentItem.get())
+            )
+        }
+
+        return rootBuilder
+            .build(guide("root"))
+            .add()
     }
 }
