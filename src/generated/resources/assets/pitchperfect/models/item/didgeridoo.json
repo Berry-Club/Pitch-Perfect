@@ -1,5 +1,35 @@
 {
   "parent": "minecraft:item/generated",
+  "display": {
+    "firstperson_lefthand": {
+      "scale": [
+        1.25,
+        1.25,
+        1.25
+      ]
+    },
+    "firstperson_righthand": {
+      "scale": [
+        1.25,
+        1.25,
+        1.25
+      ]
+    },
+    "thirdperson_lefthand": {
+      "scale": [
+        1.25,
+        1.25,
+        1.25
+      ]
+    },
+    "thirdperson_righthand": {
+      "scale": [
+        1.25,
+        1.25,
+        1.25
+      ]
+    }
+  },
   "textures": {
     "layer0": "pitchperfect:item/didgeridoo"
   }
