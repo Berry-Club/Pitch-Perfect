@@ -29,7 +29,8 @@ data class TimelineCell(
         const val WIDTH = 9
         const val HEIGHT = 5
 
-        private const val COLOR_EMPTY = 0x66333333
+        private const val COLOR_DEFAULT_LIGHT = 0x66111111
+        private const val COLOR_DEFAULT_DARK = 0x66444444
 
         private fun getLeftPos(timeline: Timeline, gridX: Int) = timeline.leftPos + 1 + gridX * (WIDTH + 1)
         private fun getTopPos(timeline: Timeline, gridY: Int) = timeline.topPos + 1 + gridY * (HEIGHT + 2)
@@ -63,9 +64,27 @@ data class TimelineCell(
 
     private val argb: Int
         get() {
-            if (soundStrings.isEmpty()) return COLOR_EMPTY
+            if (soundStrings.isEmpty()) return if (delay % 16 < 8) COLOR_DEFAULT_LIGHT else COLOR_DEFAULT_DARK
 
-            val noteColor = Note.getFromPitch(pitchInt).withAlpha(0.8f)
+            var noteColor = Note.getFromPitch(pitchInt).withAlpha(0.8f)
+
+            val hasSelectedInstrument =
+                timeline.composerScreen.selectedInstrument?.noteBlockInstrument?.soundEvent in sounds
+
+            if (hasSelectedInstrument) {
+                val alpha = noteColor shr 24 and 0xFF
+                val red = noteColor shr 16 and 0xFF
+                val green = noteColor shr 8 and 0xFF
+                val blue = noteColor shr 0 and 0xFF
+
+                val darkFactor = 10f //0 is black, 1 is no change
+
+                val newRed = (red * darkFactor).toInt().coerceIn(0, 255)
+                val newGreen = (green * darkFactor).toInt().coerceIn(0, 255)
+                val newBlue = (blue * darkFactor).toInt().coerceIn(0, 255)
+
+                noteColor = (alpha shl 24) or (newRed shl 16) or (newGreen shl 8) or (newBlue shl 0)
+            }
 
             return noteColor
         }
