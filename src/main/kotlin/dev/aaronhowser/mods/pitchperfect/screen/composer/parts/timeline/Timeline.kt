@@ -37,6 +37,7 @@ class Timeline(
 
     fun init() {
         addTimelineCells()
+        addStepJumpButtons()
         setLastBeatDelay()
 
         timelineStepper.init()
@@ -64,24 +65,26 @@ class Timeline(
         composerScreen.addRenderableWidgets(timelineCells)
     }
 
-//    fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-//        renderTimelineCells(pGuiGraphics, pMouseX, pMouseY)
-//    }
-//
-//    private fun renderTimelineCells(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
-//        for (cell in timelineCells) {
-//            cell.render(pGuiGraphics, pMouseX, pMouseY)
-//        }
-//    }
+    var stepJumpButtons: List<StepJumpButton> = listOf()
+        private set
 
-
-    fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
-        if (composerScreen.selectedInstrument == null) return
-
-        for (cell in timelineCells) {
-//            cell.click(pMouseX.toInt(), pMouseY.toInt(), pButton)
+    private fun addStepJumpButtons() {
+        if (stepJumpButtons.isNotEmpty()) {
+            PitchPerfect.LOGGER.error("Tried to add step jump buttons when they already exist")
+            return
         }
 
+        val tempList = mutableListOf<StepJumpButton>()
+
+        for (xIndex in 0 until COLUMN_COUNT) {
+            tempList += StepJumpButton(this, xIndex)
+        }
+
+        stepJumpButtons = tempList
+        composerScreen.addRenderableWidgets(stepJumpButtons)
+    }
+
+    fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
         setLastBeatDelay()
     }
 
