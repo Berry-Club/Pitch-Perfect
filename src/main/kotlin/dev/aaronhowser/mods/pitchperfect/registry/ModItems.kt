@@ -53,6 +53,9 @@ object ModItems {
     val CONDUCTOR_BOCK_ITEM: DeferredItem<DoubleHighBlockItem> =
         ITEM_REGISTRY.registerItem("conductor") { DoubleHighBlockItem(ModBlocks.CONDUCTOR.get(), Item.Properties()) }
 
+    //TODO: headphones, maybe make it just render on any player who's in the composer gui
+    //TODO: Zune
+
     val instruments = mutableListOf(
         BANJO,
         BASS_DRUM,

@@ -17,6 +17,8 @@ class ComposerControls(
     private val font: Font
 ) {
 
+    //TODO: Drag clicking
+
     private lateinit var playButton: Button
     private lateinit var stopButton: Button
     private lateinit var copyButton: Button
