@@ -40,6 +40,10 @@ class StepJumpButton(
             ScreenTextures.Sprite.StepJump.WIDTH,
             ScreenTextures.Sprite.StepJump.HEIGHT
         )
+
+        if (isMouseOver(pMouseX.toDouble(), pMouseY.toDouble())) {
+            renderTooltip(pGuiGraphics, pMouseX, pMouseY)
+        }
     }
 
     override fun updateWidgetNarration(pNarrationElementOutput: NarrationElementOutput) {
@@ -54,6 +58,17 @@ class StepJumpButton(
         timeline.timelineStepper.setDelay(delay, fromEditBox = false)
     }
 
+    private fun renderTooltip(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
+        val components = mutableListOf<Component>()
 
+        components.add(Component.literal("Jump to beat $delay"))
+
+        pGuiGraphics.renderComponentTooltip(
+            timeline.font,
+            components,
+            pMouseX,
+            pMouseY
+        )
+    }
 
 }
