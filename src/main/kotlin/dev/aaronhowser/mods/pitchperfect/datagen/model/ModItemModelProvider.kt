@@ -19,41 +19,8 @@ class ModItemModelProvider(
         for (item in ModItems.ITEM_REGISTRY.entries) {
             if (item.get() is BlockItem) continue
 
-            if (item === ModItems.DIDGERIDOO) {
-                didgeridoo()
-                continue
-            }
-
             basicItem(item.get())
         }
 
     }
-
-    private fun didgeridoo() {
-        val didgeridooItem = ModItems.DIDGERIDOO.get()
-
-        getBuilder(didgeridooItem.toString())
-            .parent(ModelFile.UncheckedModelFile("item/generated"))
-            .texture("layer0", "item/didgeridoo")
-            .transforms()
-
-            .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
-            .scale(1.25f)
-            .end()
-
-            .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
-            .scale(1.25f)
-            .end()
-
-            .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
-            .scale(1.25f)
-            .end()
-
-            .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
-            .scale(1.25f)
-            .end()
-
-            .end()
-    }
-
 }
