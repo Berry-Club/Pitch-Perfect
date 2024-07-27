@@ -11,7 +11,7 @@ object ScreenTextures {
 
             const val CANVAS_SIZE = 512
 
-            const val WIDTH = 455
+            const val WIDTH = 512
             const val HEIGHT = 256
         }
     }
