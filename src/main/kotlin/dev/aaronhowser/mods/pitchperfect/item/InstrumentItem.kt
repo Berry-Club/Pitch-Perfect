@@ -116,6 +116,10 @@ class InstrumentItem(
             lookVector.yRot(0.5f)
         }
 
+        val bwaaapLevel = itemStack.getEnchantmentLevel(
+            ModEnchantments.getEnchantHolder(player.level(), ModEnchantments.bwaaapResourceKey)
+        )
+
         if (!level.isClientSide) {
             ModPacketHandler.messageNearbyPlayers(
                 SpawnNotePacket(
@@ -124,7 +128,7 @@ class InstrumentItem(
                     (player.x + noteVector.x),
                     (player.eyeY + noteVector.y),
                     (player.z + noteVector.z),
-                    false   //TODO BWAAAAP
+                    bwaaapLevel != 0
                 ),
                 level as ServerLevel,
                 player.eyePosition,
