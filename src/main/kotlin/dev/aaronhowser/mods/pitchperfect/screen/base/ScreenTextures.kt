@@ -18,7 +18,14 @@ object ScreenTextures {
 
     object Sprite {
 
-        val STEP_JUMPER = OtherUtil.modResource("step_jump")
+        object StepJump {
+            val STEP_JUMPER = OtherUtil.modResource("step_jump")
+
+            const val CANVAS_SIZE = 16
+
+            const val WIDTH = 9
+            const val HEIGHT = 4
+        }
 
         object Instrument {
             val BANJO = OtherUtil.modResource("instruments/banjo")
