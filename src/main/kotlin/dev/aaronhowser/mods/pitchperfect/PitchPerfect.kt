@@ -24,6 +24,14 @@ class PitchPerfect(
     // mobs that play music
     // capturing mob souls to play them in your inventory? or use that with the Conductor block? Force a mob to play music?
 
+    //TODO
+    // Enchantment that you can put on Sheet Music that makes it act like a Beacon
+    // "This sequence of notes does this"
+    // For example, a song that teleports you home, or a song that sets weather/time
+
+    //TODO:
+    // HUD element to see what note you're playing
+
     companion object {
         const val ID = "pitchperfect"
         val LOGGER: Logger = LogManager.getLogger(ID)
