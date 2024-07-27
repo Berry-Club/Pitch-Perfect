@@ -119,8 +119,8 @@ class ComposerControls(
 
         jumpToBeatBox = EditBox(
             font,
-            composerScreen.leftPos + 80,
-            composerScreen.topPos + 40,
+            composerScreen.leftPos + 86,
+            composerScreen.topPos + 39,
             72,
             14,
             Component.literal("Jump to beat")
