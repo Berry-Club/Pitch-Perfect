@@ -17,10 +17,12 @@ class InstrumentArea(
     }
 
     private fun addInstrumentButtons() {
-        var x = composerScreen.leftPos + 160
-        val y = composerScreen.topPos + 35
+        var x = composerScreen.leftPos + 435
+        var y = composerScreen.topPos + 61
 
-        for (instrument in ScreenInstrument.entries) {
+        for (i in ScreenInstrument.entries.indices) {
+            val instrument = ScreenInstrument.entries[i]
+
             addIconButton(x, y, 18, 18, instrument.image) {
                 composerScreen.selectedInstrument = if (composerScreen.selectedInstrument === instrument) {
                     null
@@ -29,7 +31,12 @@ class InstrumentArea(
                 }
             }
 
-            x += 19
+            if (i % 2 == 1) {
+                x += 20
+                y += 20
+            } else {
+                x -= 20
+            }
         }
 
         composerScreen.addRenderableWidgets(buttons)
