@@ -17,8 +17,8 @@ class InstrumentArea(
     }
 
     private fun addInstrumentButtons() {
-        var x = composerScreen.leftPos + 5
-        val y = composerScreen.topPos + 5
+        var x = composerScreen.leftPos + 192
+        val y = composerScreen.topPos + 35
 
         for (instrument in ScreenInstrument.entries) {
             addIconButton(x, y, 18, 18, instrument.image) {
