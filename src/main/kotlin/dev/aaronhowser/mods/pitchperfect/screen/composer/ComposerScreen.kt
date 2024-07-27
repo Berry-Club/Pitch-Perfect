@@ -49,9 +49,11 @@ class ComposerScreen(
 
     override fun renderBackground(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         this.renderTransparentBackground(pGuiGraphics)
+
         pGuiGraphics.blit(
             ScreenTextures.Background.Composer.COMPOSER,
-            leftPos, topPos,
+            leftPos,
+            topPos,
             0f,
             0f,
             ScreenTextures.Background.Composer.WIDTH,

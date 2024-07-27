@@ -11,8 +11,8 @@ object ScreenTextures {
 
             const val CANVAS_SIZE = 512
 
-            const val WIDTH = 512
-            const val HEIGHT = 256
+            const val WIDTH = 455
+            const val HEIGHT = 221
         }
     }
 
@@ -23,8 +23,8 @@ object ScreenTextures {
 
             const val CANVAS_SIZE = 16
 
-            const val WIDTH = 9
-            const val HEIGHT = 4
+            const val WIDTH = 7
+            const val HEIGHT = 3
         }
 
         object Instrument {
