@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline
 
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
+import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
@@ -71,6 +72,9 @@ data class TimelineCell(
             return noteColor
         }
 
+    private val selectedInstrument: ScreenInstrument?
+        get() = timeline.composerScreen.selectedInstrument
+
     override fun renderWidget(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         if (isMouseOver(pMouseX, pMouseY)) renderTooltip(pGuiGraphics, pMouseX, pMouseY)
 
@@ -119,7 +123,7 @@ data class TimelineCell(
             else -> return
         }
 
-        val soundHolder = timeline.composerScreen.selectedInstrument?.noteBlockInstrument?.soundEvent ?: return
+        val soundHolder = selectedInstrument?.noteBlockInstrument?.soundEvent ?: return
         val soundString = Song.getSoundString(soundHolder)
 
         ModPacketHandler.messageServer(
