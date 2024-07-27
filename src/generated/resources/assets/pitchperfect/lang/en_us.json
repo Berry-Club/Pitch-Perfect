@@ -1,4 +1,7 @@
 {
+  "advancement.pitchperfect.hit_mob.desc": "Hit a mob using an instrument",
+  "advancement.pitchperfect.hit_mob.title": "Hit the right note",
+  "advancement.pitchperfect.root.desc": "Get any instrument!\n\nRight-click to play a note, depending on the angle you're looking!",
   "block.pitchperfect.composer": "Composer",
   "block.pitchperfect.conductor": "Conductor",
   "enchantment.pitchperfect.and_his_music_was_electric": "And His Music Was Electric",

@@ -1,53 +1,158 @@
 {
   "criteria": {
-    "any_instrument": {
+    "has_banjo": {
       "conditions": {
         "items": [
           {
             "items": "pitchperfect:banjo"
-          },
-          {
-            "items": "pitchperfect:bass_drum"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_bass": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:bass"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_bass_drum": {
+      "conditions": {
+        "items": [
+          {
+            "items": "pitchperfect:bass_drum"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_bit": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:bit"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_chimes": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:chimes"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_cow_bell": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:cow_bell"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_didgeridoo": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:didgeridoo"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_electric_piano": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:electric_piano"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_flute": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:flute"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_glockenspiel": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:glockenspiel"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_guitar": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:guitar"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_harp": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:harp"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_snare_drum": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:snare_drum"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_sticks": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:sticks"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_vibraphone": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:vibraphone"
-          },
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_xylophone": {
+      "conditions": {
+        "items": [
           {
             "items": "pitchperfect:xylophone"
           }
@@ -69,7 +174,52 @@
   },
   "requirements": [
     [
-      "any_instrument"
+      "has_banjo"
+    ],
+    [
+      "has_bass_drum"
+    ],
+    [
+      "has_bass"
+    ],
+    [
+      "has_bit"
+    ],
+    [
+      "has_chimes"
+    ],
+    [
+      "has_cow_bell"
+    ],
+    [
+      "has_didgeridoo"
+    ],
+    [
+      "has_electric_piano"
+    ],
+    [
+      "has_flute"
+    ],
+    [
+      "has_glockenspiel"
+    ],
+    [
+      "has_guitar"
+    ],
+    [
+      "has_harp"
+    ],
+    [
+      "has_snare_drum"
+    ],
+    [
+      "has_sticks"
+    ],
+    [
+      "has_vibraphone"
+    ],
+    [
+      "has_xylophone"
     ]
   ],
   "sends_telemetry_event": true

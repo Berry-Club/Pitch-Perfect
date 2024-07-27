@@ -59,6 +59,10 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
 
     object Advancement {
         const val ROOT_DESC = "advancement.pitchperfect.root.desc"
+
+        const val HIT_MOB_TITLE = "advancement.pitchperfect.hit_mob.title"
+        const val HIT_MOB_DESC = "advancement.pitchperfect.hit_mob.desc"
+
     }
 
     object Misc {
@@ -113,6 +117,10 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         add(Message.SONG_RAW_FAIL_TO_PARSE, "Failed to parse song:\n%s")
         add(Message.SONG_REMOVED, "Song removed: %s by %s")
         add(Message.SHEET_MUSIC_FAIL_DUPLICATE, "Failed to save song, as it is a duplicate of an existing song:%s")
+
+        add(Advancement.ROOT_DESC, "Get any instrument!\n\nRight-click to play a note, depending on the angle you're looking!")
+        add(Advancement.HIT_MOB_TITLE, "Hit the right note")
+        add(Advancement.HIT_MOB_DESC, "Hit a mob using an instrument")
 
         add(Misc.CREATIVE_TAB, "Pitch Perfect")
     }

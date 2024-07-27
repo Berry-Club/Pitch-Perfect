@@ -1,0 +1,26 @@
+{
+  "parent": "pitchperfect:guide/root",
+  "criteria": {
+    "hit_mob": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.pitchperfect.hit_mob.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:zombie_head"
+    },
+    "title": {
+      "translate": "advancement.pitchperfect.hit_mob.title"
+    }
+  },
+  "requirements": [
+    [
+      "hit_mob"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

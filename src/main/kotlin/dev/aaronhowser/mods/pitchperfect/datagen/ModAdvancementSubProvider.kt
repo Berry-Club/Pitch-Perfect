@@ -6,9 +6,12 @@ import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.advancements.AdvancementType
+import net.minecraft.advancements.CriteriaTriggers
+import net.minecraft.advancements.critereon.ImpossibleTrigger
 import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.core.HolderLookup
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.Items
 import net.neoforged.neoforge.common.data.AdvancementProvider
 import net.neoforged.neoforge.common.data.ExistingFileHelper
 import java.util.function.Consumer
@@ -35,7 +38,7 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
         this.saver = saver
         this.existingFileHelper = existingFileHelper
 
-        val root =
+        val rootBuilder =
             Advancement.Builder.advancement()
                 .display(
                     ModItems.BANJO.get(),
@@ -47,11 +50,34 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                     true,
                     false
                 )
-                .addCriterion(
-                    "any_instrument",
-                    InventoryChangeTrigger.TriggerInstance.hasItems(*ModItems.instruments.toTypedArray())
+
+        for (instrumentItem in ModItems.instruments) {
+            rootBuilder.addCriterion(
+                "has_${instrumentItem.id.path}",
+                InventoryChangeTrigger.TriggerInstance.hasItems(instrumentItem.get())
+            )
+        }
+
+        val root = rootBuilder
+            .build(guide("root"))
+            .add()
+
+        val hitMob =
+            Advancement.Builder.advancement()
+                .parent(root)
+                .display(
+                    Items.ZOMBIE_HEAD,
+                    ModLanguageProvider.Advancement.HIT_MOB_TITLE.toComponent(),
+                    ModLanguageProvider.Advancement.HIT_MOB_DESC.toComponent(),
+                    null,
+                    AdvancementType.TASK,
+                    true, true, false
                 )
-                .build(guide("root"))
+                .addCriterion(
+                    "hit_mob",
+                    CriteriaTriggers.IMPOSSIBLE.createCriterion(ImpossibleTrigger.TriggerInstance())
+                )
+                .build(guide("hit_mob"))
                 .add()
 
     }

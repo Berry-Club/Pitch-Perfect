@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
+import dev.aaronhowser.mods.pitchperfect.advancement.AdvancementTriggers
 import dev.aaronhowser.mods.pitchperfect.config.CommonConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.BwaaapEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.HealingBeatEnchantment
@@ -11,6 +12,7 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
 import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -172,6 +174,8 @@ class InstrumentItem(
                 48.0
             )
         }
+
+        AdvancementTriggers.hitWithInstrument(player as ServerPlayer)
 
         return false
     }
