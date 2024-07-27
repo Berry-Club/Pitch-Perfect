@@ -5,12 +5,15 @@ import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 object ScreenTextures {
 
     object Background {
-        val COMPOSER = OtherUtil.modResource("textures/gui/container/composer.png")
 
-        const val TEXTURE_SIZE = 256
+        object Composer {
+            val COMPOSER = OtherUtil.modResource("textures/gui/container/composer.png")
 
-        const val COMPOSER_WIDTH = 512
-        const val COMPOSER_HEIGHT = 256
+            const val CANVAS_SIZE = 512
+
+            const val WIDTH = 512
+            const val HEIGHT = 256
+        }
     }
 
     object Sprite {

@@ -33,8 +33,8 @@ class ComposerScreen(
     var topPos: Int by Delegates.notNull()
 
     override fun init() {
-        leftPos = (width - ScreenTextures.Background.COMPOSER_WIDTH) / 2
-        topPos = (height - ScreenTextures.Background.COMPOSER_HEIGHT) / 2
+        leftPos = (width - ScreenTextures.Background.Composer.WIDTH) / 2
+        topPos = (height - ScreenTextures.Background.Composer.HEIGHT) / 2
 
         timeline = Timeline(this, this.font)
         instrumentArea = InstrumentArea(this)
@@ -50,11 +50,14 @@ class ComposerScreen(
     override fun renderBackground(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         this.renderTransparentBackground(pGuiGraphics)
         pGuiGraphics.blit(
-            ScreenTextures.Background.COMPOSER,
+            ScreenTextures.Background.Composer.COMPOSER,
             leftPos, topPos,
-            0f, 0f,              // Texture offset
-            512, 256,             // Texture size
-            512, 512    // Texture sheet size
+            0f,
+            0f,
+            ScreenTextures.Background.Composer.WIDTH,
+            ScreenTextures.Background.Composer.HEIGHT,
+            ScreenTextures.Background.Composer.CANVAS_SIZE,
+            ScreenTextures.Background.Composer.CANVAS_SIZE
         )
     }
 
