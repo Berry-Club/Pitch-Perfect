@@ -1,0 +1,76 @@
+{
+  "criteria": {
+    "any_instrument": {
+      "conditions": {
+        "items": [
+          {
+            "items": "pitchperfect:banjo"
+          },
+          {
+            "items": "pitchperfect:bass_drum"
+          },
+          {
+            "items": "pitchperfect:bass"
+          },
+          {
+            "items": "pitchperfect:bit"
+          },
+          {
+            "items": "pitchperfect:chimes"
+          },
+          {
+            "items": "pitchperfect:cow_bell"
+          },
+          {
+            "items": "pitchperfect:didgeridoo"
+          },
+          {
+            "items": "pitchperfect:electric_piano"
+          },
+          {
+            "items": "pitchperfect:flute"
+          },
+          {
+            "items": "pitchperfect:glockenspiel"
+          },
+          {
+            "items": "pitchperfect:guitar"
+          },
+          {
+            "items": "pitchperfect:harp"
+          },
+          {
+            "items": "pitchperfect:snare_drum"
+          },
+          {
+            "items": "pitchperfect:sticks"
+          },
+          {
+            "items": "pitchperfect:vibraphone"
+          },
+          {
+            "items": "pitchperfect:xylophone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "pitchperfect:textures/block/machine_bottom.png",
+    "description": {
+      "translate": "advancement.pitchperfect.root.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "pitchperfect:banjo"
+    },
+    "title": "Pitch Perfect"
+  },
+  "requirements": [
+    [
+      "any_instrument"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

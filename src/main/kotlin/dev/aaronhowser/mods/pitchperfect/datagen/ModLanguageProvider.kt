@@ -57,6 +57,10 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         const val SHEET_MUSIC_FAIL_DUPLICATE = "message.pitchperfect.sheet_music_fail_duplicate"
     }
 
+    object Advancement {
+        const val ROOT_DESC = "advancement.pitchperfect.root.desc"
+    }
+
     object Misc {
         const val CREATIVE_TAB = "itemGroup.pitchperfect"
     }

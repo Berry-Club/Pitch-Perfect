@@ -75,7 +75,7 @@ dependencies {
     implementation "thedarkcolour:kotlinforforge-neoforge:${kff_version}"
 
     // KubeJs
-    implementation "curse.maven:kubejs-238086:5508982"
+//    implementation "curse.maven:kubejs-238086:5508982"
     implementation "curse.maven:rhino-416294:5499585"
 
     // Building Gadgets
