@@ -29,7 +29,8 @@ data class TimelineCell(
         const val WIDTH = 9
         const val HEIGHT = 5
 
-        private const val COLOR_EMPTY = 0x66333333
+        private const val COLOR_DEFAULT_LIGHT = 0x66111111
+        private const val COLOR_DEFAULT_DARK = 0x66444444
 
         private fun getLeftPos(timeline: Timeline, gridX: Int) = timeline.leftPos + 1 + gridX * (WIDTH + 1)
         private fun getTopPos(timeline: Timeline, gridY: Int) = timeline.topPos + 1 + gridY * (HEIGHT + 2)
@@ -63,7 +64,7 @@ data class TimelineCell(
 
     private val argb: Int
         get() {
-            if (soundStrings.isEmpty()) return COLOR_EMPTY
+            if (soundStrings.isEmpty()) return if (delay % 16 < 8) COLOR_DEFAULT_LIGHT else COLOR_DEFAULT_DARK
 
             val noteColor = Note.getFromPitch(pitchInt).withAlpha(0.8f)
 
