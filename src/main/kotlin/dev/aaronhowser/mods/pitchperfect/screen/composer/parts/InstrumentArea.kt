@@ -18,13 +18,21 @@ class InstrumentArea(
 
     //TODO: tooltip saying what each button is
     private fun addInstrumentButtons() {
-        var x = composerScreen.leftPos + 435
-        var y = composerScreen.topPos + 61
+        var y = composerScreen.timeline.topPos
 
+        val buttonSize = 20
+
+        var isLeft = true
         for (i in ScreenInstrument.entries.indices) {
             val instrument = ScreenInstrument.entries[i]
 
-            addIconButton(x, y, 18, 18, instrument.image) {
+            val x = if (isLeft) {
+                composerScreen.timeline.rightPos + 5
+            } else {
+                composerScreen.timeline.rightPos + 5 + buttonSize + 2
+            }
+
+            addIconButton(x, y, buttonSize, buttonSize, instrument.image) {
                 composerScreen.selectedInstrument = if (composerScreen.selectedInstrument === instrument) {
                     null
                 } else {
@@ -32,12 +40,11 @@ class InstrumentArea(
                 }
             }
 
-            if (i % 2 == 1) {
-                x += 20
-                y += 20
-            } else {
-                x -= 20
+            if (!isLeft) {
+                y += buttonSize + 2
             }
+
+            isLeft = !isLeft
         }
 
         composerScreen.addRenderableWidgets(buttons)
