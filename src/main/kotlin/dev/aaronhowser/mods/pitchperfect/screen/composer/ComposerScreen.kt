@@ -104,7 +104,7 @@ class ComposerScreen(
     }
 
     override fun onClose() {
-        timeline.timelineStepper.stopPlaying()
+        composerControls.stopPlaying()
         super.onClose()
     }
 

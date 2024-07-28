@@ -3,14 +3,16 @@ package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ComposerPasteSongPacket
+import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline.Timeline
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
-import net.minecraft.client.gui.components.PlainTextButton
+import net.minecraft.client.gui.components.SpriteIconButton
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 
 class ComposerControls(
     private val composerScreen: ComposerScreen,
@@ -68,54 +70,26 @@ class ComposerControls(
     }
 
     private fun createWidgets() {
-        fun textButton(
-            x: Int,
-            y: Int,
-            width: Int,
-            height: Int,
-            component: Component,
-            onPress: (Button) -> Unit
-        ): PlainTextButton {
-            return PlainTextButton(
-                x, y,
-                width, height,
-                component,
-                onPress,
-                font
-            )
+
+        fun addIconButton(
+            x: Int, y: Int,
+            width: Int, height: Int,
+            image: ResourceLocation,
+            component: Component = Component.empty(),
+            onPress: (Button) -> Unit = {}
+        ): SpriteIconButton {
+            val button = SpriteIconButton
+                .builder(component, onPress, true)
+                .sprite(image, 16, 16)
+                .size(width, height)
+                .build()
+                .apply {
+                    this.x = x
+                    this.y = y
+                }
+
+            return button
         }
-
-        playButton = textButton(
-            composerScreen.leftPos + 5 + 40,
-            composerScreen.topPos + 5 + 19 + 19,
-            16,
-            16,
-            Component.literal("Play")
-        ) { startPlaying() }
-
-        stopButton = textButton(
-            composerScreen.leftPos + 5 + 40,
-            composerScreen.topPos + 5 + 19 + 19 + 19,
-            16,
-            16,
-            Component.literal("Stop")
-        ) { stopPlaying() }
-
-        copyButton = textButton(
-            composerScreen.leftPos + 5,
-            composerScreen.topPos + 5 + 19 + 19,
-            16,
-            16,
-            Component.literal("Copy")
-        ) { copySong() }
-
-        pasteButton = textButton(
-            composerScreen.leftPos + 5,
-            composerScreen.topPos + 5 + 19 + 19 + 19,
-            16,
-            16,
-            Component.literal("Paste")
-        ) { pasteSong() }
 
         jumpToBeatBox = EditBox(
             font,
@@ -124,9 +98,7 @@ class ComposerControls(
             72,
             14,
             Component.literal("Jump to beat")
-        )
-
-        jumpToBeatBox.apply {
+        ).apply {
             setMaxLength(9)
             setHint(Component.literal("Jump to beat"))
 
@@ -134,6 +106,42 @@ class ComposerControls(
                 setBoxValue(newValue)
             }
         }
+
+        playButton = addIconButton(
+            composerScreen.timeline.leftPos + jumpToBeatBox.width + 5,
+            composerScreen.timeline.topPos - 22,
+            16,
+            16,
+            ScreenTextures.Sprite.Instrument.BIT,
+            Component.literal("Play")
+        ) { startPlaying() }
+
+        stopButton = addIconButton(
+            composerScreen.timeline.leftPos + jumpToBeatBox.width + 5 + 16 + 5,
+            composerScreen.timeline.topPos - 22,
+            16,
+            16,
+            ScreenTextures.Sprite.Instrument.BIT,
+            Component.literal("Stop")
+        ) { stopPlaying() }
+
+        copyButton = addIconButton(
+            composerScreen.timeline.leftPos + jumpToBeatBox.width + 5 + (16 + 5) * 2,
+            composerScreen.timeline.topPos - 22,
+            16,
+            16,
+            ScreenTextures.Sprite.Instrument.BIT,
+            Component.literal("Copy")
+        ) { copySong() }
+
+        pasteButton = addIconButton(
+            composerScreen.timeline.leftPos + jumpToBeatBox.width + 5 + (16 + 5) * 3,
+            composerScreen.timeline.topPos - 22,
+            16,
+            16,
+            ScreenTextures.Sprite.Instrument.BIT,
+            Component.literal("Paste")
+        ) { pasteSong() }
 
         composerScreen.addRenderableWidgets(playButton, stopButton, copyButton, pasteButton, jumpToBeatBox)
     }
