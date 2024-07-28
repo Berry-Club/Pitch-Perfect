@@ -37,7 +37,7 @@ class ComposerScreen(
         topPos = (height - ScreenTextures.Background.Composer.HEIGHT) / 2
 
         timeline = Timeline(this, this.font)
-        instrumentArea = InstrumentArea(this)
+        instrumentArea = InstrumentArea(this, this.font)
         composerControls = ComposerControls(this, this.font)
 
         timeline.init()
@@ -66,13 +66,7 @@ class ComposerScreen(
     override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
-        pGuiGraphics.drawString(
-            font,
-            selectedInstrument?.noteBlockInstrument?.name ?: "",
-            leftPos + 5,
-            topPos + 5 + 20,
-            0xFFFFFF
-        )
+        instrumentArea.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
 
     fun addRenderable(renderable: Renderable) {

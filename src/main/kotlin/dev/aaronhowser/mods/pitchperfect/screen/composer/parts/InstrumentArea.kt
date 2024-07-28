@@ -1,13 +1,16 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
+import net.minecraft.client.gui.Font
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.SpriteIconButton
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
 class InstrumentArea(
-    private val composerScreen: ComposerScreen
+    private val composerScreen: ComposerScreen,
+    private val font: Font
 ) {
 
     val buttons: MutableList<Button> = mutableListOf()
@@ -68,6 +71,18 @@ class InstrumentArea(
             }
 
         this.buttons.add(button)
+    }
+
+    fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        val instrument = composerScreen.selectedInstrument ?: return
+
+        pGuiGraphics.drawString(
+            font,
+            instrument.noteBlockInstrument.name,
+            composerScreen.timeline.rightPos + 5,
+            composerScreen.timeline.topPos - 10,
+            0xFFFFFF
+        )
     }
 
 }
