@@ -13,8 +13,6 @@ class InstrumentArea(
     private val font: Font
 ) {
 
-    val buttons: MutableList<Button> = mutableListOf()
-
     fun init() {
         addInstrumentButtons()
     }
@@ -49,8 +47,6 @@ class InstrumentArea(
 
             isLeft = !isLeft
         }
-
-        composerScreen.addRenderableWidgets(buttons)
     }
 
     private fun addIconButton(
@@ -70,7 +66,7 @@ class InstrumentArea(
                 this.y = y
             }
 
-        this.buttons.add(button)
+        composerScreen.addRenderableWidgets(button)
     }
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
