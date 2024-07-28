@@ -16,6 +16,7 @@ class InstrumentArea(
         addInstrumentButtons()
     }
 
+    //TODO: tooltip saying what each button is
     private fun addInstrumentButtons() {
         var x = composerScreen.leftPos + 435
         var y = composerScreen.topPos + 61
