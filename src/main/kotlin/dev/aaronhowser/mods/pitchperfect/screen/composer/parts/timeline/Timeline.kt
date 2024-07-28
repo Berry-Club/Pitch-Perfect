@@ -23,8 +23,9 @@ class Timeline(
 
     val timelineStepper = TimelineStepper(this)
 
-    val topPos by lazy { composerScreen.topPos + 60 }
-    val leftPos by lazy { composerScreen.leftPos + 85 }
+    val topPos by lazy { composerScreen.topPos + 40 }
+    val leftPos by lazy { composerScreen.leftPos + 60 }
+    val rightPos by lazy { leftPos + COLUMN_COUNT * (TimelineCell.WIDTH + 1) }
 
     var horizontalScrollIndex: Int = 0
         set(value) {
