@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline
 
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
@@ -107,11 +109,11 @@ data class TimelineCell(
     private fun renderTooltip(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
         val components = mutableListOf<Component>()
 
-        components.add(Component.literal("Delay: $delay"))
-        components.add(Component.literal("Pitch: ${note.displayName}"))
+        components.add(ModLanguageProvider.Tooltip.DELAY.toComponent(delay))
+        components.add(ModLanguageProvider.Tooltip.PITCH.toComponent(note.displayName))
 
         if (soundStrings.isNotEmpty()) {
-            components.add(Component.literal("Sounds:"))
+            components.add(ModLanguageProvider.Tooltip.SOUNDS_LIST.toComponent())
             for (soundString in soundStrings) {
                 components.add(Component.literal("  - $soundString"))
             }

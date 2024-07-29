@@ -38,5 +38,18 @@
   "message.pitchperfect.song_raw_fail_to_parse": "Failed to parse song:\n%s",
   "message.pitchperfect.song_removed": "Song removed: %s by %s",
   "message.pitchperfect.songs_list": "Songs:",
-  "subtitle.pitchperfect.instrument_broken": "Your instrument has broken!"
+  "pitchperfect.song_info": "%1$s - %2$s %3$s %4$s %5$s",
+  "pitchperfect.song_play": "[Play]",
+  "pitchperfect.song_raw": "[Raw]",
+  "pitchperfect.song_uuid": "[UUID]",
+  "subtitle.pitchperfect.instrument_broken": "Your instrument has broken!",
+  "tooltip.pitchperfect.copy": "Copy",
+  "tooltip.pitchperfect.delay": "Delay: %s",
+  "tooltip.pitchperfect.jump_to_beat": "Jump to beat",
+  "tooltip.pitchperfect.jump_to_beat_specific": "Jump to beat %s",
+  "tooltip.pitchperfect.paste": "Paste",
+  "tooltip.pitchperfect.pitch": "Pitch: %s",
+  "tooltip.pitchperfect.play": "Play",
+  "tooltip.pitchperfect.sounds_list": "Sounds: %s",
+  "tooltip.pitchperfect.stop": "Stop"
 }

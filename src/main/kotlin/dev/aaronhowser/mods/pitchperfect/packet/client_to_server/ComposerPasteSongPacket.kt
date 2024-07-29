@@ -1,12 +1,13 @@
 package dev.aaronhowser.mods.pitchperfect.packet.client_to_server
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
@@ -26,7 +27,10 @@ class ComposerPasteSongPacket(
 
             val song = Song.fromString(songString)
             if (song == null) {
-                context.player().sendSystemMessage(Component.literal("Failed to parse song"))
+                context.player().sendSystemMessage(
+                    ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE
+                        .toComponent(songString)
+                )
                 return@enqueueWork
             }
 

@@ -57,16 +57,34 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         const val SHEET_MUSIC_FAIL_DUPLICATE = "message.pitchperfect.sheet_music_fail_duplicate"
     }
 
+    object Tooltip {
+        const val JUMP_TO_BEAT = "tooltip.pitchperfect.jump_to_beat"
+        const val JUMP_TO_BEAT_SPECIFIC = "tooltip.pitchperfect.jump_to_beat_specific"
+
+        const val COPY = "tooltip.pitchperfect.copy"
+        const val PASTE = "tooltip.pitchperfect.paste"
+        const val PLAY = "tooltip.pitchperfect.play"
+        const val STOP = "tooltip.pitchperfect.stop"
+
+        const val DELAY = "tooltip.pitchperfect.delay"
+        const val PITCH = "tooltip.pitchperfect.pitch"
+        const val SOUNDS_LIST = "tooltip.pitchperfect.sounds_list"
+    }
+
     object Advancement {
         const val ROOT_DESC = "advancement.pitchperfect.root.desc"
 
         const val HIT_MOB_TITLE = "advancement.pitchperfect.hit_mob.title"
         const val HIT_MOB_DESC = "advancement.pitchperfect.hit_mob.desc"
-
     }
 
     object Misc {
         const val CREATIVE_TAB = "itemGroup.pitchperfect"
+
+        const val SONG_INFO = "pitchperfect.song_info"
+        const val SONG_UUID = "pitchperfect.song_uuid"
+        const val SONG_RAW = "pitchperfect.song_raw"
+        const val SONG_PLAY = "pitchperfect.song_play"
     }
 
     companion object {
@@ -118,10 +136,29 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         add(Message.SONG_REMOVED, "Song removed: %s by %s")
         add(Message.SHEET_MUSIC_FAIL_DUPLICATE, "Failed to save song, as it is a duplicate of an existing song:%s")
 
-        add(Advancement.ROOT_DESC, "Get any instrument!\n\nRight-click to play a note, depending on the angle you're looking!")
+        add(
+            Advancement.ROOT_DESC,
+            "Get any instrument!\n\nRight-click to play a note, depending on the angle you're looking!"
+        )
         add(Advancement.HIT_MOB_TITLE, "Hit the right note")
         add(Advancement.HIT_MOB_DESC, "Hit a mob using an instrument")
 
+        add(Tooltip.JUMP_TO_BEAT, "Jump to beat")
+        add(Tooltip.JUMP_TO_BEAT_SPECIFIC, "Jump to beat %s")
+        add(Tooltip.COPY, "Copy")
+        add(Tooltip.PASTE, "Paste")
+        add(Tooltip.PLAY, "Play")
+        add(Tooltip.STOP, "Stop")
+        add(Tooltip.DELAY, "Delay: %s")
+        add(Tooltip.PITCH, "Pitch: %s")
+        add(Tooltip.SOUNDS_LIST, "Sounds: %s")
+
         add(Misc.CREATIVE_TAB, "Pitch Perfect")
+
+        add(Misc.SONG_INFO, "%1\$s - %2\$s %3\$s %4\$s %5\$s")
+        add(Misc.SONG_UUID, "[UUID]")
+        add(Misc.SONG_RAW, "[Raw]")
+        add(Misc.SONG_PLAY, "[Play]")
+
     }
 }

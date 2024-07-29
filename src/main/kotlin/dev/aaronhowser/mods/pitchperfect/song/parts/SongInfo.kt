@@ -41,9 +41,7 @@ data class SongInfo(
     }
 
     fun getComponent(): Component {
-        val component = Component.literal("$authorName - $title")
-
-        val uuidComponent = Component.literal(" [UUID]")
+        val uuidComponent = ModLanguageProvider.Misc.SONG_UUID.toComponent()
             .withStyle {
                 it
                     .withHoverEvent(
@@ -60,7 +58,7 @@ data class SongInfo(
                     )
             }
 
-        val songDataComponent = Component.literal(" [Raw]")
+        val songDataComponent = ModLanguageProvider.Misc.SONG_RAW.toComponent()
             .withStyle {
                 it
                     .withHoverEvent(
@@ -77,7 +75,7 @@ data class SongInfo(
                     )
             }
 
-        val playComponent = Component.literal(" [Play]")
+        val playComponent = ModLanguageProvider.Misc.SONG_PLAY.toComponent()
             .withStyle {
                 it
                     .withHoverEvent(
@@ -94,7 +92,13 @@ data class SongInfo(
                     )
             }
 
-        return component.append(uuidComponent).append(songDataComponent).append(playComponent)
+        return ModLanguageProvider.Misc.SONG_INFO.toComponent(
+            authorName,
+            title,
+            uuidComponent,
+            songDataComponent,
+            playComponent
+        )
     }
 
     companion object {

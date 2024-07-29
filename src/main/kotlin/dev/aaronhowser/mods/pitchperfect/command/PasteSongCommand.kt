@@ -14,7 +14,6 @@ import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.network.chat.ClickEvent
-import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.server.level.ServerPlayer
 import net.neoforged.neoforge.network.handling.IPayloadContext
@@ -38,7 +37,7 @@ object PasteSongCommand {
         val song = Song.fromString(packet.clipboard)
 
         if (song == null) {
-            player.sendSystemMessage(Component.literal("Failed to parse song from clipboard:\n${packet.clipboard}"))
+            player.sendSystemMessage(ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE.toComponent(packet.clipboard))
             return
         }
 

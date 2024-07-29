@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ComposerControls
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.InstrumentArea
@@ -20,7 +22,7 @@ import kotlin.properties.Delegates
 @OnlyIn(Dist.CLIENT)
 class ComposerScreen(
     val composerBlockEntity: ComposerBlockEntity,
-    pTitle: Component = Component.literal("Composer")
+    pTitle: Component = ModLanguageProvider.Block.COMPOSER.toComponent()
 ) : Screen(pTitle) {
 
     var selectedInstrument: ScreenInstrument? = null

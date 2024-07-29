@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ComposerPasteSongPacket
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
@@ -46,7 +48,9 @@ class ComposerControls(
         val song = Song.fromString(clipboard)
 
         if (song == null) {
-            composerScreen.minecraft.player?.sendSystemMessage(Component.literal("Failed to parse song:\n$clipboard"))
+            composerScreen.minecraft.player?.sendSystemMessage(
+                ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE.toComponent(clipboard)
+            )
             return
         }
 
@@ -97,10 +101,10 @@ class ComposerControls(
             composerScreen.timeline.topPos - 20,
             72,
             14,
-            Component.literal("Jump to beat")
+            ModLanguageProvider.Tooltip.JUMP_TO_BEAT.toComponent()
         ).apply {
             setMaxLength(9)
-            setHint(Component.literal("Jump to beat"))
+            setHint(ModLanguageProvider.Tooltip.JUMP_TO_BEAT.toComponent())
 
             setResponder { newValue ->
                 setBoxValue(newValue)
@@ -113,7 +117,7 @@ class ComposerControls(
             16,
             16,
             ScreenTextures.Sprite.Instrument.BIT,
-            Component.literal("Play")
+            ModLanguageProvider.Tooltip.PLAY.toComponent()
         ) { startPlaying() }
 
         stopButton = addIconButton(
@@ -122,7 +126,7 @@ class ComposerControls(
             16,
             16,
             ScreenTextures.Sprite.Instrument.BIT,
-            Component.literal("Stop")
+            ModLanguageProvider.Tooltip.STOP.toComponent()
         ) { stopPlaying() }
 
         copyButton = addIconButton(
@@ -131,7 +135,7 @@ class ComposerControls(
             16,
             16,
             ScreenTextures.Sprite.Instrument.BIT,
-            Component.literal("Copy")
+            ModLanguageProvider.Tooltip.COPY.toComponent()
         ) { copySong() }
 
         pasteButton = addIconButton(
@@ -140,7 +144,7 @@ class ComposerControls(
             16,
             16,
             ScreenTextures.Sprite.Instrument.BIT,
-            Component.literal("Paste")
+            ModLanguageProvider.Tooltip.PASTE.toComponent()
         ) { pasteSong() }
 
         composerScreen.addRenderableWidgets(playButton, stopButton, copyButton, pasteButton, jumpToBeatBox)

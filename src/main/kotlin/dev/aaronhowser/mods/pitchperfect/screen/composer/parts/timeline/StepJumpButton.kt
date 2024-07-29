@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline
 
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -61,7 +63,7 @@ class StepJumpButton(
     private fun renderTooltip(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
         val components = mutableListOf<Component>()
 
-        components.add(Component.literal("Jump to beat $delay"))
+        components.add(ModLanguageProvider.Tooltip.JUMP_TO_BEAT_SPECIFIC.toComponent(delay))
 
         pGuiGraphics.renderComponentTooltip(
             timeline.font,
