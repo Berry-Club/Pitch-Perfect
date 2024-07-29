@@ -1,0 +1,29 @@
+{
+  "parent": "pitchperfect:guide/root",
+  "criteria": {
+    "make_composer": {
+      "conditions": {
+        "items": [
+          {
+            "items": "pitchperfect:composer"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "",
+    "icon": {
+      "count": 1,
+      "id": "pitchperfect:composer"
+    },
+    "title": ""
+  },
+  "requirements": [
+    [
+      "make_composer"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

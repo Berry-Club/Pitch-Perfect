@@ -1,0 +1,29 @@
+{
+  "parent": "pitchperfect:guide/make_composer",
+  "criteria": {
+    "make_conductor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "pitchperfect:conductor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "",
+    "icon": {
+      "count": 1,
+      "id": "pitchperfect:conductor"
+    },
+    "title": ""
+  },
+  "requirements": [
+    [
+      "make_conductor"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.datagen
 
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.advancements.*
@@ -54,6 +55,150 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                     CriteriaTriggers.IMPOSSIBLE.createCriterion(ImpossibleTrigger.TriggerInstance())
                 )
                 .build(guide("hit_mob"))
+                .add()
+
+        val makeComposer =
+            Advancement.Builder.advancement()
+                .parent(root)
+                .display(
+                    ModBlocks.COMPOSER.get(),
+                    Component.empty(),
+                    Component.empty(),
+                    null,
+                    AdvancementType.TASK,
+                    true, true, false
+                )
+                .addCriterion(
+                    "make_composer",
+                    InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.COMPOSER.get())
+                )
+                .build(guide("make_composer"))
+                .add()
+
+        val makeConductor =
+            Advancement.Builder.advancement()
+                .parent(makeComposer)
+                .display(
+                    ModBlocks.CONDUCTOR.get(),
+                    Component.empty(),
+                    Component.empty(),
+                    null,
+                    AdvancementType.TASK,
+                    true, true, false
+                )
+                .addCriterion(
+                    "make_conductor",
+                    InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.CONDUCTOR.get())
+                )
+                .build(guide("make_conductor"))
+                .add()
+
+        val useConductor =
+            Advancement.Builder.advancement()
+                .parent(makeConductor)
+                .display(
+                    ModBlocks.CONDUCTOR.get(),
+                    Component.empty(),
+                    Component.empty(),
+                    null,
+                    AdvancementType.TASK,
+                    true, true, false
+                )
+                .addCriterion(
+                    "use_conductor",
+                    CriteriaTriggers.IMPOSSIBLE.createCriterion(ImpossibleTrigger.TriggerInstance())
+                )
+                .build(guide("use_conductor"))
+                .add()
+
+        val conductorComplexSong =
+            Advancement.Builder.advancement()
+                .parent(useConductor)
+                .display(
+                    ModBlocks.CONDUCTOR.get(),
+                    Component.empty(),
+                    Component.empty(),
+                    null,
+                    AdvancementType.TASK,
+                    true, true, false
+                )
+                .addCriterion(
+                    "conductor_complex_song",
+                    CriteriaTriggers.IMPOSSIBLE.createCriterion(ImpossibleTrigger.TriggerInstance())
+                )
+                .build(guide("conductor_complex_song"))
+                .add()
+
+        val enchantInstrument =
+            Advancement.Builder.advancement()
+                .parent(root)
+                .display(
+                    Items.ENCHANTING_TABLE,
+                    Component.empty(),
+                    Component.empty(),
+                    null,
+                    AdvancementType.TASK,
+                    true, true, false
+                )
+                .addCriterion(
+                    "enchant_instrument",
+                    CriteriaTriggers.IMPOSSIBLE.createCriterion(ImpossibleTrigger.TriggerInstance())
+                )
+                .build(guide("enchant_instrument"))
+                .add()
+
+        val andHisMusic =
+            Advancement.Builder.advancement()
+                .parent(enchantInstrument)
+                .display(
+                    Items.LIGHTNING_ROD,
+                    Component.empty(),
+                    Component.empty(),
+                    null,
+                    AdvancementType.TASK,
+                    true, true, false
+                )
+                .addCriterion(
+                    "and_his_music_was_electric",
+                    CriteriaTriggers.IMPOSSIBLE.createCriterion(ImpossibleTrigger.TriggerInstance())
+                )
+                .build(guide("and_his_music_was_electric"))
+                .add()
+
+        val healingBeat =
+            Advancement.Builder.advancement()
+                .parent(enchantInstrument)
+                .display(
+                    Items.GOLDEN_APPLE,
+                    Component.empty(),
+                    Component.empty(),
+                    null,
+                    AdvancementType.TASK,
+                    true, true, false
+                )
+                .addCriterion(
+                    "healing_beat",
+                    CriteriaTriggers.IMPOSSIBLE.createCriterion(ImpossibleTrigger.TriggerInstance())
+                )
+                .build(guide("healing_beat"))
+                .add()
+
+        val bwaaap =
+            Advancement.Builder.advancement()
+                .parent(enchantInstrument)
+                .display(
+                    Items.TNT,
+                    Component.empty(),
+                    Component.empty(),
+                    null,
+                    AdvancementType.TASK,
+                    true, true, false
+                )
+                .addCriterion(
+                    "bwaaap",
+                    CriteriaTriggers.IMPOSSIBLE.createCriterion(ImpossibleTrigger.TriggerInstance())
+                )
+                .build(guide("bwaaap"))
                 .add()
 
     }

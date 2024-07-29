@@ -1,0 +1,22 @@
+{
+  "parent": "pitchperfect:guide/enchant_instrument",
+  "criteria": {
+    "bwaaap": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": "",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:tnt"
+    },
+    "title": ""
+  },
+  "requirements": [
+    [
+      "bwaaap"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

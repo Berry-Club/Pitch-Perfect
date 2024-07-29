@@ -1,0 +1,22 @@
+{
+  "parent": "pitchperfect:guide/use_conductor",
+  "criteria": {
+    "conductor_complex_song": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": "",
+    "icon": {
+      "count": 1,
+      "id": "pitchperfect:conductor"
+    },
+    "title": ""
+  },
+  "requirements": [
+    [
+      "conductor_complex_song"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

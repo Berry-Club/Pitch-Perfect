@@ -1,0 +1,22 @@
+{
+  "parent": "pitchperfect:guide/enchant_instrument",
+  "criteria": {
+    "healing_beat": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": "",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:golden_apple"
+    },
+    "title": ""
+  },
+  "requirements": [
+    [
+      "healing_beat"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "pitchperfect:guide/enchant_instrument",
+  "criteria": {
+    "and_his_music_was_electric": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": "",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:lightning_rod"
+    },
+    "title": ""
+  },
+  "requirements": [
+    [
+      "and_his_music_was_electric"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

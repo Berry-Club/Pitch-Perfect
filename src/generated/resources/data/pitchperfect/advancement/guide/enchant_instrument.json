@@ -1,0 +1,22 @@
+{
+  "parent": "pitchperfect:guide/root",
+  "criteria": {
+    "enchant_instrument": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": "",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:enchanting_table"
+    },
+    "title": ""
+  },
+  "requirements": [
+    [
+      "enchant_instrument"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
