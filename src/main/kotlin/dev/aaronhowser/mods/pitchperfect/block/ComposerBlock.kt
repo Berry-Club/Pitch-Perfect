@@ -90,7 +90,7 @@ class ComposerBlock(
                 as? ComposerBlockEntity ?: return InteractionResult.CONSUME
 
         if (pPlayer is LocalPlayer) {
-            val screen = ComposerScreen(blockEntity, Component.empty())
+            val screen = ComposerScreen(blockEntity)
             Minecraft.getInstance().setScreen(screen)
         }
 

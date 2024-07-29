@@ -9,6 +9,7 @@ import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline.Timeline
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
@@ -19,7 +20,7 @@ import kotlin.properties.Delegates
 @OnlyIn(Dist.CLIENT)
 class ComposerScreen(
     val composerBlockEntity: ComposerBlockEntity,
-    pTitle: Component
+    pTitle: Component = Component.literal("Composer")
 ) : Screen(pTitle) {
 
     var selectedInstrument: ScreenInstrument? = null
@@ -65,6 +66,15 @@ class ComposerScreen(
 
     override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+
+        pGuiGraphics.drawString(
+            font,
+            title,
+            leftPos + 10,
+            topPos + 10,
+            0x403030,
+            false
+        )
 
         instrumentArea.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
     }
