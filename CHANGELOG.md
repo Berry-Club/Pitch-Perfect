@@ -60,4 +60,7 @@
 # 1.5.0
 
 - Updated to 1.21
+- Added the Composer, where you can create custom songs!
+- Added the Conductor, which plays the songs you create using nearby Armor Stands that are holding instruments
 - And His Music Was Electric now works and looks nicer
+- When holding an instrument, it shows you what note your current look angle is mapped to

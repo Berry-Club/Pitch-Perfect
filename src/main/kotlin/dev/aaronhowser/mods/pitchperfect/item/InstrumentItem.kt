@@ -9,8 +9,11 @@ import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModSounds
+import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.Holder
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
@@ -182,6 +185,21 @@ class InstrumentItem(
         AdvancementTriggers.hitWithInstrument(player as ServerPlayer)
 
         return false
+    }
+
+    override fun inventoryTick(pStack: ItemStack, pLevel: Level, pEntity: Entity, pSlotId: Int, pIsSelected: Boolean) {
+        if (pEntity !is LocalPlayer) return
+
+        if (pEntity.mainHandItem != pStack && pEntity.offhandItem != pStack) return
+
+        val lookPitch = pEntity.lookAngle.y
+        val pitch = lookPitch.toFloat().map(-1f, 1f, 0.5f, 2f)
+        val note = Note.getFromPitch(pitch)
+
+        pEntity.displayClientMessage(
+            Component.literal(note.displayName).withColor(note.rgb),
+            true
+        )
     }
 
 }
