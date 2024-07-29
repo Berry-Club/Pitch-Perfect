@@ -6,12 +6,16 @@
     }
   },
   "display": {
-    "description": "",
+    "description": {
+      "translate": "advancement.pitchperfect.bwaaap.desc"
+    },
     "icon": {
       "count": 1,
       "id": "minecraft:tnt"
     },
-    "title": ""
+    "title": {
+      "translate": "advancement.pitchperfect.bwaaap.title"
+    }
   },
   "requirements": [
     [

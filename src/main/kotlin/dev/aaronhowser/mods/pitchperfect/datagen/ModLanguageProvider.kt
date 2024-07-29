@@ -76,6 +76,27 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
 
         const val HIT_MOB_TITLE = "advancement.pitchperfect.hit_mob.title"
         const val HIT_MOB_DESC = "advancement.pitchperfect.hit_mob.desc"
+
+        const val MAKE_COMPOSER_TITLE = "advancement.pitchperfect.make_composer.title"
+        const val MAKE_COMPOSER_DESC = "advancement.pitchperfect.make_composer.desc"
+
+        const val MAKE_CONDUCTOR_TITLE = "advancement.pitchperfect.make_conductor.title"
+        const val MAKE_CONDUCTOR_DESC = "advancement.pitchperfect.make_conductor.desc"
+
+        const val CONDUCTOR_COMPLEX_TITLE = "advancement.pitchperfect.conductor_complex.title"
+        const val CONDUCTOR_COMPLEX_DESC = "advancement.pitchperfect.conductor_complex.desc"
+
+        const val ENCHANT_INSTRUMENT_TITLE = "advancement.pitchperfect.enchant_instrument.title"
+        const val ENCHANT_INSTRUMENT_DESC = "advancement.pitchperfect.enchant_instrument.desc"
+
+        const val AND_HIS_MUSIC_TITLE = "advancement.pitchperfect.and_his_music.title"
+        const val AND_HIS_MUSIC_DESC = "advancement.pitchperfect.and_his_music.desc"
+
+        const val HEALING_BEAT_TITLE = "advancement.pitchperfect.healing_beat.title"
+        const val HEALING_BEAT_DESC = "advancement.pitchperfect.healing_beat.desc"
+
+        const val BWAAAP_TITLE = "advancement.pitchperfect.bwaaap.title"
+        const val BWAAAP_DESC = "advancement.pitchperfect.bwaaap.desc"
     }
 
     object Misc {
@@ -140,8 +161,34 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
             Advancement.ROOT_DESC,
             "Get any instrument!\n\nRight-click to play a note, depending on the angle you're looking!"
         )
-        add(Advancement.HIT_MOB_TITLE, "Hit the right note")
+        add(Advancement.HIT_MOB_TITLE, "Hit the Right Note")
         add(Advancement.HIT_MOB_DESC, "Hit a mob using an instrument")
+        add(Advancement.MAKE_COMPOSER_TITLE, "Maestro")
+        add(
+            Advancement.MAKE_COMPOSER_DESC,
+            "Make a Composer\n\nThis acts as a simple digital audio workstation to make songs!"
+        )
+        add(Advancement.MAKE_CONDUCTOR_TITLE, "Ghostly Symphony")
+        add(
+            Advancement.MAKE_CONDUCTOR_DESC,
+            "Make a Conductor\n\nPlace Armor Stands nearby and give them Instruments, put Sheet Music in the Conductor, then give it a redstone signal to play the song!"
+        )
+        add(Advancement.CONDUCTOR_COMPLEX_TITLE, "Polyphony")
+        add(
+            Advancement.CONDUCTOR_COMPLEX_DESC,
+            "Play a song in the Conductor that has at least 3 different instruments"
+        )
+        add(Advancement.ENCHANT_INSTRUMENT_TITLE, "The Magic of Music")
+        add(Advancement.ENCHANT_INSTRUMENT_DESC, "Enchant any instrument")
+        add(Advancement.AND_HIS_MUSIC_TITLE, "And His Music Was Electric")
+        add(
+            Advancement.AND_HIS_MUSIC_DESC,
+            "Activate the And His Music Was Electric enchantment\n\nWhen anywhere in your inventory, dealing damage will chain to other mobs, but damage the instrument"
+        )
+        add(Advancement.HEALING_BEAT_TITLE, "Music Therapy")
+        add(Advancement.HEALING_BEAT_DESC, "Heal something using the Healing Beat enchantment")
+        add(Advancement.BWAAAP_TITLE, "BWAAAAAAAP")
+        add(Advancement.BWAAAP_DESC, "Knock back entities with the BWAAAP enchantment")
 
         add(Tooltip.JUMP_TO_BEAT, "Jump to beat")
         add(Tooltip.JUMP_TO_BEAT_SPECIFIC, "Jump to beat %s")

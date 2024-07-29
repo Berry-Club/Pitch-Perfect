@@ -6,12 +6,16 @@
     }
   },
   "display": {
-    "description": "",
+    "description": {
+      "translate": "advancement.pitchperfect.enchant_instrument.desc"
+    },
     "icon": {
       "count": 1,
       "id": "minecraft:enchanting_table"
     },
-    "title": ""
+    "title": {
+      "translate": "advancement.pitchperfect.enchant_instrument.title"
+    }
   },
   "requirements": [
     [

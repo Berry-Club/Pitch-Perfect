@@ -6,12 +6,16 @@
     }
   },
   "display": {
-    "description": "",
+    "description": {
+      "translate": "advancement.pitchperfect.and_his_music.desc"
+    },
     "icon": {
       "count": 1,
       "id": "minecraft:lightning_rod"
     },
-    "title": ""
+    "title": {
+      "translate": "advancement.pitchperfect.and_his_music.title"
+    }
   },
   "requirements": [
     [

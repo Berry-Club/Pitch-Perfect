@@ -62,8 +62,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                 .parent(root)
                 .display(
                     ModBlocks.COMPOSER.get(),
-                    Component.empty(),
-                    Component.empty(),
+                    ModLanguageProvider.Advancement.MAKE_COMPOSER_TITLE.toComponent(),
+                    ModLanguageProvider.Advancement.MAKE_COMPOSER_DESC.toComponent(),
                     null,
                     AdvancementType.TASK,
                     true, true, false
@@ -80,8 +80,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                 .parent(makeComposer)
                 .display(
                     ModBlocks.CONDUCTOR.get(),
-                    Component.empty(),
-                    Component.empty(),
+                    ModLanguageProvider.Advancement.MAKE_CONDUCTOR_TITLE.toComponent(),
+                    ModLanguageProvider.Advancement.MAKE_CONDUCTOR_DESC.toComponent(),
                     null,
                     AdvancementType.TASK,
                     true, true, false
@@ -93,31 +93,13 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                 .build(guide("make_conductor"))
                 .add()
 
-        val useConductor =
+        val conductorComplexSong =
             Advancement.Builder.advancement()
                 .parent(makeConductor)
                 .display(
                     ModBlocks.CONDUCTOR.get(),
-                    Component.empty(),
-                    Component.empty(),
-                    null,
-                    AdvancementType.TASK,
-                    true, true, false
-                )
-                .addCriterion(
-                    "use_conductor",
-                    CriteriaTriggers.IMPOSSIBLE.createCriterion(ImpossibleTrigger.TriggerInstance())
-                )
-                .build(guide("use_conductor"))
-                .add()
-
-        val conductorComplexSong =
-            Advancement.Builder.advancement()
-                .parent(useConductor)
-                .display(
-                    ModBlocks.CONDUCTOR.get(),
-                    Component.empty(),
-                    Component.empty(),
+                    ModLanguageProvider.Advancement.CONDUCTOR_COMPLEX_TITLE.toComponent(),
+                    ModLanguageProvider.Advancement.CONDUCTOR_COMPLEX_DESC.toComponent(),
                     null,
                     AdvancementType.TASK,
                     true, true, false
@@ -134,8 +116,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                 .parent(root)
                 .display(
                     Items.ENCHANTING_TABLE,
-                    Component.empty(),
-                    Component.empty(),
+                    ModLanguageProvider.Advancement.ENCHANT_INSTRUMENT_TITLE.toComponent(),
+                    ModLanguageProvider.Advancement.ENCHANT_INSTRUMENT_DESC.toComponent(),
                     null,
                     AdvancementType.TASK,
                     true, true, false
@@ -152,8 +134,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                 .parent(enchantInstrument)
                 .display(
                     Items.LIGHTNING_ROD,
-                    Component.empty(),
-                    Component.empty(),
+                    ModLanguageProvider.Advancement.AND_HIS_MUSIC_TITLE.toComponent(),
+                    ModLanguageProvider.Advancement.AND_HIS_MUSIC_DESC.toComponent(),
                     null,
                     AdvancementType.TASK,
                     true, true, false
@@ -170,8 +152,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                 .parent(enchantInstrument)
                 .display(
                     Items.GOLDEN_APPLE,
-                    Component.empty(),
-                    Component.empty(),
+                    ModLanguageProvider.Advancement.HEALING_BEAT_TITLE.toComponent(),
+                    ModLanguageProvider.Advancement.HEALING_BEAT_DESC.toComponent(),
                     null,
                     AdvancementType.TASK,
                     true, true, false
@@ -188,8 +170,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                 .parent(enchantInstrument)
                 .display(
                     Items.TNT,
-                    Component.empty(),
-                    Component.empty(),
+                    ModLanguageProvider.Advancement.BWAAAP_TITLE.toComponent(),
+                    ModLanguageProvider.Advancement.BWAAAP_DESC.toComponent(),
                     null,
                     AdvancementType.TASK,
                     true, true, false

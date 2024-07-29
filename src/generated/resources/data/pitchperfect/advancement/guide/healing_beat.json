@@ -6,12 +6,16 @@
     }
   },
   "display": {
-    "description": "",
+    "description": {
+      "translate": "advancement.pitchperfect.healing_beat.desc"
+    },
     "icon": {
       "count": 1,
       "id": "minecraft:golden_apple"
     },
-    "title": ""
+    "title": {
+      "translate": "advancement.pitchperfect.healing_beat.title"
+    }
   },
   "requirements": [
     [

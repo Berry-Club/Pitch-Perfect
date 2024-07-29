@@ -13,12 +13,16 @@
     }
   },
   "display": {
-    "description": "",
+    "description": {
+      "translate": "advancement.pitchperfect.make_conductor.desc"
+    },
     "icon": {
       "count": 1,
       "id": "pitchperfect:conductor"
     },
-    "title": ""
+    "title": {
+      "translate": "advancement.pitchperfect.make_conductor.title"
+    }
   },
   "requirements": [
     [

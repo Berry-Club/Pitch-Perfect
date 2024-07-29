@@ -1,17 +1,21 @@
 {
-  "parent": "pitchperfect:guide/use_conductor",
+  "parent": "pitchperfect:guide/make_conductor",
   "criteria": {
     "conductor_complex_song": {
       "trigger": "minecraft:impossible"
     }
   },
   "display": {
-    "description": "",
+    "description": {
+      "translate": "advancement.pitchperfect.conductor_complex.desc"
+    },
     "icon": {
       "count": 1,
       "id": "pitchperfect:conductor"
     },
-    "title": ""
+    "title": {
+      "translate": "advancement.pitchperfect.conductor_complex.title"
+    }
   },
   "requirements": [
     [
