@@ -77,6 +77,23 @@ class ComposerScreen(
         )
 
         instrumentArea.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+
+        for (widget in renderables) {
+            if (widget !is Button) continue
+            if (!widget.isHovered) continue
+
+            val component = widget.message
+
+            pGuiGraphics.renderComponentTooltip(
+                font,
+                listOf(component),
+                pMouseX,
+                pMouseY
+            )
+
+            break
+        }
+
     }
 
     fun addRenderable(renderable: Renderable) {
