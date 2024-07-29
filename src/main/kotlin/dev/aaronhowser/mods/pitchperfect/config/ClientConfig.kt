@@ -17,6 +17,8 @@ class ClientConfig(
         lateinit var VOLUME: ModConfigSpec.DoubleValue
         lateinit var ELECTRIC_PARTICLE_DENSITY: ModConfigSpec.IntValue
         lateinit var ELECTRIC_PARTICLE_IS_WAVE: ModConfigSpec.BooleanValue
+
+        lateinit var LOG_MISSING_NOTE: ModConfigSpec.BooleanValue
     }
 
     init {
@@ -39,6 +41,10 @@ class ClientConfig(
         ELECTRIC_PARTICLE_IS_WAVE = builder
             .comment("Whether or not the electric particles are a wave.")
             .define("Electric Particle Is Wave", true)
+
+        LOG_MISSING_NOTE = builder
+            .comment("Whether or not to log a missing note when the mod doesn't find an exact match for a Note's pitch, and uses the closest Note instead.")
+            .define("Log Missing Note", false)
 
         builder.pop()
 

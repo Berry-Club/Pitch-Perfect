@@ -5,6 +5,7 @@ import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -142,7 +143,9 @@ enum class Note(
 
                 requireNotNull(closestNote) { "No note found for pitch $pitch (How did this happen????)" }
 
-                PitchPerfect.LOGGER.error("No note with exact pitch $pitch, using closest note: $closestNote (${closestNote.getGoodPitch()}")
+                if (ClientConfig.LOG_MISSING_NOTE.get()) {
+                    PitchPerfect.LOGGER.error("No note with exact pitch $pitch, using closest note: $closestNote (${closestNote.getGoodPitch()})")
+                }
 
                 return closestNote
             }
