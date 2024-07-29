@@ -71,6 +71,8 @@ class SheetMusicItem : Item(
         }
     }
 
+    //TODO: When used on a Composer, it should open a menu asking you to title the song, and then saves the song and sets the Sheet Music to it
+
     override fun use(pLevel: Level, pPlayer: Player, pUsedHand: InteractionHand): InteractionResultHolder<ItemStack> {
         val stack = pPlayer.getItemInHand(pUsedHand)
 

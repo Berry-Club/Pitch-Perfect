@@ -190,7 +190,7 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
             Advancement.Builder.advancement()
                 .display(
                     ModItems.BANJO.get(),
-                    Component.literal("Pitch Perfect"),
+                    Component.literal("Pitch Perfect        "),
                     ModLanguageProvider.Advancement.ROOT_DESC.toComponent(),
                     ResourceLocation.withDefaultNamespace("textures/block/note_block.png"),
                     AdvancementType.TASK,
