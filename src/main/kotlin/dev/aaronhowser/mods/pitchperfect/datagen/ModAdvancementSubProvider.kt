@@ -8,6 +8,7 @@ import net.minecraft.advancements.critereon.ImpossibleTrigger
 import net.minecraft.advancements.critereon.InventoryChangeTrigger
 import net.minecraft.core.HolderLookup
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.neoforged.neoforge.common.data.AdvancementProvider
 import net.neoforged.neoforge.common.data.ExistingFileHelper
@@ -64,7 +65,7 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
                     ModItems.BANJO.get(),
                     Component.literal("Pitch Perfect"),
                     ModLanguageProvider.Advancement.ROOT_DESC.toComponent(),
-                    OtherUtil.modResource("textures/block/machine_bottom.png"),
+                    ResourceLocation.withDefaultNamespace("textures/block/note_block.png"),
                     AdvancementType.TASK,
                     true,
                     true,
