@@ -167,17 +167,17 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         )
         add(Advancement.HIT_MOB_TITLE, "Hit the Right Note")
         add(Advancement.HIT_MOB_DESC, "Hit a mob using an instrument")
-        add(Advancement.MAKE_COMPOSER_TITLE, "Maestro        ")
+        add(Advancement.MAKE_COMPOSER_TITLE, "Maestro")
         add(
             Advancement.MAKE_COMPOSER_DESC,
             "Make a Composer\n\nThis acts as a simple digital audio workstation to make songs!"
         )
-        add(Advancement.MAKE_CONDUCTOR_TITLE, "Ghostly Symphony        ")
+        add(Advancement.MAKE_CONDUCTOR_TITLE, "Ghostly Symphony")
         add(
             Advancement.MAKE_CONDUCTOR_DESC,
             "Make a Conductor\n\nPlace Armor Stands nearby and give them Instruments, put Sheet Music in the Conductor, then give it a redstone signal to play the song!"
         )
-        add(Advancement.CONDUCTOR_COMPLEX_TITLE, "Polyphony        ")
+        add(Advancement.CONDUCTOR_COMPLEX_TITLE, "Polyphony")
         add(
             Advancement.CONDUCTOR_COMPLEX_DESC,
             "Play a song in the Conductor that has at least 3 different instruments"
