@@ -72,13 +72,20 @@ data class TimelineCell(
             if (sounds.isNotEmpty()) {
                 components.add(ModLanguageProvider.Tooltip.SOUNDS_LIST_START.toComponent())
 
-                for (soundHolder in sounds) {
+                val countMap = sounds.groupingBy { it }.eachCount()
+                for ((soundHolder, amount) in countMap) {
                     val instrument = ModItems.instruments.find { it.get().instrument == soundHolder.value() }
 
-                    val component = if (instrument != null) {
-                        Component.literal(" - ").append(instrument.get().description)
+                    val instrumentComponent = if (instrument != null) {
+                        instrument.get().description
                     } else {
-                        Component.literal("Unknown Instrument: ${soundHolder.key}")
+                        Component.literal(soundHolder.key.toString())
+                    }
+
+                    val component = if (amount > 1) {
+                        ModLanguageProvider.Tooltip.SOUND_MULTIPLE.toComponent(instrumentComponent, amount)
+                    } else {
+                        ModLanguageProvider.Tooltip.SOUND_SINGLE.toComponent(instrumentComponent)
                     }
 
                     components.add(component)

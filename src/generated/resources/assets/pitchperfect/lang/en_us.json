@@ -64,6 +64,8 @@
   "tooltip.pitchperfect.paste": "Paste",
   "tooltip.pitchperfect.pitch": "Pitch: %s",
   "tooltip.pitchperfect.play": "Play",
+  "tooltip.pitchperfect.sound_multiple": " - %s x%s",
+  "tooltip.pitchperfect.sound_single": " - %s",
   "tooltip.pitchperfect.sounds_list_start": "Sounds:",
   "tooltip.pitchperfect.stop": "Stop"
 }
