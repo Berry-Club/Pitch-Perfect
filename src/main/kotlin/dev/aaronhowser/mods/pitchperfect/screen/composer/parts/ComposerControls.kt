@@ -58,6 +58,8 @@ class ComposerControls(
             return
         }
 
+        val previousSong = composerScreen.songWip?.song
+
         ModPacketHandler.messageServer(
             ComposerPasteSongPacket(
                 song,
@@ -71,6 +73,10 @@ class ComposerControls(
 
         PitchPerfect.LOGGER.info("Pasted song from clipboard!")
         PitchPerfect.LOGGER.info(song.toString())
+        if (previousSong != null) {
+            PitchPerfect.LOGGER.info("Previous song:")
+            PitchPerfect.LOGGER.info(previousSong.toString())
+        }
     }
 
     fun startPlaying() {
