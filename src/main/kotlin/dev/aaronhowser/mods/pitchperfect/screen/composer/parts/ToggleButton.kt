@@ -18,20 +18,17 @@ class ToggleButton(
     onPress: OnPress,
     narration: CreateNarration?
 ) : SpriteIconButton.CenteredIcon(
-    width,
-    height,
+    width, height,
     message,
-    spriteWidth,
-    spriteHeight,
+    spriteWidth, spriteHeight,
     sprite,
     onPress,
     narration
 ) {
 
     companion object {
-        val SPRITE_DEFAULT: ResourceLocation = ResourceLocation.withDefaultNamespace("widget/button")
-        val SPRITE_DISABLED: ResourceLocation = ResourceLocation.withDefaultNamespace("widget/button_disabled")
-        val SPRITE_HIGHLIGHTED: ResourceLocation = ResourceLocation.withDefaultNamespace("widget/button_highlighted")
+        val SPRITE_LIGHT: ResourceLocation = ResourceLocation.withDefaultNamespace("widget/button")
+        val SPRITE_DARK: ResourceLocation = ResourceLocation.withDefaultNamespace("widget/button_disabled")
     }
 
     var toggledOn = false
@@ -48,18 +45,26 @@ class ToggleButton(
         RenderSystem.enableDepthTest()
 
         pGuiGraphics.blitSprite(
-            if (this.isHoveredOrFocused) {
-                SPRITE_HIGHLIGHTED
-            } else if (this.toggledOn) {
-                SPRITE_DEFAULT
+            if (this.toggledOn) {
+                SPRITE_DARK
             } else {
-                SPRITE_DISABLED
+                SPRITE_LIGHT
             },
             this.x,
             this.y,
             this.getWidth(),
             this.getHeight()
         )
+
+        if (this.isHovered) {
+            pGuiGraphics.renderOutline(
+                this.x,
+                this.y,
+                this.width,
+                this.height,
+                0xFFFFFFFF.toInt()
+            )
+        }
 
         pGuiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f)
         this.renderString(
