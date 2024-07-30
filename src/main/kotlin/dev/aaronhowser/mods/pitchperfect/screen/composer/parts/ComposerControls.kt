@@ -39,6 +39,10 @@ class ComposerControls(
 
         composerScreen.minecraft.keyboardHandler.clipboard = song.toString()
 
+        composerScreen.minecraft.player?.sendSystemMessage(
+            ModLanguageProvider.Message.SONG_COPIED.toComponent()
+        )
+
         PitchPerfect.LOGGER.info("Copied song to clipboard!")
         PitchPerfect.LOGGER.info(song.toString())
     }
@@ -59,6 +63,10 @@ class ComposerControls(
                 song,
                 composerScreen.composerBlockEntity.blockPos
             )
+        )
+
+        composerScreen.minecraft.player?.sendSystemMessage(
+            ModLanguageProvider.Message.SONG_PASTED.toComponent()
         )
 
         PitchPerfect.LOGGER.info("Pasted song from clipboard!")

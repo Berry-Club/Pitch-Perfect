@@ -50,6 +50,8 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         const val CLICK_COPY_SONG_UUID = "message.pitchperfect.click_copy_song_uuid"
         const val CLICK_COPY_RAW_SONG = "message.pitchperfect.click_copy_raw_song"
         const val CLICK_PLAY_SONG = "message.pitchperfect.song_play"
+        const val SONG_COPIED = "message.pitchperfect.song_copied"
+        const val SONG_PASTED = "message.pitchperfect.song_pasted"
         const val SONG_PASTE_FAIL_DUPLICATE = "message.pitchperfect.song_paste_fail_duplicate"
         const val SONG_PASTE_FAIL_TO_PARSE = "message.pitchperfect.song_paste_fail_to_parse"
         const val SONG_RAW_FAIL_TO_PARSE = "message.pitchperfect.song_raw_fail_to_parse"
@@ -148,6 +150,8 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
 
         add(Message.INSTRUMENT_BROKEN, "Your instrument has broken!")
         add(Message.SONGS_LIST, "Songs:")
+        add(Message.SONG_COPIED, "Song copied to clipboard!")
+        add(Message.SONG_PASTED, "Song pasted from clipboard!")
         add(Message.SONG_PASTE_ADDED, "Song added: %s")
         add(Message.CLICK_COPY_SONG_UUID, "Click to copy UUID:\n%s")
         add(Message.CLICK_COPY_RAW_SONG, "Click to copy raw song data:\n%s")
