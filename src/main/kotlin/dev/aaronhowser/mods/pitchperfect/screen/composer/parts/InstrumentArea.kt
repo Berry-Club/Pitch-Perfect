@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
+import dev.aaronhowser.mods.pitchperfect.screen.base.ToggleButton
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics

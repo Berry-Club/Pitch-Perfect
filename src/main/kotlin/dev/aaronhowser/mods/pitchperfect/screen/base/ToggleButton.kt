@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
+package dev.aaronhowser.mods.pitchperfect.screen.base
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.Minecraft
