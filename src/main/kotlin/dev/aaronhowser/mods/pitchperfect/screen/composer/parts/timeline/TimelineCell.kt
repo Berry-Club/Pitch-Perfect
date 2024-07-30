@@ -113,7 +113,7 @@ data class TimelineCell(
         components.add(ModLanguageProvider.Tooltip.PITCH.toComponent(note.displayName))
 
         if (soundStrings.isNotEmpty()) {
-            components.add(ModLanguageProvider.Tooltip.SOUNDS_LIST.toComponent())
+            components.add(ModLanguageProvider.Tooltip.SOUNDS_LIST_START.toComponent())
             for (soundString in soundStrings) {
                 components.add(Component.literal("  - $soundString"))
             }
