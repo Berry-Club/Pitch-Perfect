@@ -68,13 +68,15 @@ data class TimelineCell(
         get() {
             val components = mutableListOf<MutableComponent>()
 
-            val delayAmountComponent = Component.literal(delay.toString()).withStyle(ChatFormatting.WHITE)
             val delayComponent = ModLanguageProvider.Tooltip.DELAY
-                .toComponent(delayAmountComponent).withStyle(ChatFormatting.GRAY)
+                .toComponent()
+                .withStyle(ChatFormatting.GRAY)
+                .append(Component.literal("$delay").withStyle(ChatFormatting.WHITE))
 
-            val noteComponent = Component.literal(note.displayName).withColor(note.rgb)
             val pitchComponent = ModLanguageProvider.Tooltip.PITCH
-                .toComponent(noteComponent).withStyle(ChatFormatting.GRAY)
+                .toComponent()
+                .withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(note.displayName).withColor(note.rgb))
 
             components.add(delayComponent)
             components.add(pitchComponent)
@@ -95,9 +97,11 @@ data class TimelineCell(
                     }.withStyle(ChatFormatting.WHITE)
 
                     val component = if (amount > 1) {
-                        ModLanguageProvider.Tooltip.SOUND_MULTIPLE.toComponent(instrumentComponent, amount)
+                        Component.literal(" - ").withStyle(ChatFormatting.GRAY)
+                            .append(instrumentComponent)
+                            .append(Component.literal(" x$amount").withStyle(ChatFormatting.WHITE))
                     } else {
-                        ModLanguageProvider.Tooltip.SOUND_SINGLE.toComponent(instrumentComponent)
+                        Component.literal(" - ").append(instrumentComponent)
                     }.withStyle(ChatFormatting.GRAY)
 
                     components.add(component)

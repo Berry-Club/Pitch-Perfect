@@ -70,9 +70,6 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         const val PITCH = "tooltip.pitchperfect.pitch"
         const val SOUNDS_LIST_START = "tooltip.pitchperfect.sounds_list_start"
 
-        const val SOUND_SINGLE = "tooltip.pitchperfect.sound_single"
-        const val SOUND_MULTIPLE = "tooltip.pitchperfect.sound_multiple"
-
     }
 
     object Advancement {
@@ -200,12 +197,9 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         add(Tooltip.PASTE, "Paste")
         add(Tooltip.PLAY, "Play")
         add(Tooltip.STOP, "Stop")
-        add(Tooltip.DELAY, "Delay: %s")
-        add(Tooltip.PITCH, "Pitch: %s")
+        add(Tooltip.DELAY, "Delay: ")
+        add(Tooltip.PITCH, "Pitch: ")
         add(Tooltip.SOUNDS_LIST_START, "Sounds:")
-
-        add(Tooltip.SOUND_SINGLE, " - %s")
-        add(Tooltip.SOUND_MULTIPLE, " - %s x%s")
 
         add(Misc.CREATIVE_TAB, "Pitch Perfect")
 

@@ -58,14 +58,12 @@
   "pitchperfect.song_uuid": "[UUID]",
   "subtitle.pitchperfect.instrument_broken": "Your instrument has broken!",
   "tooltip.pitchperfect.copy": "Copy",
-  "tooltip.pitchperfect.delay": "Delay: %s",
+  "tooltip.pitchperfect.delay": "Delay: ",
   "tooltip.pitchperfect.jump_to_beat": "Jump to beat",
   "tooltip.pitchperfect.jump_to_beat_specific": "Jump to beat %s",
   "tooltip.pitchperfect.paste": "Paste",
-  "tooltip.pitchperfect.pitch": "Pitch: %s",
+  "tooltip.pitchperfect.pitch": "Pitch: ",
   "tooltip.pitchperfect.play": "Play",
-  "tooltip.pitchperfect.sound_multiple": " - %s x%s",
-  "tooltip.pitchperfect.sound_single": " - %s",
   "tooltip.pitchperfect.sounds_list_start": "Sounds:",
   "tooltip.pitchperfect.stop": "Stop"
 }
