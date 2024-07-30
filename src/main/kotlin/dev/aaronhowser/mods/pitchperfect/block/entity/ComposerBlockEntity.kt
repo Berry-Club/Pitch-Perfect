@@ -2,11 +2,9 @@ package dev.aaronhowser.mods.pitchperfect.block.entity
 
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
-import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -14,7 +12,6 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.player.Player
@@ -34,7 +31,7 @@ class ComposerBlockEntity(
         const val AMOUNT_SLOTS = 1
         const val SHEET_MUSIC_SLOT = 0
 
-        const val WIP_SONG_UUID = "wip_song_uuid"
+        const val SONG_WIP_TAG = "song_wip"
     }
 
     private val itemHandler: ItemStackHandler = object : ItemStackHandler(AMOUNT_SLOTS) {
@@ -73,18 +70,17 @@ class ComposerBlockEntity(
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
 
-        val songWipUuid = pTag.getUuidOrNull(WIP_SONG_UUID)
-        if (songWipUuid != null) {
-            val songSavedData = level?.songData ?: return
-            songWip = songSavedData.getSongWip(songWipUuid)
-        }
+        val songWipTag = pTag.getCompound(SONG_WIP_TAG)
+        songWip = SongWip.fromCompoundTag(songWipTag)
     }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
 
-        val songWip = songWip ?: return
-        pTag.putUUID(WIP_SONG_UUID, songWip.uuid)
+        val timeline = songWip
+        if (timeline != null) {
+            pTag.put(SONG_WIP_TAG, timeline.toTag())
+        }
     }
 
     override fun getUpdateTag(pRegistries: HolderLookup.Provider): CompoundTag {
@@ -97,15 +93,7 @@ class ComposerBlockEntity(
 
     override fun setChanged() {
         super.setChanged()
-
-        val level = level ?: return
-        level.sendBlockUpdated(blockPos, blockState, blockState, 3)
-
-        if (level is ServerLevel) {
-            val songWip = songWip ?: return
-            level.songData.updateSongWip(songWip.uuid, songWip.song)
-        }
-
+        level?.sendBlockUpdated(blockPos, blockState, blockState, 3)
     }
 
     fun clickCell(

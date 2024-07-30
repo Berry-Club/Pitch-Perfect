@@ -111,7 +111,6 @@ class SongWip(
 
     fun toTag(): Tag {
         val tag = CompoundTag()
-        tag.putUUID(UUID_NBT, uuid)
         tag.putString(SONG_NBT, song.toString())
         return tag
     }
