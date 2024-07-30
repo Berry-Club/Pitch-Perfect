@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.enchantment
 
+import dev.aaronhowser.mods.pitchperfect.ModTags
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
@@ -88,21 +89,15 @@ object HealingBeatEnchantment {
         }
 
         fun mobIsWhitelisted(mob: LivingEntity): Boolean {
-            val whitelist = ServerConfig.HEALING_BEAT_WHITELIST.get()
-
             val entityType = mob.type
-            val entityRl = BuiltInRegistries.ENTITY_TYPE.getKey(entityType)
 
-            return whitelist.contains(entityRl.toString())
+            return entityType.`is`(ModTags.HEALING_BEAT_WHITELIST)
         }
 
         fun mobIsBlacklisted(mob: LivingEntity): Boolean {
-            val blacklist = ServerConfig.HEALING_BEAT_BLACKLIST.get()
-
             val entityType = mob.type
-            val entityRl = BuiltInRegistries.ENTITY_TYPE.getKey(entityType)
 
-            return blacklist.contains(entityRl.toString())
+            return entityType.`is`(ModTags.HEALING_BEAT_BLACKLIST)
         }
 
     }

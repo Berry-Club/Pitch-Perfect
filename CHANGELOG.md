@@ -65,3 +65,4 @@
 - And His Music Was Electric now works and looks nicer
 - When holding an instrument, it shows you what note your current look angle is mapped to
 - Added advancements
+- Healing Beat whitelist and blacklist moved to entity tag rather than config

@@ -16,9 +16,6 @@ class ServerConfig(
 
         lateinit var CHANCE_MOB_SPAWNS_WITH_INSTRUMENT: ModConfigSpec.DoubleValue
 
-        lateinit var HEALING_BEAT_WHITELIST: ModConfigSpec.ConfigValue<List<String>>
-        lateinit var HEALING_BEAT_BLACKLIST: ModConfigSpec.ConfigValue<List<String>>
-
         lateinit var HEAL_RANGE: ModConfigSpec.DoubleValue
         lateinit var HEAL_AMOUNT: ModConfigSpec.DoubleValue
         lateinit var HEAL_COOLDOWN_PER: ModConfigSpec.DoubleValue
@@ -59,16 +56,6 @@ class ServerConfig(
         HEAL_COOLDOWN_PER = builder
             .comment("How many ticks to cool down for every mob healed.\nExample: healing 2 mobs has a default cooldown of 3 ticks.")
             .defineInRange("Healing Cooldown Multiplier", 1.5, 0.0, Double.MAX_VALUE)
-
-        //TODO: Move this to use entity type tags
-        HEALING_BEAT_WHITELIST = builder
-            .comment("Mobs that Healing Beat can always heal\nExample: [\"minecraft:piglin\"]")
-            .defineListAllowEmpty("Healing Beat Whitelist", listOf()) { true }
-
-        //TODO: Move this to use entity type tags
-        HEALING_BEAT_BLACKLIST = builder
-            .comment("Mobs that Healing Beat can never heal\nExample: [\"minecraft:cow\"]")
-            .defineListAllowEmpty("Healing Beat Blacklist", listOf()) { true }
 
         BWAAAP_RANGE = builder
             .comment("The reach the BWAAAP enchantment has.")

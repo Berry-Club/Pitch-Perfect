@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.pitchperfect.datagen.loot.ModBlockLootTableSubProvid
 import dev.aaronhowser.mods.pitchperfect.datagen.model.ModBlockStateProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.model.ModItemModelProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModBlockTagsProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModEntityTypeTagsProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModItemTagsProvider
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.DataGenerator
@@ -56,6 +57,11 @@ object ModDataGen {
         val itemTagProvider = generator.addProvider(
             event.includeServer(),
             ModItemTagsProvider(output, lookupProvider, blockTagProvider.contentsGetter(), existingFileHelper)
+        )
+
+        val entityTypeTagProvider = generator.addProvider(
+            event.includeServer(),
+            ModEntityTypeTagsProvider(output, lookupProvider, existingFileHelper)
         )
 
         val blockLootTableProvider = generator.addProvider(
