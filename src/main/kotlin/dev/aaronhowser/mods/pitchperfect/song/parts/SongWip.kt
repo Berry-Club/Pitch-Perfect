@@ -1,10 +1,12 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
+import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.core.Holder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvent
 
@@ -91,11 +93,24 @@ class SongWip(
         return list
     }
 
-    fun getSoundStringsAt(
+    fun getSoundComponentsAt(
         delay: Int,
         pitch: Int
-    ): List<String> {
-        return getSoundsAt(delay, pitch).map { it.value().location.toString() }
+    ): List<Component> {
+        val soundsAt = getSoundsAt(delay, pitch)
+
+        val list = mutableListOf<Component>()
+
+        for (soundHolder in soundsAt) {
+            val instrument = ModItems.instruments.find { it.get().instrument == soundHolder.value() }
+
+            val component: Component = instrument?.get()?.description
+                ?: Component.literal("Unknown Instrument: ${soundHolder.key}")
+
+            list.add(component)
+        }
+
+        return list
     }
 
     fun toTag(): Tag {

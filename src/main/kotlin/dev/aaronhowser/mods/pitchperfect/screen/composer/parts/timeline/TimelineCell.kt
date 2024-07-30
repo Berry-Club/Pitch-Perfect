@@ -55,10 +55,10 @@ data class TimelineCell(
     val note: Note
         get() = Note.getFromPitch(pitchInt)
 
-    private val soundStrings: List<String>
+    private val soundNames: List<Component>
         get() {
             val songWip = timeline.composerScreen.songWip ?: return emptyList()
-            return songWip.getSoundStringsAt(delay, pitchInt)
+            return songWip.getSoundComponentsAt(delay, pitchInt)
         }
 
     val sounds: List<Holder<SoundEvent>>
@@ -69,7 +69,7 @@ data class TimelineCell(
 
     private val argb: Int
         get() {
-            if (soundStrings.isEmpty()) return if (delay % 16 < 8) COLOR_DEFAULT_LIGHT else COLOR_DEFAULT_DARK
+            if (soundNames.isEmpty()) return if (delay % 16 < 8) COLOR_DEFAULT_LIGHT else COLOR_DEFAULT_DARK
 
             val noteColor = Note.getFromPitch(pitchInt).withAlpha(0.8f)
 
@@ -112,10 +112,10 @@ data class TimelineCell(
         components.add(ModLanguageProvider.Tooltip.DELAY.toComponent(delay))
         components.add(ModLanguageProvider.Tooltip.PITCH.toComponent(note.displayName))
 
-        if (soundStrings.isNotEmpty()) {
+        if (soundNames.isNotEmpty()) {
             components.add(ModLanguageProvider.Tooltip.SOUNDS_LIST_START.toComponent())
-            for (soundString in soundStrings) {
-                components.add(Component.literal("  - $soundString"))
+            for (soundName in soundNames) {
+                components.add(Component.literal("  - ").append(soundName))
             }
         }
 
