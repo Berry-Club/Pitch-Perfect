@@ -68,34 +68,40 @@ data class TimelineCell(
         get() {
             val components = mutableListOf<MutableComponent>()
 
-            components.add(ModLanguageProvider.Tooltip.DELAY.toComponent(delay))
-            components.add(ModLanguageProvider.Tooltip.PITCH.toComponent(note.displayName))
+            val delayAmountComponent = Component.literal(delay.toString()).withStyle(ChatFormatting.WHITE)
+            val delayComponent = ModLanguageProvider.Tooltip.DELAY
+                .toComponent(delayAmountComponent).withStyle(ChatFormatting.GRAY)
+
+            val noteComponent = Component.literal(note.displayName).withColor(note.rgb)
+            val pitchComponent = ModLanguageProvider.Tooltip.PITCH
+                .toComponent(noteComponent).withStyle(ChatFormatting.GRAY)
+
+            components.add(delayComponent)
+            components.add(pitchComponent)
 
             if (sounds.isNotEmpty()) {
-                components.add(ModLanguageProvider.Tooltip.SOUNDS_LIST_START.toComponent())
+                val listStartComponent = ModLanguageProvider.Tooltip.SOUNDS_LIST_START
+                    .toComponent().withStyle(ChatFormatting.GRAY)
+                components.add(listStartComponent)
 
                 val countMap = sounds.groupingBy { it }.eachCount()
                 for ((soundHolder, amount) in countMap) {
                     val instrument = ModItems.instruments.find { it.get().instrument == soundHolder.value() }
 
                     val instrumentComponent = if (instrument != null) {
-                        instrument.get().description
+                        instrument.get().description as MutableComponent
                     } else {
                         Component.literal(soundHolder.key.toString())
-                    }
+                    }.withStyle(ChatFormatting.WHITE)
 
                     val component = if (amount > 1) {
                         ModLanguageProvider.Tooltip.SOUND_MULTIPLE.toComponent(instrumentComponent, amount)
                     } else {
                         ModLanguageProvider.Tooltip.SOUND_SINGLE.toComponent(instrumentComponent)
-                    }
+                    }.withStyle(ChatFormatting.GRAY)
 
                     components.add(component)
                 }
-            }
-
-            for (component in components) {
-                component.withColor(ChatFormatting.GRAY.color!!)
             }
 
             return components
