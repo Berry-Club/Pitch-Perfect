@@ -10,6 +10,7 @@ import net.minecraft.nbt.Tag
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.saveddata.SavedData
 import java.util.*
 
@@ -66,6 +67,8 @@ class SongSavedData : SavedData() {
             )
         }
 
+        val Level.songData: SongSavedData?
+            get() = if (this is ServerLevel) get(this) else null
         val ServerLevel.songData: SongSavedData
             get() = get(this.server.overworld())
         val MinecraftServer.songData: SongSavedData
@@ -114,21 +117,34 @@ class SongSavedData : SavedData() {
         return songs.getOrDefault(uuid, null)
     }
 
-    fun getSongInfos(): List<SongInfo> {
-        return songs.values.toList()
-    }
-
-    fun getSongInfosBy(author: Player): List<SongInfo> {
-        return getSongInfosBy(author.uuid)
-    }
-
-    fun getSongInfosBy(author: UUID): List<SongInfo> {
-        return songs.values.filter { it.authorUuid == author }
-    }
-
     fun getSongInfosGroupedByAuthor(): List<SongInfo> {
         val compareBy: Comparator<SongInfo> = compareBy(SongInfo::authorName, SongInfo::title)
         return songs.values.sortedWith(compareBy)
+    }
+
+    fun addSongWip(songWip: SongWip) {
+        wipSongs[songWip.uuid] = songWip
+        setDirty()
+    }
+
+    fun updateSongWip(uuid: UUID, song: Song) {
+        val songWip = wipSongs[uuid]
+
+        if (songWip == null) {
+            addSongWip(SongWip(uuid, song))
+        }
+
+        songWip?.song = song
+        setDirty()
+    }
+
+    fun removeSongWip(uuid: UUID) {
+        wipSongs.remove(uuid)
+        setDirty()
+    }
+
+    fun getSongWip(uuid: UUID): SongWip? {
+        return wipSongs.getOrDefault(uuid, null)
     }
 
     override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
