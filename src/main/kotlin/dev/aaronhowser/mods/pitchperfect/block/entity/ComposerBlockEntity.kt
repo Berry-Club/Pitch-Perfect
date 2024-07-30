@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.neoforged.neoforge.items.IItemHandler
 import net.neoforged.neoforge.items.ItemStackHandler
+import java.util.*
 
 class ComposerBlockEntity(
     pPos: BlockPos,
@@ -121,8 +122,10 @@ class ComposerBlockEntity(
         }
     }
 
-    fun setSong(song: Song) {
-        songWip = SongWip(song)
+    fun setSong(song: Song, uuid: UUID? = null) {
+        val realUuid = uuid ?: songWip?.uuid ?: UUID.randomUUID()
+
+        songWip = SongWip(realUuid, song)
         setChanged()
     }
 
