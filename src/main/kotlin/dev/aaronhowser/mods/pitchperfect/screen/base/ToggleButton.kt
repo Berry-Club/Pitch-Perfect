@@ -11,7 +11,8 @@ import net.minecraft.util.Mth
 class ToggleButton(
     width: Int,
     height: Int,
-    message: Component,
+    private val messageOn: Component,
+    private val messageOff: Component = messageOn,
     spriteWidth: Int,
     spriteHeight: Int,
     sprite: ResourceLocation,
@@ -19,7 +20,7 @@ class ToggleButton(
     narration: CreateNarration?
 ) : SpriteIconButton.CenteredIcon(
     width, height,
-    message,
+    messageOn,
     spriteWidth, spriteHeight,
     sprite,
     onPress,
@@ -31,6 +32,14 @@ class ToggleButton(
     }
 
     var toggledOn = false
+
+    override fun getMessage(): Component {
+        return if (this.toggledOn) {
+            this.messageOn
+        } else {
+            this.messageOff
+        }
+    }
 
     override fun renderWidget(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         val minecraft = Minecraft.getInstance()

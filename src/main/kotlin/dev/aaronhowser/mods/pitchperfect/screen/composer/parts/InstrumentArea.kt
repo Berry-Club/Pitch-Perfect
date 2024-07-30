@@ -69,12 +69,13 @@ class InstrumentArea(
         x: Int, y: Int,
         width: Int, height: Int,
         image: ResourceLocation,
-        component: Component = Component.empty(),
+        messageOn: Component,
+        messageOff: Component = messageOn,
         onPress: (Button) -> Unit = {}
     ) {
         val button = ToggleButton(
             width, height,
-            component,
+            messageOn, messageOff,
             16, 16,
             image,
             onPress,
