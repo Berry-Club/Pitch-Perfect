@@ -27,8 +27,7 @@ class ToggleButton(
 ) {
 
     companion object {
-        val SPRITE_LIGHT: ResourceLocation = ResourceLocation.withDefaultNamespace("widget/button")
-        val SPRITE_DARK: ResourceLocation = ResourceLocation.withDefaultNamespace("widget/button_disabled")
+        private val SPRITE_LIGHT: ResourceLocation = ResourceLocation.withDefaultNamespace("widget/button")
     }
 
     var toggledOn = false
@@ -40,16 +39,16 @@ class ToggleButton(
 
     override fun renderWidget(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         val minecraft = Minecraft.getInstance()
-        pGuiGraphics.setColor(1.0f, 1.0f, 1.0f, this.alpha)
+        if (this.toggledOn) {
+            pGuiGraphics.setColor(0.65f, 0.65f, 0.65f, this.alpha)
+        } else {
+            pGuiGraphics.setColor(1.0f, 1.0f, 1.0f, this.alpha)
+        }
         RenderSystem.enableBlend()
         RenderSystem.enableDepthTest()
 
         pGuiGraphics.blitSprite(
-            if (this.toggledOn) {
-                SPRITE_DARK
-            } else {
-                SPRITE_LIGHT
-            },
+            SPRITE_LIGHT,
             this.x,
             this.y,
             this.getWidth(),
