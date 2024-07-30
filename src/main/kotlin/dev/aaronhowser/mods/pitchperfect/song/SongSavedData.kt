@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.pitchperfect.song
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
-import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -16,19 +15,18 @@ import java.util.*
 class SongSavedData : SavedData() {
 
     private val songs: MutableMap<UUID, SongInfo> = mutableMapOf()
-    private val wipSongs: MutableMap<UUID, SongWip> = mutableMapOf()
 
     companion object {
         private fun create() = SongSavedData()
 
         private const val SONGS_TAG = "songs"
-        private const val WIP_SONGS_TAG = "wip_songs"
 
         private fun load(pTag: CompoundTag, provider: HolderLookup.Provider): SongSavedData {
             val songData = SongSavedData()
             songData.songs.clear()
 
             val songInfoListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
+
             for (i in songInfoListTag.indices) {
                 val songInfoTag = songInfoListTag[i] as CompoundTag
                 val songInfo = SongInfo.fromCompoundTag(songInfoTag)
@@ -39,19 +37,6 @@ class SongSavedData : SavedData() {
                 }
 
                 songData.songs[songInfo.song.uuid] = songInfo
-            }
-
-            val songWipListTag = pTag.getList(WIP_SONGS_TAG, Tag.TAG_COMPOUND.toInt())
-            for (i in songWipListTag.indices) {
-                val songWipTag = songWipListTag[i] as CompoundTag
-                val songWip = SongWip.fromCompoundTag(songWipTag)
-
-                if (songWip == null) {
-                    PitchPerfect.LOGGER.error("Failed to load wip song from tag: $songWipTag")
-                    continue
-                }
-
-                songData.wipSongs[songWip.uuid] = songWip
             }
 
             return songData
@@ -133,16 +118,12 @@ class SongSavedData : SavedData() {
 
     override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
         val songListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
+
         for (songInfo in songs.values) {
             songListTag.add(songInfo.toTag())
         }
-        pTag.put(SONGS_TAG, songListTag)
 
-        val wipSongListTag = pTag.getList(WIP_SONGS_TAG, Tag.TAG_COMPOUND.toInt())
-        for (songWip in wipSongs.values) {
-            wipSongListTag.add(songWip.toTag())
-        }
-        pTag.put(WIP_SONGS_TAG, wipSongListTag)
+        pTag.put(SONGS_TAG, songListTag)
 
         return pTag
     }
