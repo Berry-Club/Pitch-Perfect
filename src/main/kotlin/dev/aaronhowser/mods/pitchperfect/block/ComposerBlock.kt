@@ -1,13 +1,13 @@
 package dev.aaronhowser.mods.pitchperfect.block
 
 import com.mojang.serialization.MapCodec
+import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -69,10 +69,17 @@ class ComposerBlock(
         pNewState: BlockState,
         pMovedByPiston: Boolean
     ) {
+
         if (pState.block != pNewState.block) {
             val blockEntity = pLevel.getBlockEntity(pPos)
             if (blockEntity is ComposerBlockEntity) {
                 blockEntity.dropDrops()
+
+                val songWip = blockEntity.songWip
+                if (songWip != null) {
+                    PitchPerfect.LOGGER.info("A Composer with a song was broken!")
+                    PitchPerfect.LOGGER.info(songWip.song.toString())
+                }
             }
         }
 
