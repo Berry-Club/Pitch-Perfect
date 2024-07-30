@@ -9,12 +9,14 @@ import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.map
+import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.core.Holder
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.sounds.SoundEvent
 
 data class TimelineCell(
@@ -64,7 +66,7 @@ data class TimelineCell(
 
     private val componentList: List<Component>
         get() {
-            val components = mutableListOf<Component>()
+            val components = mutableListOf<MutableComponent>()
 
             components.add(ModLanguageProvider.Tooltip.DELAY.toComponent(delay))
             components.add(ModLanguageProvider.Tooltip.PITCH.toComponent(note.displayName))
@@ -90,6 +92,10 @@ data class TimelineCell(
 
                     components.add(component)
                 }
+            }
+
+            for (component in components) {
+                component.withColor(ChatFormatting.GRAY.color!!)
             }
 
             return components
