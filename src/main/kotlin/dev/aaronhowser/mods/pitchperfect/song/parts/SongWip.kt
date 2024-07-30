@@ -1,18 +1,19 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
-import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.core.Holder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvent
+import java.util.*
 
 class SongWip(
     var song: Song
 ) {
+
+    val uuid: UUID = UUID.randomUUID()
 
     companion object {
         val CODEC: Codec<SongWip> =
