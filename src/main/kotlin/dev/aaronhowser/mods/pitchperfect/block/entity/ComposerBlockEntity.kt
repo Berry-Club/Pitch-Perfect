@@ -67,20 +67,18 @@ class ComposerBlockEntity(
         return itemHandler.getStackInSlot(SHEET_MUSIC_SLOT)
     }
 
-    private var songWipUuid: UUID? = null
+    var songWip: SongWip? = null
+        private set
 
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
 
-        songWipUuid = pTag.getUuidOrNull(WIP_SONG_UUID)
-    }
-
-    val songWip: SongWip?
-        get() {
-            val level = this.level as? ServerLevel ?: return null
-            val songWipUuid = songWipUuid ?: return null
-            return level.songData.getSongWip(songWipUuid)
+        val songWipUuid = pTag.getUuidOrNull(WIP_SONG_UUID)
+        if (songWipUuid != null) {
+            val songSavedData = level?.songData ?: return
+            songWip = songSavedData.getSongWip(songWipUuid)
         }
+    }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
@@ -100,13 +98,14 @@ class ComposerBlockEntity(
     override fun setChanged() {
         super.setChanged()
 
-        val level = this.level ?: return
+        val level = level ?: return
         level.sendBlockUpdated(blockPos, blockState, blockState, 3)
 
         if (level is ServerLevel) {
             val songWip = songWip ?: return
             level.songData.updateSongWip(songWip.uuid, songWip.song)
         }
+
     }
 
     fun clickCell(
@@ -116,10 +115,8 @@ class ComposerBlockEntity(
         leftClick: Boolean,
         instrument: String
     ) {
-        if (level !is ServerLevel) return
-
-        if (songWipUuid == null) {
-            songWipUuid = UUID.randomUUID()
+        if (songWip == null) {
+            songWip = SongWip()
         }
 
         val note = Note.getFromPitch(pitch)
@@ -132,19 +129,15 @@ class ComposerBlockEntity(
             } else {
                 removeBeat(delay, note, soundHolder)
             }
-        }
 
-        setChanged()
+            setChanged()
+        }
     }
 
     fun setSong(song: Song, uuid: UUID? = null) {
-        val level = this.level as? ServerLevel ?: return
-
         val realUuid = uuid ?: songWip?.uuid ?: UUID.randomUUID()
 
-        val songData = level.songData
-        songData.updateSongWip(realUuid, song)
-
+        songWip = SongWip(realUuid, song)
         setChanged()
     }
 
