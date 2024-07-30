@@ -27,6 +27,10 @@ data class UuidComponent(
         val songUuidComponent: DataComponentType<UuidComponent> by lazy {
             ModDataComponents.SONG_UUID_COMPONENT.get()
         }
+
+        val songWipUuidComponent: DataComponentType<UuidComponent> by lazy {
+            ModDataComponents.SONG_WIP_UUID_COMPONENT.get()
+        }
     }
 
 }
