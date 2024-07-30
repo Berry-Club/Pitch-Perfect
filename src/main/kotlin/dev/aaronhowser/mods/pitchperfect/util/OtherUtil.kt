@@ -1,9 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect.util
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.AABB
+import java.util.*
 
 object OtherUtil {
 
@@ -27,6 +29,10 @@ object OtherUtil {
                 originEntity.z + range
             )
         ).filterIsInstance<LivingEntity>()
+    }
+
+    fun CompoundTag.getUuidOrNull(key: String): UUID? {
+        return if (this.contains(key)) this.getUUID(key) else null
     }
 
 }

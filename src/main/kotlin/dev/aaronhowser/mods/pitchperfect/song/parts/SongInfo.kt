@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -128,22 +129,17 @@ data class SongInfo(
             )
 
         fun fromCompoundTag(tag: CompoundTag): SongInfo? {
-            try {
-                val title = tag.getString(TITLE)
-                val authorUuid = tag.getUUID(AUTHOR_UUID)
-                val authorName = tag.getString(AUTHOR_NAME)
-                val song = Song.fromString(tag.getString(SONG))
+            val title = tag.getString(TITLE)
+            val authorUuid = tag.getUuidOrNull(AUTHOR_UUID) ?: return null
+            val authorName = tag.getString(AUTHOR_NAME)
+            val song = Song.fromString(tag.getString(SONG))
 
-                if (song == null) {
-                    PitchPerfect.LOGGER.error("Failed to parse song from tag: $tag")
-                    return null
-                }
-
-                return SongInfo(title, authorUuid, authorName, song)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            if (song == null) {
+                PitchPerfect.LOGGER.error("Failed to parse song from tag: $tag")
                 return null
             }
+
+            return SongInfo(title, authorUuid, authorName, song)
         }
     }
 
