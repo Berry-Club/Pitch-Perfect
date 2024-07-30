@@ -67,6 +67,14 @@ repositories {
     maven {
         url "https://cursemaven.com"
     }
+
+    maven {
+        url "https://maven.latvian.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
+
 }
 
 dependencies {
@@ -75,8 +83,7 @@ dependencies {
     implementation "thedarkcolour:kotlinforforge-neoforge:${kff_version}"
 
     // KubeJs
-    implementation "curse.maven:kubejs-238086:5572436"
-    implementation "curse.maven:rhino-416294:5554415"
+    runtimeOnly "dev.latvian.mods:kubejs-neoforge:${kubejs_version}"
 
     // Building Gadgets
     implementation "curse.maven:building-gadgets-298187:5464117"
