@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
+import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
@@ -55,21 +56,41 @@ data class TimelineCell(
     val note: Note
         get() = Note.getFromPitch(pitchInt)
 
-    private val soundNames: List<Component>
-        get() {
-            val songWip = timeline.composerScreen.songWip ?: return emptyList()
-            return songWip.getSoundComponentsAt(delay, pitchInt)
-        }
-
     val sounds: List<Holder<SoundEvent>>
         get() {
             val songWip = timeline.composerScreen.songWip ?: return emptyList()
             return songWip.getSoundsAt(delay, pitchInt)
         }
 
+    private val componentList: List<Component>
+        get() {
+            val components = mutableListOf<Component>()
+
+            components.add(ModLanguageProvider.Tooltip.DELAY.toComponent(delay))
+            components.add(ModLanguageProvider.Tooltip.PITCH.toComponent(note.displayName))
+
+            if (sounds.isNotEmpty()) {
+                components.add(ModLanguageProvider.Tooltip.SOUNDS_LIST_START.toComponent())
+
+                for (soundHolder in sounds) {
+                    val instrument = ModItems.instruments.find { it.get().instrument == soundHolder.value() }
+
+                    val component = if (instrument != null) {
+                        Component.literal(" - ").append(instrument.get().description)
+                    } else {
+                        Component.literal("Unknown Instrument: ${soundHolder.key}")
+                    }
+
+                    components.add(component)
+                }
+            }
+
+            return components
+        }
+
     private val argb: Int
         get() {
-            if (soundNames.isEmpty()) return if (delay % 16 < 8) COLOR_DEFAULT_LIGHT else COLOR_DEFAULT_DARK
+            if (sounds.isEmpty()) return if (delay % 16 < 8) COLOR_DEFAULT_LIGHT else COLOR_DEFAULT_DARK
 
             val noteColor = Note.getFromPitch(pitchInt).withAlpha(0.8f)
 
@@ -107,21 +128,9 @@ data class TimelineCell(
     }
 
     private fun renderTooltip(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int) {
-        val components = mutableListOf<Component>()
-
-        components.add(ModLanguageProvider.Tooltip.DELAY.toComponent(delay))
-        components.add(ModLanguageProvider.Tooltip.PITCH.toComponent(note.displayName))
-
-        if (soundNames.isNotEmpty()) {
-            components.add(ModLanguageProvider.Tooltip.SOUNDS_LIST_START.toComponent())
-            for (soundName in soundNames) {
-                components.add(Component.literal("  - ").append(soundName))
-            }
-        }
-
         pGuiGraphics.renderComponentTooltip(
             timeline.font,
-            components,
+            componentList,
             pMouseX,
             pMouseY
         )

@@ -93,26 +93,6 @@ class SongWip(
         return list
     }
 
-    fun getSoundComponentsAt(
-        delay: Int,
-        pitch: Int
-    ): List<Component> {
-        val soundsAt = getSoundsAt(delay, pitch)
-
-        val list = mutableListOf<Component>()
-
-        for (soundHolder in soundsAt) {
-            val instrument = ModItems.instruments.find { it.get().instrument == soundHolder.value() }
-
-            val component: Component = instrument?.get()?.description
-                ?: Component.literal("Unknown Instrument: ${soundHolder.key}")
-
-            list.add(component)
-        }
-
-        return list
-    }
-
     fun toTag(): Tag {
         val tag = CompoundTag()
         tag.putString(SONG_NBT, song.toString())
