@@ -32,11 +32,6 @@ class ToggleButton(
 
     var toggledOn = false
 
-    override fun onPress() {
-        this.toggledOn = !this.toggledOn
-        super.onPress()
-    }
-
     override fun renderWidget(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         val minecraft = Minecraft.getInstance()
         if (this.toggledOn) {

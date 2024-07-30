@@ -17,8 +17,11 @@ class InstrumentArea(
         addInstrumentButtons()
     }
 
-    //TODO: tooltip saying what each button is
+    private val buttons = mutableListOf<ToggleButton>()
+
     private fun addInstrumentButtons() {
+        buttons.clear()
+
         var y = composerScreen.timeline.topPos
 
         val buttonSize = 20
@@ -44,6 +47,8 @@ class InstrumentArea(
                 } else {
                     instrument
                 }
+
+                deselectAllOthers()
             }
 
             if (!isLeft) {
@@ -51,6 +56,12 @@ class InstrumentArea(
             }
 
             isLeft = !isLeft
+        }
+    }
+
+    private fun deselectAllOthers() {
+        for (button in buttons) {
+            button.toggledOn = button.message == composerScreen.selectedInstrument?.displayName
         }
     }
 
@@ -72,6 +83,8 @@ class InstrumentArea(
             this.x = x
             this.y = y
         }
+
+        buttons.add(button)
 
         composerScreen.addRenderableWidgets(button)
     }
