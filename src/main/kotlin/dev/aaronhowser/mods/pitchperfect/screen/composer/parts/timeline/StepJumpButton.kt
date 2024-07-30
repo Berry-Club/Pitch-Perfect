@@ -20,8 +20,8 @@ class StepJumpButton(
 ) {
 
     companion object {
-        private const val WIDTH = ScreenTextures.Sprite.StepJump.WIDTH
-        private const val HEIGHT = ScreenTextures.Sprite.StepJump.HEIGHT
+        private const val WIDTH = ScreenTextures.Sprite.Control.StepJump.WIDTH
+        private const val HEIGHT = ScreenTextures.Sprite.Control.StepJump.HEIGHT
 
         private fun getLeftPos(timeline: Timeline, gridX: Int): Int = timeline.leftPos + 1 + gridX * (WIDTH + 1)
         private fun getTopPos(timeline: Timeline): Int = timeline.topPos - 4
@@ -32,15 +32,15 @@ class StepJumpButton(
 
     override fun renderWidget(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         pGuiGraphics.blitSprite(
-            ScreenTextures.Sprite.StepJump.STEP_JUMPER,
-            ScreenTextures.Sprite.StepJump.CANVAS_SIZE,
-            ScreenTextures.Sprite.StepJump.CANVAS_SIZE,
+            ScreenTextures.Sprite.Control.StepJump.STEP_JUMPER,
+            ScreenTextures.Sprite.Control.StepJump.CANVAS_SIZE,
+            ScreenTextures.Sprite.Control.StepJump.CANVAS_SIZE,
             0,
             0,
             this.x,
             this.y,
-            ScreenTextures.Sprite.StepJump.WIDTH,
-            ScreenTextures.Sprite.StepJump.HEIGHT
+            ScreenTextures.Sprite.Control.StepJump.WIDTH,
+            ScreenTextures.Sprite.Control.StepJump.HEIGHT
         )
 
         if (isMouseOver(pMouseX.toDouble(), pMouseY.toDouble())) {
