@@ -33,7 +33,12 @@ class InstrumentArea(
                 composerScreen.timeline.rightPos + 5 + buttonSize + 2
             }
 
-            addIconButton(x, y, buttonSize, buttonSize, instrument.image) {
+            addIconButton(
+                x, y,
+                buttonSize, buttonSize,
+                instrument.image,
+                instrument.displayName,
+            ) {
                 composerScreen.selectedInstrument = if (composerScreen.selectedInstrument === instrument) {
                     null
                 } else {
@@ -71,10 +76,11 @@ class InstrumentArea(
 
     fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         val instrument = composerScreen.selectedInstrument ?: return
+        val component = instrument.displayName
 
         pGuiGraphics.drawString(
             font,
-            instrument.noteBlockInstrument.name,
+            component,
             composerScreen.timeline.rightPos + 5,
             composerScreen.timeline.topPos - 10,
             0xFFFFFF
