@@ -4,7 +4,6 @@ import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
-import net.minecraft.client.gui.components.SpriteIconButton
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
@@ -61,15 +60,17 @@ class InstrumentArea(
         component: Component = Component.empty(),
         onPress: (Button) -> Unit = {}
     ) {
-        val button = SpriteIconButton
-            .builder(component, onPress, true)
-            .sprite(image, 16, 16)
-            .size(width, height)
-            .build()
-            .apply {
-                this.x = x
-                this.y = y
-            }
+        val button = ToggleButton(
+            width, height,
+            component,
+            16, 16,
+            image,
+            onPress,
+            null
+        ).apply {
+            this.x = x
+            this.y = y
+        }
 
         composerScreen.addRenderableWidgets(button)
     }
