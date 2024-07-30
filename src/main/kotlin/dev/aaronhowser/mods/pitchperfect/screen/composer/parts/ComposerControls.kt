@@ -116,7 +116,7 @@ class ComposerControls(
             composerScreen.timeline.topPos - 22,
             16,
             16,
-            ScreenTextures.Sprite.Instrument.BIT,
+            ScreenTextures.Sprite.Control.PLAY,
             ModLanguageProvider.Tooltip.PLAY.toComponent()
         ) { startPlaying() }
 
@@ -125,7 +125,7 @@ class ComposerControls(
             composerScreen.timeline.topPos - 22,
             16,
             16,
-            ScreenTextures.Sprite.Instrument.BIT,
+            ScreenTextures.Sprite.Control.STOP,
             ModLanguageProvider.Tooltip.STOP.toComponent()
         ) { stopPlaying() }
 
@@ -134,7 +134,7 @@ class ComposerControls(
             composerScreen.timeline.topPos - 22,
             16,
             16,
-            ScreenTextures.Sprite.Instrument.BIT,
+            ScreenTextures.Sprite.Control.COPY,
             ModLanguageProvider.Tooltip.COPY.toComponent()
         ) { copySong() }
 
@@ -143,7 +143,7 @@ class ComposerControls(
             composerScreen.timeline.topPos - 22,
             16,
             16,
-            ScreenTextures.Sprite.Instrument.BIT,
+            ScreenTextures.Sprite.Control.PASTE,
             ModLanguageProvider.Tooltip.PASTE.toComponent()
         ) { pasteSong() }
 

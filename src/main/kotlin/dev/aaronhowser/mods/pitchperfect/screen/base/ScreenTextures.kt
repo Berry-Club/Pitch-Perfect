@@ -47,6 +47,12 @@ object ScreenTextures {
                 const val HEIGHT = 3
             }
 
+            val PLAY = OtherUtil.modResource("play")
+            val STOP = OtherUtil.modResource("stop")
+
+            val COPY = OtherUtil.modResource("copy")
+            val PASTE = OtherUtil.modResource("paste")
+
         }
 
     }
