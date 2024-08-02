@@ -13,8 +13,6 @@ class SongWip(
     var song: Song
 ) {
 
-    val uuid: UUID = UUID.randomUUID()
-
     companion object {
         val CODEC: Codec<SongWip> =
             Song.CODEC.xmap(::SongWip, SongWip::song)
