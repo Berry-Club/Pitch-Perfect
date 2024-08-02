@@ -9,7 +9,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.player.Player
 import java.util.*
 
-data class Author(
+data class SongAuthor(
     val uuid: UUID,
     val name: String
 ) {
@@ -17,19 +17,19 @@ data class Author(
     constructor(player: Player) : this(player.uuid, player.gameProfile.name)
 
     companion object {
-        val CODEC: Codec<Author> =
+        val CODEC: Codec<SongAuthor> =
             RecordCodecBuilder.create {
                 it.group(
-                    UuidComponent.UUID_CODEC.fieldOf("uuid").forGetter(Author::uuid),
-                    Codec.STRING.fieldOf("name").forGetter(Author::name)
-                ).apply(it, ::Author)
+                    UuidComponent.UUID_CODEC.fieldOf("uuid").forGetter(SongAuthor::uuid),
+                    Codec.STRING.fieldOf("name").forGetter(SongAuthor::name)
+                ).apply(it, ::SongAuthor)
             }
 
-        val STREAM_CODEC: StreamCodec<ByteBuf, Author> =
+        val STREAM_CODEC: StreamCodec<ByteBuf, SongAuthor> =
             StreamCodec.composite(
-                UuidComponent.UUID_STREAM_CODEC, Author::uuid,
-                ByteBufCodecs.STRING_UTF8, Author::name,
-                ::Author
+                UuidComponent.UUID_STREAM_CODEC, SongAuthor::uuid,
+                ByteBufCodecs.STRING_UTF8, SongAuthor::name,
+                ::SongAuthor
             )
     }
 

@@ -19,7 +19,7 @@ import net.minecraft.world.entity.player.Player
 
 data class SongInfo(
     val title: String,
-    val authors: List<Author>,
+    val songAuthors: List<SongAuthor>,
     val song: Song
 ) {
 
@@ -27,7 +27,7 @@ data class SongInfo(
         title: String,
         player: Player,
         song: Song
-    ) : this(title, listOf(Author(player)), song)
+    ) : this(title, listOf(SongAuthor(player)), song)
 
     fun toTag(): Tag {
         val compoundTag = CompoundTag()
@@ -35,7 +35,7 @@ data class SongInfo(
 
         val tagAuthors = compoundTag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
 
-        for (author in authors) {
+        for (author in songAuthors) {
             val authorTag = CompoundTag()
             authorTag.putUUID(AUTHOR_UUID, author.uuid)
             authorTag.putString(AUTHOR_NAME, author.name)
@@ -68,7 +68,7 @@ data class SongInfo(
             }
 
         val authorsHoverComponent = Component.empty()
-        for (author in authors) {
+        for (author in songAuthors) {
             authorsHoverComponent.append(Component.literal(author.name))
         }
 
@@ -144,7 +144,7 @@ data class SongInfo(
             RecordCodecBuilder.create { instance ->
                 instance.group(
                     Codec.STRING.fieldOf(TITLE).forGetter(SongInfo::title),
-                    Author.CODEC.listOf().fieldOf(AUTHORS).forGetter(SongInfo::authors),
+                    SongAuthor.CODEC.listOf().fieldOf(AUTHORS).forGetter(SongInfo::songAuthors),
                     Song.CODEC.fieldOf(SONG).forGetter(SongInfo::song)
                 ).apply(instance, ::SongInfo)
             }
@@ -152,7 +152,7 @@ data class SongInfo(
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SongInfo> =
             StreamCodec.composite(
                 ByteBufCodecs.STRING_UTF8, SongInfo::title,
-                Author.STREAM_CODEC.apply(ByteBufCodecs.list()), SongInfo::authors,
+                SongAuthor.STREAM_CODEC.apply(ByteBufCodecs.list()), SongInfo::songAuthors,
                 Song.STREAM_CODEC, SongInfo::song,
                 ::SongInfo
             )
@@ -160,7 +160,7 @@ data class SongInfo(
         fun fromCompoundTag(tag: CompoundTag): SongInfo? {
             val title = tag.getString(TITLE)
 
-            val authors = mutableListOf<Author>()
+            val songAuthors = mutableListOf<SongAuthor>()
             val tagAuthors = tag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
             for (authorTag in tagAuthors) {
                 val authorCompoundTag = authorTag as? CompoundTag ?: continue
@@ -168,7 +168,7 @@ data class SongInfo(
                 val uuid = authorCompoundTag.getUuidOrNull(AUTHOR_UUID) ?: continue
                 val name = authorCompoundTag.getString(AUTHOR_NAME)
 
-                authors.add(Author(uuid, name))
+                songAuthors.add(SongAuthor(uuid, name))
             }
 
             val song = Song.fromString(tag.getString(SONG))
@@ -178,7 +178,7 @@ data class SongInfo(
                 return null
             }
 
-            return SongInfo(title, authors, song)
+            return SongInfo(title, songAuthors, song)
         }
     }
 

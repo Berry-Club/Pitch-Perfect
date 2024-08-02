@@ -108,7 +108,7 @@ class SongSavedData : SavedData() {
     }
 
     fun getSongInfosBy(author: UUID): List<SongInfo> {
-        return songs.values.filter { songInfo -> songInfo.authors.any { it.uuid == author } }
+        return songs.values.filter { songInfo -> songInfo.songAuthors.any { it.uuid == author } }
     }
 
     fun getSongInfosGroupedByAuthor(): List<SongInfo> {
