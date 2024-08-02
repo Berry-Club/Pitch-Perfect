@@ -60,7 +60,7 @@ class ConductorBlockEntity(
         )
 
         level?.setBlock(blockPos, newBottomState, 1 or 2) // 1 = update adjacent, 2 = send to client
-        level?.sendBlockUpdated(blockPos, blockState, blockState, 1 or 2)
+        level?.sendBlockUpdated(blockPos, blockState, blockState, 1 or 2 or 8)
 
         val oldTopState = level?.getBlockState(blockPos.above()) ?: return
         if (oldTopState.block != ModBlocks.CONDUCTOR.get()) return
