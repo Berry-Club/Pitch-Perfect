@@ -65,7 +65,7 @@ object ModDataGen {
         )
 
         val blockLootTableProvider = generator.addProvider(
-            event.includeClient(),
+            event.includeServer(),
             LootTableProvider(
                 output,
                 setOf(),
