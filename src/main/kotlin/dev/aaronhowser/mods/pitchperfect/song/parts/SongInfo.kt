@@ -67,6 +67,21 @@ data class SongInfo(
                     )
             }
 
+        val authorsHoverComponent = Component.empty()
+        for (author in authors) {
+            authorsHoverComponent.append(Component.literal(author.name))
+        }
+
+        val authorsComponent = ModLanguageProvider.Misc.SONG_AUTHORS.toComponent()
+            .withStyle {
+                it.withHoverEvent(
+                    HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        authorsHoverComponent
+                    )
+                )
+            }
+
         val songDataComponent = ModLanguageProvider.Misc.SONG_RAW.toComponent()
             .withStyle {
                 it
@@ -103,7 +118,7 @@ data class SongInfo(
 
         return ModLanguageProvider.Misc.SONG_INFO.toComponent(
             title,
-            title,
+            authorsComponent,
             uuidComponent,
             songDataComponent,
             playComponent,

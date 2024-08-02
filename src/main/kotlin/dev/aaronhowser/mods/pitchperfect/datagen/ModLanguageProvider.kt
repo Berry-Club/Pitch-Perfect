@@ -120,6 +120,7 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         const val CREATIVE_TAB = "itemGroup.pitchperfect"
 
         const val SONG_INFO = "pitchperfect.song_info"
+        const val SONG_AUTHORS = "pitchperfect.song_authors"
         const val SONG_UUID = "pitchperfect.song_uuid"
         const val SONG_RAW = "pitchperfect.song_raw"
         const val SONG_PLAY = "pitchperfect.song_play"
@@ -222,6 +223,7 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
         add(Misc.CREATIVE_TAB, "Pitch Perfect")
 
         add(Misc.SONG_INFO, "%1\$s - %2\$s %3\$s %4\$s %5\$s")
+        add(Misc.SONG_AUTHORS, "[Authors]")
         add(Misc.SONG_UUID, "[UUID]")
         add(Misc.SONG_RAW, "[Raw]")
         add(Misc.SONG_PLAY, "[Play]")
