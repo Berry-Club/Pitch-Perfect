@@ -34,7 +34,8 @@ import net.minecraft.world.phys.Vec3
 import kotlin.random.Random
 
 class InstrumentItem(
-    val instrument: SoundEvent
+    val instrument: SoundEvent,
+    val fontString: String
 ) : Item(
     Properties()
         .durability(100)
@@ -54,8 +55,15 @@ class InstrumentItem(
         )
 ) {
 
-    constructor(noteBlockInstrument: NoteBlockInstrument) : this(noteBlockInstrument.soundEvent.value())
-    constructor(holder: Holder<SoundEvent>) : this(holder.value())
+    constructor(
+        noteBlockInstrument: NoteBlockInstrument,
+        fontString: String
+    ) : this(noteBlockInstrument.soundEvent.value(), fontString)
+
+    constructor(
+        holder: Holder<SoundEvent>,
+        fontString: String
+    ) : this(holder.value(), fontString)
 
     companion object {
 

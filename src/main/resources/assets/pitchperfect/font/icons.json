@@ -2,19 +2,19 @@
   "providers": [
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/bass.png",
+      "file": "pitchperfect:item/banjo.png",
       "ascent": 7,
       "chars": ["a"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/bass_drum.png",
+      "file": "pitchperfect:item/bass.png",
       "ascent": 7,
       "chars": ["b"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/banjo.png",
+      "file": "pitchperfect:item/bass_drum.png",
       "ascent": 7,
       "chars": ["c"]
     },

@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.pitchperfect.datagen
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
-import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.ChatFormatting
 import net.minecraft.data.PackOutput
@@ -14,33 +13,13 @@ import net.neoforged.neoforge.common.data.LanguageProvider
 class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPerfect.ID, "en_us") {
 
     object FontIcon {
-        val font = OtherUtil.modResource("icons")
-        private val style = Style.EMPTY.withFont(font).withColor(ChatFormatting.WHITE)
+        val FONT = OtherUtil.modResource("icons")
+        private val STYLE = Style.EMPTY.withFont(FONT).withColor(ChatFormatting.WHITE)
 
         fun getIcon(instrumentItem: InstrumentItem): MutableComponent {
-            val char = when (instrumentItem) {
-                ModItems.BASS.get() -> "a"
-                ModItems.BASS_DRUM.get() -> "b"
-                ModItems.BANJO.get() -> "c"
-                ModItems.BIT.get() -> "d"
-                ModItems.CHIMES.get() -> "e"
-                ModItems.COW_BELL.get() -> "f"
-                ModItems.DIDGERIDOO.get() -> "g"
-                ModItems.ELECTRIC_PIANO.get() -> "h"
-                ModItems.FLUTE.get() -> "i"
-                ModItems.GLOCKENSPIEL.get() -> "j"
-                ModItems.GUITAR.get() -> "k"
-                ModItems.HARP.get() -> "l"
-                ModItems.SNARE_DRUM.get() -> "m"
-                ModItems.STICKS.get() -> "n"
-                ModItems.VIBRAPHONE.get() -> "o"
-                ModItems.XYLOPHONE.get() -> "p"
-                else -> "a"
-            }
-
-            return Component.literal(char).setStyle(style)
+            val fontString = instrumentItem.fontString
+            return Component.literal(fontString).setStyle(STYLE)
         }
-
     }
 
     object Item {
