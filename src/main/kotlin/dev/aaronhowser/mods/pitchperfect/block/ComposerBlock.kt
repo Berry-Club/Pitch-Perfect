@@ -12,8 +12,10 @@ import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -158,6 +160,34 @@ class ComposerBlock(
         }
 
         pTooltipComponents.add(instrumentsComponent)
+    }
+
+    override fun playerWillDestroy(pLevel: Level, pPos: BlockPos, pState: BlockState, pPlayer: Player): BlockState {
+        val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity
+
+        if (
+            blockEntity is ComposerBlockEntity
+            && pPlayer is ServerPlayer
+            && pPlayer.isCreative
+            && blockEntity.songWip?.song?.beats?.isNotEmpty() == true
+        ) {
+
+            val stack = this.asItem().defaultInstance
+            stack.applyComponents(blockEntity.collectComponents())
+
+            val itemEntity = ItemEntity(
+                pLevel,
+                pPos.x.toDouble() + 0.5,
+                pPos.y.toDouble() + 0.5,
+                pPos.z.toDouble() + 0.5,
+                stack
+            )
+
+            itemEntity.setDefaultPickUpDelay()
+            pLevel.addFreshEntity(itemEntity)
+        }
+
+        return super.playerWillDestroy(pLevel, pPos, pState, pPlayer)
     }
 
 }
