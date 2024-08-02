@@ -82,13 +82,20 @@ data class SongInfo(
                 )
             }
 
+        var songString = song.toString()
+        if (songString.length > 500) {
+            songString = songString.substring(0, 500) + "..."
+        }
+
         val songDataComponent = ModLanguageProvider.Misc.SONG_RAW.toComponent()
             .withStyle {
                 it
                     .withHoverEvent(
                         HoverEvent(
                             HoverEvent.Action.SHOW_TEXT,
-                            ModLanguageProvider.Message.CLICK_COPY_RAW_SONG.toComponent(song.toString())
+                            ModLanguageProvider.Message.CLICK_COPY_RAW_SONG.toComponent(
+                                songString
+                            )
                         )
                     )
                     .withClickEvent(
