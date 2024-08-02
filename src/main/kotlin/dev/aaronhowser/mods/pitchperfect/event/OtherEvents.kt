@@ -89,7 +89,7 @@ object OtherEvents {
             armorStandItem.shrink(1)
         }
 
-        event.level.playSound(null, armorStand.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS)
+        event.level.playSound(null, armorStand.blockPosition(), SoundEvents.DISPENSER_DISPENSE, SoundSource.PLAYERS)
     }
 
     @SubscribeEvent
