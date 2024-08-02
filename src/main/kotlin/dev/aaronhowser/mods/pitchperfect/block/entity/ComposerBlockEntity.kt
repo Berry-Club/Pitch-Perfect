@@ -57,9 +57,9 @@ class ComposerBlockEntity(
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
 
-        val timeline = songWip
-        if (timeline != null) {
-            pTag.put(SONG_WIP_TAG, timeline.toTag())
+        val currentSongWip = songWip
+        if (currentSongWip != null) {
+            pTag.put(SONG_WIP_TAG, currentSongWip.toTag())
         }
 
         if (authors.isNotEmpty()) {
