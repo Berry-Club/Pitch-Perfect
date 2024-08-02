@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.block.entity
 import dev.aaronhowser.mods.pitchperfect.item.component.SongComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
-import dev.aaronhowser.mods.pitchperfect.song.parts.SongAuthor
+import dev.aaronhowser.mods.pitchperfect.song.parts.Author
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
@@ -33,7 +33,7 @@ class ComposerBlockEntity(
 
     var songWip: SongWip? = null
         private set
-    var songAuthors: List<SongAuthor> = emptyList()
+    var authors: List<Author> = emptyList()
         private set
 
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
@@ -58,17 +58,17 @@ class ComposerBlockEntity(
             val name = authorTag.getString(AUTHOR_NAME_TAG)
             val uuid = authorTag.getUuidOrNull(AUTHOR_UUID_TAG) ?: continue
 
-            songAuthors = songAuthors + SongAuthor(uuid, name)
+            authors = authors + Author(uuid, name)
         }
     }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
 
-        if (songAuthors.isNotEmpty()) {
+        if (authors.isNotEmpty()) {
             val authorsTag = pTag.getList(AUTHORS_TAG, ListTag.TAG_COMPOUND.toInt())
 
-            for (author in songAuthors) {
+            for (author in authors) {
                 val authorTag = CompoundTag()
                 authorTag.putString(AUTHOR_NAME_TAG, author.name)
                 authorTag.putString(AUTHOR_UUID_TAG, author.uuid.toString())
@@ -112,8 +112,8 @@ class ComposerBlockEntity(
             songWip = SongWip()
         }
 
-        if (songAuthors.none { it.uuid == player.uuid }) {
-            songAuthors = songAuthors + SongAuthor(player.uuid, player.gameProfile.name)
+        if (authors.none { it.uuid == player.uuid }) {
+            authors = authors + Author(player.uuid, player.gameProfile.name)
         }
 
         val note = Note.getFromPitch(pitch)
