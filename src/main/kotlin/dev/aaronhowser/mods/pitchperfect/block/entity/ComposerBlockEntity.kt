@@ -26,6 +26,7 @@ class ComposerBlockEntity(
 ) : BlockEntity(ModBlockEntities.COMPOSER.get(), pPos, pBlockState) {
 
     companion object {
+        const val SONG_WIP_TAG = "song_content"
         const val AUTHORS_TAG = "authors"
         const val AUTHOR_NAME_TAG = "name"
         const val AUTHOR_UUID_TAG = "uuid"
@@ -39,17 +40,8 @@ class ComposerBlockEntity(
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
 
-        val components = pTag.getCompound("components")
-
-        val songWipComponentString = ModDataComponents.SONG_WIP_COMPONENT.id.toString()
-        if (components.contains(songWipComponentString)) {
-            val songString = components.getString(songWipComponentString)
-            val song = Song.fromString(songString)
-
-            if (song != null) {
-                songWip = SongWip(song)
-            }
-        }
+        val songWipTag = pTag.getCompound(SONG_WIP_TAG)
+        songWip = SongWip.fromCompoundTag(songWipTag)
 
         val authorsTag = pTag.getList(AUTHORS_TAG, ListTag.TAG_COMPOUND.toInt())
         for (authorTag in authorsTag) {
@@ -64,6 +56,11 @@ class ComposerBlockEntity(
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
+
+        val timeline = songWip
+        if (timeline != null) {
+            pTag.put(SONG_WIP_TAG, timeline.toTag())
+        }
 
         if (authors.isNotEmpty()) {
             val authorsTag = pTag.getList(AUTHORS_TAG, ListTag.TAG_COMPOUND.toInt())
