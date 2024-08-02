@@ -156,7 +156,7 @@ data class SongInfo(
             val authors = mutableListOf<Author>()
             val tagAuthors = tag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
             for (authorTag in tagAuthors) {
-                val authorCompoundTag = tag as? CompoundTag ?: continue
+                val authorCompoundTag = authorTag as? CompoundTag ?: continue
 
                 val uuid = authorCompoundTag.getUuidOrNull(AUTHOR_UUID) ?: continue
                 val name = authorCompoundTag.getString(AUTHOR_NAME)

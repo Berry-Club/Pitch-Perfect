@@ -32,7 +32,7 @@ object OtherUtil {
     }
 
     fun CompoundTag.getUuidOrNull(key: String): UUID? {
-        return if (this.contains(key)) this.getUUID(key) else null
+        return if (this.hasUUID(key)) this.getUUID(key) else null
     }
 
 }
