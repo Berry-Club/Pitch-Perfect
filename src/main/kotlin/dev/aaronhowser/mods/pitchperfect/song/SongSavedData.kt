@@ -108,11 +108,11 @@ class SongSavedData : SavedData() {
     }
 
     fun getSongInfosBy(author: UUID): List<SongInfo> {
-        return songs.values.filter { it.authorUuid == author }
+        return songs.values.filter { songInfo -> songInfo.authors.any { it.uuid == author } }
     }
 
     fun getSongInfosGroupedByAuthor(): List<SongInfo> {
-        val compareBy: Comparator<SongInfo> = compareBy(SongInfo::authorName, SongInfo::title)
+        val compareBy: Comparator<SongInfo> = compareBy(SongInfo::title)
         return songs.values.sortedWith(compareBy)
     }
 

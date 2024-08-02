@@ -5,9 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.ClickEvent
@@ -16,26 +16,34 @@ import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.player.Player
-import java.util.*
 
 data class SongInfo(
     val title: String,
-    val authorUuid: UUID,
-    val authorName: String,
+    val authors: List<Author>,
     val song: Song
 ) {
 
     constructor(
         title: String,
-        author: Player,
+        player: Player,
         song: Song
-    ) : this(title, author.uuid, author.gameProfile.name, song)
+    ) : this(title, listOf(Author(player)), song)
 
     fun toTag(): Tag {
         val compoundTag = CompoundTag()
         compoundTag.putString(TITLE, title)
-        compoundTag.putUUID(AUTHOR_UUID, authorUuid)
-        compoundTag.putString(AUTHOR_NAME, authorName)
+
+        val tagAuthors = compoundTag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
+
+        for (author in authors) {
+            val authorTag = CompoundTag()
+            authorTag.putUUID(AUTHOR_UUID, author.uuid)
+            authorTag.putString(AUTHOR_NAME, author.name)
+            tagAuthors.add(authorTag)
+        }
+
+        compoundTag.put(AUTHORS, tagAuthors)
+
         compoundTag.putString(SONG, song.toString())
 
         return compoundTag
@@ -94,27 +102,27 @@ data class SongInfo(
             }
 
         return ModLanguageProvider.Misc.SONG_INFO.toComponent(
-            authorName,
+            title,
             title,
             uuidComponent,
             songDataComponent,
-            playComponent
+            playComponent,
         )
     }
 
     companion object {
 
         private const val TITLE = "title"
-        private const val AUTHOR_UUID = "authorUuid"
-        private const val AUTHOR_NAME = "authorName"
+        private const val AUTHORS = "authors"
+        private const val AUTHOR_UUID = "uuid"
+        private const val AUTHOR_NAME = "name"
         private const val SONG = "song"
 
         val CODEC: Codec<SongInfo> =
             RecordCodecBuilder.create { instance ->
                 instance.group(
                     Codec.STRING.fieldOf(TITLE).forGetter(SongInfo::title),
-                    UuidComponent.UUID_CODEC.fieldOf(AUTHOR_UUID).forGetter(SongInfo::authorUuid),
-                    Codec.STRING.fieldOf(AUTHOR_NAME).forGetter(SongInfo::authorName),
+                    Author.CODEC.listOf().fieldOf(AUTHORS).forGetter(SongInfo::authors),
                     Song.CODEC.fieldOf(SONG).forGetter(SongInfo::song)
                 ).apply(instance, ::SongInfo)
             }
@@ -122,16 +130,25 @@ data class SongInfo(
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SongInfo> =
             StreamCodec.composite(
                 ByteBufCodecs.STRING_UTF8, SongInfo::title,
-                UuidComponent.UUID_STREAM_CODEC, SongInfo::authorUuid,
-                ByteBufCodecs.STRING_UTF8, SongInfo::authorName,
+                Author.STREAM_CODEC.apply(ByteBufCodecs.list()), SongInfo::authors,
                 Song.STREAM_CODEC, SongInfo::song,
                 ::SongInfo
             )
 
         fun fromCompoundTag(tag: CompoundTag): SongInfo? {
             val title = tag.getString(TITLE)
-            val authorUuid = tag.getUuidOrNull(AUTHOR_UUID) ?: return null
-            val authorName = tag.getString(AUTHOR_NAME)
+
+            val authors = mutableListOf<Author>()
+            val tagAuthors = tag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
+            for (authorTag in tagAuthors) {
+                val authorCompoundTag = tag as? CompoundTag ?: continue
+
+                val uuid = authorCompoundTag.getUuidOrNull(AUTHOR_UUID) ?: continue
+                val name = authorCompoundTag.getString(AUTHOR_NAME)
+
+                authors.add(Author(uuid, name))
+            }
+
             val song = Song.fromString(tag.getString(SONG))
 
             if (song == null) {
@@ -139,7 +156,7 @@ data class SongInfo(
                 return null
             }
 
-            return SongInfo(title, authorUuid, authorName, song)
+            return SongInfo(title, authors, song)
         }
     }
 

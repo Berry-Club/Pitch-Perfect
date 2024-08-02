@@ -34,8 +34,7 @@ object RemoveSongCommand {
 
         player.sendSystemMessage(
             ModLanguageProvider.Message.SONG_REMOVED.toComponent(
-                songInfo.title,
-                songInfo.authorName
+                songInfo.title
             )
         )
 
