@@ -3,12 +3,14 @@ package dev.aaronhowser.mods.pitchperfect.block
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
+import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -109,6 +111,21 @@ class ComposerBlock(
         super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
 
         return InteractionResult.CONSUME
+    }
+
+    override fun setPlacedBy(
+        pLevel: Level,
+        pPos: BlockPos,
+        pState: BlockState,
+        pPlacer: LivingEntity?,
+        pStack: ItemStack
+    ) {
+        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack)
+
+        val songComponent = pStack.get(ModDataComponents.SONG_WIP_COMPONENT) ?: return
+        val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
+
+        blockEntity.setSong(songComponent.song)
     }
 
 }
