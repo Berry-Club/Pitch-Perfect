@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
+import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
@@ -143,22 +144,22 @@ class ComposerBlock(
         pTooltipComponents.addAll(
             1,
             listOf(
-                ModLanguageProvider.Font.BASS,
-                ModLanguageProvider.Font.BASS_DRUM,
-                ModLanguageProvider.Font.BANJO,
-                ModLanguageProvider.Font.BIT,
-                ModLanguageProvider.Font.CHIMES,
-                ModLanguageProvider.Font.COW_BELL,
-                ModLanguageProvider.Font.DIDGERIDOO,
-                ModLanguageProvider.Font.ELECTRIC_PIANO,
-                ModLanguageProvider.Font.FLUTE,
-                ModLanguageProvider.Font.GLOCKENSPIEL,
-                ModLanguageProvider.Font.GUITAR,
-                ModLanguageProvider.Font.HARP,
-                ModLanguageProvider.Font.SNARE_DRUM,
-                ModLanguageProvider.Font.STICKS,
-                ModLanguageProvider.Font.VIBRAPHONE,
-                ModLanguageProvider.Font.XYLOPHONE,
+                ModLanguageProvider.FontIcon.getIcon(ModItems.BASS.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.BASS_DRUM.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.BANJO.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.BIT.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.CHIMES.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.COW_BELL.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.DIDGERIDOO.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.ELECTRIC_PIANO.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.FLUTE.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.GLOCKENSPIEL.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.GUITAR.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.HARP.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.SNARE_DRUM.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.STICKS.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.VIBRAPHONE.get()),
+                ModLanguageProvider.FontIcon.getIcon(ModItems.XYLOPHONE.get()),
             )
         )
     }

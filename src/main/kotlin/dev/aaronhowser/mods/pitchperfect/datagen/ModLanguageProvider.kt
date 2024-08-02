@@ -1,35 +1,45 @@
 package dev.aaronhowser.mods.pitchperfect.datagen
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
+import net.minecraft.ChatFormatting
 import net.minecraft.data.PackOutput
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
 import net.neoforged.neoforge.common.data.LanguageProvider
 
 class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPerfect.ID, "en_us") {
 
-    object Font {
+    object FontIcon {
         val font = OtherUtil.modResource("icons")
+        private val style = Style.EMPTY.withFont(font).withColor(ChatFormatting.WHITE)
 
-        private fun getFont(name: Char) = Component.literal(name.toString()).withStyle { it.withFont(font) }
+        fun getIcon(instrumentItem: InstrumentItem): MutableComponent {
+            val char = when (instrumentItem) {
+                ModItems.BASS.get() -> "a"
+                ModItems.BASS_DRUM.get() -> "b"
+                ModItems.BANJO.get() -> "c"
+                ModItems.BIT.get() -> "d"
+                ModItems.CHIMES.get() -> "e"
+                ModItems.COW_BELL.get() -> "f"
+                ModItems.DIDGERIDOO.get() -> "g"
+                ModItems.ELECTRIC_PIANO.get() -> "h"
+                ModItems.FLUTE.get() -> "i"
+                ModItems.GLOCKENSPIEL.get() -> "j"
+                ModItems.GUITAR.get() -> "k"
+                ModItems.HARP.get() -> "l"
+                ModItems.SNARE_DRUM.get() -> "m"
+                ModItems.STICKS.get() -> "n"
+                ModItems.VIBRAPHONE.get() -> "o"
+                ModItems.XYLOPHONE.get() -> "p"
+                else -> "a"
+            }
 
-        val BASS: MutableComponent = getFont('a')
-        val BASS_DRUM: MutableComponent = getFont('b')
-        val BANJO: MutableComponent = getFont('c')
-        val BIT: MutableComponent = getFont('d')
-        val CHIMES: MutableComponent = getFont('e')
-        val COW_BELL: MutableComponent = getFont('f')
-        val DIDGERIDOO: MutableComponent = getFont('g')
-        val ELECTRIC_PIANO: MutableComponent = getFont('h')
-        val FLUTE: MutableComponent = getFont('i')
-        val GLOCKENSPIEL: MutableComponent = getFont('j')
-        val GUITAR: MutableComponent = getFont('k')
-        val HARP: MutableComponent = getFont('l')
-        val SNARE_DRUM: MutableComponent = getFont('m')
-        val STICKS: MutableComponent = getFont('n')
-        val VIBRAPHONE: MutableComponent = getFont('o')
-        val XYLOPHONE: MutableComponent = getFont('p')
+            return Component.literal(char).withStyle(style)
+        }
 
     }
 
