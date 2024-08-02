@@ -42,7 +42,7 @@ class SheetMusicItem : Item(
                 stopRecording(stack, player)
             } else {
                 stack.set(ModDataComponents.IS_RECORDING_COMPONENT, BooleanComponent(true))
-                stack.remove(UuidComponent.songUuidComponent)
+                stack.remove(ModDataComponents.SONG_UUID_COMPONENT)
             }
         }
 
@@ -64,7 +64,10 @@ class SheetMusicItem : Item(
                 return
             }
 
-            itemStack.set(UuidComponent.songUuidComponent, UuidComponent(addSongResult.songInfo.song.uuid))
+            itemStack.set(
+                ModDataComponents.SONG_UUID_COMPONENT,
+                UuidComponent(addSongResult.songInfo.song.uuid)
+            )
         }
 
         fun isRecording(stack: ItemStack): Boolean {

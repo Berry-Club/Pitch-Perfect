@@ -23,10 +23,6 @@ data class UuidComponent(
 
         val STREAM_CODEC: StreamCodec<ByteBuf, UuidComponent> =
             UUID_STREAM_CODEC.map(::UuidComponent, UuidComponent::uuid)
-
-        val songUuidComponent: DataComponentType<UuidComponent> by lazy {
-            ModDataComponents.SONG_UUID_COMPONENT.get()
-        }
     }
 
 }
