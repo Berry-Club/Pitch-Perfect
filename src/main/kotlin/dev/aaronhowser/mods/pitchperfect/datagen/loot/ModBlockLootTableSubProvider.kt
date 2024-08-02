@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.loot.BlockLootSubProvider
 import net.minecraft.world.flag.FeatureFlags
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.storage.loot.LootPool
 import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.entries.LootItem
@@ -39,6 +40,13 @@ class ModBlockLootTableSubProvider(
             )
 
         this.add(composer, builder)
+    }
+
+    override fun getKnownBlocks(): Iterable<Block> {
+        return listOf(
+            ModBlocks.CONDUCTOR.get(),
+            ModBlocks.COMPOSER.get()
+        )
     }
 
 }
