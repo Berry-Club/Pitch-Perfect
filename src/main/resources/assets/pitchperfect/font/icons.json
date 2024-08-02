@@ -2,97 +2,97 @@
   "providers": [
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/bass",
+      "file": "pitchperfect:item/bass.png",
       "ascent": 7,
       "chars": ["a"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/bass_drum",
+      "file": "pitchperfect:item/bass_drum.png",
       "ascent": 7,
       "chars": ["b"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/banjo",
+      "file": "pitchperfect:item/banjo.png",
       "ascent": 7,
       "chars": ["c"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/bit",
+      "file": "pitchperfect:item/bit.png",
       "ascent": 7,
       "chars": ["d"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/chimes",
+      "file": "pitchperfect:item/chimes.png",
       "ascent": 7,
       "chars": ["e"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/cow_bell",
+      "file": "pitchperfect:item/cow_bell.png",
       "ascent": 7,
       "chars": ["f"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/didgeridoo",
+      "file": "pitchperfect:item/didgeridoo.png",
       "ascent": 7,
       "chars": ["g"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/electric_piano",
+      "file": "pitchperfect:item/electric_piano.png",
       "ascent": 7,
       "chars": ["h"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/flute",
+      "file": "pitchperfect:item/flute.png",
       "ascent": 7,
       "chars": ["i"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/glockenspiel",
+      "file": "pitchperfect:item/glockenspiel.png",
       "ascent": 7,
       "chars": ["j"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/guitar",
+      "file": "pitchperfect:item/guitar.png",
       "ascent": 7,
       "chars": ["k"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/harp",
+      "file": "pitchperfect:item/harp.png",
       "ascent": 7,
       "chars": ["l"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/snare_drum",
+      "file": "pitchperfect:item/snare_drum.png",
       "ascent": 7,
       "chars": ["m"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/sticks",
+      "file": "pitchperfect:item/sticks.png",
       "ascent": 7,
       "chars": ["n"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/vibraphone",
+      "file": "pitchperfect:item/vibraphone.png",
       "ascent": 7,
       "chars": ["o"]
     },
     {
       "type": "bitmap",
-      "file": "pitchperfect:item/xylophone",
+      "file": "pitchperfect:item/xylophone.png",
       "ascent": 7,
       "chars": ["p"]
     }

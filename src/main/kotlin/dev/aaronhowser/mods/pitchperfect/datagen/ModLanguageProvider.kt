@@ -38,7 +38,7 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
                 else -> "a"
             }
 
-            return Component.literal(char).withStyle(style)
+            return Component.literal(char).setStyle(style)
         }
 
     }
