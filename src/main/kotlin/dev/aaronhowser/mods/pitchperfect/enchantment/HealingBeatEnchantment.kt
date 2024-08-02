@@ -2,11 +2,10 @@ package dev.aaronhowser.mods.pitchperfect.enchantment
 
 import dev.aaronhowser.mods.pitchperfect.ModTags
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
-import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
+import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
@@ -25,7 +24,7 @@ object HealingBeatEnchantment {
         private val itemStack: ItemStack
     ) {
 
-        val soundEvent = InstrumentItem.getSoundEvent(itemStack)
+        val soundEvent = SoundEventComponent.getSoundEvent(itemStack)
         val mobsToHeal by lazy { findMobsToHeal() }
 
         init {
