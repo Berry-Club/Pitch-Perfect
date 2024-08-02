@@ -1,0 +1,100 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/bass",
+      "ascent": 7,
+      "chars": ["a"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/bass_drum",
+      "ascent": 7,
+      "chars": ["b"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/banjo",
+      "ascent": 7,
+      "chars": ["c"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/bit",
+      "ascent": 7,
+      "chars": ["d"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/chimes",
+      "ascent": 7,
+      "chars": ["e"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/cow_bell",
+      "ascent": 7,
+      "chars": ["f"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/didgeridoo",
+      "ascent": 7,
+      "chars": ["g"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/electric_piano",
+      "ascent": 7,
+      "chars": ["h"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/flute",
+      "ascent": 7,
+      "chars": ["i"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/glockenspiel",
+      "ascent": 7,
+      "chars": ["j"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/guitar",
+      "ascent": 7,
+      "chars": ["k"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/harp",
+      "ascent": 7,
+      "chars": ["l"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/snare_drum",
+      "ascent": 7,
+      "chars": ["m"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/sticks",
+      "ascent": 7,
+      "chars": ["n"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/vibraphone",
+      "ascent": 7,
+      "chars": ["o"]
+    },
+    {
+      "type": "bitmap",
+      "file": "pitchperfect:item/xylophone",
+      "ascent": 7,
+      "chars": ["p"]
+    }
+  ]
+}

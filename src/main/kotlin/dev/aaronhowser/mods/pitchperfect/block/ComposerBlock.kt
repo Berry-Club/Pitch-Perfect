@@ -3,16 +3,20 @@ package dev.aaronhowser.mods.pitchperfect.block
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.*
@@ -126,6 +130,37 @@ class ComposerBlock(
         val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
 
         blockEntity.setSong(songComponent.song)
+    }
+
+    override fun appendHoverText(
+        pStack: ItemStack,
+        pContext: Item.TooltipContext,
+        pTooltipComponents: MutableList<Component>,
+        pTooltipFlag: TooltipFlag
+    ) {
+        super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
+
+        pTooltipComponents.addAll(
+            1,
+            listOf(
+                ModLanguageProvider.Font.BASS,
+                ModLanguageProvider.Font.BASS_DRUM,
+                ModLanguageProvider.Font.BANJO,
+                ModLanguageProvider.Font.BIT,
+                ModLanguageProvider.Font.CHIMES,
+                ModLanguageProvider.Font.COW_BELL,
+                ModLanguageProvider.Font.DIDGERIDOO,
+                ModLanguageProvider.Font.ELECTRIC_PIANO,
+                ModLanguageProvider.Font.FLUTE,
+                ModLanguageProvider.Font.GLOCKENSPIEL,
+                ModLanguageProvider.Font.GUITAR,
+                ModLanguageProvider.Font.HARP,
+                ModLanguageProvider.Font.SNARE_DRUM,
+                ModLanguageProvider.Font.STICKS,
+                ModLanguageProvider.Font.VIBRAPHONE,
+                ModLanguageProvider.Font.XYLOPHONE,
+            )
+        )
     }
 
 }

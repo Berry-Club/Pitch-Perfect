@@ -1,12 +1,37 @@
 package dev.aaronhowser.mods.pitchperfect.datagen
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.data.PackOutput
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.neoforged.neoforge.common.data.LanguageProvider
 
 class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPerfect.ID, "en_us") {
+
+    object Font {
+        val font = OtherUtil.modResource("icons")
+
+        private fun getFont(name: Char) = Component.literal(name.toString()).withStyle { it.withFont(font) }
+
+        val BASS: MutableComponent = getFont('a')
+        val BASS_DRUM: MutableComponent = getFont('b')
+        val BANJO: MutableComponent = getFont('c')
+        val BIT: MutableComponent = getFont('d')
+        val CHIMES: MutableComponent = getFont('e')
+        val COW_BELL: MutableComponent = getFont('f')
+        val DIDGERIDOO: MutableComponent = getFont('g')
+        val ELECTRIC_PIANO: MutableComponent = getFont('h')
+        val FLUTE: MutableComponent = getFont('i')
+        val GLOCKENSPIEL: MutableComponent = getFont('j')
+        val GUITAR: MutableComponent = getFont('k')
+        val HARP: MutableComponent = getFont('l')
+        val SNARE_DRUM: MutableComponent = getFont('m')
+        val STICKS: MutableComponent = getFont('n')
+        val VIBRAPHONE: MutableComponent = getFont('o')
+        val XYLOPHONE: MutableComponent = getFont('p')
+
+    }
 
     object Item {
         const val BASS = "item.pitchperfect.bass"
