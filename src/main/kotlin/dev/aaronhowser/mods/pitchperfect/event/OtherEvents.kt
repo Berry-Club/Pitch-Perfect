@@ -1,12 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect.event
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.command.ModCommands
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
-import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
+import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.SongRecorder
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -21,7 +20,6 @@ import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.LeftClickBlock
 import net.neoforged.neoforge.event.level.NoteBlockEvent
 
 @EventBusSubscriber(
@@ -77,7 +75,7 @@ object OtherEvents {
         val armorStandItem = armorStand.mainHandItem
         if (armorStandItem.isEmpty) {
             val playerItem = player.getItemInHand(event.hand)
-            if (!playerItem.has(SoundEventComponent.component)) return
+            if (!playerItem.has(ModDataComponents.SOUND_EVENT_COMPONENT)) return
 
             armorStand.disabledSlots = -1
             armorStand.isShowArms = true
@@ -85,7 +83,7 @@ object OtherEvents {
             armorStand.setItemInHand(InteractionHand.MAIN_HAND, playerItem.copy())
             playerItem.shrink(1)
         } else {
-            if (!armorStandItem.has(SoundEventComponent.component)) return
+            if (!armorStandItem.has(ModDataComponents.SOUND_EVENT_COMPONENT)) return
 
             player.addItem(armorStandItem.copy())
             armorStandItem.shrink(1)

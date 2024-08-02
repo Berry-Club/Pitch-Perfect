@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent.Companion.isTrue
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
+import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
@@ -40,13 +41,13 @@ class SheetMusicItem : Item(
             if (isRecording(stack)) {
                 stopRecording(stack, player)
             } else {
-                stack.set(BooleanComponent.isRecordingComponent, BooleanComponent(true))
+                stack.set(ModDataComponents.IS_RECORDING_COMPONENT, BooleanComponent(true))
                 stack.remove(UuidComponent.songUuidComponent)
             }
         }
 
         private fun stopRecording(itemStack: ItemStack, player: ServerPlayer) {
-            itemStack.remove(BooleanComponent.isRecordingComponent)
+            itemStack.remove(ModDataComponents.IS_RECORDING_COMPONENT)
 
             val songBuilder = OtherEvents.songRecorders[player] ?: return
             OtherEvents.songRecorders.remove(player)
@@ -67,7 +68,7 @@ class SheetMusicItem : Item(
         }
 
         fun isRecording(stack: ItemStack): Boolean {
-            return stack.get(BooleanComponent.isRecordingComponent).isTrue
+            return stack.get(ModDataComponents.IS_RECORDING_COMPONENT).isTrue
         }
     }
 

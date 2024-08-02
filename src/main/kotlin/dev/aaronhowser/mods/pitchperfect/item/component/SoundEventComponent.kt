@@ -23,12 +23,8 @@ data class SoundEventComponent(
         val STREAM_CODEC: StreamCodec<ByteBuf, SoundEventComponent> =
             ByteBufCodecs.fromCodec(CODEC)
 
-        val component: DataComponentType<SoundEventComponent> by lazy {
-            ModDataComponents.SOUND_EVENT_COMPONENT.get()
-        }
-
         fun getSoundEvent(itemStack: ItemStack): SoundEvent? {
-            return itemStack.get(component)?.soundEvent
+            return itemStack.get(ModDataComponents.SOUND_EVENT_COMPONENT)?.soundEvent
         }
 
     }
