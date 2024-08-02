@@ -92,7 +92,7 @@ data class TimelineCell(
 
                 val countMap = sounds.groupingBy { it }.eachCount()
                 for ((soundHolder, amount) in countMap) {
-                    val instrument = ModItems.instruments.find { it.get().instrument == soundHolder.value() }
+                    val instrument = ModItems.getFromSoundHolder(soundHolder)
 
                     val instrumentComponent = if (instrument != null) {
                         instrument.get().description as MutableComponent

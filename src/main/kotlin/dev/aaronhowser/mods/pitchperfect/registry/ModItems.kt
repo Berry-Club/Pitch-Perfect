@@ -3,6 +3,8 @@ package dev.aaronhowser.mods.pitchperfect.registry
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
+import net.minecraft.core.Holder
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.item.DoubleHighBlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
@@ -74,5 +76,9 @@ object ModItems {
         VIBRAPHONE,
         XYLOPHONE
     )
+
+    fun getFromSoundHolder(soundHolder: Holder<SoundEvent>): DeferredItem<InstrumentItem>? {
+        return instruments.find { it.get().instrument == soundHolder.value() }
+    }
 
 }
