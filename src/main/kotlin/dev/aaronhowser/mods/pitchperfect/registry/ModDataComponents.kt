@@ -28,4 +28,9 @@ object ModDataComponents {
             it.persistent(UuidComponent.CODEC).networkSynchronized(UuidComponent.STREAM_CODEC)
         }
 
+    val SONG_WIP_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<BooleanComponent>> =
+        DATA_COMPONENT_REGISTRY.registerComponentType("song_wip") {
+            it.persistent(BooleanComponent.CODEC).networkSynchronized(BooleanComponent.STREAM_CODEC)
+        }
+
 }
