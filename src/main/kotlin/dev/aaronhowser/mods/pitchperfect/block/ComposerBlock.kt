@@ -141,27 +141,14 @@ class ComposerBlock(
     ) {
         super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
 
-        pTooltipComponents.addAll(
-            1,
-            listOf(
-                ModLanguageProvider.FontIcon.getIcon(ModItems.BASS.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.BASS_DRUM.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.BANJO.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.BIT.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.CHIMES.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.COW_BELL.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.DIDGERIDOO.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.ELECTRIC_PIANO.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.FLUTE.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.GLOCKENSPIEL.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.GUITAR.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.HARP.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.SNARE_DRUM.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.STICKS.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.VIBRAPHONE.get()),
-                ModLanguageProvider.FontIcon.getIcon(ModItems.XYLOPHONE.get()),
+        for (instrument in ModItems.instruments) {
+            val item = instrument.get()
+
+            pTooltipComponents.add(
+                Component.literal(item.descriptionId).append(ModLanguageProvider.FontIcon.getIcon(item))
             )
-        )
+        }
+
     }
 
 }
