@@ -73,7 +73,6 @@ class ComposerBlock(
         if (pState.block != pNewState.block) {
             val blockEntity = pLevel.getBlockEntity(pPos)
             if (blockEntity is ComposerBlockEntity) {
-                blockEntity.dropDrops()
 
                 val songWip = blockEntity.songWip
                 if (songWip != null) {

@@ -28,11 +28,6 @@ object ModBusEvents {
             ModBlockEntities.CONDUCTOR.get()
         ) { conductorBE, direction -> conductorBE.getItemHandler(direction) }
 
-        event.registerBlockEntity(
-            Capabilities.ItemHandler.BLOCK,
-            ModBlockEntities.COMPOSER.get()
-        ) { composerBE, direction -> composerBE.getItemHandler(direction) }
-
     }
 
 }
