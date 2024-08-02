@@ -2,12 +2,9 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
 import net.minecraft.core.Holder
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvent
-import java.util.*
 
 class SongWip(
     var song: Song
@@ -18,15 +15,6 @@ class SongWip(
             Song.CODEC.xmap(::SongWip, SongWip::song)
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SongWip> =
             Song.STREAM_CODEC.map(::SongWip, SongWip::song)
-
-        private const val SONG_NBT = "song"
-
-        fun fromCompoundTag(tag: CompoundTag): SongWip? {
-            val songString = tag.getString(SONG_NBT)
-            if (songString.isEmpty()) return null
-            val song = Song.fromString(songString) ?: return null
-            return SongWip(song)
-        }
     }
 
     constructor() : this(Song(emptyMap()))
@@ -90,12 +78,6 @@ class SongWip(
         }
 
         return list
-    }
-
-    fun toTag(): Tag {
-        val tag = CompoundTag()
-        tag.putString(SONG_NBT, song.toString())
-        return tag
     }
 
 }
