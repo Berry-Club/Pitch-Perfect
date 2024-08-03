@@ -85,7 +85,7 @@ class ComposerBlock(
             val blockEntity = pLevel.getBlockEntity(pPos)
             if (blockEntity is ComposerBlockEntity) {
 
-                val songWip = blockEntity.songWip
+                val songWip = blockEntity.composerSong
                 if (songWip != null) {
                     PitchPerfect.LOGGER.info("A Composer with a song was broken!")
                     PitchPerfect.LOGGER.info(songWip.song.toString())
@@ -129,10 +129,10 @@ class ComposerBlock(
     ) {
         super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack)
 
-        val songComponent = pStack.get(ModDataComponents.SONG_WIP_COMPONENT) ?: return
+        val songComponent = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT) ?: return
         val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
 
-        blockEntity.setSong(songComponent.song)
+        blockEntity.setSong(songComponent.composerSong.song)
     }
 
     override fun appendHoverText(
@@ -143,7 +143,7 @@ class ComposerBlock(
     ) {
         super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
 
-        val song = pStack.get(ModDataComponents.SONG_WIP_COMPONENT)?.song ?: return
+        val song = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT)?.composerSong?.song ?: return
 
         val instrumentsComponent = Component.empty()
 
@@ -169,7 +169,7 @@ class ComposerBlock(
             blockEntity is ComposerBlockEntity
             && pPlayer is ServerPlayer
             && pPlayer.isCreative
-            && blockEntity.songWip?.song?.beats?.isNotEmpty() == true
+            && blockEntity.composerSong?.song?.beats?.isNotEmpty() == true
         ) {
 
             val stack = this.asItem().defaultInstance
