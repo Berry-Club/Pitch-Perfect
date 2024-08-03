@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
@@ -114,6 +115,21 @@ class ComposerBlock(
         }
 
         return super.playerWillDestroy(pLevel, pPos, pState, pPlayer)
+    }
+
+    override fun setPlacedBy(
+        pLevel: Level,
+        pPos: BlockPos,
+        pState: BlockState,
+        pPlacer: LivingEntity?,
+        pStack: ItemStack
+    ) {
+        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack)
+
+        val songComponent = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT) ?: return
+        val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
+
+        blockEntity.setSong(songComponent.composerSong)
     }
 
     override fun onRemove(
