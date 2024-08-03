@@ -31,8 +31,6 @@ class ComposerBlockEntity(
 
     var composerSong: ComposerSong? = null
         private set
-    var authors: List<Author> = emptyList()
-        private set
 
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
@@ -47,29 +45,16 @@ class ComposerBlockEntity(
             val name = authorTag.getString(AUTHOR_NAME_TAG)
             val uuid = authorTag.getUuidOrNull(AUTHOR_UUID_TAG) ?: continue
 
-            authors = authors + Author(uuid, name)
+            composerSong?.addAuthor(uuid, name)
         }
     }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
 
-        val timeline = composerSong
-        if (timeline != null) {
-            pTag.put(COMPOSER_SONG_TAG, timeline.toTag())
-        }
-
-        if (authors.isNotEmpty()) {
-            val authorsTag = pTag.getList(AUTHORS_TAG, ListTag.TAG_COMPOUND.toInt())
-
-            for (author in authors) {
-                val authorTag = CompoundTag()
-                authorTag.putString(AUTHOR_NAME_TAG, author.name)
-                authorTag.putString(AUTHOR_UUID_TAG, author.uuid.toString())
-                authorsTag.add(authorTag)
-            }
-
-            pTag.put(AUTHORS_TAG, authorsTag)
+        val currentComposerSong = composerSong
+        if (currentComposerSong != null) {
+            pTag.put(COMPOSER_SONG_TAG, currentComposerSong.toTag())
         }
     }
 
@@ -98,9 +83,7 @@ class ComposerBlockEntity(
             composerSong = ComposerSong()
         }
 
-        if (authors.none { it.uuid == player.uuid }) {
-            authors = authors + Author(player.uuid, player.gameProfile.name)
-        }
+        composerSong?.addAuthor(player)
 
         val note = Note.getFromPitch(pitch)
 
@@ -117,8 +100,8 @@ class ComposerBlockEntity(
         }
     }
 
-    fun setSong(song: Song) {
-        composerSong = ComposerSong(song)
+    fun setSong(song: Song, player: Player) {
+        composerSong = ComposerSong(song, listOf(Author(player)))
         setChanged()
     }
 

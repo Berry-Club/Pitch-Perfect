@@ -40,7 +40,7 @@ class ComposerPasteSongPacket(
             val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
             if (!player.canInteractWithBlock(composerPos, playerReach)) return@enqueueWork
 
-            composerBlockEntity.setSong(song)
+            composerBlockEntity.setSong(song, player)
         }
     }
 
