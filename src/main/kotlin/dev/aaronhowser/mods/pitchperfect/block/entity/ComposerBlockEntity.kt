@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
-import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.parts.Author
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
@@ -24,11 +23,7 @@ class ComposerBlockEntity(
 ) : BlockEntity(ModBlockEntities.COMPOSER.get(), pPos, pBlockState) {
 
     companion object {
-
-        private const val COMPONENTS_TAG = "components"
-
-        private val SONG_WIP_TAG = ModDataComponents.SONG_WIP_COMPONENT.id.toString()
-
+        const val SONG_WIP_TAG = "song_content"
         const val AUTHORS_TAG = "authors"
         const val AUTHOR_NAME_TAG = "name"
         const val AUTHOR_UUID_TAG = "uuid"
@@ -42,13 +37,8 @@ class ComposerBlockEntity(
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
 
-        val componentsTag = pTag.getCompound(COMPONENTS_TAG)
-
-        val songString = componentsTag.getString(SONG_WIP_TAG)
-        val song = Song.fromString(songString)
-        if (song != null) {
-            setSong(song)
-        }
+        val songWipTag = pTag.getCompound(SONG_WIP_TAG)
+        songWip = SongWip.fromCompoundTag(songWipTag)
 
         val authorsTag = pTag.getList(AUTHORS_TAG, ListTag.TAG_COMPOUND.toInt())
         for (authorTag in authorsTag) {
@@ -63,6 +53,11 @@ class ComposerBlockEntity(
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
+
+        val currentSongWip = songWip
+        if (currentSongWip != null) {
+            pTag.put(SONG_WIP_TAG, currentSongWip.toTag())
+        }
 
         if (authors.isNotEmpty()) {
             val authorsTag = pTag.getList(AUTHORS_TAG, ListTag.TAG_COMPOUND.toInt())
