@@ -3,23 +3,14 @@ package dev.aaronhowser.mods.pitchperfect.block
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
-import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
-import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.network.chat.Component
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.*
@@ -118,76 +109,6 @@ class ComposerBlock(
         super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
 
         return InteractionResult.CONSUME
-    }
-
-    override fun setPlacedBy(
-        pLevel: Level,
-        pPos: BlockPos,
-        pState: BlockState,
-        pPlacer: LivingEntity?,
-        pStack: ItemStack
-    ) {
-        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack)
-
-        val songComponent = pStack.get(ModDataComponents.SONG_WIP_COMPONENT) ?: return
-        val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
-
-        blockEntity.setSong(songComponent.song)
-    }
-
-    override fun appendHoverText(
-        pStack: ItemStack,
-        pContext: Item.TooltipContext,
-        pTooltipComponents: MutableList<Component>,
-        pTooltipFlag: TooltipFlag
-    ) {
-        super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
-
-        val song = pStack.get(ModDataComponents.SONG_WIP_COMPONENT)?.song ?: return
-
-        val instrumentsComponent = Component.empty()
-
-        for (soundHolder in song.soundHolders) {
-            val instrument = ModItems.getFromSoundHolder(soundHolder)
-
-            val instrumentComponent = if (instrument != null) {
-                ModLanguageProvider.FontIcon.getIcon(instrument.get())
-            } else {
-                Component.literal(soundHolder.key.toString())
-            }
-
-            instrumentsComponent.append(instrumentComponent)
-        }
-
-        pTooltipComponents.add(instrumentsComponent)
-    }
-
-    override fun playerWillDestroy(pLevel: Level, pPos: BlockPos, pState: BlockState, pPlayer: Player): BlockState {
-        val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity
-
-        if (
-            blockEntity is ComposerBlockEntity
-            && pPlayer is ServerPlayer
-            && pPlayer.isCreative
-            && blockEntity.songWip?.song?.beats?.isNotEmpty() == true
-        ) {
-
-            val stack = this.asItem().defaultInstance
-            stack.applyComponents(blockEntity.collectComponents())
-
-            val itemEntity = ItemEntity(
-                pLevel,
-                pPos.x.toDouble() + 0.5,
-                pPos.y.toDouble() + 0.5,
-                pPos.z.toDouble() + 0.5,
-                stack
-            )
-
-            itemEntity.setDefaultPickUpDelay()
-            pLevel.addFreshEntity(itemEntity)
-        }
-
-        return super.playerWillDestroy(pLevel, pPos, pState, pPlayer)
     }
 
 }
