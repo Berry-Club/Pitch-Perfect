@@ -90,8 +90,8 @@ class Timeline(
     }
 
     fun setLastBeatDelay() {
-        val songWip = composerScreen.songWip ?: return
-        val lastBeat = songWip.song.beats.flatMap { it.value }.maxByOrNull { it.at } ?: return
+        val composerSong = composerScreen.composerSong ?: return
+        val lastBeat = composerSong.song.beats.flatMap { it.value }.maxByOrNull { it.at } ?: return
         lastBeatDelay = lastBeat.at
     }
 

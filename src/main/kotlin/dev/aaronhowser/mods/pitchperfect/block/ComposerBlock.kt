@@ -85,10 +85,10 @@ class ComposerBlock(
             val blockEntity = pLevel.getBlockEntity(pPos)
             if (blockEntity is ComposerBlockEntity) {
 
-                val songWip = blockEntity.songWip
-                if (songWip != null) {
+                val composerSong = blockEntity.composerSong
+                if (composerSong != null) {
                     PitchPerfect.LOGGER.info("A Composer with a song was broken!")
-                    PitchPerfect.LOGGER.info(songWip.song.toString())
+                    PitchPerfect.LOGGER.info(composerSong.song.toString())
                 }
             }
         }
@@ -169,7 +169,7 @@ class ComposerBlock(
             blockEntity is ComposerBlockEntity
             && pPlayer is ServerPlayer
             && pPlayer.isCreative
-            && blockEntity.songWip?.song?.beats?.isNotEmpty() == true
+            && blockEntity.composerSong?.song?.beats?.isNotEmpty() == true
         ) {
 
             val stack = this.asItem().defaultInstance
