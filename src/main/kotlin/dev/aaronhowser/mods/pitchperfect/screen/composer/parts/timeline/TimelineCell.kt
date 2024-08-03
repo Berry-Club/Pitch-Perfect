@@ -60,8 +60,8 @@ data class TimelineCell(
 
     val sounds: List<Holder<SoundEvent>>
         get() {
-            val composerSong = timeline.composerScreen.composerSong ?: return emptyList()
-            return composerSong.getSoundsAt(delay, pitchInt)
+            val songWip = timeline.composerScreen.songWip ?: return emptyList()
+            return songWip.getSoundsAt(delay, pitchInt)
         }
 
     private val componentList: List<Component>

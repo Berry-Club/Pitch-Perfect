@@ -15,7 +15,7 @@
             {
               "function": "minecraft:copy_components",
               "include": [
-                "pitchperfect:composer_song"
+                "pitchperfect:song_wip"
               ],
               "source": "block_entity"
             }
