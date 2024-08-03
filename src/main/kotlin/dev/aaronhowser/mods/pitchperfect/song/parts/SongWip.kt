@@ -1,37 +1,35 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.Holder
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvent
+import java.util.*
 
-class ComposerSong(
-    var song: Song,
-    var authors: List<Author>
+class SongWip(
+    var song: Song
 ) {
 
     companion object {
-        val CODEC: Codec<ComposerSong> =
-            RecordCodecBuilder.create {
-                it.group(
-                    Song.CODEC.fieldOf("song").forGetter(ComposerSong::song),
-                    Codec.list(Author.CODEC).fieldOf("authors").forGetter(ComposerSong::authors)
-                ).apply(it, ::ComposerSong)
-            }
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSong> =
-            StreamCodec.composite(
-                Song.STREAM_CODEC, ComposerSong::song,
-                Author.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSong::authors,
-                ::ComposerSong
-            )
+        val CODEC: Codec<SongWip> =
+            Song.CODEC.xmap(::SongWip, SongWip::song)
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SongWip> =
+            Song.STREAM_CODEC.map(::SongWip, SongWip::song)
 
         private const val SONG_NBT = "song"
+
+        fun fromCompoundTag(tag: CompoundTag): SongWip? {
+            val songString = tag.getString(SONG_NBT)
+            if (songString.isEmpty()) return null
+            val song = Song.fromString(songString) ?: return null
+            return SongWip(song)
+        }
     }
 
-    constructor() : this(Song(emptyMap()), emptyList())
+    constructor() : this(Song(emptyMap()))
 
     fun addBeat(
         delay: Int,
@@ -92,6 +90,12 @@ class ComposerSong(
         }
 
         return list
+    }
+
+    fun toTag(): Tag {
+        val tag = CompoundTag()
+        tag.putString(SONG_NBT, song.toString())
+        return tag
     }
 
 }
