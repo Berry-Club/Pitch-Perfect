@@ -3,14 +3,21 @@ package dev.aaronhowser.mods.pitchperfect.block
 import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
+import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
+import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.*
@@ -130,6 +137,34 @@ class ComposerBlock(
         }
 
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston)
+    }
+
+    override fun appendHoverText(
+        pStack: ItemStack,
+        pContext: Item.TooltipContext,
+        pTooltipComponents: MutableList<Component>,
+        pTooltipFlag: TooltipFlag
+    ) {
+        super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
+
+        val composerSong = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT)?.composerSong ?: return
+        val song = composerSong.song
+
+        val instrumentsComponent = Component.empty()
+
+        for (soundHolder in song.soundHolders) {
+            val instrument = ModItems.getFromSoundHolder(soundHolder)
+
+            val instrumentComponent = if (instrument != null) {
+                ModLanguageProvider.FontIcon.getIcon(instrument.get())
+            } else {
+                Component.literal(soundHolder.key.toString())
+            }
+
+            instrumentsComponent.append(instrumentComponent)
+        }
+
+        pTooltipComponents.add(instrumentsComponent)
     }
 
 }
