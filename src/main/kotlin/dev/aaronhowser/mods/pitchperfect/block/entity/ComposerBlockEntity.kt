@@ -28,7 +28,10 @@ class ComposerBlockEntity(
     }
 
     var composerSong: ComposerSong? = null
-        private set
+        private set(value) {
+            field = value
+            setChanged()
+        }
 
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
@@ -89,7 +92,10 @@ class ComposerBlockEntity(
 
     fun setSong(song: Song, player: Player) {
         composerSong = ComposerSong(song, listOf(Author(player)))
-        setChanged()
+    }
+
+    fun setSong(song: ComposerSong) {
+        composerSong = song
     }
 
     override fun collectImplicitComponents(pComponents: DataComponentMap.Builder) {
