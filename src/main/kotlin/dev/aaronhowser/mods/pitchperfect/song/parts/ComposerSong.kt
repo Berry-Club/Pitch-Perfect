@@ -7,25 +7,24 @@ import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvent
-import java.util.*
 
-class SongWip(
+class ComposerSong(
     var song: Song
 ) {
 
     companion object {
-        val CODEC: Codec<SongWip> =
-            Song.CODEC.xmap(::SongWip, SongWip::song)
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SongWip> =
-            Song.STREAM_CODEC.map(::SongWip, SongWip::song)
+        val CODEC: Codec<ComposerSong> =
+            Song.CODEC.xmap(::ComposerSong, ComposerSong::song)
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSong> =
+            Song.STREAM_CODEC.map(::ComposerSong, ComposerSong::song)
 
         private const val SONG_NBT = "song"
 
-        fun fromCompoundTag(tag: CompoundTag): SongWip? {
+        fun fromCompoundTag(tag: CompoundTag): ComposerSong? {
             val songString = tag.getString(SONG_NBT)
             if (songString.isEmpty()) return null
             val song = Song.fromString(songString) ?: return null
-            return SongWip(song)
+            return ComposerSong(song)
         }
     }
 
