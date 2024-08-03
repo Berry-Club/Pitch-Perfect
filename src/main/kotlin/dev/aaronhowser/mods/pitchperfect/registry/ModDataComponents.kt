@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.registry
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.ComposerSongComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.SongComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import net.minecraft.core.component.DataComponentType
@@ -29,9 +29,9 @@ object ModDataComponents {
             it.persistent(UuidComponent.CODEC).networkSynchronized(UuidComponent.STREAM_CODEC)
         }
 
-    val COMPOSER_SONG_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<ComposerSongComponent>> =
-        DATA_COMPONENT_REGISTRY.registerComponentType("composer_song") {
-            it.persistent(ComposerSongComponent.CODEC).networkSynchronized(ComposerSongComponent.STREAM_CODEC)
+    val SONG_WIP_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SongComponent>> =
+        DATA_COMPONENT_REGISTRY.registerComponentType("song_wip") {
+            it.persistent(SongComponent.CODEC).networkSynchronized(SongComponent.STREAM_CODEC)
         }
 
 }
