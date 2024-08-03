@@ -129,7 +129,7 @@ class ComposerBlock(
     ) {
         super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack)
 
-        val songComponent = pStack.get(ModDataComponents.SONG_WIP_COMPONENT) ?: return
+        val songComponent = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT) ?: return
         val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
 
         blockEntity.setSong(songComponent.song)
@@ -143,7 +143,7 @@ class ComposerBlock(
     ) {
         super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
 
-        val song = pStack.get(ModDataComponents.SONG_WIP_COMPONENT)?.song ?: return
+        val song = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT)?.song ?: return
 
         val instrumentsComponent = Component.empty()
 
