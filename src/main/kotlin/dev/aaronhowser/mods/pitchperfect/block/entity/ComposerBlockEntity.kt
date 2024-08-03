@@ -83,10 +83,7 @@ class ComposerBlockEntity(
             composerSong = ComposerSong()
         }
 
-        composerSong?.addAuthor(player)
-
         val note = Note.getFromPitch(pitch)
-
         val soundHolder = Song.getSoundHolder(instrument)
 
         composerSong?.apply {
@@ -96,8 +93,10 @@ class ComposerBlockEntity(
                 removeBeat(delay, note, soundHolder)
             }
 
-            setChanged()
+            addAuthor(player)
         }
+
+        setChanged()
     }
 
     fun setSong(song: Song, player: Player) {
