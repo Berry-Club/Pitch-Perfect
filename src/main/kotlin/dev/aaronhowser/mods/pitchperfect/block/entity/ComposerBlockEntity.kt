@@ -38,6 +38,11 @@ class ComposerBlockEntity(
 
         val composerSongTag = pTag.getCompound(COMPOSER_SONG_TAG)
         composerSong = ComposerSong.fromCompoundTag(composerSongTag)
+
+        // this is so fucked up lmao
+        if (pTag.contains("components")) {
+            pTag.remove("components")
+        }
     }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
