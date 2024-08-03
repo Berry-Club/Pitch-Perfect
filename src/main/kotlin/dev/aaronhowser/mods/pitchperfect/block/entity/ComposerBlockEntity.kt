@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.song.parts.Author
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
-import dev.aaronhowser.mods.pitchperfect.song.parts.ComposerSong
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -23,13 +23,13 @@ class ComposerBlockEntity(
 ) : BlockEntity(ModBlockEntities.COMPOSER.get(), pPos, pBlockState) {
 
     companion object {
-        const val COMPOSER_SONG_TAG = "composer_song"
+        const val SONG_WIP_TAG = "song_content"
         const val AUTHORS_TAG = "authors"
         const val AUTHOR_NAME_TAG = "name"
         const val AUTHOR_UUID_TAG = "uuid"
     }
 
-    var composerSong: ComposerSong? = null
+    var songWip: SongWip? = null
         private set
     var authors: List<Author> = emptyList()
         private set
@@ -37,8 +37,8 @@ class ComposerBlockEntity(
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
 
-        val composerSongTag = pTag.getCompound(COMPOSER_SONG_TAG)
-        composerSong = ComposerSong.fromCompoundTag(composerSongTag)
+        val songWipTag = pTag.getCompound(SONG_WIP_TAG)
+        songWip = SongWip.fromCompoundTag(songWipTag)
 
         val authorsTag = pTag.getList(AUTHORS_TAG, ListTag.TAG_COMPOUND.toInt())
         for (authorTag in authorsTag) {
@@ -54,9 +54,9 @@ class ComposerBlockEntity(
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
 
-        val timeline = composerSong
+        val timeline = songWip
         if (timeline != null) {
-            pTag.put(COMPOSER_SONG_TAG, timeline.toTag())
+            pTag.put(SONG_WIP_TAG, timeline.toTag())
         }
 
         if (authors.isNotEmpty()) {
@@ -94,8 +94,8 @@ class ComposerBlockEntity(
         leftClick: Boolean,
         instrument: String
     ) {
-        if (composerSong == null) {
-            composerSong = ComposerSong()
+        if (songWip == null) {
+            songWip = SongWip()
         }
 
         if (authors.none { it.uuid == player.uuid }) {
@@ -106,7 +106,7 @@ class ComposerBlockEntity(
 
         val soundHolder = Song.getSoundHolder(instrument)
 
-        composerSong?.apply {
+        songWip?.apply {
             if (leftClick) {
                 addBeat(delay, note, soundHolder)
             } else {
@@ -118,7 +118,7 @@ class ComposerBlockEntity(
     }
 
     fun setSong(song: Song) {
-        composerSong = ComposerSong(song)
+        songWip = SongWip(song)
         setChanged()
     }
 

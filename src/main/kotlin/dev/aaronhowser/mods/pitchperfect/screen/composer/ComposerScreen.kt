@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ComposerControls
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.InstrumentArea
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline.Timeline
-import dev.aaronhowser.mods.pitchperfect.song.parts.ComposerSong
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongWip
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Button
@@ -118,7 +118,7 @@ class ComposerScreen(
         return false
     }
 
-    var composerSong: ComposerSong? = null
+    var songWip: SongWip? = null
         private set
 
     override fun tick() {
@@ -126,8 +126,8 @@ class ComposerScreen(
             minecraft?.player?.closeContainer()
         }
 
-        if (composerSong != composerBlockEntity.composerSong) {
-            composerSong = composerBlockEntity.composerSong
+        if (songWip != composerBlockEntity.songWip) {
+            songWip = composerBlockEntity.songWip
             timeline.setLastBeatDelay()
         }
     }
