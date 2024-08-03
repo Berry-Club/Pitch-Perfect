@@ -29,8 +29,8 @@ object ModDataComponents {
             it.persistent(UuidComponent.CODEC).networkSynchronized(UuidComponent.STREAM_CODEC)
         }
 
-    val SONG_WIP_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SongComponent>> =
-        DATA_COMPONENT_REGISTRY.registerComponentType("song_wip") {
+    val COMPOSER_SONG_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SongComponent>> =
+        DATA_COMPONENT_REGISTRY.registerComponentType("composer_song") {
             it.persistent(SongComponent.CODEC).networkSynchronized(SongComponent.STREAM_CODEC)
         }
 

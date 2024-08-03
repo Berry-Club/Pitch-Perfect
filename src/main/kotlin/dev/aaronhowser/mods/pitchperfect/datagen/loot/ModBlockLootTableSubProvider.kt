@@ -33,7 +33,7 @@ class ModBlockLootTableSubProvider(
                             LootItem.lootTableItem(composer)
                                 .apply(
                                     CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
-                                        .include(ModDataComponents.SONG_WIP_COMPONENT.get())
+                                        .include(ModDataComponents.COMPOSER_SONG_COMPONENT.get())
                                 )
                         )
                 )

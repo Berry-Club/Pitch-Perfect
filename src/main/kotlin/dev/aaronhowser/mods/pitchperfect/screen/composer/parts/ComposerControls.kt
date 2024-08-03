@@ -35,7 +35,7 @@ class ComposerControls(
     }
 
     fun copySong() {
-        val song = composerScreen.songWip?.song ?: return
+        val song = composerScreen.composerSong?.song ?: return
 
         composerScreen.minecraft.keyboardHandler.clipboard = song.toString()
 
@@ -58,7 +58,7 @@ class ComposerControls(
             return
         }
 
-        val previousSong = composerScreen.songWip?.song
+        val previousSong = composerScreen.composerSong?.song
 
         ModPacketHandler.messageServer(
             ComposerPasteSongPacket(
