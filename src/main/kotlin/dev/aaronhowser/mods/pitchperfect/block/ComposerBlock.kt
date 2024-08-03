@@ -9,6 +9,7 @@ import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
@@ -62,6 +63,52 @@ class ComposerBlock(
         return ComposerBlockEntity(pPos, pState)
     }
 
+    override fun useWithoutItem(
+        pState: BlockState,
+        pLevel: Level,
+        pPos: BlockPos,
+        pPlayer: Player,
+        pHitResult: BlockHitResult
+    ): InteractionResult {
+        val blockEntity = pLevel.getBlockEntity(pPos)
+                as? ComposerBlockEntity ?: return InteractionResult.CONSUME
+
+        if (pPlayer is LocalPlayer) {
+            val screen = ComposerScreen(blockEntity)
+            Minecraft.getInstance().setScreen(screen)
+        }
+
+        super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
+
+        return InteractionResult.CONSUME
+    }
+
+    override fun playerWillDestroy(pLevel: Level, pPos: BlockPos, pState: BlockState, pPlayer: Player): BlockState {
+        val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity
+
+        if (!pLevel.isClientSide && pPlayer.isCreative && blockEntity != null) {
+            val composerSong = blockEntity.composerSong
+            if (composerSong != null) {
+                val itemStack = this.asItem().defaultInstance
+                itemStack.applyComponents(blockEntity.collectComponents())
+
+                val itemEntity = ItemEntity(
+                    pLevel,
+                    pPos.x.toDouble() + 0.5,
+                    pPos.y.toDouble() + 0.5,
+                    pPos.z.toDouble() + 0.5,
+                    itemStack
+                )
+
+                itemEntity.setDefaultPickUpDelay()
+                pLevel.addFreshEntity(itemEntity)
+            }
+
+        }
+
+        return super.playerWillDestroy(pLevel, pPos, pState, pPlayer)
+    }
+
     override fun onRemove(
         pState: BlockState,
         pLevel: Level,
@@ -83,26 +130,6 @@ class ComposerBlock(
         }
 
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston)
-    }
-
-    override fun useWithoutItem(
-        pState: BlockState,
-        pLevel: Level,
-        pPos: BlockPos,
-        pPlayer: Player,
-        pHitResult: BlockHitResult
-    ): InteractionResult {
-        val blockEntity = pLevel.getBlockEntity(pPos)
-                as? ComposerBlockEntity ?: return InteractionResult.CONSUME
-
-        if (pPlayer is LocalPlayer) {
-            val screen = ComposerScreen(blockEntity)
-            Minecraft.getInstance().setScreen(screen)
-        }
-
-        super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
-
-        return InteractionResult.CONSUME
     }
 
 }

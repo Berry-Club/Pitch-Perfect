@@ -1,15 +1,16 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
+import dev.aaronhowser.mods.pitchperfect.item.component.ComposerSongComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
+import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.parts.Author
 import dev.aaronhowser.mods.pitchperfect.song.parts.ComposerSong
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
-import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.component.DataComponentMap
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
@@ -89,6 +90,13 @@ class ComposerBlockEntity(
     fun setSong(song: Song, player: Player) {
         composerSong = ComposerSong(song, listOf(Author(player)))
         setChanged()
+    }
+
+    override fun collectImplicitComponents(pComponents: DataComponentMap.Builder) {
+        super.collectImplicitComponents(pComponents)
+
+        val currentSong = composerSong ?: return
+        pComponents.set(ModDataComponents.COMPOSER_SONG_COMPONENT, ComposerSongComponent(currentSong))
     }
 
 }
