@@ -10,7 +10,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.*
@@ -18,7 +17,6 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.phys.BlockHitResult
 
 class ComposerBlock(
@@ -85,10 +83,6 @@ class ComposerBlock(
         }
 
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston)
-    }
-
-    override fun getDrops(pState: BlockState, pParams: LootParams.Builder): MutableList<ItemStack> {
-        return super.getDrops(pState, pParams)
     }
 
     override fun useWithoutItem(
