@@ -88,14 +88,6 @@ class ComposerBlockEntity(
         super.setChanged()
 
         level?.sendBlockUpdated(blockPos, blockState, blockState, 1 or 2 or 8)
-
-        val song = songWip?.song
-        if (song != null) {
-            val componentBuilder = DataComponentMap.builder()
-            componentBuilder.set(ModDataComponents.SONG_WIP_COMPONENT, SongComponent(song))
-
-            this.setComponents(componentBuilder.build())
-        }
     }
 
     fun clickCell(
