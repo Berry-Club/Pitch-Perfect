@@ -24,9 +24,6 @@ class ComposerBlockEntity(
 
     companion object {
         const val COMPOSER_SONG_TAG = "composer_song"
-        const val AUTHORS_TAG = "authors"
-        const val AUTHOR_NAME_TAG = "name"
-        const val AUTHOR_UUID_TAG = "uuid"
     }
 
     var composerSong: ComposerSong? = null
@@ -37,16 +34,6 @@ class ComposerBlockEntity(
 
         val composerSongTag = pTag.getCompound(COMPOSER_SONG_TAG)
         composerSong = ComposerSong.fromCompoundTag(composerSongTag)
-
-        val authorsTag = pTag.getList(AUTHORS_TAG, ListTag.TAG_COMPOUND.toInt())
-        for (authorTag in authorsTag) {
-            if (authorTag !is CompoundTag) continue
-
-            val name = authorTag.getString(AUTHOR_NAME_TAG)
-            val uuid = authorTag.getUuidOrNull(AUTHOR_UUID_TAG) ?: continue
-
-            composerSong?.addAuthor(uuid, name)
-        }
     }
 
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
