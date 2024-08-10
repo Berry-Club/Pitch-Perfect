@@ -9,6 +9,8 @@ import net.minecraft.world.level.Level
 
 object ModEnchantments {
 
+    //TODO: Make sure these can actually be applied in the enchanting table
+
     val healingBeatResourceKey: ResourceKey<Enchantment> =
         ResourceKey.create(Registries.ENCHANTMENT, OtherUtil.modResource("healing_beat"))
     val bwaaapResourceKey: ResourceKey<Enchantment> =
