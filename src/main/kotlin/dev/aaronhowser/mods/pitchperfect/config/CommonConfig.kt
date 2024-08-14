@@ -4,6 +4,7 @@ import net.neoforged.neoforge.common.ModConfigSpec
 import org.apache.commons.lang3.tuple.Pair
 
 
+//TODO: Remove this class
 class CommonConfig(
     private val builder: ModConfigSpec.Builder
 ) {
