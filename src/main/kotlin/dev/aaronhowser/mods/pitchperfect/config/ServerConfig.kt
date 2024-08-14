@@ -14,6 +14,7 @@ class ServerConfig(
         val CONFIG: ServerConfig = configPair.left
         val CONFIG_SPEC: ModConfigSpec = configPair.right
 
+        //TODO: Use
         lateinit var CHANCE_MOB_SPAWNS_WITH_INSTRUMENT: ModConfigSpec.DoubleValue
 
         lateinit var HEAL_RANGE: ModConfigSpec.DoubleValue
@@ -35,13 +36,11 @@ class ServerConfig(
     }
 
     init {
-        ServerConfigs()
+        serverConfigs()
         builder.build()
     }
 
-    private fun ServerConfigs() {
-
-        builder.push("Server")
+    private fun serverConfigs() {
 
         CHANCE_MOB_SPAWNS_WITH_INSTRUMENT = builder
             .comment("The chance that a monster with an empty main-hand will have it filled with an instrument on spawn.")
@@ -88,7 +87,6 @@ class ServerConfig(
             .comment("Should players be able to give Armor Stands instruments? Disable if another mod is installed that already does this.")
             .define("Can Give Armor Stands Instruments", true)
 
-        builder.pop()
     }
 
 }
