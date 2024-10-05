@@ -4,9 +4,11 @@ plugins {
     id 'java-library'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.145'
+    id 'net.neoforged.moddev' version '1.0.0'
 
+    // Adds the Kotlin Gradle plugin
     id 'org.jetbrains.kotlin.jvm' version '2.0.0'
+    // OPTIONAL Kotlin Serialization plugin
     id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.0'
 }
 
@@ -14,38 +16,79 @@ version = mod_version
 group = mod_group_id
 base.archivesName = mod_id
 
+// Mojang ships Java 21 to end users in 1.20.5+, so your mod should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 compileKotlin.compilerOptions.jvmTarget = JvmTarget.JVM_21
 
-minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
-//minecraft.accessTransformers.entry public net.minecraft.client.Minecraft textureManager # textureManager
-
 // Default run configurations.
 // These can be tweaked, removed, or duplicated as needed.
-runs {
-    configureEach {
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
+neoForge {
+    // NeoForge version
+    version = neo_version
 
-        systemProperty 'forge.logging.console.level', 'debug'
-
-        modSource project.sourceSets.main
+    // Add Parchment parameter mappings
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
     }
 
-    client {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    // This line is optional. Access Transformers are automatically detected
+    // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
+
+    runs {
+        configureEach {
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+
+        client {
+            client()
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        client_two {
+            client()
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            programArguments.addAll '--username', 'PlayerTwo'
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+            // workingDirectory project.file('run-data')
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
     }
 
-    server {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
-    }
-
-    gameTestServer {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-    }
-
-    data {
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
     }
 }
 
@@ -66,8 +109,12 @@ repositories {
 
     maven {
         url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
     }
 
+    // For KubeJS
     maven {
         url "https://maven.latvian.dev/releases"
         content {
@@ -78,18 +125,8 @@ repositories {
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neo_version}"
-
+    // Must use the '-neoforge' version on NeoForge. If on regular forge, omit the '-neoforge'
     implementation "thedarkcolour:kotlinforforge-neoforge:${kff_version}"
-
-    // KubeJs
-    runtimeOnly "dev.latvian.mods:kubejs-neoforge:${kubejs_version}"
-
-    // Building Gadgets
-    implementation "curse.maven:building-gadgets-298187:5464117"
-
-    // Spark
-    implementation "curse.maven:spark-361579:5434153"
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -113,6 +150,7 @@ tasks.withType(ProcessResources).configureEach {
     }
 }
 
+// Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
@@ -126,6 +164,11 @@ publishing {
     }
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
 idea {
     module {
         downloadSources = true
