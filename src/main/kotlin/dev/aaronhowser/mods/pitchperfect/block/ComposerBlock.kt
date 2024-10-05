@@ -21,12 +21,14 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.HitResult
 
 class ComposerBlock(
     private val properties: Properties = Properties.of()
@@ -115,6 +117,22 @@ class ComposerBlock(
         }
 
         return super.playerWillDestroy(pLevel, pPos, pState, pPlayer)
+    }
+
+    override fun getCloneItemStack(
+        state: BlockState,
+        target: HitResult,
+        level: LevelReader,
+        pos: BlockPos,
+        player: Player
+    ): ItemStack {
+        val blockEntity = level.getBlockEntity(pos) as? ComposerBlockEntity
+            ?: return super.getCloneItemStack(state, target, level, pos, player)
+
+        val itemStack = this.asItem().defaultInstance
+        itemStack.applyComponents(blockEntity.collectComponents())
+
+        return itemStack
     }
 
     override fun setPlacedBy(
