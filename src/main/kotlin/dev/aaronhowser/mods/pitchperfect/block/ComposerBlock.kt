@@ -164,7 +164,7 @@ class ComposerBlock(
                 val composerSong = blockEntity.composerSong
                 if (composerSong != null) {
                     PitchPerfect.LOGGER.info("A Composer with a song was broken!")
-                    PitchPerfect.LOGGER.info(composerSong.songInfo.toString())
+                    PitchPerfect.LOGGER.info(composerSong.song.toString())
                 }
             }
         }
@@ -181,7 +181,7 @@ class ComposerBlock(
         super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
 
         val composerSong = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT)?.composerSong ?: return
-        val song = composerSong.songInfo.song
+        val song = composerSong.song
 
         val instrumentsComponent = Component.empty()
 
