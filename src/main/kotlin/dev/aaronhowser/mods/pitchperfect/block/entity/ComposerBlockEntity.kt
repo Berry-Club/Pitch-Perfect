@@ -14,7 +14,6 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import java.util.*
-import kotlin.properties.Delegates
 
 class ComposerBlockEntity(
     pPos: BlockPos,
@@ -25,7 +24,9 @@ class ComposerBlockEntity(
         const val COMPOSER_SONG_UUID_NBT = "composer_song_uuid"
     }
 
-    var composerSongUuid: UUID by Delegates.notNull()
+    // Defaults to a new random one, but if it's actually loading from NBT it'll be overwritten
+    var composerSongUuid: UUID = UUID.randomUUID()
+        private set
 
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
@@ -45,9 +46,7 @@ class ComposerBlockEntity(
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
 
-        if (composerSongUuid != null) {
-            pTag.putUUID(COMPOSER_SONG_UUID_NBT, composerSongUuid!!)
-        }
+        pTag.putUUID(COMPOSER_SONG_UUID_NBT, composerSongUuid)
     }
 
     override fun getUpdateTag(pRegistries: HolderLookup.Provider): CompoundTag {
