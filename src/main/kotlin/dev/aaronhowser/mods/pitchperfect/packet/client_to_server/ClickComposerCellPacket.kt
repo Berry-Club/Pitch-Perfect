@@ -2,6 +2,9 @@ package dev.aaronhowser.mods.pitchperfect.packet.client_to_server
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
+import dev.aaronhowser.mods.pitchperfect.song.parts.Note
+import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -29,7 +32,23 @@ class ClickComposerCellPacket(
             val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
             if (!player.canInteractWithBlock(blockPos, playerReach)) return@enqueueWork
 
-            composerBlockEntity.clickCell(player, delay, pitch, leftClick, selectedInstrument)
+            val composerSongUuid = composerBlockEntity.composerSongUuid
+
+            val composerSongSavedData = player.server!!.composerSongSavedData
+            val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+
+            val note = Note.getFromPitch(pitch)
+            val soundHolder = Song.getSoundHolder(selectedInstrument)
+
+            composerSong.apply {
+                if (leftClick) {
+                    addBeat(pitch, note, soundHolder)
+                } else {
+                    removeBeat(delay, note, soundHolder)
+                }
+
+                addAuthor(player)
+            }
         }
     }
 
