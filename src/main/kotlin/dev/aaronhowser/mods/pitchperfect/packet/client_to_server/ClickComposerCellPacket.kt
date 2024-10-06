@@ -45,7 +45,7 @@ class ClickComposerCellPacket(
 
             composerSong.apply {
                 if (leftClick) {
-                    addBeat(pitch, note, soundHolder)
+                    addBeat(delay, note, soundHolder)
                 } else {
                     removeBeat(delay, note, soundHolder)
                 }
