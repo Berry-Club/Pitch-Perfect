@@ -119,9 +119,6 @@ class ComposerScreen(
         return false
     }
 
-    val composerSong: ComposerSong?
-        get() = SetCurrentComposerSongPacket.currentComposerSong
-
     override fun tick() {
         if (composerBlockEntity.isRemoved) {
             minecraft?.player?.closeContainer()

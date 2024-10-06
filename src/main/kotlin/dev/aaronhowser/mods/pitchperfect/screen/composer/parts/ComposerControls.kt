@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ComposerPasteSongPacket
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline.Timeline
@@ -35,7 +36,7 @@ class ComposerControls(
     }
 
     fun copySong() {
-        val song = composerScreen.composerSong?.song ?: return
+        val song = SetCurrentComposerSongPacket.currentComposerSong?.song ?: return
 
         composerScreen.minecraft.keyboardHandler.clipboard = song.toString()
 
@@ -58,7 +59,7 @@ class ComposerControls(
             return
         }
 
-        val previousSong = composerScreen.composerSong?.song
+        val previousSong = SetCurrentComposerSongPacket.currentComposerSong?.song
 
         ModPacketHandler.messageServer(
             ComposerPasteSongPacket(

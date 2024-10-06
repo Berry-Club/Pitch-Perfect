@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
@@ -60,7 +61,7 @@ data class TimelineCell(
 
     val sounds: List<Holder<SoundEvent>>
         get() {
-            val composerSong = timeline.composerScreen.composerSong ?: return emptyList()
+            val composerSong = SetCurrentComposerSongPacket.currentComposerSong ?: return emptyList()
             return composerSong.getSoundsAt(delay, pitchInt)
         }
 

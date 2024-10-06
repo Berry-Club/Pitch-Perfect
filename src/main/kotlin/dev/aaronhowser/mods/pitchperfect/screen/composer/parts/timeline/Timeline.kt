@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.gui.Font
 import net.neoforged.api.distmarker.Dist
@@ -90,7 +91,7 @@ class Timeline(
     }
 
     fun setLastBeatDelay() {
-        val composerSong = composerScreen.composerSong ?: return
+        val composerSong = SetCurrentComposerSongPacket.currentComposerSong ?: return
         val lastBeat = composerSong.song.beats.flatMap { it.value }.maxByOrNull { it.at } ?: return
         lastBeatDelay = lastBeat.at
     }
