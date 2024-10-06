@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.Holder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -14,7 +15,7 @@ import java.util.*
 
 class ComposerSong(
     val uuid: UUID,
-    val songInfo: SongInfo,
+    var songInfo: SongInfo,
 ) {
 
     companion object {
@@ -29,6 +30,7 @@ class ComposerSong(
                         .forGetter(ComposerSong::songInfo)
                 ).apply(it, ::ComposerSong)
             }
+
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSong> =
             StreamCodec.composite(
                 UuidComponent.UUID_STREAM_CODEC, ComposerSong::uuid,
@@ -36,8 +38,16 @@ class ComposerSong(
                 ::ComposerSong
             )
 
-        fun fromCompoundTag(tag: CompoundTag): ComposerSong? {
+        const val SONG_INFO_NBT = "song_info"
+        const val UUID_NBT = "uuid"
 
+        fun fromCompoundTag(tag: CompoundTag): ComposerSong? {
+            val songInfoTag = tag.get(SONG_INFO_NBT) as? CompoundTag ?: return null
+            val singInfo = SongInfo.fromCompoundTag(songInfoTag) ?: return null
+
+            val uuid = tag.getUuidOrNull(UUID_NBT) ?: return null
+
+            return ComposerSong(uuid, singInfo)
         }
     }
 
@@ -46,7 +56,7 @@ class ComposerSong(
         note: Note,
         instrument: Holder<SoundEvent>
     ) {
-        val updatedBeats = song.beats.toMutableMap()
+        val updatedBeats = songInfo.song.beats.toMutableMap()
 
         val currentBeats = updatedBeats[instrument].orEmpty()
         val currentBeat = currentBeats.find { it.at == delay } ?: Beat(delay, emptyList())
@@ -54,7 +64,9 @@ class ComposerSong(
         val newBeat = Beat(delay, newNotes)
 
         updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
-        song = song.copy(beats = updatedBeats)
+
+        val newSongInfo = songInfo.copy(song = songInfo.song.copy(beats = updatedBeats))
+        songInfo = newSongInfo
     }
 
     fun removeBeat(
@@ -62,7 +74,7 @@ class ComposerSong(
         note: Note,
         instrument: Holder<SoundEvent>
     ) {
-        val updatedBeats = song.beats.toMutableMap()
+        val updatedBeats = songInfo.song.beats.toMutableMap()
 
         val currentBeats = updatedBeats[instrument] ?: return
         val currentBeat = currentBeats.find { it.at == delay } ?: return
@@ -79,7 +91,8 @@ class ComposerSong(
             }
         }
 
-        song = song.copy(beats = updatedBeats)
+        val newSongInfo = songInfo.copy(song = songInfo.song.copy(beats = updatedBeats))
+        songInfo = newSongInfo
     }
 
     fun getSoundsAt(
@@ -89,7 +102,7 @@ class ComposerSong(
         val note = Note.getFromPitch(pitch)
         val list = mutableListOf<Holder<SoundEvent>>()
 
-        for ((soundHolder, beats) in song.beats) {
+        for ((soundHolder, beats) in songInfo.song.beats) {
             val beat = beats.find { it.at == delay } ?: continue
 
             for (beatNote in beat.notes) {
@@ -105,30 +118,25 @@ class ComposerSong(
     fun addAuthor(
         player: Player
     ) {
-        if (authors.none { it.uuid == player.uuid }) {
-            authors = authors + Author(player.uuid, player.gameProfile.name)
-        }
+        addAuthor(player.uuid, player.name.string)
     }
 
     fun addAuthor(
         uuid: UUID,
         name: String
     ) {
+        val authors = songInfo.authors.toMutableList()
+
         if (authors.none { it.uuid == uuid }) {
-            authors = authors + Author(uuid, name)
+            authors.add(Author(uuid, name))
+            songInfo = songInfo.copy(authors = authors)
         }
     }
 
     fun toTag(): Tag {
         val tag = CompoundTag()
-        tag.putString(SONG_NBT, song.toString())
-
-        val authorsListTag = tag.getList(AUTHORS_NBT, Tag.TAG_LIST.toInt())
-        for (author in authors) {
-            authorsListTag.add(author.toTag())
-        }
-        tag.put(AUTHORS_NBT, authorsListTag)
-
+        tag.putUUID(UUID_NBT, uuid)
+        tag.put(SONG_INFO_NBT, songInfo.toTag())
         return tag
     }
 
