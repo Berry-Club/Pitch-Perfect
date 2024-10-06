@@ -30,6 +30,10 @@ class SetCurrentComposerSongPacket(
 
         var currentComposerSong: ComposerSong? = null
             private set
+
+        fun unset() {
+            currentComposerSong = null
+        }
     }
 
 }

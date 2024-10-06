@@ -34,7 +34,7 @@ class Timeline(
             timelineStepper.setCellsAtBeat()
         }
 
-    var lastBeatDelay: Int = 0
+    var delayOfFinalBeat: Int = 0
         private set
 
     fun init() {
@@ -93,7 +93,7 @@ class Timeline(
     fun setLastBeatDelay() {
         val composerSong = SetCurrentComposerSongPacket.currentComposerSong ?: return
         val lastBeat = composerSong.song.beats.flatMap { it.value }.maxByOrNull { it.at } ?: return
-        lastBeatDelay = lastBeat.at
+        delayOfFinalBeat = lastBeat.at
     }
 
 }

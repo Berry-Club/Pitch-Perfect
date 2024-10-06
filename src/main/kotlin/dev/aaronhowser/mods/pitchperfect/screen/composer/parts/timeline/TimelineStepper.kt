@@ -11,7 +11,7 @@ class TimelineStepper(
     private var currentDelay = 0
 
     fun setDelay(value: Int, fromEditBox: Boolean = false) {
-        currentDelay = value.coerceIn(0, timeline.lastBeatDelay)
+        currentDelay = value.coerceIn(0, timeline.delayOfFinalBeat)
         setCellsAtBeat()
 
         if (!fromEditBox) {
@@ -91,7 +91,7 @@ class TimelineStepper(
 
         }
 
-        if (currentDelay >= timeline.lastBeatDelay) {
+        if (currentDelay >= timeline.delayOfFinalBeat) {
             stopPlaying()
             return
         }

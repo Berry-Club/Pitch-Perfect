@@ -119,20 +119,23 @@ class ComposerScreen(
         return false
     }
 
+    private var songPreviousTick: ComposerSong? = null
+
     override fun tick() {
         if (composerBlockEntity.isRemoved) {
             minecraft?.player?.closeContainer()
         }
 
-
-//        if (composerSong != composerBlockEntity.composerSong) {
-//            composerSong = composerBlockEntity.composerSong
-//            timeline.setLastBeatDelay()
-//        }
+        if (songPreviousTick != SetCurrentComposerSongPacket.currentComposerSong) {
+            songPreviousTick = SetCurrentComposerSongPacket.currentComposerSong
+            timeline.setLastBeatDelay()
+        }
     }
 
     override fun onClose() {
         composerControls.stopPlaying()
+        SetCurrentComposerSongPacket.unset()
+
         super.onClose()
     }
 
