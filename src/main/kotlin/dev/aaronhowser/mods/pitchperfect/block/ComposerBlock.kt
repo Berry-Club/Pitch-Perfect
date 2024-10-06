@@ -4,14 +4,18 @@ import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
@@ -86,6 +90,13 @@ class ComposerBlock(
         if (pPlayer is LocalPlayer) {
             val screen = ComposerScreen(blockEntity)
             Minecraft.getInstance().setScreen(screen)
+        } else if (pPlayer is ServerPlayer) {
+            val composerSongSavedData = pPlayer.server.composerSongSavedData
+
+            val composerSongUuid = blockEntity.composerSongUuid
+            val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+
+            ModPacketHandler.messagePlayer(pPlayer, SetCurrentComposerSongPacket(composerSong))
         }
 
         super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)

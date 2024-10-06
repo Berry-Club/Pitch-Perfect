@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.packet
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ComposerPasteSongPacket
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.SongPasteCommandResponsePacket
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SongPasteCommandRequestPacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnElectricLinePacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
@@ -67,6 +68,15 @@ object ModPacketHandler {
         registrar.playToServer(
             SongPasteCommandResponsePacket.TYPE,
             SongPasteCommandResponsePacket.STREAM_CODEC,
+            DirectionalPayloadHandler(
+                { packet, context -> packet.receiveMessage(context) },
+                { packet, context -> packet.receiveMessage(context) }
+            )
+        )
+
+        registrar.playToClient(
+            SetCurrentComposerSongPacket.TYPE,
+            SetCurrentComposerSongPacket.STREAM_CODEC,
             DirectionalPayloadHandler(
                 { packet, context -> packet.receiveMessage(context) },
                 { packet, context -> packet.receiveMessage(context) }

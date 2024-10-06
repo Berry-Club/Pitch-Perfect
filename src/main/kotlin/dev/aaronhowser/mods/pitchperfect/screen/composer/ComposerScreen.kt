@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.screen.composer
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ComposerControls
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.InstrumentArea
@@ -118,15 +119,15 @@ class ComposerScreen(
         return false
     }
 
-    var composerSong: ComposerSong? = null
-        private set
+    val composerSong: ComposerSong?
+        get() = SetCurrentComposerSongPacket.currentComposerSong
 
     override fun tick() {
         if (composerBlockEntity.isRemoved) {
             minecraft?.player?.closeContainer()
         }
 
-        //FIXME
+
 //        if (composerSong != composerBlockEntity.composerSong) {
 //            composerSong = composerBlockEntity.composerSong
 //            timeline.setLastBeatDelay()
