@@ -23,8 +23,6 @@ data class SongInfo(
     val song: Song
 ) {
 
-    constructor() : this("", emptyList(), Song())
-
     constructor(
         title: String,
         player: Player,
@@ -167,10 +165,8 @@ data class SongInfo(
             for (authorTag in tagAuthors) {
                 val authorCompoundTag = authorTag as? CompoundTag ?: continue
 
-                val uuid = authorCompoundTag.getUuidOrNull(AUTHOR_UUID) ?: continue
-                val name = authorCompoundTag.getString(AUTHOR_NAME)
-
-                authors.add(Author(uuid, name))
+                val author = Author.fromCompoundTag(authorCompoundTag) ?: continue
+                authors.add(author)
             }
 
             val song = Song.fromString(tag.getString(SONG))

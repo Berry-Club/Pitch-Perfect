@@ -6,8 +6,10 @@ import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.Holder
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.player.Player
@@ -15,10 +17,11 @@ import java.util.*
 
 class ComposerSong(
     val uuid: UUID,
-    var songInfo: SongInfo,
+    var song: Song,
+    val authors: MutableList<Author>
 ) {
 
-    constructor() : this(UUID.randomUUID(), SongInfo())
+    constructor() : this(UUID.randomUUID(), Song(), mutableListOf())
 
     companion object {
         val CODEC: Codec<ComposerSong> =
@@ -27,29 +30,43 @@ class ComposerSong(
                     UuidComponent.UUID_CODEC
                         .fieldOf("uuid")
                         .forGetter(ComposerSong::uuid),
-                    SongInfo.CODEC
-                        .fieldOf("song_info")
-                        .forGetter(ComposerSong::songInfo)
+                    Song.CODEC
+                        .fieldOf("song")
+                        .forGetter(ComposerSong::song),
+                    Author.CODEC.listOf()
+                        .fieldOf("authors")
+                        .forGetter(ComposerSong::authors)
                 ).apply(it, ::ComposerSong)
             }
 
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSong> =
             StreamCodec.composite(
                 UuidComponent.UUID_STREAM_CODEC, ComposerSong::uuid,
-                SongInfo.STREAM_CODEC, ComposerSong::songInfo,
+                Song.STREAM_CODEC, ComposerSong::song,
+                Author.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSong::authors,
                 ::ComposerSong
             )
 
-        const val SONG_INFO_NBT = "song_info"
-        const val UUID_NBT = "uuid"
+        private const val SONG_NBT = "song"
+        private const val UUID_NBT = "uuid"
+        private const val AUTHORS_NBT = "authors"
 
         fun fromCompoundTag(tag: CompoundTag): ComposerSong? {
-            val songInfoTag = tag.get(SONG_INFO_NBT) as? CompoundTag ?: return null
-            val singInfo = SongInfo.fromCompoundTag(songInfoTag) ?: return null
-
             val uuid = tag.getUuidOrNull(UUID_NBT) ?: return null
 
-            return ComposerSong(uuid, singInfo)
+            val songString = tag.getString(SONG_NBT)
+            val song = Song.fromString(songString) ?: return null
+
+            val authors = mutableListOf<Author>()
+            val tagAuthors = tag.getList(AUTHORS_NBT, ListTag.TAG_COMPOUND.toInt())
+            for (authorTag in tagAuthors) {
+                val authorCompoundTag = authorTag as? CompoundTag ?: continue
+
+                val author = Author.fromCompoundTag(authorCompoundTag) ?: continue
+                authors.add(author)
+            }
+
+            return ComposerSong(uuid, song, authors)
         }
     }
 
@@ -58,7 +75,7 @@ class ComposerSong(
         note: Note,
         instrument: Holder<SoundEvent>
     ) {
-        val updatedBeats = songInfo.song.beats.toMutableMap()
+        val updatedBeats = song.beats.toMutableMap()
 
         val currentBeats = updatedBeats[instrument].orEmpty()
         val currentBeat = currentBeats.find { it.at == delay } ?: Beat(delay, emptyList())
@@ -67,8 +84,8 @@ class ComposerSong(
 
         updatedBeats[instrument] = currentBeats.filterNot { it.at == delay } + newBeat
 
-        val newSongInfo = songInfo.copy(song = songInfo.song.copy(beats = updatedBeats))
-        songInfo = newSongInfo
+        val newSong = song.copy(beats = updatedBeats)
+        song = newSong
     }
 
     fun removeBeat(
@@ -76,7 +93,7 @@ class ComposerSong(
         note: Note,
         instrument: Holder<SoundEvent>
     ) {
-        val updatedBeats = songInfo.song.beats.toMutableMap()
+        val updatedBeats = song.beats.toMutableMap()
 
         val currentBeats = updatedBeats[instrument] ?: return
         val currentBeat = currentBeats.find { it.at == delay } ?: return
@@ -93,8 +110,8 @@ class ComposerSong(
             }
         }
 
-        val newSongInfo = songInfo.copy(song = songInfo.song.copy(beats = updatedBeats))
-        songInfo = newSongInfo
+        val newSong = song.copy(beats = updatedBeats)
+        song = newSong
     }
 
     fun getSoundsAt(
@@ -104,7 +121,7 @@ class ComposerSong(
         val note = Note.getFromPitch(pitch)
         val list = mutableListOf<Holder<SoundEvent>>()
 
-        for ((soundHolder, beats) in songInfo.song.beats) {
+        for ((soundHolder, beats) in song.beats) {
             val beat = beats.find { it.at == delay } ?: continue
 
             for (beatNote in beat.notes) {
@@ -127,18 +144,25 @@ class ComposerSong(
         uuid: UUID,
         name: String
     ) {
-        val authors = songInfo.authors.toMutableList()
-
         if (authors.none { it.uuid == uuid }) {
             authors.add(Author(uuid, name))
-            songInfo = songInfo.copy(authors = authors)
         }
     }
 
     fun toTag(): Tag {
         val tag = CompoundTag()
+
         tag.putUUID(UUID_NBT, uuid)
-        tag.put(SONG_INFO_NBT, songInfo.toTag())
+        tag.putString(SONG_NBT, song.toString())
+
+        val tagAuthors = tag.getList(AUTHORS_NBT, ListTag.TAG_COMPOUND.toInt())
+
+        for (author in authors) {
+            tagAuthors.add(author.toTag())
+        }
+
+        tag.put(AUTHORS_NBT, tagAuthors)
+
         return tag
     }
 
