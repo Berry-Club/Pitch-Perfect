@@ -18,6 +18,8 @@ class ComposerSong(
     var songInfo: SongInfo,
 ) {
 
+    constructor() : this(UUID.randomUUID(), SongInfo())
+
     companion object {
         val CODEC: Codec<ComposerSong> =
             RecordCodecBuilder.create {

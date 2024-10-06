@@ -35,7 +35,7 @@ class ComposerControls(
     }
 
     fun copySong() {
-        val song = composerScreen.composerSong?.song ?: return
+        val song = composerScreen.composerSong?.songInfo?.song ?: return
 
         composerScreen.minecraft.keyboardHandler.clipboard = song.toString()
 

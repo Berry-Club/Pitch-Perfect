@@ -3,10 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.block.entity
 import dev.aaronhowser.mods.pitchperfect.item.component.ComposerSongComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
-import dev.aaronhowser.mods.pitchperfect.song.parts.Author
-import dev.aaronhowser.mods.pitchperfect.song.parts.ComposerSong
-import dev.aaronhowser.mods.pitchperfect.song.parts.Note
-import dev.aaronhowser.mods.pitchperfect.song.parts.Song
+import dev.aaronhowser.mods.pitchperfect.song.parts.*
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponentMap
@@ -17,6 +14,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import java.util.*
 
 class ComposerBlockEntity(
     pPos: BlockPos,
@@ -96,7 +94,14 @@ class ComposerBlockEntity(
     }
 
     fun setSong(song: Song, player: Player) {
-        composerSong = ComposerSong(song, listOf(Author(player)))
+        composerSong = ComposerSong(
+            composerSong?.uuid ?: UUID.randomUUID(),
+            SongInfo(
+                composerSong?.songInfo?.title ?: "",
+                listOf(Author(player)),
+                song
+            )
+        )
     }
 
     fun setSong(song: ComposerSong) {
