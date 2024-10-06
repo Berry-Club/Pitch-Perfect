@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.song.data
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.song.parts.ComposerSong
+import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -51,7 +52,10 @@ class ComposerSongSavedData : SavedData() {
             get() = get(this.server.overworld())
         val MinecraftServer.composerSongSavedData: ComposerSongSavedData
             get() = get(this.overworld())
+    }
 
+    fun getOrCreateSong(uuid: UUID): ComposerSong {
+        return composerSongs.computeIfAbsent(uuid) { ComposerSong(uuid, Song(), mutableListOf()) }
     }
 
     override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {

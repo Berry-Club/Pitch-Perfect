@@ -3,10 +3,11 @@ package dev.aaronhowser.mods.pitchperfect.block.entity
 import dev.aaronhowser.mods.pitchperfect.item.component.ComposerSongComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
-import dev.aaronhowser.mods.pitchperfect.song.parts.Author
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.ComposerSong
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponentMap
@@ -14,9 +15,11 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import java.util.*
 
 class ComposerBlockEntity(
     pPos: BlockPos,
@@ -24,20 +27,31 @@ class ComposerBlockEntity(
 ) : BlockEntity(ModBlockEntities.COMPOSER.get(), pPos, pBlockState) {
 
     companion object {
-        const val COMPOSER_SONG_TAG = "composer_song"
+        const val COMPOSER_SONG_UUID_NBT = "composer_song_uuid"
     }
 
-    var composerSong: ComposerSong? = null
+    var composerSongUuid: UUID? = null
         private set(value) {
             field = value
             setChanged()
         }
 
+    val composerSong: ComposerSong?
+        get() {
+            val level = this.getLevel() as? ServerLevel ?: return null
+            val composerSongSavedData = level.composerSongSavedData
+
+            return composerSongSavedData.getOrCreateSong(composerSongUuid ?: return null)
+        }
+
     override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.loadAdditional(pTag, pRegistries)
 
-        val composerSongTag = pTag.getCompound(COMPOSER_SONG_TAG)
-        composerSong = ComposerSong.fromCompoundTag(composerSongTag)
+        val songUuid = pTag.getUuidOrNull(COMPOSER_SONG_UUID_NBT)
+
+        if (songUuid != null) {
+            composerSongUuid = songUuid
+        }
 
         // this is so fucked up lmao
         if (pTag.contains("components")) {
@@ -48,9 +62,8 @@ class ComposerBlockEntity(
     override fun saveAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
         super.saveAdditional(pTag, pRegistries)
 
-        val currentComposerSong = composerSong
-        if (currentComposerSong != null) {
-            pTag.put(COMPOSER_SONG_TAG, currentComposerSong.toTag())
+        if (composerSongUuid != null) {
+            pTag.putUUID(COMPOSER_SONG_UUID_NBT, composerSongUuid!!)
         }
     }
 
@@ -76,7 +89,7 @@ class ComposerBlockEntity(
         instrument: String
     ) {
         if (composerSong == null) {
-            composerSong = ComposerSong()
+//            composerSong = ComposerSong()
         }
 
         val note = Note.getFromPitch(pitch)
@@ -96,11 +109,15 @@ class ComposerBlockEntity(
     }
 
     fun setSong(song: Song, player: Player) {
-        composerSong = ComposerSong(song.uuid, song, mutableListOf(Author(player)))
+
+        composerSong?.apply {
+            this@apply.song = song
+            addAuthor(player)
+        }
     }
 
     fun setSong(song: ComposerSong) {
-        composerSong = song
+        // FIXME
     }
 
     override fun collectImplicitComponents(pComponents: DataComponentMap.Builder) {
