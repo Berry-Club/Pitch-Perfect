@@ -1,3 +1,3 @@
-// 1.21	2024-07-29T22:43:08.2637863	Tags for minecraft:entity_type mod id pitchperfect
+// 1.21.1	2024-10-06T09:47:10.6848381	Tags for minecraft:entity_type mod id pitchperfect
 40edf96c0f7fd391ccce6bdd1e4c2e5ba63417a2 data/pitchperfect/tags/entity_type/healing_beat_blacklist.json
 ee75b90db1cfb03a8ce6da87690f062a665055c4 data/pitchperfect/tags/entity_type/healing_beat_whitelist.json
