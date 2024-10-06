@@ -54,8 +54,16 @@ class ComposerSongSavedData : SavedData() {
 
     }
 
-    override fun save(p0: CompoundTag, p1: HolderLookup.Provider): CompoundTag {
-        TODO("Not yet implemented")
+    override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
+        val songListTag = pTag.getList(COMPOSER_SONGS_TAG, Tag.TAG_COMPOUND.toInt())
+
+        for (songInfo in composerSongs.values) {
+            songListTag.add(songInfo.toTag())
+        }
+
+        pTag.put(COMPOSER_SONGS_TAG, songListTag)
+
+        return pTag
     }
 
 }
