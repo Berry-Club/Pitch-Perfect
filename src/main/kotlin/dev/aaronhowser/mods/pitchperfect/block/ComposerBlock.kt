@@ -87,16 +87,20 @@ class ComposerBlock(
         val blockEntity = pLevel.getBlockEntity(pPos)
                 as? ComposerBlockEntity ?: return InteractionResult.CONSUME
 
-        if (pPlayer is LocalPlayer) {
-            val screen = ComposerScreen(blockEntity)
-            Minecraft.getInstance().setScreen(screen)
-        } else if (pPlayer is ServerPlayer) {
-            val composerSongSavedData = pPlayer.server.composerSongSavedData
+        when (pPlayer) {
+            is LocalPlayer -> {
+                val screen = ComposerScreen(blockEntity)
+                Minecraft.getInstance().setScreen(screen)
+            }
 
-            val composerSongUuid = blockEntity.composerSongUuid
-            val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+            is ServerPlayer -> {
+                val composerSongSavedData = pPlayer.server.composerSongSavedData
 
-            ModPacketHandler.messagePlayer(pPlayer, SetCurrentComposerSongPacket(composerSong))
+                val composerSongUuid = blockEntity.composerSongUuid
+                val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+
+                ModPacketHandler.messagePlayer(pPlayer, SetCurrentComposerSongPacket(composerSong))
+            }
         }
 
         super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
