@@ -1,9 +1,13 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
+import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
+import io.netty.buffer.ByteBuf
 import net.minecraft.network.chat.Component
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 
@@ -92,4 +96,20 @@ enum class ScreenInstrument(
         NoteBlockInstrument.XYLOPHONE,
         ModLanguageProvider.Item.XYLOPHONE.toComponent()
     );
+
+    companion object {
+
+        val CODEC: Codec<ScreenInstrument> =
+            Codec.STRING.xmap(
+                { value -> valueOf(value) },
+                { value -> value.name }
+            )
+
+        val STREAM_CODEC: StreamCodec<ByteBuf, ScreenInstrument> =
+            ByteBufCodecs.STRING_UTF8.map(
+                { value -> valueOf(value) },
+                { value -> value.name }
+            )
+
+    }
 }

@@ -175,19 +175,16 @@ class ComposerBlock(
         pTooltipFlag: TooltipFlag
     ) {
         super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
-
-        val composerSong = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT)?.composerSong ?: return
-        val song = composerSong.song
-
         val instrumentsComponent = Component.empty()
 
-        for (soundHolder in song.soundHolders) {
-            val instrument = ModItems.getFromSoundHolder(soundHolder)
+        val instruments = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT)?.instruments ?: return
+        for (screenInstrument in instruments) {
+            val instrumentItem = ModItems.getFromSoundHolder(screenInstrument.noteBlockInstrument.soundEvent)
 
-            val instrumentComponent = if (instrument != null) {
-                ModLanguageProvider.FontIcon.getIcon(instrument.get())
+            val instrumentComponent = if (instrumentItem != null) {
+                ModLanguageProvider.FontIcon.getIcon(instrumentItem.get())
             } else {
-                Component.literal(soundHolder.key.toString())
+                Component.literal(screenInstrument.noteBlockInstrument.soundEvent.key.toString())
             }
 
             instrumentsComponent.append(instrumentComponent)
