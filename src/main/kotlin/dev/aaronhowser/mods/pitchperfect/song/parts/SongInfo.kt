@@ -23,6 +23,8 @@ data class SongInfo(
     val song: Song
 ) {
 
+    constructor() : this("", emptyList(), Song())
+
     constructor(
         title: String,
         player: Player,
