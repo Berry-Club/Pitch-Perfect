@@ -97,22 +97,20 @@ class ComposerBlock(
         val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity
 
         if (!pLevel.isClientSide && pPlayer.isCreative && blockEntity != null) {
-            val composerSong = blockEntity.composerSong
-            if (composerSong != null) {
-                val itemStack = this.asItem().defaultInstance
-                itemStack.applyComponents(blockEntity.collectComponents())
 
-                val itemEntity = ItemEntity(
-                    pLevel,
-                    pPos.x.toDouble() + 0.5,
-                    pPos.y.toDouble() + 0.5,
-                    pPos.z.toDouble() + 0.5,
-                    itemStack
-                )
+            val itemStack = this.asItem().defaultInstance
+            itemStack.applyComponents(blockEntity.collectComponents())
 
-                itemEntity.setDefaultPickUpDelay()
-                pLevel.addFreshEntity(itemEntity)
-            }
+            val itemEntity = ItemEntity(
+                pLevel,
+                pPos.x.toDouble() + 0.5,
+                pPos.y.toDouble() + 0.5,
+                pPos.z.toDouble() + 0.5,
+                itemStack
+            )
+
+            itemEntity.setDefaultPickUpDelay()
+            pLevel.addFreshEntity(itemEntity)
 
         }
 
@@ -147,7 +145,9 @@ class ComposerBlock(
         val songComponent = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT) ?: return
         val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
 
-        blockEntity.setSong(songComponent.composerSong)
+//        blockEntity.composerSongUuid = songComponent.composerSongUuid
+//
+//        blockEntity.setSong(songComponent.composerSong)
     }
 
     override fun onRemove(
@@ -159,13 +159,9 @@ class ComposerBlock(
     ) {
         if (pState.block != pNewState.block) {
             val blockEntity = pLevel.getBlockEntity(pPos)
-            if (blockEntity is ComposerBlockEntity) {
 
-                val composerSong = blockEntity.composerSong
-                if (composerSong != null) {
-                    PitchPerfect.LOGGER.info("A Composer with a song was broken!")
-                    PitchPerfect.LOGGER.info(composerSong.song.toString())
-                }
+            if (blockEntity is ComposerBlockEntity) {
+                PitchPerfect.LOGGER.info("A Composer was broken! It had the uuid ${blockEntity.composerSongUuid}")
             }
         }
 

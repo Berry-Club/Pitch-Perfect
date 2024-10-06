@@ -126,10 +126,11 @@ class ComposerScreen(
             minecraft?.player?.closeContainer()
         }
 
-        if (composerSong != composerBlockEntity.composerSong) {
-            composerSong = composerBlockEntity.composerSong
-            timeline.setLastBeatDelay()
-        }
+        //FIXME
+//        if (composerSong != composerBlockEntity.composerSong) {
+//            composerSong = composerBlockEntity.composerSong
+//            timeline.setLastBeatDelay()
+//        }
     }
 
     override fun onClose() {

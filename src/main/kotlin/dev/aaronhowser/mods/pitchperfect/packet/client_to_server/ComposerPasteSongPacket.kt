@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import io.netty.buffer.ByteBuf
@@ -40,7 +41,12 @@ class ComposerPasteSongPacket(
             val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
             if (!player.canInteractWithBlock(composerPos, playerReach)) return@enqueueWork
 
-            composerBlockEntity.setSong(song, player)
+            val composerSongUuid = composerBlockEntity.composerSongUuid
+
+            val composerSongSavedData = player.server!!.composerSongSavedData
+            val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+
+            composerSong.song = song
         }
     }
 
