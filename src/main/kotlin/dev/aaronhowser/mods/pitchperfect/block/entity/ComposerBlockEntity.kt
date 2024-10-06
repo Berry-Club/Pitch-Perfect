@@ -1,9 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
-import dev.aaronhowser.mods.pitchperfect.item.component.ComposerSongComponent
+import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
-import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -12,7 +11,6 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import java.util.*
@@ -68,16 +66,9 @@ class ComposerBlockEntity(
     override fun collectImplicitComponents(pComponents: DataComponentMap.Builder) {
         super.collectImplicitComponents(pComponents)
 
-        val level = this.level as? ServerLevel ?: return
-        val composerSong = level.composerSongSavedData.getOrCreateSong(composerSongUuid)
-
         pComponents.set(
-            ModDataComponents.COMPOSER_SONG_COMPONENT,
-            ComposerSongComponent(
-                composerSongUuid,
-                composerSong.authors,
-                composerSong.song.soundHolders.toList()
-            )
+            ModDataComponents.SONG_UUID_COMPONENT,
+            UuidComponent(composerSongUuid)
         )
     }
 
