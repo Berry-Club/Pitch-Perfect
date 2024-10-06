@@ -2,59 +2,44 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import net.minecraft.core.Holder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.player.Player
 import java.util.*
 
 class ComposerSong(
-    var song: Song,
-    var authors: List<Author>
+    val uuid: UUID,
+    val songInfo: SongInfo,
 ) {
 
     companion object {
         val CODEC: Codec<ComposerSong> =
             RecordCodecBuilder.create {
                 it.group(
-                    Song.CODEC.fieldOf("song").forGetter(ComposerSong::song),
-                    Author.CODEC.listOf().fieldOf("authors").forGetter(ComposerSong::authors)
+                    UuidComponent.UUID_CODEC
+                        .fieldOf("uuid")
+                        .forGetter(ComposerSong::uuid),
+                    SongInfo.CODEC
+                        .fieldOf("song_info")
+                        .forGetter(ComposerSong::songInfo)
                 ).apply(it, ::ComposerSong)
             }
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSong> =
             StreamCodec.composite(
-                Song.STREAM_CODEC, ComposerSong::song,
-                Author.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSong::authors,
+                UuidComponent.UUID_STREAM_CODEC, ComposerSong::uuid,
+                SongInfo.STREAM_CODEC, ComposerSong::songInfo,
                 ::ComposerSong
             )
 
-        private const val SONG_NBT = "song"
-        private const val AUTHORS_NBT = "authors"
-
         fun fromCompoundTag(tag: CompoundTag): ComposerSong? {
-            val songString = tag.getString(SONG_NBT)
-            if (songString.isEmpty()) return null
-            val song = Song.fromString(songString) ?: return null
 
-            val authorsTag = tag.getList(AUTHORS_NBT, Tag.TAG_COMPOUND.toInt())
-            val authors: MutableList<Author> = mutableListOf()
-
-            for (authorTag in authorsTag) {
-                if (authorTag !is CompoundTag) continue
-
-                val author = Author.fromCompoundTag(authorTag) ?: continue
-                authors.add(author)
-            }
-
-            return ComposerSong(song, authors)
         }
     }
-
-    constructor() : this(Song(emptyMap()), emptyList())
 
     fun addBeat(
         delay: Int,

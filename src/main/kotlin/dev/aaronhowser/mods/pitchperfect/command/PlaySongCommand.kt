@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.command
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
+import dev.aaronhowser.mods.pitchperfect.song.data.SongSavedData.Companion.songData
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.UuidArgument

@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.t
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.SongPasteCommandResponsePacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SongPasteCommandRequestPacket
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
+import dev.aaronhowser.mods.pitchperfect.song.data.SongSavedData.Companion.songData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.commands.CommandSourceStack

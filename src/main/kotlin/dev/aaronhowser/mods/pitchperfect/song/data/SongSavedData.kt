@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.pitchperfect.song
+package dev.aaronhowser.mods.pitchperfect.song.data
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
@@ -17,8 +17,6 @@ class SongSavedData : SavedData() {
     private val songs: MutableMap<UUID, SongInfo> = mutableMapOf()
 
     companion object {
-        private fun create() = SongSavedData()
-
         private const val SONGS_TAG = "songs"
 
         private fun load(pTag: CompoundTag, provider: HolderLookup.Provider): SongSavedData {
@@ -46,7 +44,7 @@ class SongSavedData : SavedData() {
             require(level == level.server.overworld()) { "SongSavedData can only be accessed on the overworld" }
 
             return level.dataStorage.computeIfAbsent(
-                Factory(::create, ::load),
+                Factory(::SongSavedData, Companion::load),
                 "pitchperfect"
             )
         }

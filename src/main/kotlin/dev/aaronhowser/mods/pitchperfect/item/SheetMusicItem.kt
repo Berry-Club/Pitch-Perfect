@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent.Compani
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
-import dev.aaronhowser.mods.pitchperfect.song.SongSavedData.Companion.songData
+import dev.aaronhowser.mods.pitchperfect.song.data.SongSavedData.Companion.songData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
