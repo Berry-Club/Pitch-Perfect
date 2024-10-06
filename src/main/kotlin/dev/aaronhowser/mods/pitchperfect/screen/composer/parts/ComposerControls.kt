@@ -58,7 +58,7 @@ class ComposerControls(
             return
         }
 
-        val previousSong = composerScreen.composerSong?.song
+        val previousSong = composerScreen.composerSong?.songInfo?.song
 
         ModPacketHandler.messageServer(
             ComposerPasteSongPacket(
