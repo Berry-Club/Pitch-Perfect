@@ -23,8 +23,6 @@ data class Song(
     val beats: Map<Holder<SoundEvent>, List<Beat>>
 ) {
 
-    constructor() : this(emptyMap())
-
     val soundHolders: Set<Holder<SoundEvent>> = beats.keys
 
     val uuid: UUID = UUID.nameUUIDFromBytes(toString().toByteArray())

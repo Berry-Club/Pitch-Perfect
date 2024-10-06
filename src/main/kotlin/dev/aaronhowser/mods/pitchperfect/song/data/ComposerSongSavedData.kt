@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.song.data
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.song.parts.ComposerSong
+import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -12,14 +13,14 @@ import java.util.*
 
 class ComposerSongSavedData : SavedData() {
 
-    private val composerSongs: MutableMap<UUID, ComposerSong> = mutableMapOf()
+    private val songs: MutableMap<UUID, SongInfo> = mutableMapOf()
 
     companion object {
         private const val COMPOSER_SONGS_TAG = "composer_songs"
 
         private fun load(pTag: CompoundTag, provider: HolderLookup.Provider): ComposerSongSavedData {
             val songData = ComposerSongSavedData()
-            songData.composerSongs.clear()
+            songData.songs.clear()
 
             val composerSongListTag = pTag.getList(COMPOSER_SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
@@ -32,7 +33,7 @@ class ComposerSongSavedData : SavedData() {
                     continue
                 }
 
-                songData.composerSongs[composerSong.uuid] = composerSong
+                songData.songs[composerSong.uuid] = composerSong
             }
 
             return songData
@@ -51,7 +52,10 @@ class ComposerSongSavedData : SavedData() {
             get() = get(this.server.overworld())
         val MinecraftServer.composerSongSavedData: ComposerSongSavedData
             get() = get(this.overworld())
+    }
 
+    fun getSong(uuid: UUID): SongInfo? {
+        return songs[uuid]
     }
 
     override fun save(p0: CompoundTag, p1: HolderLookup.Provider): CompoundTag {

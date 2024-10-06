@@ -1,63 +1,40 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
+import io.netty.buffer.ByteBuf
 import net.minecraft.core.Holder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
-import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.player.Player
 import java.util.*
 
 class ComposerSong(
-    val uuid: UUID,
-    var songInfo: SongInfo,
+    val uuid: UUID
 ) {
 
-    constructor() : this(UUID.randomUUID(), SongInfo())
+    constructor() : this(UUID.randomUUID())
 
     companion object {
         val CODEC: Codec<ComposerSong> =
-            RecordCodecBuilder.create {
-                it.group(
-                    UuidComponent.UUID_CODEC
-                        .fieldOf("uuid")
-                        .forGetter(ComposerSong::uuid),
-                    SongInfo.CODEC
-                        .fieldOf("song_info")
-                        .forGetter(ComposerSong::songInfo)
-                ).apply(it, ::ComposerSong)
-            }
+            UuidComponent.UUID_CODEC.xmap(::ComposerSong, ComposerSong::uuid)
 
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSong> =
-            StreamCodec.composite(
-                UuidComponent.UUID_STREAM_CODEC, ComposerSong::uuid,
-                SongInfo.STREAM_CODEC, ComposerSong::songInfo,
-                ::ComposerSong
-            )
-
-        const val SONG_INFO_NBT = "song_info"
-        const val UUID_NBT = "uuid"
-
-        fun fromCompoundTag(tag: CompoundTag): ComposerSong? {
-            val songInfoTag = tag.get(SONG_INFO_NBT) as? CompoundTag ?: return null
-            val singInfo = SongInfo.fromCompoundTag(songInfoTag) ?: return null
-
-            val uuid = tag.getUuidOrNull(UUID_NBT) ?: return null
-
-            return ComposerSong(uuid, singInfo)
-        }
+        val STREAM_CODEC: StreamCodec<ByteBuf, ComposerSong> =
+            UuidComponent.UUID_STREAM_CODEC.map(::ComposerSong, ComposerSong::uuid)
     }
 
     fun addBeat(
+        composerSongSavedData: ComposerSongSavedData,
         delay: Int,
         note: Note,
         instrument: Holder<SoundEvent>
     ) {
+        val songInfo = composerSongSavedData.getSong(uuid)
+
         val updatedBeats = songInfo.song.beats.toMutableMap()
 
         val currentBeats = updatedBeats[instrument].orEmpty()
@@ -133,13 +110,6 @@ class ComposerSong(
             authors.add(Author(uuid, name))
             songInfo = songInfo.copy(authors = authors)
         }
-    }
-
-    fun toTag(): Tag {
-        val tag = CompoundTag()
-        tag.putUUID(UUID_NBT, uuid)
-        tag.put(SONG_INFO_NBT, songInfo.toTag())
-        return tag
     }
 
 }
