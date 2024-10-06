@@ -2,17 +2,18 @@ package dev.aaronhowser.mods.pitchperfect.item.component
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.song.parts.Author
+import net.minecraft.core.Holder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.sounds.SoundEvent
 import java.util.*
 
 data class ComposerSongComponent(
     val composerSongUuid: UUID,
     val authors: List<Author>,
-    val instruments: List<ScreenInstrument>
+    val instruments: List<Holder<SoundEvent>>
 ) {
 
     companion object {
@@ -25,7 +26,7 @@ data class ComposerSongComponent(
                     Author.CODEC.listOf()
                         .fieldOf("authors")
                         .forGetter(ComposerSongComponent::authors),
-                    ScreenInstrument.CODEC.listOf()
+                    SoundEvent.CODEC.listOf()
                         .fieldOf("instruments")
                         .forGetter(ComposerSongComponent::instruments)
                 ).apply(instance, ::ComposerSongComponent)
@@ -35,7 +36,7 @@ data class ComposerSongComponent(
             StreamCodec.composite(
                 UuidComponent.UUID_STREAM_CODEC, ComposerSongComponent::composerSongUuid,
                 Author.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSongComponent::authors,
-                ScreenInstrument.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSongComponent::instruments,
+                SoundEvent.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSongComponent::instruments,
                 ::ComposerSongComponent
             )
     }
