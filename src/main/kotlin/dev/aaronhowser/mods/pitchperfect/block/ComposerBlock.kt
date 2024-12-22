@@ -88,6 +88,7 @@ class ComposerBlock(
                 as? ComposerBlockEntity ?: return InteractionResult.CONSUME
 
         when (pPlayer) {
+            //TODO: Does this break on server
             is LocalPlayer -> {
                 val screen = ComposerScreen(blockEntity)
                 Minecraft.getInstance().setScreen(screen)
@@ -102,8 +103,6 @@ class ComposerBlock(
                 ModPacketHandler.messagePlayer(pPlayer, SetCurrentComposerSongPacket(composerSong))
             }
         }
-
-        super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult)
 
         return InteractionResult.CONSUME
     }
