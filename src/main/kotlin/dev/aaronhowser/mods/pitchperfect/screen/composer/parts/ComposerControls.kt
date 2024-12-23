@@ -117,14 +117,11 @@ class ComposerControls(
             72,
             14,
             ModLanguageProvider.Tooltip.JUMP_TO_BEAT.toComponent()
-        ).apply {
-            setMaxLength(9)
-            setHint(ModLanguageProvider.Tooltip.JUMP_TO_BEAT.toComponent())
+        )
 
-            setResponder { newValue ->
-                setBoxValue(newValue)
-            }
-        }
+        jumpToBeatBox.setMaxLength(9)
+        jumpToBeatBox.setHint(ModLanguageProvider.Tooltip.JUMP_TO_BEAT.toComponent())
+        jumpToBeatBox.setResponder(::setBoxValue)
 
         playButton = addIconButton(
             composerScreen.timeline.leftPos + jumpToBeatBox.width + 5,
