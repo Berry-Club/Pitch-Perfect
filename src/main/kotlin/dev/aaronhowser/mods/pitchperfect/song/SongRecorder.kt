@@ -6,7 +6,6 @@ import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.core.Holder
 import net.minecraft.sounds.SoundEvent
 import java.nio.file.Path
-import java.util.*
 
 //TODO: Move this to SongInProgress
 class SongRecorder(

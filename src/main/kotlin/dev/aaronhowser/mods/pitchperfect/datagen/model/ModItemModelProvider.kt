@@ -4,9 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import net.minecraft.data.PackOutput
 import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.ItemDisplayContext
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider
-import net.neoforged.neoforge.client.model.generators.ModelFile
 import net.neoforged.neoforge.common.data.ExistingFileHelper
 
 class ModItemModelProvider(
