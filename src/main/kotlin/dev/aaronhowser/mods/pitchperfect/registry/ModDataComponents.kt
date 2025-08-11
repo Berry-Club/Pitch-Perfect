@@ -5,9 +5,9 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.item.component.ComposerSongComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
-import io.netty.buffer.ByteBuf
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.Registries
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.neoforged.neoforge.registries.DeferredHolder
@@ -34,7 +34,7 @@ object ModDataComponents {
 	private fun <T> register(
 		name: String,
 		codec: Codec<T>,
-		streamCodec: StreamCodec<out ByteBuf, T>
+		streamCodec: StreamCodec<in RegistryFriendlyByteBuf, T>
 	): DeferredHolder<DataComponentType<*>, DataComponentType<T>> {
 		return DATA_COMPONENT_REGISTRY.registerComponentType(name) {
 			it.persistent(codec).networkSynchronized(streamCodec)
