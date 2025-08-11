@@ -50,10 +50,11 @@ object ModItems {
 		registerInstrument("xylophone", NoteBlockInstrument.XYLOPHONE, "p")
 
 	val MUSIC_SHEET: DeferredItem<SheetMusicItem> =
-		ITEM_REGISTRY.registerItem("sheet_music") { SheetMusicItem() }
+		register("music_sheet", ::SheetMusicItem)
 
-	val CONDUCTOR_BOCK_ITEM: DeferredItem<DoubleHighBlockItem> =
-		ITEM_REGISTRY.registerItem("conductor") { DoubleHighBlockItem(ModBlocks.CONDUCTOR.get(), Item.Properties()) }
+	@Suppress("unused")
+	val CONDUCTOR_BLOCK_ITEM: DeferredItem<DoubleHighBlockItem> =
+		register("conductor") { DoubleHighBlockItem(ModBlocks.CONDUCTOR.get(), Item.Properties()) }
 
 	//TODO: headphones, maybe make it just render on any player who's in the composer gui
 	//TODO: Zune
@@ -63,12 +64,19 @@ object ModItems {
 		return instruments.find { it.get().instrument == soundHolder.value() }
 	}
 
+	fun <T : Item> register(
+		name: String,
+		item: () -> T
+	): DeferredItem<T> {
+		return ITEM_REGISTRY.registerItem(name) { item() }
+	}
+
 	fun registerInstrument(
 		name: String,
 		instrument: NoteBlockInstrument,
 		fontString: String
 	): DeferredItem<InstrumentItem> {
-		return ITEM_REGISTRY.registerItem(name) { InstrumentItem(instrument, fontString) }
+		return register(name) { InstrumentItem(instrument, fontString) }
 	}
 
 
