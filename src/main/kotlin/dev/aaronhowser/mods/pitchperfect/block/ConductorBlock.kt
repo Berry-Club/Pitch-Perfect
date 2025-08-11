@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.pitchperfect.block
 
-import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.block.entity.ConductorBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -16,23 +15,20 @@ import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.block.state.properties.BooleanProperty
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
-import net.minecraft.world.level.block.state.properties.EnumProperty
+import net.minecraft.world.level.block.state.properties.*
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class ConductorBlock(
-	private val properties: Properties = Properties.of()
+class ConductorBlock : Block(
+	Properties.of()
 		.strength(2f, 2f)
 		.mapColor(MapColor.METAL)
 		.sound(SoundType.METAL)
 		.noOcclusion()
-) : HorizontalDirectionalBlock(properties), EntityBlock {
+), EntityBlock {
 
 	init {
 		registerDefaultState(
@@ -94,20 +90,6 @@ class ConductorBlock(
 
 		return Boxes.getShape(half, facing)
 	}
-
-	companion object {
-		val HALF: EnumProperty<DoubleBlockHalf> = BlockStateProperties.DOUBLE_BLOCK_HALF
-		val FILLED: BooleanProperty = BlockStateProperties.ENABLED
-		val POWERED: BooleanProperty = BlockStateProperties.POWERED
-
-		val CODEC: MapCodec<ConductorBlock> = simpleCodec(::ConductorBlock)
-	}
-
-	override fun codec(): MapCodec<ConductorBlock> {
-		return CODEC
-	}
-
-	// Block Entity stuff
 
 	override fun newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity? {
 		return if (pState.getValue(HALF) == DoubleBlockHalf.LOWER) ConductorBlockEntity(pPos, pState) else null
@@ -201,7 +183,7 @@ class ConductorBlock(
 
 		if (isPowered) {
 			val blockEntity = pLevel.getBlockEntity(mainPos) as? ConductorBlockEntity ?: return
-			blockEntity.redstonePulse()
+			blockEntity.redstonePulseReceived()
 		}
 	}
 
@@ -236,6 +218,7 @@ class ConductorBlock(
 			DoubleBlockHalf.UPPER -> pPos.below()
 			else -> return
 		}
+
 		val otherHalfState = pLevel.getBlockState(otherHalfPos)
 
 		if (otherHalfState.block == this) {
@@ -265,6 +248,13 @@ class ConductorBlock(
 		}
 	}
 
+	companion object {
+		val HALF: EnumProperty<DoubleBlockHalf> = BlockStateProperties.DOUBLE_BLOCK_HALF
+		val FILLED: BooleanProperty = BlockStateProperties.ENABLED
+		val POWERED: BooleanProperty = BlockStateProperties.POWERED
+		val FACING: DirectionProperty = BlockStateProperties.HORIZONTAL_FACING
+	}
+
 	private object Boxes {
 		fun getShape(half: DoubleBlockHalf, facing: Direction): VoxelShape {
 			val combinedShape = Shapes.or(
@@ -275,7 +265,6 @@ class ConductorBlock(
 			return when (half) {
 				DoubleBlockHalf.LOWER -> combinedShape
 				DoubleBlockHalf.UPPER -> combinedShape.move(0.0, -1.0, 0.0)
-				else -> Shapes.empty()
 			}
 		}
 

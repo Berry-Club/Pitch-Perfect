@@ -19,10 +19,6 @@ class ComposerBlockEntity(
 	pBlockState: BlockState
 ) : BlockEntity(ModBlockEntities.COMPOSER.get(), pPos, pBlockState) {
 
-	companion object {
-		const val COMPOSER_SONG_UUID_NBT = "composer_song_uuid"
-	}
-
 	// Defaults to a new random one, but if it's actually loading from NBT it'll be overwritten
 	var composerSongUuid: UUID = UUID.randomUUID()
 		private set
@@ -48,13 +44,8 @@ class ComposerBlockEntity(
 		pTag.putUUID(COMPOSER_SONG_UUID_NBT, composerSongUuid)
 	}
 
-	override fun getUpdateTag(pRegistries: HolderLookup.Provider): CompoundTag {
-		return saveWithoutMetadata(pRegistries)
-	}
-
-	override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
-		return ClientboundBlockEntityDataPacket.create(this)
-	}
+	override fun getUpdateTag(pRegistries: HolderLookup.Provider): CompoundTag = saveWithoutMetadata(pRegistries)
+	override fun getUpdatePacket(): Packet<ClientGamePacketListener> = ClientboundBlockEntityDataPacket.create(this)
 
 	override fun setChanged() {
 		super.setChanged()
@@ -64,11 +55,11 @@ class ComposerBlockEntity(
 
 	override fun collectImplicitComponents(pComponents: DataComponentMap.Builder) {
 		super.collectImplicitComponents(pComponents)
+		pComponents.set(ModDataComponents.SONG_UUID, composerSongUuid)
+	}
 
-		pComponents.set(
-			ModDataComponents.SONG_UUID,
-			composerSongUuid
-		)
+	companion object {
+		const val COMPOSER_SONG_UUID_NBT = "composer_song_uuid"
 	}
 
 }

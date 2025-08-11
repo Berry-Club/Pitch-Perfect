@@ -53,16 +53,17 @@ class ConductorBlockEntity(
 
 	override fun setChanged() {
 		super.setChanged()
+		val level = level ?: return
 
 		val newBottomState = blockState.setValue(
 			ConductorBlock.FILLED,
 			!itemHandler.getStackInSlot(0).isEmpty
 		)
 
-		level?.setBlock(blockPos, newBottomState, 1 or 2) // 1 = update adjacent, 2 = send to client
-		level?.sendBlockUpdated(blockPos, blockState, blockState, 1 or 2 or 8)
+		level.setBlock(blockPos, newBottomState, 1 or 2) // 1 = update adjacent, 2 = send to client
+		level.sendBlockUpdated(blockPos, blockState, blockState, 1 or 2 or 8)
 
-		val oldTopState = level?.getBlockState(blockPos.above()) ?: return
+		val oldTopState = level.getBlockState(blockPos.above())
 		if (oldTopState.block != ModBlocks.CONDUCTOR.get()) return
 
 		val newTopState = oldTopState.setValue(
@@ -70,8 +71,8 @@ class ConductorBlockEntity(
 			!itemHandler.getStackInSlot(0).isEmpty
 		)
 
-		level?.setBlock(blockPos.above(), newTopState, 1 or 2)
-		level?.sendBlockUpdated(blockPos.above(), oldTopState, newTopState, 1 or 2)
+		level.setBlock(blockPos.above(), newTopState, 1 or 2)
+		level.sendBlockUpdated(blockPos.above(), oldTopState, newTopState, 1 or 2)
 
 		song = null
 	}
@@ -120,7 +121,7 @@ class ConductorBlockEntity(
 
 	private var song: Song? = null
 
-	fun redstonePulse() {
+	fun redstonePulseReceived() {
 		val blockItem = itemHandler.getStackInSlot(0)
 		if (blockItem.item != ModItems.MUSIC_SHEET.get()) return
 

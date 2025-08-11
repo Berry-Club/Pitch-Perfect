@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.pitchperfect.block
 
-import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
@@ -26,20 +25,25 @@ import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.EntityBlock
+import net.minecraft.world.level.block.RenderShape
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 
-class ComposerBlock(
-	private val properties: Properties = Properties.of()
+class ComposerBlock : Block(
+	Properties.of()
 		.strength(2f, 2f)
 		.mapColor(MapColor.METAL)
 		.sound(SoundType.METAL)
-) : HorizontalDirectionalBlock(properties), EntityBlock {
+), EntityBlock {
 
 	init {
 		registerDefaultState(
@@ -62,16 +66,6 @@ class ComposerBlock(
 	override fun getRenderShape(pState: BlockState): RenderShape {
 		return RenderShape.MODEL
 	}
-
-	companion object {
-		val CODEC: MapCodec<ComposerBlock> = simpleCodec(::ComposerBlock)
-	}
-
-	override fun codec(): MapCodec<ComposerBlock> {
-		return CODEC
-	}
-
-	// Block Entity stuff
 
 	override fun newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity {
 		return ComposerBlockEntity(pPos, pState)
@@ -205,6 +199,10 @@ class ComposerBlock(
 		}
 
 		pTooltipComponents.add(instrumentsComponent)
+	}
+
+	companion object {
+		val FACING: DirectionProperty = BlockStateProperties.HORIZONTAL_FACING
 	}
 
 }
