@@ -98,7 +98,7 @@ enum class ScreenInstrument(
 	);
 
 	val displayName: Component by lazy {
-		deferredItem.get().defaultInstance.displayName
+		deferredItem.get().defaultInstance.hoverName
 	}
 
 	companion object {
