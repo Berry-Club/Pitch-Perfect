@@ -19,6 +19,9 @@ class ClientConfig(
 		lateinit var ELECTRIC_PARTICLE_IS_WAVE: ModConfigSpec.BooleanValue
 
 		lateinit var LOG_MISSING_NOTE: ModConfigSpec.BooleanValue
+
+		lateinit var MIN_ATTACK_PARTICLES: ModConfigSpec.IntValue
+		lateinit var MAX_ATTACK_PARTICLES: ModConfigSpec.IntValue
 	}
 
 	init {
@@ -45,6 +48,14 @@ class ClientConfig(
 		LOG_MISSING_NOTE = builder
 			.comment("Whether or not to log a missing note when the mod doesn't find an exact match for a Note's pitch, and uses the closest Note instead.")
 			.define("Log Missing Note", false)
+
+		MIN_ATTACK_PARTICLES = builder
+			.comment("The minimum amount of notes to spawn, when attacking with an instrument.")
+			.defineInRange("Minimum Attack Particles Amount", 3, 0, Int.MAX_VALUE)
+
+		MAX_ATTACK_PARTICLES = builder
+			.comment("The maximum amount of notes to spawn, when attacking with an instrument.\n(Must be greater than minimum)")
+			.defineInRange("Maximum Attack Particles Amount", 10, 0, Int.MAX_VALUE)
 
 		builder.pop()
 

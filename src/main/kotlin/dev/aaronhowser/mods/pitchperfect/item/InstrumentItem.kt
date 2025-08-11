@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
 import dev.aaronhowser.mods.pitchperfect.advancement.AdvancementTriggers
-import dev.aaronhowser.mods.pitchperfect.config.CommonConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.BwaaapEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.HealingBeatEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.ModEnchantments
@@ -152,8 +151,9 @@ class InstrumentItem(
 
 		val sound = stack.get(ModDataComponents.SOUND_EVENT) ?: return false
 
-		val particleAmountLowerBound = CommonConfig.MIN_ATTACK_PARTICLES.get()
-		val particleAmountUpperBound = CommonConfig.MAX_ATTACK_PARTICLES.get()
+		//TODO: Send a packet instead and use the config
+		val particleAmountLowerBound = 1
+		val particleAmountUpperBound = 2
 
 		require(particleAmountLowerBound <= particleAmountUpperBound) {
 			"Min attack particles cannot be greater than max attack particles."
