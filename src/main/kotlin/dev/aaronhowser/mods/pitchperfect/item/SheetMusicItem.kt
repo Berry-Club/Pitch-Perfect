@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent.Compani
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
+import dev.aaronhowser.mods.pitchperfect.song.SongRecorder
 import dev.aaronhowser.mods.pitchperfect.song.data.SongSavedData.Companion.songData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.server.level.ServerLevel
@@ -49,8 +50,8 @@ class SheetMusicItem : Item(
 		private fun stopRecording(itemStack: ItemStack, player: ServerPlayer) {
 			itemStack.remove(ModDataComponents.IS_RECORDING_COMPONENT)
 
-			val songBuilder = OtherEvents.songRecorders[player] ?: return
-			OtherEvents.songRecorders.remove(player)
+			val songBuilder = SongRecorder.SONG_RECORDERS[player] ?: return
+			SongRecorder.SONG_RECORDERS.remove(player)
 			val song = songBuilder.build(Song.defaultFile)
 
 			val songData = player.server.songData

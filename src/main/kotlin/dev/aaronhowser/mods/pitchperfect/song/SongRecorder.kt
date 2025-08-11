@@ -1,10 +1,17 @@
 package dev.aaronhowser.mods.pitchperfect.song
 
+import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
+import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import dev.aaronhowser.mods.pitchperfect.song.parts.Beat
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.core.Holder
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.util.Mth
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.NoteBlock
+import net.neoforged.neoforge.event.level.NoteBlockEvent
 import java.nio.file.Path
 
 //TODO: Move this to SongInProgress
@@ -60,6 +67,38 @@ class SongRecorder(
 		}
 
 		return song
+	}
+
+	companion object {
+		val SONG_RECORDERS = mutableMapOf<Player, SongRecorder>()
+
+		fun onNoteBlockPlayed(event: NoteBlockEvent.Play) {
+			if (event.level.isClientSide) return
+
+			val blockPos = event.pos
+
+			val pitch = NoteBlock.getPitchFromNote(event.vanillaNoteId)
+
+			val soundEvent = event.instrument.soundEvent
+
+			val currentWorldTick = (event.level as? Level)?.gameTime ?: throw IllegalStateException()
+
+			val nearbyRecordingPlayers = event.level.players().filter { player ->
+				player.inventory.contains { stack -> SheetMusicItem.isRecording(stack) } &&
+						player.blockPosition().distSqr(blockPos) < Mth.square(ServerConfig.RECORDING_RANGE.get())
+			}
+
+			for (player in nearbyRecordingPlayers) {
+				val songRecorder = SONG_RECORDERS.getOrPut(player) { SongRecorder(currentWorldTick) }
+
+				songRecorder.addNote(
+					currentWorldTick,
+					soundEvent,
+					pitch
+				)
+			}
+		}
+
 	}
 
 }
