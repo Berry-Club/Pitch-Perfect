@@ -10,15 +10,15 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper
 import java.util.concurrent.CompletableFuture
 
 class ModBlockTagsProvider(
-    output: PackOutput,
-    lookupProvider: CompletableFuture<HolderLookup.Provider>,
-    existingFileHelper: ExistingFileHelper?
+	output: PackOutput,
+	lookupProvider: CompletableFuture<HolderLookup.Provider>,
+	existingFileHelper: ExistingFileHelper?
 ) : BlockTagsProvider(output, lookupProvider, PitchPerfect.ID, existingFileHelper) {
 
-    override fun addTags(pProvider: HolderLookup.Provider) {
+	override fun addTags(pProvider: HolderLookup.Provider) {
 
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CONDUCTOR.get())
-        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.COMPOSER.get())
+		tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CONDUCTOR.get())
+		tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.COMPOSER.get())
 
-    }
+	}
 }

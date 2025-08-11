@@ -9,17 +9,17 @@ import net.minecraft.world.level.Level
 
 object ModEnchantments {
 
-    //TODO: Make sure these can actually be applied in the enchanting table
+	//TODO: Make sure these can actually be applied in the enchanting table
 
-    val healingBeatResourceKey: ResourceKey<Enchantment> =
-        ResourceKey.create(Registries.ENCHANTMENT, OtherUtil.modResource("healing_beat"))
-    val bwaaapResourceKey: ResourceKey<Enchantment> =
-        ResourceKey.create(Registries.ENCHANTMENT, OtherUtil.modResource("bwaaap"))
-    val andHisMusicWasElectricResourceKey: ResourceKey<Enchantment> =
-        ResourceKey.create(Registries.ENCHANTMENT, OtherUtil.modResource("and_his_music_was_electric"))
+	val healingBeatResourceKey: ResourceKey<Enchantment> =
+		ResourceKey.create(Registries.ENCHANTMENT, OtherUtil.modResource("healing_beat"))
+	val bwaaapResourceKey: ResourceKey<Enchantment> =
+		ResourceKey.create(Registries.ENCHANTMENT, OtherUtil.modResource("bwaaap"))
+	val andHisMusicWasElectricResourceKey: ResourceKey<Enchantment> =
+		ResourceKey.create(Registries.ENCHANTMENT, OtherUtil.modResource("and_his_music_was_electric"))
 
-    fun getEnchantHolder(level: Level, resourceKey: ResourceKey<Enchantment>): Holder.Reference<Enchantment> {
-        return level.registryAccess().registry(Registries.ENCHANTMENT).get().getHolderOrThrow(resourceKey)
-    }
+	fun getEnchantHolder(level: Level, resourceKey: ResourceKey<Enchantment>): Holder.Reference<Enchantment> {
+		return level.registryAccess().registry(Registries.ENCHANTMENT).get().getHolderOrThrow(resourceKey)
+	}
 
 }

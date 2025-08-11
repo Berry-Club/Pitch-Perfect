@@ -17,37 +17,37 @@ import thedarkcolour.kotlinforforge.neoforge.forge.runWhenOn
 
 @Mod(PitchPerfect.ID)
 class PitchPerfect(
-    modContainer: ModContainer
+	modContainer: ModContainer
 ) {
 
-    //TODO:
-    // mobs that play music
-    // capturing mob souls to play them in your inventory? or use that with the Conductor block? Force a mob to play music?
+	//TODO:
+	// mobs that play music
+	// capturing mob souls to play them in your inventory? or use that with the Conductor block? Force a mob to play music?
 
-    //TODO
-    // Enchantment that you can put on Sheet Music that makes it act like a Beacon
-    // "This sequence of notes does this"
-    // For example, a song that teleports you home, or a song that sets weather/time
+	//TODO
+	// Enchantment that you can put on Sheet Music that makes it act like a Beacon
+	// "This sequence of notes does this"
+	// For example, a song that teleports you home, or a song that sets weather/time
 
-    //TODO:
-    // HUD element to see what note you're playing
+	//TODO:
+	// HUD element to see what note you're playing
 
-    companion object {
-        const val ID = "pitchperfect"
-        val LOGGER: Logger = LogManager.getLogger(ID)
-    }
+	companion object {
+		const val ID = "pitchperfect"
+		val LOGGER: Logger = LogManager.getLogger(ID)
+	}
 
-    init {
-        ModRegistries.register(MOD_BUS)
+	init {
+		ModRegistries.register(MOD_BUS)
 
-        runWhenOn(Dist.CLIENT) {
-            val screenFactory = IConfigScreenFactory { container, screen -> ConfigurationScreen(container, screen) }
-            modContainer.registerExtensionPoint(IConfigScreenFactory::class.java, screenFactory)
-        }
+		runWhenOn(Dist.CLIENT) {
+			val screenFactory = IConfigScreenFactory { container, screen -> ConfigurationScreen(container, screen) }
+			modContainer.registerExtensionPoint(IConfigScreenFactory::class.java, screenFactory)
+		}
 
-        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC)
-        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.CONFIG_SPEC)
-        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.CONFIG_SPEC)
+		modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC)
+		modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.CONFIG_SPEC)
+		modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.CONFIG_SPEC)
 
-    }
+	}
 }

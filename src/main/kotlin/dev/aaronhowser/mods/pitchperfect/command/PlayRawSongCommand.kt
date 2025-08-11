@@ -14,41 +14,41 @@ import net.minecraft.server.level.ServerPlayer
 
 object PlayRawSongCommand {
 
-    private const val SONG_ARGUMENT = "song"
+	private const val SONG_ARGUMENT = "song"
 
-    fun register(): ArgumentBuilder<CommandSourceStack, *> {
-        return Commands
-            .literal("playRawSong")
-            .requires { it.hasPermission(2) }
-            .then(
-                Commands
-                    .argument(SONG_ARGUMENT, StringArgumentType.greedyString())
-                    .executes(::playSong)
-            )
-    }
+	fun register(): ArgumentBuilder<CommandSourceStack, *> {
+		return Commands
+			.literal("playRawSong")
+			.requires { it.hasPermission(2) }
+			.then(
+				Commands
+					.argument(SONG_ARGUMENT, StringArgumentType.greedyString())
+					.executes(::playSong)
+			)
+	}
 
-    private fun playSong(context: CommandContext<CommandSourceStack>): Int {
-        try {
-            val songString = StringArgumentType.getString(context, SONG_ARGUMENT)
-            val song = Song.fromString(songString)
+	private fun playSong(context: CommandContext<CommandSourceStack>): Int {
+		try {
+			val songString = StringArgumentType.getString(context, SONG_ARGUMENT)
+			val song = Song.fromString(songString)
 
-            val player = context.source.entity as? ServerPlayer ?: return 0
+			val player = context.source.entity as? ServerPlayer ?: return 0
 
-            if (song == null) {
-                player.sendSystemMessage(
-                    ModLanguageProvider.Message.SONG_RAW_FAIL_TO_PARSE.toComponent(songString),
-                    false
-                )
-                return 0
-            }
+			if (song == null) {
+				player.sendSystemMessage(
+					ModLanguageProvider.Message.SONG_RAW_FAIL_TO_PARSE.toComponent(songString),
+					false
+				)
+				return 0
+			}
 
-            val songPlayer = SongPlayer(player.level() as ServerLevel, song) { player.eyePosition }
+			val songPlayer = SongPlayer(player.level() as ServerLevel, song) { player.eyePosition }
 
-            songPlayer.startPlaying()
-            return 1
-        } catch (e: IllegalArgumentException) {
-            return 0
-        }
-    }
+			songPlayer.startPlaying()
+			return 1
+		} catch (e: IllegalArgumentException) {
+			return 0
+		}
+	}
 
 }

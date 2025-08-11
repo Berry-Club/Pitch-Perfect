@@ -9,57 +9,57 @@ import java.nio.file.Path
 
 //TODO: Move this to SongInProgress
 class SongRecorder(
-    private val startingTick: Long
+	private val startingTick: Long
 ) {
 
-    private val notesMap: MutableMap<Holder<SoundEvent>, Map<
-            Int,            // Tick
-            List<Float>>    // Pitches
-            > = mutableMapOf()
+	private val notesMap: MutableMap<Holder<SoundEvent>, Map<
+			Int,            // Tick
+			List<Float>>    // Pitches
+			> = mutableMapOf()
 
-    fun addNote(
-        currentTick: Long,
-        sound: Holder<SoundEvent>,
-        pitch: Float
-    ) {
-        val ticksSinceStart = (currentTick - startingTick).toInt()
+	fun addNote(
+		currentTick: Long,
+		sound: Holder<SoundEvent>,
+		pitch: Float
+	) {
+		val ticksSinceStart = (currentTick - startingTick).toInt()
 
-        val previousInstrumentBeats = notesMap[sound] ?: emptyMap()
-        val previousBeatsThisTick = previousInstrumentBeats[ticksSinceStart] ?: emptyList()
-        val withThisPitch = previousBeatsThisTick + pitch
-        val newInstrumentBeats = previousInstrumentBeats + (ticksSinceStart to withThisPitch)
+		val previousInstrumentBeats = notesMap[sound] ?: emptyMap()
+		val previousBeatsThisTick = previousInstrumentBeats[ticksSinceStart] ?: emptyList()
+		val withThisPitch = previousBeatsThisTick + pitch
+		val newInstrumentBeats = previousInstrumentBeats + (ticksSinceStart to withThisPitch)
 
-        notesMap[sound] = newInstrumentBeats
-    }
+		notesMap[sound] = newInstrumentBeats
+	}
 
-    fun build(path: Path? = null): Song {
-        val instrumentBeatMap: HashMap<Holder<SoundEvent>, List<Beat>> = HashMap()
+	fun build(path: Path? = null): Song {
+		val instrumentBeatMap: HashMap<Holder<SoundEvent>, List<Beat>> = HashMap()
 
-        for ((soundEvent, map) in notesMap) {
+		for ((soundEvent, map) in notesMap) {
 
-            val instrumentBeats = mutableListOf<Beat>()
+			val instrumentBeats = mutableListOf<Beat>()
 
-            for ((tick, pitches) in map) {
-                val notes: MutableList<Note> = mutableListOf()
-                for (pitch in pitches) {
-                    val note = Note.getFromPitch(pitch)
+			for ((tick, pitches) in map) {
+				val notes: MutableList<Note> = mutableListOf()
+				for (pitch in pitches) {
+					val note = Note.getFromPitch(pitch)
 
-                    notes.add(note)
-                }
-                val beat = Beat(tick, notes)
-                instrumentBeats.add(beat)
-            }
+					notes.add(note)
+				}
+				val beat = Beat(tick, notes)
+				instrumentBeats.add(beat)
+			}
 
-            instrumentBeatMap[soundEvent] = instrumentBeats
-        }
+			instrumentBeatMap[soundEvent] = instrumentBeats
+		}
 
-        val song = Song(instrumentBeatMap)
+		val song = Song(instrumentBeatMap)
 
-        if (path != null) {
-            song.saveToPath(path)
-        }
+		if (path != null) {
+			song.saveToPath(path)
+		}
 
-        return song
-    }
+		return song
+	}
 
 }

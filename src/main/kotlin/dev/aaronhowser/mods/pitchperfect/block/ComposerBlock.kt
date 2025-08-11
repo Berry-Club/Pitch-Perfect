@@ -35,176 +35,176 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 
 class ComposerBlock(
-    private val properties: Properties = Properties.of()
-        .strength(2f, 2f)
-        .mapColor(MapColor.METAL)
-        .sound(SoundType.METAL)
+	private val properties: Properties = Properties.of()
+		.strength(2f, 2f)
+		.mapColor(MapColor.METAL)
+		.sound(SoundType.METAL)
 ) : HorizontalDirectionalBlock(properties), EntityBlock {
 
-    init {
-        registerDefaultState(
-            stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
-        )
-    }
+	init {
+		registerDefaultState(
+			stateDefinition.any()
+				.setValue(FACING, Direction.NORTH)
+		)
+	}
 
-    override fun getStateForPlacement(pContext: BlockPlaceContext): BlockState? {
-        return defaultBlockState()
-            .setValue(FACING, pContext.horizontalDirection.opposite)
-    }
+	override fun getStateForPlacement(pContext: BlockPlaceContext): BlockState? {
+		return defaultBlockState()
+			.setValue(FACING, pContext.horizontalDirection.opposite)
+	}
 
-    override fun createBlockStateDefinition(pBuilder: StateDefinition.Builder<Block, BlockState>) {
-        super.createBlockStateDefinition(pBuilder)
-        pBuilder.add(FACING)
-    }
+	override fun createBlockStateDefinition(pBuilder: StateDefinition.Builder<Block, BlockState>) {
+		super.createBlockStateDefinition(pBuilder)
+		pBuilder.add(FACING)
+	}
 
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun getRenderShape(pState: BlockState): RenderShape {
-        return RenderShape.MODEL
-    }
+	@Suppress("OVERRIDE_DEPRECATION")
+	override fun getRenderShape(pState: BlockState): RenderShape {
+		return RenderShape.MODEL
+	}
 
-    companion object {
-        val CODEC: MapCodec<ComposerBlock> = simpleCodec(::ComposerBlock)
-    }
+	companion object {
+		val CODEC: MapCodec<ComposerBlock> = simpleCodec(::ComposerBlock)
+	}
 
-    override fun codec(): MapCodec<ComposerBlock> {
-        return CODEC
-    }
+	override fun codec(): MapCodec<ComposerBlock> {
+		return CODEC
+	}
 
-    // Block Entity stuff
+	// Block Entity stuff
 
-    override fun newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity {
-        return ComposerBlockEntity(pPos, pState)
-    }
+	override fun newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity {
+		return ComposerBlockEntity(pPos, pState)
+	}
 
-    override fun useWithoutItem(
-        pState: BlockState,
-        pLevel: Level,
-        pPos: BlockPos,
-        pPlayer: Player,
-        pHitResult: BlockHitResult
-    ): InteractionResult {
-        val blockEntity = pLevel.getBlockEntity(pPos)
-                as? ComposerBlockEntity ?: return InteractionResult.CONSUME
+	override fun useWithoutItem(
+		pState: BlockState,
+		pLevel: Level,
+		pPos: BlockPos,
+		pPlayer: Player,
+		pHitResult: BlockHitResult
+	): InteractionResult {
+		val blockEntity = pLevel.getBlockEntity(pPos)
+				as? ComposerBlockEntity ?: return InteractionResult.CONSUME
 
-        when (pPlayer) {
-            //TODO: Does this break on server
-            is LocalPlayer -> {
-                val screen = ComposerScreen(blockEntity)
-                Minecraft.getInstance().setScreen(screen)
-            }
+		when (pPlayer) {
+			//TODO: Does this break on server
+			is LocalPlayer -> {
+				val screen = ComposerScreen(blockEntity)
+				Minecraft.getInstance().setScreen(screen)
+			}
 
-            is ServerPlayer -> {
-                val composerSongSavedData = pPlayer.server.composerSongSavedData
+			is ServerPlayer -> {
+				val composerSongSavedData = pPlayer.server.composerSongSavedData
 
-                val composerSongUuid = blockEntity.composerSongUuid
-                val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+				val composerSongUuid = blockEntity.composerSongUuid
+				val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
 
-                ModPacketHandler.messagePlayer(pPlayer, SetCurrentComposerSongPacket(composerSong))
-            }
-        }
+				ModPacketHandler.messagePlayer(pPlayer, SetCurrentComposerSongPacket(composerSong))
+			}
+		}
 
-        return InteractionResult.CONSUME
-    }
+		return InteractionResult.CONSUME
+	}
 
-    override fun playerWillDestroy(pLevel: Level, pPos: BlockPos, pState: BlockState, pPlayer: Player): BlockState {
-        val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity
+	override fun playerWillDestroy(pLevel: Level, pPos: BlockPos, pState: BlockState, pPlayer: Player): BlockState {
+		val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity
 
-        if (!pLevel.isClientSide && pPlayer.isCreative && blockEntity != null) {
+		if (!pLevel.isClientSide && pPlayer.isCreative && blockEntity != null) {
 
-            val itemStack = this.asItem().defaultInstance
-            itemStack.applyComponents(blockEntity.collectComponents())
+			val itemStack = this.asItem().defaultInstance
+			itemStack.applyComponents(blockEntity.collectComponents())
 
-            val itemEntity = ItemEntity(
-                pLevel,
-                pPos.x.toDouble() + 0.5,
-                pPos.y.toDouble() + 0.5,
-                pPos.z.toDouble() + 0.5,
-                itemStack
-            )
+			val itemEntity = ItemEntity(
+				pLevel,
+				pPos.x.toDouble() + 0.5,
+				pPos.y.toDouble() + 0.5,
+				pPos.z.toDouble() + 0.5,
+				itemStack
+			)
 
-            itemEntity.setDefaultPickUpDelay()
-            pLevel.addFreshEntity(itemEntity)
+			itemEntity.setDefaultPickUpDelay()
+			pLevel.addFreshEntity(itemEntity)
 
-        }
+		}
 
-        return super.playerWillDestroy(pLevel, pPos, pState, pPlayer)
-    }
+		return super.playerWillDestroy(pLevel, pPos, pState, pPlayer)
+	}
 
-    override fun getCloneItemStack(
-        state: BlockState,
-        target: HitResult,
-        level: LevelReader,
-        pos: BlockPos,
-        player: Player
-    ): ItemStack {
-        val blockEntity = level.getBlockEntity(pos) as? ComposerBlockEntity
-            ?: return super.getCloneItemStack(state, target, level, pos, player)
+	override fun getCloneItemStack(
+		state: BlockState,
+		target: HitResult,
+		level: LevelReader,
+		pos: BlockPos,
+		player: Player
+	): ItemStack {
+		val blockEntity = level.getBlockEntity(pos) as? ComposerBlockEntity
+			?: return super.getCloneItemStack(state, target, level, pos, player)
 
-        val itemStack = this.asItem().defaultInstance
-        itemStack.applyComponents(blockEntity.collectComponents())
+		val itemStack = this.asItem().defaultInstance
+		itemStack.applyComponents(blockEntity.collectComponents())
 
-        return itemStack
-    }
+		return itemStack
+	}
 
-    override fun setPlacedBy(
-        pLevel: Level,
-        pPos: BlockPos,
-        pState: BlockState,
-        pPlacer: LivingEntity?,
-        pStack: ItemStack
-    ) {
-        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack)
+	override fun setPlacedBy(
+		pLevel: Level,
+		pPos: BlockPos,
+		pState: BlockState,
+		pPlacer: LivingEntity?,
+		pStack: ItemStack
+	) {
+		super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack)
 
-        val songComponent = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT) ?: return
-        val blockEntity = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
+		pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT) ?: return
+		pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
 
 //        blockEntity.composerSongUuid = songComponent.composerSongUuid
 //
 //        blockEntity.setSong(songComponent.composerSong)
-    }
+	}
 
-    override fun onRemove(
-        pState: BlockState,
-        pLevel: Level,
-        pPos: BlockPos,
-        pNewState: BlockState,
-        pMovedByPiston: Boolean
-    ) {
-        if (pState.block != pNewState.block) {
-            val blockEntity = pLevel.getBlockEntity(pPos)
+	override fun onRemove(
+		pState: BlockState,
+		pLevel: Level,
+		pPos: BlockPos,
+		pNewState: BlockState,
+		pMovedByPiston: Boolean
+	) {
+		if (pState.block != pNewState.block) {
+			val blockEntity = pLevel.getBlockEntity(pPos)
 
-            if (blockEntity is ComposerBlockEntity) {
-                PitchPerfect.LOGGER.info("A Composer was broken! It had the uuid ${blockEntity.composerSongUuid}")
-            }
-        }
+			if (blockEntity is ComposerBlockEntity) {
+				PitchPerfect.LOGGER.info("A Composer was broken! It had the uuid ${blockEntity.composerSongUuid}")
+			}
+		}
 
-        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston)
-    }
+		super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston)
+	}
 
-    override fun appendHoverText(
-        pStack: ItemStack,
-        pContext: Item.TooltipContext,
-        pTooltipComponents: MutableList<Component>,
-        pTooltipFlag: TooltipFlag
-    ) {
-        super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
-        val instrumentsComponent = Component.empty()
+	override fun appendHoverText(
+		pStack: ItemStack,
+		pContext: Item.TooltipContext,
+		pTooltipComponents: MutableList<Component>,
+		pTooltipFlag: TooltipFlag
+	) {
+		super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
+		val instrumentsComponent = Component.empty()
 
-        val instruments = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT)?.instruments ?: return
-        for (screenInstrument in instruments) {
-            val instrumentItem = ModItems.getFromSoundHolder(screenInstrument.noteBlockInstrument.soundEvent)
+		val instruments = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT)?.instruments ?: return
+		for (screenInstrument in instruments) {
+			val instrumentItem = ModItems.getFromSoundHolder(screenInstrument.noteBlockInstrument.soundEvent)
 
-            val instrumentComponent = if (instrumentItem != null) {
-                ModLanguageProvider.FontIcon.getIcon(instrumentItem.get())
-            } else {
-                Component.literal(screenInstrument.noteBlockInstrument.soundEvent.key.toString())
-            }
+			val instrumentComponent = if (instrumentItem != null) {
+				ModLanguageProvider.FontIcon.getIcon(instrumentItem.get())
+			} else {
+				Component.literal(screenInstrument.noteBlockInstrument.soundEvent.key.toString())
+			}
 
-            instrumentsComponent.append(instrumentComponent)
-        }
+			instrumentsComponent.append(instrumentComponent)
+		}
 
-        pTooltipComponents.add(instrumentsComponent)
-    }
+		pTooltipComponents.add(instrumentsComponent)
+	}
 
 }

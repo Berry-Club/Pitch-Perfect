@@ -22,158 +22,158 @@ import kotlin.properties.Delegates
 
 @OnlyIn(Dist.CLIENT)
 class ComposerScreen(
-    val composerBlockEntity: ComposerBlockEntity,
-    pTitle: Component = ModLanguageProvider.Block.COMPOSER.toComponent()
+	val composerBlockEntity: ComposerBlockEntity,
+	pTitle: Component = ModLanguageProvider.Block.COMPOSER.toComponent()
 ) : Screen(pTitle) {
 
-    var selectedInstrument: ScreenInstrument? = null
+	var selectedInstrument: ScreenInstrument? = null
 
-    lateinit var timeline: Timeline
-        private set
-    private lateinit var instrumentArea: InstrumentArea
-    lateinit var composerControls: ComposerControls
-        private set
-    var leftPos: Int by Delegates.notNull()
-    var topPos: Int by Delegates.notNull()
+	lateinit var timeline: Timeline
+		private set
+	private lateinit var instrumentArea: InstrumentArea
+	lateinit var composerControls: ComposerControls
+		private set
+	var leftPos: Int by Delegates.notNull()
+	var topPos: Int by Delegates.notNull()
 
-    override fun init() {
-        leftPos = (width - ScreenTextures.Background.Composer.WIDTH) / 2
-        topPos = (height - ScreenTextures.Background.Composer.HEIGHT) / 2
+	override fun init() {
+		leftPos = (width - ScreenTextures.Background.Composer.WIDTH) / 2
+		topPos = (height - ScreenTextures.Background.Composer.HEIGHT) / 2
 
-        timeline = Timeline(this, this.font)
-        instrumentArea = InstrumentArea(this, this.font)
-        composerControls = ComposerControls(this, this.font)
+		timeline = Timeline(this, this.font)
+		instrumentArea = InstrumentArea(this, this.font)
+		composerControls = ComposerControls(this, this.font)
 
-        timeline.init()
-        instrumentArea.init()
-        composerControls.init()
-    }
+		timeline.init()
+		instrumentArea.init()
+		composerControls.init()
+	}
 
-    // Rendering
+	// Rendering
 
-    override fun renderBackground(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        this.renderTransparentBackground(pGuiGraphics)
+	override fun renderBackground(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+		this.renderTransparentBackground(pGuiGraphics)
 
-        pGuiGraphics.blit(
-            ScreenTextures.Background.Composer.COMPOSER,
-            leftPos,
-            topPos,
-            0f,
-            0f,
-            ScreenTextures.Background.Composer.WIDTH,
-            ScreenTextures.Background.Composer.HEIGHT,
-            ScreenTextures.Background.Composer.CANVAS_SIZE,
-            ScreenTextures.Background.Composer.CANVAS_SIZE
-        )
-    }
+		pGuiGraphics.blit(
+			ScreenTextures.Background.Composer.COMPOSER,
+			leftPos,
+			topPos,
+			0f,
+			0f,
+			ScreenTextures.Background.Composer.WIDTH,
+			ScreenTextures.Background.Composer.HEIGHT,
+			ScreenTextures.Background.Composer.CANVAS_SIZE,
+			ScreenTextures.Background.Composer.CANVAS_SIZE
+		)
+	}
 
-    override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+	override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
-        pGuiGraphics.drawString(
-            font,
-            title,
-            leftPos + 10,
-            topPos + 10,
-            0x403030,
-            false
-        )
+		pGuiGraphics.drawString(
+			font,
+			title,
+			leftPos + 10,
+			topPos + 10,
+			0x403030,
+			false
+		)
 
-        instrumentArea.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
+		instrumentArea.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick)
 
-        for (widget in renderables) {
-            if (widget !is Button) continue
-            if (!widget.isHovered) continue
+		for (widget in renderables) {
+			if (widget !is Button) continue
+			if (!widget.isHovered) continue
 
-            val component = widget.message
+			val component = widget.message
 
-            pGuiGraphics.renderComponentTooltip(
-                font,
-                listOf(component),
-                pMouseX,
-                pMouseY
-            )
+			pGuiGraphics.renderComponentTooltip(
+				font,
+				listOf(component),
+				pMouseX,
+				pMouseY
+			)
 
-            break
-        }
+			break
+		}
 
-    }
+	}
 
-    fun addRenderable(renderable: Renderable) {
-        super.addRenderableOnly(renderable)
-    }
+	fun addRenderable(renderable: Renderable) {
+		super.addRenderableOnly(renderable)
+	}
 
-    fun addRenderableWidgets(widgets: Collection<AbstractWidget>) {
-        for (widget in widgets) {
-            this.addRenderableWidget(widget)
-        }
-    }
+	fun addRenderableWidgets(widgets: Collection<AbstractWidget>) {
+		for (widget in widgets) {
+			this.addRenderableWidget(widget)
+		}
+	}
 
-    fun addRenderableWidgets(vararg widgets: AbstractWidget) {
-        addRenderableWidgets(widgets.toList())
-    }
+	fun addRenderableWidgets(vararg widgets: AbstractWidget) {
+		addRenderableWidgets(widgets.toList())
+	}
 
-    // Behavior
+	// Behavior
 
-    override fun isPauseScreen(): Boolean {
-        return false
-    }
+	override fun isPauseScreen(): Boolean {
+		return false
+	}
 
-    private var songPreviousTick: ComposerSong? = null
+	private var songPreviousTick: ComposerSong? = null
 
-    override fun tick() {
-        if (composerBlockEntity.isRemoved) {
-            minecraft?.player?.closeContainer()
-        }
+	override fun tick() {
+		if (composerBlockEntity.isRemoved) {
+			minecraft?.player?.closeContainer()
+		}
 
-        if (songPreviousTick != SetCurrentComposerSongPacket.currentComposerSong) {
-            songPreviousTick = SetCurrentComposerSongPacket.currentComposerSong
-            timeline.setLastBeatDelay()
-        }
-    }
+		if (songPreviousTick != SetCurrentComposerSongPacket.currentComposerSong) {
+			songPreviousTick = SetCurrentComposerSongPacket.currentComposerSong
+			timeline.setLastBeatDelay()
+		}
+	}
 
-    override fun onClose() {
-        composerControls.stopPlaying()
-        SetCurrentComposerSongPacket.unset()
+	override fun onClose() {
+		composerControls.stopPlaying()
+		SetCurrentComposerSongPacket.unset()
 
-        super.onClose()
-    }
+		super.onClose()
+	}
 
-    // Controls
+	// Controls
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        timeline.mouseClicked(pMouseX, pMouseY, pButton)
+	override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+		timeline.mouseClicked(pMouseX, pMouseY, pButton)
 
-        if (!composerControls.jumpToBeatBox.isHovered) {
-            composerControls.jumpToBeatBox.isFocused = false
-        } else {
-            if (pButton == 1) {
-                composerControls.jumpToBeatBox.value = ""
-            }
-        }
+		if (!composerControls.jumpToBeatBox.isHovered) {
+			composerControls.jumpToBeatBox.isFocused = false
+		} else {
+			if (pButton == 1) {
+				composerControls.jumpToBeatBox.value = ""
+			}
+		}
 
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
-    }
+		return super.mouseClicked(pMouseX, pMouseY, pButton)
+	}
 
-    override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pScrollX: Double, pScrollY: Double): Boolean {
-        if (pScrollY > 0 || pScrollX > 0) {
-            timeline.horizontalScrollIndex--
-        } else if (pScrollY < 0 || pScrollX < 0) {
-            timeline.horizontalScrollIndex++
-        }
+	override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pScrollX: Double, pScrollY: Double): Boolean {
+		if (pScrollY > 0 || pScrollX > 0) {
+			timeline.horizontalScrollIndex--
+		} else if (pScrollY < 0 || pScrollX < 0) {
+			timeline.horizontalScrollIndex++
+		}
 
-        return super.mouseScrolled(pMouseX, pMouseY, pScrollX, pScrollY)
-    }
+		return super.mouseScrolled(pMouseX, pMouseY, pScrollX, pScrollY)
+	}
 
-    override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+	override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
 
-        if (isCopy(pKeyCode) || isCut(pKeyCode)) {
-            composerControls.copySong()
-        } else if (isPaste(pKeyCode)) {
-            composerControls.pasteSong()
-        }
+		if (isCopy(pKeyCode) || isCut(pKeyCode)) {
+			composerControls.copySong()
+		} else if (isPaste(pKeyCode)) {
+			composerControls.pasteSong()
+		}
 
-        return super.keyPressed(pKeyCode, pScanCode, pModifiers)
-    }
+		return super.keyPressed(pKeyCode, pScanCode, pModifiers)
+	}
 
 }

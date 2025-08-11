@@ -10,24 +10,24 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 
 @EventBusSubscriber(
-    modid = PitchPerfect.ID,
-    bus = EventBusSubscriber.Bus.MOD
+	modid = PitchPerfect.ID,
+	bus = EventBusSubscriber.Bus.MOD
 )
 object ModBusEvents {
 
-    @SubscribeEvent
-    fun registerPayloads(event: RegisterPayloadHandlersEvent) {
-        ModPacketHandler.registerPayloads(event)
-    }
+	@SubscribeEvent
+	fun registerPayloads(event: RegisterPayloadHandlersEvent) {
+		ModPacketHandler.registerPayloads(event)
+	}
 
-    @SubscribeEvent
-    fun onRegisterCapabilities(event: RegisterCapabilitiesEvent) {
+	@SubscribeEvent
+	fun onRegisterCapabilities(event: RegisterCapabilitiesEvent) {
 
-        event.registerBlockEntity(
-            Capabilities.ItemHandler.BLOCK,
-            ModBlockEntities.CONDUCTOR.get()
-        ) { conductorBE, direction -> conductorBE.getItemHandler(direction) }
+		event.registerBlockEntity(
+			Capabilities.ItemHandler.BLOCK,
+			ModBlockEntities.CONDUCTOR.get()
+		) { conductorBE, direction -> conductorBE.getItemHandler(direction) }
 
-    }
+	}
 
 }

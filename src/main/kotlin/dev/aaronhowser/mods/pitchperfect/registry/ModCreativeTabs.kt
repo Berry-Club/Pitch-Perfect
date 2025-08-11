@@ -12,18 +12,18 @@ import java.util.function.Supplier
 
 object ModCreativeTabs {
 
-    val CREATIVE_TAB_REGISTRY: DeferredRegister<CreativeModeTab> =
-        DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, PitchPerfect.ID)
+	val CREATIVE_TAB_REGISTRY: DeferredRegister<CreativeModeTab> =
+		DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, PitchPerfect.ID)
 
-    val MOD_TAB: DeferredHolder<CreativeModeTab, CreativeModeTab> =
-        CREATIVE_TAB_REGISTRY.register("pitch_perfect", Supplier {
-            CreativeModeTab.builder()
-                .title(ModLanguageProvider.Misc.CREATIVE_TAB.toComponent())
-                .icon { ModItems.BANJO.toStack() }
-                .displayItems { a, b ->
-                    b.acceptAll(ModItems.ITEM_REGISTRY.entries.map { (it as DeferredItem).toStack() })
-                }
-                .build()
-        })
+	val MOD_TAB: DeferredHolder<CreativeModeTab, CreativeModeTab> =
+		CREATIVE_TAB_REGISTRY.register("pitch_perfect", Supplier {
+			CreativeModeTab.builder()
+				.title(ModLanguageProvider.Misc.CREATIVE_TAB.toComponent())
+				.icon { ModItems.BANJO.toStack() }
+				.displayItems { a, b ->
+					b.acceptAll(ModItems.ITEM_REGISTRY.entries.map { (it as DeferredItem).toStack() })
+				}
+				.build()
+		})
 
 }

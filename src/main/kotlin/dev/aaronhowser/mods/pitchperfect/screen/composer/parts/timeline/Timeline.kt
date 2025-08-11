@@ -9,91 +9,91 @@ import net.neoforged.api.distmarker.OnlyIn
 
 @OnlyIn(Dist.CLIENT)
 class Timeline(
-    val composerScreen: ComposerScreen,
-    val font: Font
+	val composerScreen: ComposerScreen,
+	val font: Font
 ) {
 
-    companion object {
-        const val ROW_COUNT = 25
-        const val COLUMN_COUNT = 41
+	companion object {
+		const val ROW_COUNT = 25
+		const val COLUMN_COUNT = 41
 
-        const val TICKS_PER_BEAT = 2
-    }
+		const val TICKS_PER_BEAT = 2
+	}
 
-    //TODO: Scroll bar at the bottom
+	//TODO: Scroll bar at the bottom
 
-    val timelineStepper = TimelineStepper(this)
+	val timelineStepper = TimelineStepper(this)
 
-    val topPos by lazy { composerScreen.topPos + 40 }
-    val leftPos by lazy { composerScreen.leftPos + 60 }
-    val rightPos by lazy { leftPos + COLUMN_COUNT * (TimelineCell.WIDTH + 1) }
+	val topPos by lazy { composerScreen.topPos + 40 }
+	val leftPos by lazy { composerScreen.leftPos + 60 }
+	val rightPos by lazy { leftPos + COLUMN_COUNT * (TimelineCell.WIDTH + 1) }
 
-    var horizontalScrollIndex: Int = 0
-        set(value) {
-            field = value.coerceAtLeast(0)
-            timelineStepper.setCellsAtBeat()
-        }
+	var horizontalScrollIndex: Int = 0
+		set(value) {
+			field = value.coerceAtLeast(0)
+			timelineStepper.setCellsAtBeat()
+		}
 
-    var delayOfFinalBeat: Int = 0
-        private set
+	var delayOfFinalBeat: Int = 0
+		private set
 
-    fun init() {
-        addTimelineCells()
-        addStepJumpButtons()
-        setLastBeatDelay()
+	fun init() {
+		addTimelineCells()
+		addStepJumpButtons()
+		setLastBeatDelay()
 
-        timelineStepper.init()
-    }
+		timelineStepper.init()
+	}
 
-    var timelineCells: List<TimelineCell> = listOf()
-        private set
+	var timelineCells: List<TimelineCell> = listOf()
+		private set
 
-    private fun addTimelineCells() {
-        if (timelineCells.isNotEmpty()) {
-            PitchPerfect.LOGGER.error("Tried to add timeline cells when they already exist")
-            return
-        }
+	private fun addTimelineCells() {
+		if (timelineCells.isNotEmpty()) {
+			PitchPerfect.LOGGER.error("Tried to add timeline cells when they already exist")
+			return
+		}
 
-        val tempList = mutableListOf<TimelineCell>()
+		val tempList = mutableListOf<TimelineCell>()
 
-        for (yIndex in 0 until ROW_COUNT) {
-            for (xIndex in 0 until COLUMN_COUNT) {
-                tempList += TimelineCell(this, xIndex, yIndex)
-            }
-        }
+		for (yIndex in 0 until ROW_COUNT) {
+			for (xIndex in 0 until COLUMN_COUNT) {
+				tempList += TimelineCell(this, xIndex, yIndex)
+			}
+		}
 
-        timelineCells = tempList
+		timelineCells = tempList
 
-        composerScreen.addRenderableWidgets(timelineCells)
-    }
+		composerScreen.addRenderableWidgets(timelineCells)
+	}
 
-    var stepJumpButtons: List<StepJumpButton> = listOf()
-        private set
+	var stepJumpButtons: List<StepJumpButton> = listOf()
+		private set
 
-    private fun addStepJumpButtons() {
-        if (stepJumpButtons.isNotEmpty()) {
-            PitchPerfect.LOGGER.error("Tried to add step jump buttons when they already exist")
-            return
-        }
+	private fun addStepJumpButtons() {
+		if (stepJumpButtons.isNotEmpty()) {
+			PitchPerfect.LOGGER.error("Tried to add step jump buttons when they already exist")
+			return
+		}
 
-        val tempList = mutableListOf<StepJumpButton>()
+		val tempList = mutableListOf<StepJumpButton>()
 
-        for (xIndex in 0 until COLUMN_COUNT) {
-            tempList += StepJumpButton(this, xIndex)
-        }
+		for (xIndex in 0 until COLUMN_COUNT) {
+			tempList += StepJumpButton(this, xIndex)
+		}
 
-        stepJumpButtons = tempList
-        composerScreen.addRenderableWidgets(stepJumpButtons)
-    }
+		stepJumpButtons = tempList
+		composerScreen.addRenderableWidgets(stepJumpButtons)
+	}
 
-    fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
-        setLastBeatDelay()
-    }
+	fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int) {
+		setLastBeatDelay()
+	}
 
-    fun setLastBeatDelay() {
-        val composerSong = SetCurrentComposerSongPacket.currentComposerSong ?: return
-        val lastBeat = composerSong.song.beats.flatMap { it.value }.maxByOrNull { it.at } ?: return
-        delayOfFinalBeat = lastBeat.at
-    }
+	fun setLastBeatDelay() {
+		val composerSong = SetCurrentComposerSongPacket.currentComposerSong ?: return
+		val lastBeat = composerSong.song.beats.flatMap { it.value }.maxByOrNull { it.at } ?: return
+		delayOfFinalBeat = lastBeat.at
+	}
 
 }

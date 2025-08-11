@@ -18,63 +18,63 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
 class ClickComposerCellPacket(
-    val delay: Int,
-    val pitch: Int,
-    val leftClick: Boolean,
-    val selectedInstrument: String,
-    val blockPos: BlockPos
+	val delay: Int,
+	val pitch: Int,
+	val leftClick: Boolean,
+	val selectedInstrument: String,
+	val blockPos: BlockPos
 ) : IModPacket {
 
-    override fun receiveMessage(context: IPayloadContext) {
-        context.enqueueWork {
-            val player = context.player()
+	override fun receiveMessage(context: IPayloadContext) {
+		context.enqueueWork {
+			val player = context.player()
 
-            val composerBlockEntity = player.level().getBlockEntity(blockPos) as? ComposerBlockEntity
-                ?: return@enqueueWork
+			val composerBlockEntity = player.level().getBlockEntity(blockPos) as? ComposerBlockEntity
+				?: return@enqueueWork
 
-            val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
-            if (!player.canInteractWithBlock(blockPos, playerReach)) return@enqueueWork
+			val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
+			if (!player.canInteractWithBlock(blockPos, playerReach)) return@enqueueWork
 
-            val composerSongUuid = composerBlockEntity.composerSongUuid
+			val composerSongUuid = composerBlockEntity.composerSongUuid
 
-            val composerSongSavedData = player.server!!.composerSongSavedData
-            val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+			val composerSongSavedData = player.server!!.composerSongSavedData
+			val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
 
-            val note = Note.getFromPitch(pitch)
-            val soundHolder = Song.getSoundHolder(selectedInstrument)
+			val note = Note.getFromPitch(pitch)
+			val soundHolder = Song.getSoundHolder(selectedInstrument)
 
-            composerSong.apply {
-                if (leftClick) {
-                    addBeat(delay, note, soundHolder)
-                } else {
-                    removeBeat(delay, note, soundHolder)
-                }
+			composerSong.apply {
+				if (leftClick) {
+					addBeat(delay, note, soundHolder)
+				} else {
+					removeBeat(delay, note, soundHolder)
+				}
 
-                addAuthor(player)
-            }
+				addAuthor(player)
+			}
 
-            ModPacketHandler.messagePlayer(player as ServerPlayer, SetCurrentComposerSongPacket(composerSong))
-        }
-    }
+			ModPacketHandler.messagePlayer(player as ServerPlayer, SetCurrentComposerSongPacket(composerSong))
+		}
+	}
 
-    override fun type(): CustomPacketPayload.Type<ClickComposerCellPacket> {
-        return TYPE
-    }
+	override fun type(): CustomPacketPayload.Type<ClickComposerCellPacket> {
+		return TYPE
+	}
 
-    companion object {
-        val TYPE: CustomPacketPayload.Type<ClickComposerCellPacket> =
-            CustomPacketPayload.Type(OtherUtil.modResource("click_composer_cell"))
+	companion object {
+		val TYPE: CustomPacketPayload.Type<ClickComposerCellPacket> =
+			CustomPacketPayload.Type(OtherUtil.modResource("click_composer_cell"))
 
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ClickComposerCellPacket> =
-            StreamCodec.composite(
-                ByteBufCodecs.VAR_INT, ClickComposerCellPacket::delay,
-                ByteBufCodecs.VAR_INT, ClickComposerCellPacket::pitch,
-                ByteBufCodecs.BOOL, ClickComposerCellPacket::leftClick,
-                ByteBufCodecs.STRING_UTF8, ClickComposerCellPacket::selectedInstrument,
-                BlockPos.STREAM_CODEC, ClickComposerCellPacket::blockPos,
-                ::ClickComposerCellPacket
-            )
+		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ClickComposerCellPacket> =
+			StreamCodec.composite(
+				ByteBufCodecs.VAR_INT, ClickComposerCellPacket::delay,
+				ByteBufCodecs.VAR_INT, ClickComposerCellPacket::pitch,
+				ByteBufCodecs.BOOL, ClickComposerCellPacket::leftClick,
+				ByteBufCodecs.STRING_UTF8, ClickComposerCellPacket::selectedInstrument,
+				BlockPos.STREAM_CODEC, ClickComposerCellPacket::blockPos,
+				::ClickComposerCellPacket
+			)
 
-    }
+	}
 
 }

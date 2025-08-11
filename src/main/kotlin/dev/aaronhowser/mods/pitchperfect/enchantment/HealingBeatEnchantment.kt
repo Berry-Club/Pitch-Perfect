@@ -15,90 +15,90 @@ import net.minecraft.world.item.ItemStack
 
 object HealingBeatEnchantment {
 
-    fun trigger(user: LivingEntity, itemstack: ItemStack) {
-        HealingBeatPulse(user, itemstack)
-    }
+	fun trigger(user: LivingEntity, itemstack: ItemStack) {
+		HealingBeatPulse(user, itemstack)
+	}
 
-    private class HealingBeatPulse(
-        private val user: LivingEntity,
-        private val itemStack: ItemStack
-    ) {
+	private class HealingBeatPulse(
+		private val user: LivingEntity,
+		private val itemStack: ItemStack
+	) {
 
-        val soundEvent = SoundEventComponent.getSoundEvent(itemStack)
-        val mobsToHeal by lazy { findMobsToHeal() }
+		val soundEvent = SoundEventComponent.getSoundEvent(itemStack)
+		val mobsToHeal by lazy { findMobsToHeal() }
 
-        init {
-            pulse()
-        }
+		init {
+			pulse()
+		}
 
-        private fun pulse() {
-            if (user.level().isClientSide) return
-            if (mobsToHeal.isEmpty()) return
-            if (soundEvent == null) return
+		private fun pulse() {
+			if (user.level().isClientSide) return
+			if (mobsToHeal.isEmpty()) return
+			if (soundEvent == null) return
 
-            mobsToHeal.forEach { heal(it) }
+			mobsToHeal.forEach { heal(it) }
 
-            if (user is Player) {
-                user.cooldowns.addCooldown(
-                    itemStack.item,
-                    Mth.ceil(ServerConfig.HEAL_COOLDOWN_PER.get() * mobsToHeal.size)
-                )
-            }
-        }
+			if (user is Player) {
+				user.cooldowns.addCooldown(
+					itemStack.item,
+					Mth.ceil(ServerConfig.HEAL_COOLDOWN_PER.get() * mobsToHeal.size)
+				)
+			}
+		}
 
-        private fun heal(target: LivingEntity) {
-            target.heal(ServerConfig.HEAL_AMOUNT.get().toFloat())
+		private fun heal(target: LivingEntity) {
+			target.heal(ServerConfig.HEAL_AMOUNT.get().toFloat())
 
-            ModPacketHandler.messageNearbyPlayers(
-                SpawnNotePacket(
-                    soundEvent!!.location,
-                    user.lookAngle.y.toFloat(),
-                    target.x,
-                    target.eyeY,
-                    target.z
-                ),
-                user.level() as ServerLevel,
-                target.eyePosition,
-                64.0
-            )
-        }
+			ModPacketHandler.messageNearbyPlayers(
+				SpawnNotePacket(
+					soundEvent!!.location,
+					user.lookAngle.y.toFloat(),
+					target.x,
+					target.eyeY,
+					target.z
+				),
+				user.level() as ServerLevel,
+				target.eyePosition,
+				64.0
+			)
+		}
 
-        private fun findMobsToHeal(): List<LivingEntity> {
-            val nearbyMobs = OtherUtil.getNearbyLivingEntities(user, ServerConfig.HEAL_RANGE.get())
+		private fun findMobsToHeal(): List<LivingEntity> {
+			val nearbyMobs = OtherUtil.getNearbyLivingEntities(user, ServerConfig.HEAL_RANGE.get())
 
-            return nearbyMobs.filter { potentialMob ->
+			return nearbyMobs.filter { potentialMob ->
 
-                val missingHealth = potentialMob.maxHealth > potentialMob.health
-                if (!missingHealth) return@filter false
+				val missingHealth = potentialMob.maxHealth > potentialMob.health
+				if (!missingHealth) return@filter false
 
-                val isBlacklisted = mobIsBlacklisted(potentialMob)
-                if (isBlacklisted) return@filter false
+				val isBlacklisted = mobIsBlacklisted(potentialMob)
+				if (isBlacklisted) return@filter false
 
-                if (potentialMob is Monster) {
-                    if (user is Monster) return@filter true
-                    if (mobIsWhitelisted(potentialMob)) return@filter true
-                } else {
-                    // If the potential mob is not a monster but the user is, don't heal it
-                    if (user is Monster) return@filter false
-                }
+				if (potentialMob is Monster) {
+					if (user is Monster) return@filter true
+					if (mobIsWhitelisted(potentialMob)) return@filter true
+				} else {
+					// If the potential mob is not a monster but the user is, don't heal it
+					if (user is Monster) return@filter false
+				}
 
-                return@filter true
-            }
+				return@filter true
+			}
 
-        }
+		}
 
-        fun mobIsWhitelisted(mob: LivingEntity): Boolean {
-            val entityType = mob.type
+		fun mobIsWhitelisted(mob: LivingEntity): Boolean {
+			val entityType = mob.type
 
-            return entityType.`is`(ModEntityTypeTagsProvider.HEALING_BEAT_WHITELIST)
-        }
+			return entityType.`is`(ModEntityTypeTagsProvider.HEALING_BEAT_WHITELIST)
+		}
 
-        fun mobIsBlacklisted(mob: LivingEntity): Boolean {
-            val entityType = mob.type
+		fun mobIsBlacklisted(mob: LivingEntity): Boolean {
+			val entityType = mob.type
 
-            return entityType.`is`(ModEntityTypeTagsProvider.HEALING_BEAT_BLACKLIST)
-        }
+			return entityType.`is`(ModEntityTypeTagsProvider.HEALING_BEAT_BLACKLIST)
+		}
 
-    }
+	}
 
 }

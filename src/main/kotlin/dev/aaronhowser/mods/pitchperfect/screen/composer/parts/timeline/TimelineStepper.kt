@@ -6,101 +6,101 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Renderable
 
 class TimelineStepper(
-    private val timeline: Timeline
+	private val timeline: Timeline
 ) : Renderable {
-    private var currentDelay = 0
+	private var currentDelay = 0
 
-    fun setDelay(value: Int, fromEditBox: Boolean = false) {
-        currentDelay = value.coerceIn(0, timeline.delayOfFinalBeat)
-        setCellsAtBeat()
+	fun setDelay(value: Int, fromEditBox: Boolean = false) {
+		currentDelay = value.coerceIn(0, timeline.delayOfFinalBeat)
+		setCellsAtBeat()
 
-        if (!fromEditBox) {
-            timeline.composerScreen.composerControls
-                .setBoxValue(currentDelay.toString(), fromStepper = true)
-        }
-    }
+		if (!fromEditBox) {
+			timeline.composerScreen.composerControls
+				.setBoxValue(currentDelay.toString(), fromStepper = true)
+		}
+	}
 
-    private var cellsAtBeat: List<TimelineCell> = listOf()
+	private var cellsAtBeat: List<TimelineCell> = listOf()
 
-    fun setCellsAtBeat() {
-        cellsAtBeat = timeline.timelineCells.filter { it.delay == currentDelay }
-    }
+	fun setCellsAtBeat() {
+		cellsAtBeat = timeline.timelineCells.filter { it.delay == currentDelay }
+	}
 
-    fun init() {
-        setCellsAtBeat()
+	fun init() {
+		setCellsAtBeat()
 
-        timeline.composerScreen.addRenderable(this)
-    }
+		timeline.composerScreen.addRenderable(this)
+	}
 
-    override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        if (cellsAtBeat.isEmpty()) return
+	override fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+		if (cellsAtBeat.isEmpty()) return
 
-        val topCellY = cellsAtBeat.minOf { it.renderTop }
-        val bottomCellY = cellsAtBeat.maxOf { it.renderBottom }
-        val left = cellsAtBeat.first().renderLeft
-        val right = cellsAtBeat.last().renderRight
+		val topCellY = cellsAtBeat.minOf { it.renderTop }
+		val bottomCellY = cellsAtBeat.maxOf { it.renderBottom }
+		val left = cellsAtBeat.first().renderLeft
+		val right = cellsAtBeat.last().renderRight
 
-        pGuiGraphics.fill(
-            left - 1,
-            topCellY - 1,
-            right + 1,
-            bottomCellY + 1,
-            0x66FF6666
-        )
-    }
+		pGuiGraphics.fill(
+			left - 1,
+			topCellY - 1,
+			right + 1,
+			bottomCellY + 1,
+			0x66FF6666
+		)
+	}
 
-    var playing = false
-        private set
+	var playing = false
+		private set
 
-    fun startPlaying() {
-        if (playing) return
-        playing = true
+	fun startPlaying() {
+		if (playing) return
+		playing = true
 
-        playBeat()
-    }
+		playBeat()
+	}
 
-    fun stopPlaying() {
-        if (!playing) {
-            timeline.horizontalScrollIndex = 0
-            setDelay(0)
-            return
-        }
-        playing = false
-    }
+	fun stopPlaying() {
+		if (!playing) {
+			timeline.horizontalScrollIndex = 0
+			setDelay(0)
+			return
+		}
+		playing = false
+	}
 
-    private fun playBeat() {
-        if (!playing) return
+	private fun playBeat() {
+		if (!playing) return
 
-        val idealScrollIndex = currentDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2 + 1
-        timeline.horizontalScrollIndex = idealScrollIndex
+		val idealScrollIndex = currentDelay / Timeline.TICKS_PER_BEAT - Timeline.COLUMN_COUNT / 2 + 1
+		timeline.horizontalScrollIndex = idealScrollIndex
 
-        val blockPos = timeline.composerScreen.composerBlockEntity.blockPos
-        for (cell in cellsAtBeat) {
-            val note = cell.note
+		val blockPos = timeline.composerScreen.composerBlockEntity.blockPos
+		for (cell in cellsAtBeat) {
+			val note = cell.note
 
-            for (soundHolder in cell.sounds) {
-                ClientUtil.playNote(
-                    soundHolder.value(),
-                    note.getGoodPitch(),
-                    blockPos.x + 0.5,
-                    blockPos.y + 1.5,
-                    blockPos.z + 0.5,
-                    false
-                )
-            }
+			for (soundHolder in cell.sounds) {
+				ClientUtil.playNote(
+					soundHolder.value(),
+					note.getGoodPitch(),
+					blockPos.x + 0.5,
+					blockPos.y + 1.5,
+					blockPos.z + 0.5,
+					false
+				)
+			}
 
-        }
+		}
 
-        if (currentDelay >= timeline.delayOfFinalBeat) {
-            stopPlaying()
-            return
-        }
+		if (currentDelay >= timeline.delayOfFinalBeat) {
+			stopPlaying()
+			return
+		}
 
-        setDelay(currentDelay + Timeline.TICKS_PER_BEAT)
+		setDelay(currentDelay + Timeline.TICKS_PER_BEAT)
 
-        ModClientScheduler.scheduleTaskInTicks(Timeline.TICKS_PER_BEAT) {
-            playBeat()
-        }
-    }
+		ModClientScheduler.scheduleTaskInTicks(Timeline.TICKS_PER_BEAT) {
+			playBeat()
+		}
+	}
 
 }

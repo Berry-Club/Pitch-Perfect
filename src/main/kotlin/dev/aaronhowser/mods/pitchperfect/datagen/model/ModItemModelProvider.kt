@@ -8,17 +8,17 @@ import net.neoforged.neoforge.client.model.generators.ItemModelProvider
 import net.neoforged.neoforge.common.data.ExistingFileHelper
 
 class ModItemModelProvider(
-    output: PackOutput,
-    existingFileHelper: ExistingFileHelper
+	output: PackOutput,
+	existingFileHelper: ExistingFileHelper
 ) : ItemModelProvider(output, PitchPerfect.ID, existingFileHelper) {
 
-    override fun registerModels() {
+	override fun registerModels() {
 
-        for (item in ModItems.ITEM_REGISTRY.entries) {
-            if (item.get() is BlockItem) continue
+		for (item in ModItems.ITEM_REGISTRY.entries) {
+			if (item.get() is BlockItem) continue
 
-            basicItem(item.get())
-        }
+			basicItem(item.get())
+		}
 
-    }
+	}
 }

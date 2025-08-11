@@ -12,25 +12,25 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper
 import java.util.concurrent.CompletableFuture
 
 class ModEntityTypeTagsProvider(
-    pOutput: PackOutput,
-    pProvider: CompletableFuture<HolderLookup.Provider>,
-    existingFileHelper: ExistingFileHelper?
+	pOutput: PackOutput,
+	pProvider: CompletableFuture<HolderLookup.Provider>,
+	existingFileHelper: ExistingFileHelper?
 ) : EntityTypeTagsProvider(pOutput, pProvider, PitchPerfect.ID, existingFileHelper) {
 
-    companion object {
-        private fun create(name: String): TagKey<EntityType<*>> =
-            TagKey.create(Registries.ENTITY_TYPE, OtherUtil.modResource(name))
+	companion object {
+		private fun create(name: String): TagKey<EntityType<*>> =
+			TagKey.create(Registries.ENTITY_TYPE, OtherUtil.modResource(name))
 
-        val HEALING_BEAT_WHITELIST: TagKey<EntityType<*>> = create("healing_beat_whitelist")
-        val HEALING_BEAT_BLACKLIST: TagKey<EntityType<*>> = create("healing_beat_blacklist")
-    }
+		val HEALING_BEAT_WHITELIST: TagKey<EntityType<*>> = create("healing_beat_whitelist")
+		val HEALING_BEAT_BLACKLIST: TagKey<EntityType<*>> = create("healing_beat_blacklist")
+	}
 
-    override fun addTags(pProvider: HolderLookup.Provider) {
-        this.tag(HEALING_BEAT_WHITELIST)
-            .add(EntityType.SNOW_GOLEM)
+	override fun addTags(pProvider: HolderLookup.Provider) {
+		this.tag(HEALING_BEAT_WHITELIST)
+			.add(EntityType.SNOW_GOLEM)
 
-        this.tag(HEALING_BEAT_BLACKLIST)
-            .add(EntityType.ARMOR_STAND)
-    }
+		this.tag(HEALING_BEAT_BLACKLIST)
+			.add(EntityType.ARMOR_STAND)
+	}
 
 }

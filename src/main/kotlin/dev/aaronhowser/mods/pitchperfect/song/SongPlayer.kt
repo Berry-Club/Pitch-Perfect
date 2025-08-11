@@ -11,50 +11,50 @@ import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component2
 import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component3
 
 class SongPlayer(
-    val level: ServerLevel,
-    val song: Song,
-    val location: () -> Vec3
+	val level: ServerLevel,
+	val song: Song,
+	val location: () -> Vec3
 ) {
 
-    private var playing: Boolean = false
-    private var started: Boolean = false
+	private var playing: Boolean = false
+	private var started: Boolean = false
 
-    fun stopPlaying() {
-        playing = false
-    }
+	fun stopPlaying() {
+		playing = false
+	}
 
-    fun startPlaying() {
-        if (started) return
-        playing = true
-        started = true
+	fun startPlaying() {
+		if (started) return
+		playing = true
+		started = true
 
-        for ((instrument, beats) in song.beats) {
+		for ((instrument, beats) in song.beats) {
 
-            for ((tick, notes) in beats) {
-                for (note in notes) {
-                    val pitch = note.getGoodPitch()
+			for ((tick, notes) in beats) {
+				for (note in notes) {
+					val pitch = note.getGoodPitch()
 
-                    ModServerScheduler.scheduleTaskInTicks(tick) {
-                        if (!playing) return@scheduleTaskInTicks
+					ModServerScheduler.scheduleTaskInTicks(tick) {
+						if (!playing) return@scheduleTaskInTicks
 
-                        val (x, y, z) = location()
+						val (x, y, z) = location()
 
-                        ModPacketHandler.messageNearbyPlayers(
-                            SpawnNotePacket(
-                                instrument.value().location,
-                                pitch,
-                                x,
-                                y,
-                                z,
-                                false
-                            ),
-                            level,
-                            location(),
-                            128.0
-                        )
-                    }
-                }
-            }
-        }
-    }
+						ModPacketHandler.messageNearbyPlayers(
+							SpawnNotePacket(
+								instrument.value().location,
+								pitch,
+								x,
+								y,
+								z,
+								false
+							),
+							level,
+							location(),
+							128.0
+						)
+					}
+				}
+			}
+		}
+	}
 }

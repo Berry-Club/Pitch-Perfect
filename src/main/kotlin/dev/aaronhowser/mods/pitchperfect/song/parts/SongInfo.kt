@@ -17,166 +17,166 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.player.Player
 
 data class SongInfo(
-    val title: String,
-    val authors: List<Author>,
-    val song: Song
+	val title: String,
+	val authors: List<Author>,
+	val song: Song
 ) {
 
-    constructor(
-        title: String,
-        player: Player,
-        song: Song
-    ) : this(title, listOf(Author(player)), song)
+	constructor(
+		title: String,
+		player: Player,
+		song: Song
+	) : this(title, listOf(Author(player)), song)
 
-    fun toTag(): Tag {
-        val compoundTag = CompoundTag()
-        compoundTag.putString(TITLE, title)
+	fun toTag(): Tag {
+		val compoundTag = CompoundTag()
+		compoundTag.putString(TITLE, title)
 
-        val tagAuthors = compoundTag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
+		val tagAuthors = compoundTag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
 
-        for (author in authors) {
-            val authorTag = CompoundTag()
-            authorTag.putUUID(AUTHOR_UUID, author.uuid)
-            authorTag.putString(AUTHOR_NAME, author.name)
-            tagAuthors.add(authorTag)
-        }
+		for (author in authors) {
+			val authorTag = CompoundTag()
+			authorTag.putUUID(AUTHOR_UUID, author.uuid)
+			authorTag.putString(AUTHOR_NAME, author.name)
+			tagAuthors.add(authorTag)
+		}
 
-        compoundTag.put(AUTHORS, tagAuthors)
+		compoundTag.put(AUTHORS, tagAuthors)
 
-        compoundTag.putString(SONG, song.toString())
+		compoundTag.putString(SONG, song.toString())
 
-        return compoundTag
-    }
+		return compoundTag
+	}
 
-    fun getComponent(): Component {
-        val uuidComponent = ModLanguageProvider.Misc.SONG_UUID.toComponent()
-            .withStyle {
-                it
-                    .withHoverEvent(
-                        HoverEvent(
-                            HoverEvent.Action.SHOW_TEXT,
-                            ModLanguageProvider.Message.CLICK_COPY_SONG_UUID.toComponent(song.uuid.toString())
-                        )
-                    )
-                    .withClickEvent(
-                        ClickEvent(
-                            ClickEvent.Action.COPY_TO_CLIPBOARD,
-                            song.uuid.toString()
-                        )
-                    )
-            }
+	fun getComponent(): Component {
+		val uuidComponent = ModLanguageProvider.Misc.SONG_UUID.toComponent()
+			.withStyle {
+				it
+					.withHoverEvent(
+						HoverEvent(
+							HoverEvent.Action.SHOW_TEXT,
+							ModLanguageProvider.Message.CLICK_COPY_SONG_UUID.toComponent(song.uuid.toString())
+						)
+					)
+					.withClickEvent(
+						ClickEvent(
+							ClickEvent.Action.COPY_TO_CLIPBOARD,
+							song.uuid.toString()
+						)
+					)
+			}
 
-        val authorsHoverComponent = Component.empty()
-        for (author in authors) {
-            authorsHoverComponent.append(Component.literal(author.name))
-        }
+		val authorsHoverComponent = Component.empty()
+		for (author in authors) {
+			authorsHoverComponent.append(Component.literal(author.name))
+		}
 
-        val authorsComponent = ModLanguageProvider.Misc.SONG_AUTHORS.toComponent()
-            .withStyle {
-                it.withHoverEvent(
-                    HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        authorsHoverComponent
-                    )
-                )
-            }
+		val authorsComponent = ModLanguageProvider.Misc.SONG_AUTHORS.toComponent()
+			.withStyle {
+				it.withHoverEvent(
+					HoverEvent(
+						HoverEvent.Action.SHOW_TEXT,
+						authorsHoverComponent
+					)
+				)
+			}
 
-        var songString = song.toString()
-        if (songString.length > 500) {
-            songString = songString.substring(0, 500) + "..."
-        }
+		var songString = song.toString()
+		if (songString.length > 500) {
+			songString = songString.substring(0, 500) + "..."
+		}
 
-        val songDataComponent = ModLanguageProvider.Misc.SONG_RAW.toComponent()
-            .withStyle {
-                it
-                    .withHoverEvent(
-                        HoverEvent(
-                            HoverEvent.Action.SHOW_TEXT,
-                            ModLanguageProvider.Message.CLICK_COPY_RAW_SONG.toComponent(
-                                songString
-                            )
-                        )
-                    )
-                    .withClickEvent(
-                        ClickEvent(
-                            ClickEvent.Action.COPY_TO_CLIPBOARD,
-                            song.toString()
-                        )
-                    )
-            }
+		val songDataComponent = ModLanguageProvider.Misc.SONG_RAW.toComponent()
+			.withStyle {
+				it
+					.withHoverEvent(
+						HoverEvent(
+							HoverEvent.Action.SHOW_TEXT,
+							ModLanguageProvider.Message.CLICK_COPY_RAW_SONG.toComponent(
+								songString
+							)
+						)
+					)
+					.withClickEvent(
+						ClickEvent(
+							ClickEvent.Action.COPY_TO_CLIPBOARD,
+							song.toString()
+						)
+					)
+			}
 
-        val playComponent = ModLanguageProvider.Misc.SONG_PLAY.toComponent()
-            .withStyle {
-                it
-                    .withHoverEvent(
-                        HoverEvent(
-                            HoverEvent.Action.SHOW_TEXT,
-                            ModLanguageProvider.Message.CLICK_PLAY_SONG.toComponent()
-                        )
-                    )
-                    .withClickEvent(
-                        ClickEvent(
-                            ClickEvent.Action.RUN_COMMAND,
-                            "/pitchperfect playSong ${song.uuid}"
-                        )
-                    )
-            }
+		val playComponent = ModLanguageProvider.Misc.SONG_PLAY.toComponent()
+			.withStyle {
+				it
+					.withHoverEvent(
+						HoverEvent(
+							HoverEvent.Action.SHOW_TEXT,
+							ModLanguageProvider.Message.CLICK_PLAY_SONG.toComponent()
+						)
+					)
+					.withClickEvent(
+						ClickEvent(
+							ClickEvent.Action.RUN_COMMAND,
+							"/pitchperfect playSong ${song.uuid}"
+						)
+					)
+			}
 
-        return ModLanguageProvider.Misc.SONG_INFO.toComponent(
-            title,
-            authorsComponent,
-            uuidComponent,
-            songDataComponent,
-            playComponent,
-        )
-    }
+		return ModLanguageProvider.Misc.SONG_INFO.toComponent(
+			title,
+			authorsComponent,
+			uuidComponent,
+			songDataComponent,
+			playComponent,
+		)
+	}
 
-    companion object {
+	companion object {
 
-        private const val TITLE = "title"
-        private const val AUTHORS = "authors"
-        private const val AUTHOR_UUID = "uuid"
-        private const val AUTHOR_NAME = "name"
-        private const val SONG = "song"
+		private const val TITLE = "title"
+		private const val AUTHORS = "authors"
+		private const val AUTHOR_UUID = "uuid"
+		private const val AUTHOR_NAME = "name"
+		private const val SONG = "song"
 
-        val CODEC: Codec<SongInfo> =
-            RecordCodecBuilder.create { instance ->
-                instance.group(
-                    Codec.STRING.fieldOf(TITLE).forGetter(SongInfo::title),
-                    Author.CODEC.listOf().fieldOf(AUTHORS).forGetter(SongInfo::authors),
-                    Song.CODEC.fieldOf(SONG).forGetter(SongInfo::song)
-                ).apply(instance, ::SongInfo)
-            }
+		val CODEC: Codec<SongInfo> =
+			RecordCodecBuilder.create { instance ->
+				instance.group(
+					Codec.STRING.fieldOf(TITLE).forGetter(SongInfo::title),
+					Author.CODEC.listOf().fieldOf(AUTHORS).forGetter(SongInfo::authors),
+					Song.CODEC.fieldOf(SONG).forGetter(SongInfo::song)
+				).apply(instance, ::SongInfo)
+			}
 
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SongInfo> =
-            StreamCodec.composite(
-                ByteBufCodecs.STRING_UTF8, SongInfo::title,
-                Author.STREAM_CODEC.apply(ByteBufCodecs.list()), SongInfo::authors,
-                Song.STREAM_CODEC, SongInfo::song,
-                ::SongInfo
-            )
+		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SongInfo> =
+			StreamCodec.composite(
+				ByteBufCodecs.STRING_UTF8, SongInfo::title,
+				Author.STREAM_CODEC.apply(ByteBufCodecs.list()), SongInfo::authors,
+				Song.STREAM_CODEC, SongInfo::song,
+				::SongInfo
+			)
 
-        fun fromCompoundTag(tag: CompoundTag): SongInfo? {
-            val title = tag.getString(TITLE)
+		fun fromCompoundTag(tag: CompoundTag): SongInfo? {
+			val title = tag.getString(TITLE)
 
-            val authors = mutableListOf<Author>()
-            val tagAuthors = tag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
-            for (authorTag in tagAuthors) {
-                val authorCompoundTag = authorTag as? CompoundTag ?: continue
+			val authors = mutableListOf<Author>()
+			val tagAuthors = tag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
+			for (authorTag in tagAuthors) {
+				val authorCompoundTag = authorTag as? CompoundTag ?: continue
 
-                val author = Author.fromCompoundTag(authorCompoundTag) ?: continue
-                authors.add(author)
-            }
+				val author = Author.fromCompoundTag(authorCompoundTag) ?: continue
+				authors.add(author)
+			}
 
-            val song = Song.fromString(tag.getString(SONG))
+			val song = Song.fromString(tag.getString(SONG))
 
-            if (song == null) {
-                PitchPerfect.LOGGER.error("Failed to parse song from tag: $tag")
-                return null
-            }
+			if (song == null) {
+				PitchPerfect.LOGGER.error("Failed to parse song from tag: $tag")
+				return null
+			}
 
-            return SongInfo(title, authors, song)
-        }
-    }
+			return SongInfo(title, authors, song)
+		}
+	}
 
 }

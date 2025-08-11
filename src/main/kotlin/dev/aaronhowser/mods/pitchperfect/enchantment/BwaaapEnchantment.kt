@@ -9,54 +9,54 @@ import net.minecraft.world.item.ItemStack
 
 object BwaaapEnchantment {
 
-    fun trigger(user: LivingEntity, itemStack: ItemStack) {
-        BwaaapWave(user, itemStack)
-    }
+	fun trigger(user: LivingEntity, itemStack: ItemStack) {
+		BwaaapWave(user, itemStack)
+	}
 
-    private class BwaaapWave(
-        val user: LivingEntity,
-        val itemStack: ItemStack
-    ) {
+	private class BwaaapWave(
+		val user: LivingEntity,
+		val itemStack: ItemStack
+	) {
 
-        private val range = ServerConfig.BWAAAP_RANGE.get()
-        private val targets: List<LivingEntity> = OtherUtil.getNearbyLivingEntities(user, range)
+		private val range = ServerConfig.BWAAAP_RANGE.get()
+		private val targets: List<LivingEntity> = OtherUtil.getNearbyLivingEntities(user, range)
 
-        init {
-            knockback()
-        }
+		init {
+			knockback()
+		}
 
-        private fun knockback() {
-            val strength = ServerConfig.BWAAAP_STRENGTH.get()
-            var cooldown = 0.0
+		private fun knockback() {
+			val strength = ServerConfig.BWAAAP_STRENGTH.get()
+			var cooldown = 0.0
 
-            for (target in targets) {
-                val targetMotion = target.deltaMovement
+			for (target in targets) {
+				val targetMotion = target.deltaMovement
 
-                val toTargetVec = target.position().subtract(user.position())
+				val toTargetVec = target.position().subtract(user.position())
 
-                val distanceToTarget = user.distanceTo(target)
-                val percentFromRange = 1 - distanceToTarget / range // 1 = at user, 0 = at range
+				val distanceToTarget = user.distanceTo(target)
+				val percentFromRange = 1 - distanceToTarget / range // 1 = at user, 0 = at range
 
-                cooldown += percentFromRange
+				cooldown += percentFromRange
 
-                val yMult = if (user.isCrouching) 2f else 1f
+				val yMult = if (user.isCrouching) 2f else 1f
 
-                target.deltaMovement = targetMotion.add(
-                    toTargetVec.multiply(
-                        percentFromRange * strength,
-                        percentFromRange * strength * yMult,
-                        percentFromRange * strength
-                    )
-                )
-            }
+				target.deltaMovement = targetMotion.add(
+					toTargetVec.multiply(
+						percentFromRange * strength,
+						percentFromRange * strength * yMult,
+						percentFromRange * strength
+					)
+				)
+			}
 
-            cooldown *= ServerConfig.BWAAAP_COOLDOWN_FACTOR.get()
+			cooldown *= ServerConfig.BWAAAP_COOLDOWN_FACTOR.get()
 
-            if (user is Player) {
-                user.cooldowns.addCooldown(itemStack.item, Mth.ceil(cooldown))
-            }
-        }
+			if (user is Player) {
+				user.cooldowns.addCooldown(itemStack.item, Mth.ceil(cooldown))
+			}
+		}
 
-    }
+	}
 
 }

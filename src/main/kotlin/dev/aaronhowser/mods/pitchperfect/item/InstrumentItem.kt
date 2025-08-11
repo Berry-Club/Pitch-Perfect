@@ -34,177 +34,177 @@ import net.minecraft.world.phys.Vec3
 import kotlin.random.Random
 
 class InstrumentItem(
-    val instrument: SoundEvent,
-    val fontString: String
+	val instrument: SoundEvent,
+	val fontString: String
 ) : Item(
-    Properties()
-        .durability(100)
-        .component(ModDataComponents.SOUND_EVENT_COMPONENT, SoundEventComponent(instrument))
-        .attributes(
-            ItemAttributeModifiers.builder()
-                .add(
-                    Attributes.ATTACK_DAMAGE,
-                    AttributeModifier(
-                        BASE_ATTACK_DAMAGE_ID,
-                        0.1,
-                        AttributeModifier.Operation.ADD_VALUE
-                    ),
-                    EquipmentSlotGroup.MAINHAND
-                )
-                .build()
-        )
+	Properties()
+		.durability(100)
+		.component(ModDataComponents.SOUND_EVENT_COMPONENT, SoundEventComponent(instrument))
+		.attributes(
+			ItemAttributeModifiers.builder()
+				.add(
+					Attributes.ATTACK_DAMAGE,
+					AttributeModifier(
+						BASE_ATTACK_DAMAGE_ID,
+						0.1,
+						AttributeModifier.Operation.ADD_VALUE
+					),
+					EquipmentSlotGroup.MAINHAND
+				)
+				.build()
+		)
 ) {
 
-    constructor(
-        noteBlockInstrument: NoteBlockInstrument,
-        fontString: String
-    ) : this(noteBlockInstrument.soundEvent.value(), fontString)
+	constructor(
+		noteBlockInstrument: NoteBlockInstrument,
+		fontString: String
+	) : this(noteBlockInstrument.soundEvent.value(), fontString)
 
-    constructor(
-        holder: Holder<SoundEvent>,
-        fontString: String
-    ) : this(holder.value(), fontString)
+	constructor(
+		holder: Holder<SoundEvent>,
+		fontString: String
+	) : this(holder.value(), fontString)
 
-    companion object {
+	companion object {
 
-        fun healingBeat(itemStack: ItemStack, player: Player) {
-            if (player.cooldowns.isOnCooldown(itemStack.item)) return
+		fun healingBeat(itemStack: ItemStack, player: Player) {
+			if (player.cooldowns.isOnCooldown(itemStack.item)) return
 
-            val healingBeatLevel = itemStack.getEnchantmentLevel(
-                ModEnchantments.getEnchantHolder(player.level(), ModEnchantments.healingBeatResourceKey)
-            )
+			val healingBeatLevel = itemStack.getEnchantmentLevel(
+				ModEnchantments.getEnchantHolder(player.level(), ModEnchantments.healingBeatResourceKey)
+			)
 
-            if (healingBeatLevel == 0) return
+			if (healingBeatLevel == 0) return
 
-            HealingBeatEnchantment.trigger(player, itemStack)
-        }
+			HealingBeatEnchantment.trigger(player, itemStack)
+		}
 
-        fun bwaaap(itemStack: ItemStack, player: Player) {
-            if (player.cooldowns.isOnCooldown(itemStack.item)) return
+		fun bwaaap(itemStack: ItemStack, player: Player) {
+			if (player.cooldowns.isOnCooldown(itemStack.item)) return
 
-            val bwaaapLevel = itemStack.getEnchantmentLevel(
-                ModEnchantments.getEnchantHolder(player.level(), ModEnchantments.bwaaapResourceKey)
-            )
+			val bwaaapLevel = itemStack.getEnchantmentLevel(
+				ModEnchantments.getEnchantHolder(player.level(), ModEnchantments.bwaaapResourceKey)
+			)
 
-            if (bwaaapLevel == 0) return
+			if (bwaaapLevel == 0) return
 
-            BwaaapEnchantment.trigger(player, itemStack)
-        }
+			BwaaapEnchantment.trigger(player, itemStack)
+		}
 
-    }
+	}
 
-    override fun getBreakingSound(): SoundEvent = ModSounds.GUITAR_SMASH.get()
+	override fun getBreakingSound(): SoundEvent = ModSounds.GUITAR_SMASH.get()
 
-    override fun use(
-        pLevel: Level,
-        pPlayer: Player,
-        pUsedHand: InteractionHand
-    ): InteractionResultHolder<ItemStack> {
-        val itemStack = pPlayer.getItemInHand(pUsedHand)
+	override fun use(
+		pLevel: Level,
+		pPlayer: Player,
+		pUsedHand: InteractionHand
+	): InteractionResultHolder<ItemStack> {
+		val itemStack = pPlayer.getItemInHand(pUsedHand)
 
-        useInstrument(itemStack, pPlayer, pLevel, pUsedHand)
+		useInstrument(itemStack, pPlayer, pLevel, pUsedHand)
 
-        return InteractionResultHolder.pass(itemStack)
-    }
+		return InteractionResultHolder.pass(itemStack)
+	}
 
-    private fun useInstrument(
-        itemStack: ItemStack,
-        player: Player,
-        level: Level,
-        interactionHand: InteractionHand
-    ) {
-        val sound = SoundEventComponent.getSoundEvent(itemStack) ?: return
+	private fun useInstrument(
+		itemStack: ItemStack,
+		player: Player,
+		level: Level,
+		interactionHand: InteractionHand
+	) {
+		val sound = SoundEventComponent.getSoundEvent(itemStack) ?: return
 
-        val lookVector = player.lookAngle
-        val pitch = lookVector.y.toFloat().map(-1f, 1f, 0.5f, 2f)
+		val lookVector = player.lookAngle
+		val pitch = lookVector.y.toFloat().map(-1f, 1f, 0.5f, 2f)
 
-        val noteVector = if (interactionHand == InteractionHand.MAIN_HAND) {
-            lookVector.yRot(-0.5f)
-        } else {
-            lookVector.yRot(0.5f)
-        }
+		val noteVector = if (interactionHand == InteractionHand.MAIN_HAND) {
+			lookVector.yRot(-0.5f)
+		} else {
+			lookVector.yRot(0.5f)
+		}
 
-        val bwaaapLevel = itemStack.getEnchantmentLevel(
-            ModEnchantments.getEnchantHolder(player.level(), ModEnchantments.bwaaapResourceKey)
-        )
+		val bwaaapLevel = itemStack.getEnchantmentLevel(
+			ModEnchantments.getEnchantHolder(player.level(), ModEnchantments.bwaaapResourceKey)
+		)
 
-        if (!level.isClientSide) {
-            ModPacketHandler.messageNearbyPlayers(
-                SpawnNotePacket(
-                    sound.location,
-                    pitch,
-                    (player.x + noteVector.x),
-                    (player.eyeY + noteVector.y),
-                    (player.z + noteVector.z),
-                    bwaaapLevel != 0
-                ),
-                level as ServerLevel,
-                player.eyePosition,
-                128.0
-            )
-        }
+		if (!level.isClientSide) {
+			ModPacketHandler.messageNearbyPlayers(
+				SpawnNotePacket(
+					sound.location,
+					pitch,
+					(player.x + noteVector.x),
+					(player.eyeY + noteVector.y),
+					(player.z + noteVector.z),
+					bwaaapLevel != 0
+				),
+				level as ServerLevel,
+				player.eyePosition,
+				128.0
+			)
+		}
 
-        healingBeat(itemStack, player)
-        bwaaap(itemStack, player)
-    }
+		healingBeat(itemStack, player)
+		bwaaap(itemStack, player)
+	}
 
-    override fun onLeftClickEntity(stack: ItemStack, player: Player, entity: Entity): Boolean {
-        if (entity.level().isClientSide) return false
+	override fun onLeftClickEntity(stack: ItemStack, player: Player, entity: Entity): Boolean {
+		if (entity.level().isClientSide) return false
 
-        val sound = SoundEventComponent.getSoundEvent(stack) ?: return false
+		val sound = SoundEventComponent.getSoundEvent(stack) ?: return false
 
-        val particleAmountLowerBound = CommonConfig.MIN_ATTACK_PARTICLES.get()
-        val particleAmountUpperBound = CommonConfig.MAX_ATTACK_PARTICLES.get()
+		val particleAmountLowerBound = CommonConfig.MIN_ATTACK_PARTICLES.get()
+		val particleAmountUpperBound = CommonConfig.MAX_ATTACK_PARTICLES.get()
 
-        require(particleAmountLowerBound <= particleAmountUpperBound) {
-            "Min attack particles cannot be greater than max attack particles."
-        }
+		require(particleAmountLowerBound <= particleAmountUpperBound) {
+			"Min attack particles cannot be greater than max attack particles."
+		}
 
-        val range = particleAmountLowerBound..particleAmountUpperBound
-        val randomAmount = range.random()
+		val range = particleAmountLowerBound..particleAmountUpperBound
+		val randomAmount = range.random()
 
-        val entityWidth = entity.bbWidth
-        val entityHeight = entity.bbHeight
+		val entityWidth = entity.bbWidth
+		val entityHeight = entity.bbHeight
 
-        for (note in 1..randomAmount) {
-            val randomPitch = Random.nextDouble(0.5, 2.0).toFloat()
+		for (note in 1..randomAmount) {
+			val randomPitch = Random.nextDouble(0.5, 2.0).toFloat()
 
-            val noteX = entity.x + entityWidth * Random.nextDouble(-1.5, 1.5)
-            val noteZ = entity.z + entityWidth * Random.nextDouble(-1.5, 1.5)
-            val noteY = entity.y + entityHeight + entityHeight * Random.nextDouble(-0.75, 0.75)
+			val noteX = entity.x + entityWidth * Random.nextDouble(-1.5, 1.5)
+			val noteZ = entity.z + entityWidth * Random.nextDouble(-1.5, 1.5)
+			val noteY = entity.y + entityHeight + entityHeight * Random.nextDouble(-0.75, 0.75)
 
-            ModPacketHandler.messageNearbyPlayers(
-                SpawnNotePacket(
-                    sound.location,
-                    randomPitch,
-                    noteX,
-                    noteY,
-                    noteZ
-                ),
-                entity.level() as ServerLevel,
-                Vec3(entity.x, entity.y, entity.z),
-                48.0
-            )
-        }
+			ModPacketHandler.messageNearbyPlayers(
+				SpawnNotePacket(
+					sound.location,
+					randomPitch,
+					noteX,
+					noteY,
+					noteZ
+				),
+				entity.level() as ServerLevel,
+				Vec3(entity.x, entity.y, entity.z),
+				48.0
+			)
+		}
 
-        AdvancementTriggers.hitWithInstrument(player as ServerPlayer)
+		AdvancementTriggers.hitWithInstrument(player as ServerPlayer)
 
-        return false
-    }
+		return false
+	}
 
-    override fun inventoryTick(pStack: ItemStack, pLevel: Level, pEntity: Entity, pSlotId: Int, pIsSelected: Boolean) {
-        if (pEntity !is LocalPlayer) return
+	override fun inventoryTick(pStack: ItemStack, pLevel: Level, pEntity: Entity, pSlotId: Int, pIsSelected: Boolean) {
+		if (pEntity !is LocalPlayer) return
 
-        if (pEntity.mainHandItem != pStack && pEntity.offhandItem != pStack) return
+		if (pEntity.mainHandItem != pStack && pEntity.offhandItem != pStack) return
 
-        val lookPitch = pEntity.lookAngle.y
-        val pitch = lookPitch.toFloat().map(-1f, 1f, 0.5f, 2f)
-        val note = Note.getFromPitch(pitch)
+		val lookPitch = pEntity.lookAngle.y
+		val pitch = lookPitch.toFloat().map(-1f, 1f, 0.5f, 2f)
+		val note = Note.getFromPitch(pitch)
 
-        pEntity.displayClientMessage(
-            Component.literal(note.displayName).withColor(note.rgb),
-            true
-        )
-    }
+		pEntity.displayClientMessage(
+			Component.literal(note.displayName).withColor(note.rgb),
+			true
+		)
+	}
 
 }

@@ -16,95 +16,95 @@ import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler
 
 object ModPacketHandler {
 
-    fun registerPayloads(event: RegisterPayloadHandlersEvent) {
+	fun registerPayloads(event: RegisterPayloadHandlersEvent) {
 
-        val registrar = event.registrar("1")
+		val registrar = event.registrar("1")
 
-        registrar.playToClient(
-            SpawnNotePacket.TYPE,
-            SpawnNotePacket.STREAM_CODEC,
-            DirectionalPayloadHandler(
-                { packet, context -> packet.receiveMessage(context) },
-                { packet, context -> packet.receiveMessage(context) }
-            )
-        )
+		registrar.playToClient(
+			SpawnNotePacket.TYPE,
+			SpawnNotePacket.STREAM_CODEC,
+			DirectionalPayloadHandler(
+				{ packet, context -> packet.receiveMessage(context) },
+				{ packet, context -> packet.receiveMessage(context) }
+			)
+		)
 
-        registrar.playToClient(
-            SpawnElectricLinePacket.TYPE,
-            SpawnElectricLinePacket.STREAM_CODEC,
-            DirectionalPayloadHandler(
-                { packet, context -> packet.receiveMessage(context) },
-                { packet, context -> packet.receiveMessage(context) }
-            )
-        )
+		registrar.playToClient(
+			SpawnElectricLinePacket.TYPE,
+			SpawnElectricLinePacket.STREAM_CODEC,
+			DirectionalPayloadHandler(
+				{ packet, context -> packet.receiveMessage(context) },
+				{ packet, context -> packet.receiveMessage(context) }
+			)
+		)
 
-        registrar.playToServer(
-            ClickComposerCellPacket.TYPE,
-            ClickComposerCellPacket.STREAM_CODEC,
-            DirectionalPayloadHandler(
-                { packet, context -> packet.receiveMessage(context) },
-                { packet, context -> packet.receiveMessage(context) }
-            )
-        )
+		registrar.playToServer(
+			ClickComposerCellPacket.TYPE,
+			ClickComposerCellPacket.STREAM_CODEC,
+			DirectionalPayloadHandler(
+				{ packet, context -> packet.receiveMessage(context) },
+				{ packet, context -> packet.receiveMessage(context) }
+			)
+		)
 
-        registrar.playToServer(
-            ComposerPasteSongPacket.TYPE,
-            ComposerPasteSongPacket.STREAM_CODEC,
-            DirectionalPayloadHandler(
-                { packet, context -> packet.receiveMessage(context) },
-                { packet, context -> packet.receiveMessage(context) }
-            )
-        )
+		registrar.playToServer(
+			ComposerPasteSongPacket.TYPE,
+			ComposerPasteSongPacket.STREAM_CODEC,
+			DirectionalPayloadHandler(
+				{ packet, context -> packet.receiveMessage(context) },
+				{ packet, context -> packet.receiveMessage(context) }
+			)
+		)
 
-        registrar.playToClient(
-            SongPasteCommandRequestPacket.TYPE,
-            SongPasteCommandRequestPacket.STREAM_CODEC,
-            DirectionalPayloadHandler(
-                { packet, context -> packet.receiveMessage(context) },
-                { packet, context -> packet.receiveMessage(context) }
-            )
-        )
+		registrar.playToClient(
+			SongPasteCommandRequestPacket.TYPE,
+			SongPasteCommandRequestPacket.STREAM_CODEC,
+			DirectionalPayloadHandler(
+				{ packet, context -> packet.receiveMessage(context) },
+				{ packet, context -> packet.receiveMessage(context) }
+			)
+		)
 
-        registrar.playToServer(
-            SongPasteCommandResponsePacket.TYPE,
-            SongPasteCommandResponsePacket.STREAM_CODEC,
-            DirectionalPayloadHandler(
-                { packet, context -> packet.receiveMessage(context) },
-                { packet, context -> packet.receiveMessage(context) }
-            )
-        )
+		registrar.playToServer(
+			SongPasteCommandResponsePacket.TYPE,
+			SongPasteCommandResponsePacket.STREAM_CODEC,
+			DirectionalPayloadHandler(
+				{ packet, context -> packet.receiveMessage(context) },
+				{ packet, context -> packet.receiveMessage(context) }
+			)
+		)
 
-        registrar.playToClient(
-            SetCurrentComposerSongPacket.TYPE,
-            SetCurrentComposerSongPacket.STREAM_CODEC,
-            DirectionalPayloadHandler(
-                { packet, context -> packet.receiveMessage(context) },
-                { packet, context -> packet.receiveMessage(context) }
-            )
-        )
+		registrar.playToClient(
+			SetCurrentComposerSongPacket.TYPE,
+			SetCurrentComposerSongPacket.STREAM_CODEC,
+			DirectionalPayloadHandler(
+				{ packet, context -> packet.receiveMessage(context) },
+				{ packet, context -> packet.receiveMessage(context) }
+			)
+		)
 
-    }
+	}
 
 
-    fun messageNearbyPlayers(packet: IModPacket, serverLevel: ServerLevel, origin: Vec3, radius: Double) {
-        for (player in serverLevel.players()) {
-            val distance = player.distanceToSqr(origin.x(), origin.y(), origin.z())
-            if (distance < radius * radius) {
-                messagePlayer(player, packet)
-            }
-        }
-    }
+	fun messageNearbyPlayers(packet: IModPacket, serverLevel: ServerLevel, origin: Vec3, radius: Double) {
+		for (player in serverLevel.players()) {
+			val distance = player.distanceToSqr(origin.x(), origin.y(), origin.z())
+			if (distance < radius * radius) {
+				messagePlayer(player, packet)
+			}
+		}
+	}
 
-    fun messagePlayer(player: ServerPlayer, packet: IModPacket) {
-        PacketDistributor.sendToPlayer(player, packet)
-    }
+	fun messagePlayer(player: ServerPlayer, packet: IModPacket) {
+		PacketDistributor.sendToPlayer(player, packet)
+	}
 
-    fun messageAllPlayers(packet: IModPacket) {
-        PacketDistributor.sendToAllPlayers(packet)
-    }
+	fun messageAllPlayers(packet: IModPacket) {
+		PacketDistributor.sendToAllPlayers(packet)
+	}
 
-    fun messageServer(packet: IModPacket) {
-        PacketDistributor.sendToServer(packet)
-    }
+	fun messageServer(packet: IModPacket) {
+		PacketDistributor.sendToServer(packet)
+	}
 
 }

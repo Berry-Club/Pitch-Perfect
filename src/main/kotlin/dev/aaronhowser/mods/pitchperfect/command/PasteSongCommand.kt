@@ -20,72 +20,72 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 
 object PasteSongCommand {
 
-    private const val TITLE_ARGUMENT = "title"
+	private const val TITLE_ARGUMENT = "title"
 
-    fun register(): ArgumentBuilder<CommandSourceStack, *> {
-        return Commands
-            .literal("pasteSong")
-            .then(
-                Commands
-                    .argument(TITLE_ARGUMENT, StringArgumentType.string())
-                    .executes(::sendPastePacket)
-            )
-    }
+	fun register(): ArgumentBuilder<CommandSourceStack, *> {
+		return Commands
+			.literal("pasteSong")
+			.then(
+				Commands
+					.argument(TITLE_ARGUMENT, StringArgumentType.string())
+					.executes(::sendPastePacket)
+			)
+	}
 
-    fun receivePacket(packet: SongPasteCommandResponsePacket, context: IPayloadContext) {
-        val player = context.player() as ServerPlayer
-        val song = Song.fromString(packet.clipboard)
+	fun receivePacket(packet: SongPasteCommandResponsePacket, context: IPayloadContext) {
+		val player = context.player() as ServerPlayer
+		val song = Song.fromString(packet.clipboard)
 
-        if (song == null) {
-            player.sendSystemMessage(ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE.toComponent(packet.clipboard))
-            return
-        }
+		if (song == null) {
+			player.sendSystemMessage(ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE.toComponent(packet.clipboard))
+			return
+		}
 
-        val title = packet.title
+		val title = packet.title
 
-        val songInfo = SongInfo(
-            packet.title,
-            player,
-            song
-        )
+		val songInfo = SongInfo(
+			packet.title,
+			player,
+			song
+		)
 
-        val songSavedData = player.server.songData
-        val result = songSavedData.addSongInfo(songInfo)
+		val songSavedData = player.server.songData
+		val result = songSavedData.addSongInfo(songInfo)
 
-        val component = if (result.success) {
-            ModLanguageProvider.Message.SONG_PASTE_ADDED
-                .toComponent(title)
-                .withStyle {
-                    it
-                        .withHoverEvent(
-                            HoverEvent(
-                                HoverEvent.Action.SHOW_TEXT,
-                                ModLanguageProvider.Message.CLICK_COPY_SONG_UUID.toComponent(song.uuid.toString())
-                            )
-                        )
-                        .withClickEvent(
-                            ClickEvent(
-                                ClickEvent.Action.COPY_TO_CLIPBOARD,
-                                songInfo.song.uuid.toString()
-                            )
-                        )
-                }
-        } else {
-            ModLanguageProvider.Message.SONG_PASTE_FAIL_DUPLICATE.toComponent(title)
-                .append(result.songInfo.getComponent())
-        }
+		val component = if (result.success) {
+			ModLanguageProvider.Message.SONG_PASTE_ADDED
+				.toComponent(title)
+				.withStyle {
+					it
+						.withHoverEvent(
+							HoverEvent(
+								HoverEvent.Action.SHOW_TEXT,
+								ModLanguageProvider.Message.CLICK_COPY_SONG_UUID.toComponent(song.uuid.toString())
+							)
+						)
+						.withClickEvent(
+							ClickEvent(
+								ClickEvent.Action.COPY_TO_CLIPBOARD,
+								songInfo.song.uuid.toString()
+							)
+						)
+				}
+		} else {
+			ModLanguageProvider.Message.SONG_PASTE_FAIL_DUPLICATE.toComponent(title)
+				.append(result.songInfo.getComponent())
+		}
 
-        player.sendSystemMessage(component)
+		player.sendSystemMessage(component)
 
-    }
+	}
 
-    private fun sendPastePacket(context: CommandContext<CommandSourceStack>): Int {
-        val title = StringArgumentType.getString(context, TITLE_ARGUMENT)
-        val player = context.source.entity as? ServerPlayer ?: return 0
+	private fun sendPastePacket(context: CommandContext<CommandSourceStack>): Int {
+		val title = StringArgumentType.getString(context, TITLE_ARGUMENT)
+		val player = context.source.entity as? ServerPlayer ?: return 0
 
-        ModPacketHandler.messagePlayer(player, SongPasteCommandRequestPacket(title))
+		ModPacketHandler.messagePlayer(player, SongPasteCommandRequestPacket(title))
 
-        return 1
-    }
+		return 1
+	}
 
 }

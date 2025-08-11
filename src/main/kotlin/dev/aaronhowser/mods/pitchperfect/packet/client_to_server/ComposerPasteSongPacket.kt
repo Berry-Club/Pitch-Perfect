@@ -16,54 +16,54 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
 class ComposerPasteSongPacket(
-    val songString: String,
-    val composerPos: BlockPos
+	val songString: String,
+	val composerPos: BlockPos
 ) : IModPacket {
 
-    constructor(song: Song, composerPos: BlockPos) : this(song.toString(), composerPos)
+	constructor(song: Song, composerPos: BlockPos) : this(song.toString(), composerPos)
 
-    override fun receiveMessage(context: IPayloadContext) {
-        context.enqueueWork {
-            val player = context.player()
+	override fun receiveMessage(context: IPayloadContext) {
+		context.enqueueWork {
+			val player = context.player()
 
-            val song = Song.fromString(songString)
-            if (song == null) {
-                context.player().sendSystemMessage(
-                    ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE
-                        .toComponent(songString)
-                )
-                return@enqueueWork
-            }
+			val song = Song.fromString(songString)
+			if (song == null) {
+				context.player().sendSystemMessage(
+					ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE
+						.toComponent(songString)
+				)
+				return@enqueueWork
+			}
 
-            val composerBlockEntity = player.level().getBlockEntity(composerPos) as? ComposerBlockEntity
-                ?: return@enqueueWork
+			val composerBlockEntity = player.level().getBlockEntity(composerPos) as? ComposerBlockEntity
+				?: return@enqueueWork
 
-            val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
-            if (!player.canInteractWithBlock(composerPos, playerReach)) return@enqueueWork
+			val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
+			if (!player.canInteractWithBlock(composerPos, playerReach)) return@enqueueWork
 
-            val composerSongUuid = composerBlockEntity.composerSongUuid
+			val composerSongUuid = composerBlockEntity.composerSongUuid
 
-            val composerSongSavedData = player.server!!.composerSongSavedData
-            val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+			val composerSongSavedData = player.server!!.composerSongSavedData
+			val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
 
-            composerSong.song = song
-        }
-    }
+			composerSong.song = song
+		}
+	}
 
-    override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> {
-        return TYPE
-    }
+	override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> {
+		return TYPE
+	}
 
-    companion object {
-        val TYPE: CustomPacketPayload.Type<ComposerPasteSongPacket> =
-            CustomPacketPayload.Type(OtherUtil.modResource("composer_paste_song"))
+	companion object {
+		val TYPE: CustomPacketPayload.Type<ComposerPasteSongPacket> =
+			CustomPacketPayload.Type(OtherUtil.modResource("composer_paste_song"))
 
-        val STREAM_CODEC: StreamCodec<ByteBuf, ComposerPasteSongPacket> =
-            StreamCodec.composite(
-                ByteBufCodecs.STRING_UTF8, ComposerPasteSongPacket::songString,
-                BlockPos.STREAM_CODEC, ComposerPasteSongPacket::composerPos,
-                ::ComposerPasteSongPacket
-            )
-    }
+		val STREAM_CODEC: StreamCodec<ByteBuf, ComposerPasteSongPacket> =
+			StreamCodec.composite(
+				ByteBufCodecs.STRING_UTF8, ComposerPasteSongPacket::songString,
+				BlockPos.STREAM_CODEC, ComposerPasteSongPacket::composerPos,
+				::ComposerPasteSongPacket
+			)
+	}
 
 }

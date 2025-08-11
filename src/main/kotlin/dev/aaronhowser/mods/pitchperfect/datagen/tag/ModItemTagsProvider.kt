@@ -14,21 +14,21 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper
 import java.util.concurrent.CompletableFuture
 
 class ModItemTagsProvider(
-    pOutput: PackOutput,
-    pLookupProvider: CompletableFuture<HolderLookup.Provider>,
-    pBlockTags: CompletableFuture<TagLookup<Block>>,
-    existingFileHelper: ExistingFileHelper?
+	pOutput: PackOutput,
+	pLookupProvider: CompletableFuture<HolderLookup.Provider>,
+	pBlockTags: CompletableFuture<TagLookup<Block>>,
+	existingFileHelper: ExistingFileHelper?
 ) : ItemTagsProvider(pOutput, pLookupProvider, pBlockTags, PitchPerfect.ID, existingFileHelper) {
 
-    companion object {
-        val INSTRUMENTS_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, OtherUtil.modResource("instruments"))
-    }
+	companion object {
+		val INSTRUMENTS_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, OtherUtil.modResource("instruments"))
+	}
 
-    override fun addTags(pProvider: HolderLookup.Provider) {
+	override fun addTags(pProvider: HolderLookup.Provider) {
 
-        this.tag(INSTRUMENTS_TAG)
-            .add(*ModItems.instruments.map { it.get() }.toTypedArray())
+		this.tag(INSTRUMENTS_TAG)
+			.add(*ModItems.instruments.map { it.get() }.toTypedArray())
 
-    }
+	}
 
 }

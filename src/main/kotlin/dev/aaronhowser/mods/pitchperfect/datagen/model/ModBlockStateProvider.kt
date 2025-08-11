@@ -13,69 +13,69 @@ import net.neoforged.neoforge.client.model.generators.ItemModelBuilder
 import net.neoforged.neoforge.common.data.ExistingFileHelper
 
 class ModBlockStateProvider(
-    output: PackOutput,
-    private val existingFileHelper: ExistingFileHelper
+	output: PackOutput,
+	private val existingFileHelper: ExistingFileHelper
 ) : BlockStateProvider(output, PitchPerfect.ID, existingFileHelper) {
 
-    override fun registerStatesAndModels() {
-        conductor()
-        composer()
-    }
+	override fun registerStatesAndModels() {
+		conductor()
+		composer()
+	}
 
-    private fun conductor() {
+	private fun conductor() {
 
-        val block = ModBlocks.CONDUCTOR.get()
+		val block = ModBlocks.CONDUCTOR.get()
 
-        getVariantBuilder(block)
-            .forAllStates {
-                val half = it.getValue(ConductorBlock.HALF)
-                val hasItem = it.getValue(ConductorBlock.FILLED)
+		getVariantBuilder(block)
+			.forAllStates {
+				val half = it.getValue(ConductorBlock.HALF)
+				val hasItem = it.getValue(ConductorBlock.FILLED)
 
-                val modelLoc = if (half == DoubleBlockHalf.LOWER) {
-                    modLoc(
-                        if (hasItem) {
-                            "block/conductor_filled"
-                        } else {
-                            "block/conductor"
-                        }
-                    )
-                } else {
-                    mcLoc("block/air")
-                }
+				val modelLoc = if (half == DoubleBlockHalf.LOWER) {
+					modLoc(
+						if (hasItem) {
+							"block/conductor_filled"
+						} else {
+							"block/conductor"
+						}
+					)
+				} else {
+					mcLoc("block/air")
+				}
 
-                val modelFile = models().getExistingFile(modelLoc)
+				val modelFile = models().getExistingFile(modelLoc)
 
-                val facing: Direction = it.getValue(HorizontalDirectionalBlock.FACING)
-                val yRotation = when (facing) {
-                    Direction.NORTH -> 0
-                    Direction.EAST -> 90
-                    Direction.SOUTH -> 180
-                    Direction.WEST -> 270
-                    else -> throw IllegalStateException("Invalid facing direction")
-                }
+				val facing: Direction = it.getValue(HorizontalDirectionalBlock.FACING)
+				val yRotation = when (facing) {
+					Direction.NORTH -> 0
+					Direction.EAST -> 90
+					Direction.SOUTH -> 180
+					Direction.WEST -> 270
+					else -> throw IllegalStateException("Invalid facing direction")
+				}
 
-                ConfiguredModel
-                    .builder()
-                    .modelFile(modelFile)
-                    .rotationY(yRotation)
-                    .build()
-            }
+				ConfiguredModel
+					.builder()
+					.modelFile(modelFile)
+					.rotationY(yRotation)
+					.build()
+			}
 
-        simpleBlockItem(
-            block,
-            ItemModelBuilder(
-                modLoc("block/conductor"),
-                existingFileHelper
-            )
-        )
+		simpleBlockItem(
+			block,
+			ItemModelBuilder(
+				modLoc("block/conductor"),
+				existingFileHelper
+			)
+		)
 
-    }
+	}
 
-    private fun composer() {
-        simpleBlockWithItem(
-            ModBlocks.COMPOSER.get(),
-            cubeAll(ModBlocks.COMPOSER.get())
-        )
-    }
+	private fun composer() {
+		simpleBlockWithItem(
+			ModBlocks.COMPOSER.get(),
+			cubeAll(ModBlocks.COMPOSER.get())
+		)
+	}
 
 }

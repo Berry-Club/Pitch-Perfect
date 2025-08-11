@@ -23,78 +23,78 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.NoteBlockEvent
 
 @EventBusSubscriber(
-    modid = PitchPerfect.ID
+	modid = PitchPerfect.ID
 )
 object OtherEvents {
 
-    @SubscribeEvent
-    fun afterLivingHurt(event: LivingDamageEvent.Post) {
-        AndHisMusicWasElectricEnchantment.handleElectric(event)
-    }
+	@SubscribeEvent
+	fun afterLivingHurt(event: LivingDamageEvent.Post) {
+		AndHisMusicWasElectricEnchantment.handleElectric(event)
+	}
 
-    val songRecorders = mutableMapOf<Player, SongRecorder>()
+	val songRecorders = mutableMapOf<Player, SongRecorder>()
 
-    @SubscribeEvent
-    fun onNoteBlock(event: NoteBlockEvent.Play) {
-        if (event.level.isClientSide) return
+	@SubscribeEvent
+	fun onNoteBlock(event: NoteBlockEvent.Play) {
+		if (event.level.isClientSide) return
 
-        val blockPos = event.pos
+		val blockPos = event.pos
 
-        val pitch = NoteBlock.getPitchFromNote(event.vanillaNoteId)
+		val pitch = NoteBlock.getPitchFromNote(event.vanillaNoteId)
 
-        val soundEvent = event.instrument.soundEvent
+		val soundEvent = event.instrument.soundEvent
 
-        val currentWorldTick = (event.level as? Level)?.gameTime ?: throw IllegalStateException()
+		val currentWorldTick = (event.level as? Level)?.gameTime ?: throw IllegalStateException()
 
-        val nearbyRecordingPlayers = event.level.players().filter { player ->
-            player.inventory.contains { stack -> SheetMusicItem.isRecording(stack) } &&
-                    player.blockPosition().distSqr(blockPos) < Mth.square(ServerConfig.RECORDING_RANGE.get())
-        }
+		val nearbyRecordingPlayers = event.level.players().filter { player ->
+			player.inventory.contains { stack -> SheetMusicItem.isRecording(stack) } &&
+					player.blockPosition().distSqr(blockPos) < Mth.square(ServerConfig.RECORDING_RANGE.get())
+		}
 
-        for (player in nearbyRecordingPlayers) {
-            val songRecorder = songRecorders.getOrPut(player) { SongRecorder(currentWorldTick) }
+		for (player in nearbyRecordingPlayers) {
+			val songRecorder = songRecorders.getOrPut(player) { SongRecorder(currentWorldTick) }
 
-            songRecorder.addNote(
-                currentWorldTick,
-                soundEvent,
-                pitch
-            )
-        }
+			songRecorder.addNote(
+				currentWorldTick,
+				soundEvent,
+				pitch
+			)
+		}
 
-    }
+	}
 
-    @SubscribeEvent
-    fun onActivateEntity(event: PlayerInteractEvent.EntityInteractSpecific) {
-        if (event.level.isClientSide) return
+	@SubscribeEvent
+	fun onActivateEntity(event: PlayerInteractEvent.EntityInteractSpecific) {
+		if (event.level.isClientSide) return
 
-        val armorStand = event.target as? ArmorStand ?: return
-        if (!ServerConfig.CAN_GIVE_ARMOR_STANDS_INSTRUMENTS.get()) return
+		val armorStand = event.target as? ArmorStand ?: return
+		if (!ServerConfig.CAN_GIVE_ARMOR_STANDS_INSTRUMENTS.get()) return
 
-        val player = event.entity
+		val player = event.entity
 
-        val armorStandItem = armorStand.mainHandItem
-        if (armorStandItem.isEmpty) {
-            val playerItem = player.getItemInHand(event.hand)
-            if (!playerItem.has(ModDataComponents.SOUND_EVENT_COMPONENT)) return
+		val armorStandItem = armorStand.mainHandItem
+		if (armorStandItem.isEmpty) {
+			val playerItem = player.getItemInHand(event.hand)
+			if (!playerItem.has(ModDataComponents.SOUND_EVENT_COMPONENT)) return
 
-            armorStand.disabledSlots = -1
-            armorStand.isShowArms = true
+			armorStand.disabledSlots = -1
+			armorStand.isShowArms = true
 
-            armorStand.setItemInHand(InteractionHand.MAIN_HAND, playerItem.copy())
-            playerItem.shrink(1)
-        } else {
-            if (!armorStandItem.has(ModDataComponents.SOUND_EVENT_COMPONENT)) return
+			armorStand.setItemInHand(InteractionHand.MAIN_HAND, playerItem.copy())
+			playerItem.shrink(1)
+		} else {
+			if (!armorStandItem.has(ModDataComponents.SOUND_EVENT_COMPONENT)) return
 
-            player.addItem(armorStandItem.copy())
-            armorStandItem.shrink(1)
-        }
+			player.addItem(armorStandItem.copy())
+			armorStandItem.shrink(1)
+		}
 
-        event.level.playSound(null, armorStand.blockPosition(), SoundEvents.DISPENSER_DISPENSE, SoundSource.PLAYERS)
-    }
+		event.level.playSound(null, armorStand.blockPosition(), SoundEvents.DISPENSER_DISPENSE, SoundSource.PLAYERS)
+	}
 
-    @SubscribeEvent
-    fun onRegisterCommands(event: RegisterCommandsEvent) {
-        ModCommands.register(event.dispatcher)
-    }
+	@SubscribeEvent
+	fun onRegisterCommands(event: RegisterCommandsEvent) {
+		ModCommands.register(event.dispatcher)
+	}
 
 }

@@ -11,43 +11,43 @@ import net.minecraft.resources.ResourceLocation
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
 data class SpawnNotePacket(
-    val soundResourceLocation: ResourceLocation,
-    val pitch: Float,
-    val x: Double,
-    val y: Double,
-    val z: Double,
-    val hasBwaaap: Boolean = false
+	val soundResourceLocation: ResourceLocation,
+	val pitch: Float,
+	val x: Double,
+	val y: Double,
+	val z: Double,
+	val hasBwaaap: Boolean = false
 ) : IModPacket {
 
-    override fun receiveMessage(context: IPayloadContext) {
-        context.enqueueWork {
-            ClientUtil.playNote(
-                soundResourceLocation,
-                pitch,
-                x,
-                y,
-                z,
-                hasBwaaap
-            )
-        }
-    }
+	override fun receiveMessage(context: IPayloadContext) {
+		context.enqueueWork {
+			ClientUtil.playNote(
+				soundResourceLocation,
+				pitch,
+				x,
+				y,
+				z,
+				hasBwaaap
+			)
+		}
+	}
 
-    override fun type(): CustomPacketPayload.Type<SpawnNotePacket> = TYPE
+	override fun type(): CustomPacketPayload.Type<SpawnNotePacket> = TYPE
 
-    companion object {
-        val TYPE: CustomPacketPayload.Type<SpawnNotePacket> =
-            CustomPacketPayload.Type(OtherUtil.modResource("spawn_note"))
+	companion object {
+		val TYPE: CustomPacketPayload.Type<SpawnNotePacket> =
+			CustomPacketPayload.Type(OtherUtil.modResource("spawn_note"))
 
-        val STREAM_CODEC: StreamCodec<ByteBuf, SpawnNotePacket> =
-            StreamCodec.composite(
-                ResourceLocation.STREAM_CODEC, SpawnNotePacket::soundResourceLocation,
-                ByteBufCodecs.FLOAT, SpawnNotePacket::pitch,
-                ByteBufCodecs.DOUBLE, SpawnNotePacket::x,
-                ByteBufCodecs.DOUBLE, SpawnNotePacket::y,
-                ByteBufCodecs.DOUBLE, SpawnNotePacket::z,
-                ByteBufCodecs.BOOL, SpawnNotePacket::hasBwaaap,
-                ::SpawnNotePacket
-            )
-    }
+		val STREAM_CODEC: StreamCodec<ByteBuf, SpawnNotePacket> =
+			StreamCodec.composite(
+				ResourceLocation.STREAM_CODEC, SpawnNotePacket::soundResourceLocation,
+				ByteBufCodecs.FLOAT, SpawnNotePacket::pitch,
+				ByteBufCodecs.DOUBLE, SpawnNotePacket::x,
+				ByteBufCodecs.DOUBLE, SpawnNotePacket::y,
+				ByteBufCodecs.DOUBLE, SpawnNotePacket::z,
+				ByteBufCodecs.BOOL, SpawnNotePacket::hasBwaaap,
+				::SpawnNotePacket
+			)
+	}
 
 }

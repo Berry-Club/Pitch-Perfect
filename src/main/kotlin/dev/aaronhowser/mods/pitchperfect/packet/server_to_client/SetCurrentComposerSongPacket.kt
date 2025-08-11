@@ -9,31 +9,31 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
 class SetCurrentComposerSongPacket(
-    private val composerSong: ComposerSong
+	private val composerSong: ComposerSong
 ) : IModPacket {
-    override fun receiveMessage(context: IPayloadContext) {
-        context.enqueueWork {
-            currentComposerSong = composerSong
-        }
-    }
+	override fun receiveMessage(context: IPayloadContext) {
+		context.enqueueWork {
+			currentComposerSong = composerSong
+		}
+	}
 
-    override fun type(): CustomPacketPayload.Type<SetCurrentComposerSongPacket> {
-        return TYPE
-    }
+	override fun type(): CustomPacketPayload.Type<SetCurrentComposerSongPacket> {
+		return TYPE
+	}
 
-    companion object {
-        val TYPE: CustomPacketPayload.Type<SetCurrentComposerSongPacket> =
-            CustomPacketPayload.Type(OtherUtil.modResource("set_composer_song"))
+	companion object {
+		val TYPE: CustomPacketPayload.Type<SetCurrentComposerSongPacket> =
+			CustomPacketPayload.Type(OtherUtil.modResource("set_composer_song"))
 
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SetCurrentComposerSongPacket> =
-            ComposerSong.STREAM_CODEC.map(::SetCurrentComposerSongPacket, SetCurrentComposerSongPacket::composerSong)
+		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SetCurrentComposerSongPacket> =
+			ComposerSong.STREAM_CODEC.map(::SetCurrentComposerSongPacket, SetCurrentComposerSongPacket::composerSong)
 
-        var currentComposerSong: ComposerSong? = null
-            private set
+		var currentComposerSong: ComposerSong? = null
+			private set
 
-        fun unset() {
-            currentComposerSong = null
-        }
-    }
+		fun unset() {
+			currentComposerSong = null
+		}
+	}
 
 }

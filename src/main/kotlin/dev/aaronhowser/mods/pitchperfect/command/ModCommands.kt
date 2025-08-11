@@ -7,18 +7,18 @@ import net.minecraft.commands.Commands
 
 object ModCommands {
 
-    fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
+	fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
 
-        val modCommands = dispatcher.register(
-            Commands
-                .literal(PitchPerfect.ID)
-                .then(PlayRawSongCommand.register())
-                .then(PlaySongCommand.register())
-                .then(ListSongsCommand.register())
-                .then(RemoveSongCommand.register())
-                .then(PasteSongCommand.register())
-        )
+		dispatcher.register(
+			Commands
+				.literal(PitchPerfect.ID)
+				.then(PlayRawSongCommand.register())
+				.then(PlaySongCommand.register())
+				.then(ListSongsCommand.register())
+				.then(RemoveSongCommand.register())
+				.then(PasteSongCommand.register())
+		)
 
-    }
+	}
 
 }
