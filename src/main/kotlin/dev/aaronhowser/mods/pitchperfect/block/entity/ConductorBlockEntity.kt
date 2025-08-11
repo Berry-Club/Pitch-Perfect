@@ -10,6 +10,10 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.ModServerScheduler
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.component1
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.component2
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.component3
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.toVec3
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -27,10 +31,6 @@ import net.minecraft.world.phys.AABB
 import net.neoforged.fml.loading.FMLPaths
 import net.neoforged.neoforge.items.IItemHandler
 import net.neoforged.neoforge.items.ItemStackHandler
-import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component1
-import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component2
-import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component3
-import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.toVec3
 
 class ConductorBlockEntity(
 	pPos: BlockPos,

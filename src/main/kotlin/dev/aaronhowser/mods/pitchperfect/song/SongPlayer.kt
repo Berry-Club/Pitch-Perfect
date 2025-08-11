@@ -4,16 +4,17 @@ import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.ModServerScheduler
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.component1
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.component2
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.component3
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
-import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component1
-import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component2
-import thedarkcolour.kotlinforforge.neoforge.forge.vectorutil.v3d.component3
+import java.util.function.Supplier
 
 class SongPlayer(
 	val level: ServerLevel,
 	val song: Song,
-	val location: () -> Vec3
+	val location: Supplier<Vec3>
 ) {
 
 	private var playing: Boolean = false
@@ -37,7 +38,7 @@ class SongPlayer(
 					ModServerScheduler.scheduleTaskInTicks(tick) {
 						if (!playing) return@scheduleTaskInTicks
 
-						val (x, y, z) = location()
+						val (x, y, z) = location.get()
 
 						ModPacketHandler.messageNearbyPlayers(
 							SpawnNotePacket(
@@ -49,7 +50,7 @@ class SongPlayer(
 								false
 							),
 							level,
-							location(),
+							location.get(),
 							128.0
 						)
 					}

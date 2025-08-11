@@ -3,12 +3,14 @@ package dev.aaronhowser.mods.pitchperfect.util
 import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import io.netty.buffer.ByteBuf
+import net.minecraft.core.Vec3i
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
 import java.util.*
 
 object OtherUtil {
@@ -48,5 +50,13 @@ object OtherUtil {
 		UUID::fromString,
 		UUID::toString
 	)
+
+	fun Vec3i.toVec3(): Vec3 {
+		return Vec3(this.x.toDouble(), this.y.toDouble(), this.z.toDouble())
+	}
+
+	operator fun Vec3.component1(): Double = x
+	operator fun Vec3.component2(): Double = y
+	operator fun Vec3.component3(): Double = z
 
 }
