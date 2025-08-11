@@ -5,6 +5,7 @@ bin
 .metadata
 .classpath
 .project
+.kotlin/
 
 # idea
 out
@@ -19,6 +20,5 @@ build
 
 # other
 eclipse
-run
-runs
-.kotlin/
+runs/client
+runs/server
