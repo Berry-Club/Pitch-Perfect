@@ -4,6 +4,8 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.command.ModCommands
 import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
+import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.SongRecorder
 import net.minecraft.sounds.SoundEvents
@@ -12,15 +14,31 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.neoforge.capabilities.Capabilities
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.NoteBlockEvent
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 
 @EventBusSubscriber(
 	modid = PitchPerfect.ID
 )
-object OtherEvents {
+object CommonEvents {
+
+	@SubscribeEvent
+	fun registerPayloads(event: RegisterPayloadHandlersEvent) {
+		ModPacketHandler.registerPayloads(event)
+	}
+
+	@SubscribeEvent
+	fun onRegisterCapabilities(event: RegisterCapabilitiesEvent) {
+		event.registerBlockEntity(
+			Capabilities.ItemHandler.BLOCK,
+			ModBlockEntities.CONDUCTOR.get()
+		) { conductorBE, direction -> conductorBE.getItemHandler(direction) }
+	}
 
 	@SubscribeEvent
 	fun afterLivingHurt(event: LivingDamageEvent.Post) {
