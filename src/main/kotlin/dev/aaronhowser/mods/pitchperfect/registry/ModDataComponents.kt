@@ -1,37 +1,43 @@
 package dev.aaronhowser.mods.pitchperfect.registry
 
+import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.ComposerSongComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
+import io.netty.buffer.ByteBuf
 import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 
 object ModDataComponents {
 
 	val DATA_COMPONENT_REGISTRY: DeferredRegister.DataComponents =
-		DeferredRegister.createDataComponents(PitchPerfect.ID)
+		DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, PitchPerfect.ID)
 
 	val SOUND_EVENT_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<SoundEventComponent>> =
-		DATA_COMPONENT_REGISTRY.registerComponentType("instrument") {
-			it.persistent(SoundEventComponent.CODEC).networkSynchronized(SoundEventComponent.STREAM_CODEC)
-		}
+		register("instrument", SoundEventComponent.CODEC, SoundEventComponent.STREAM_CODEC)
 
-	val IS_RECORDING_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<BooleanComponent>> =
-		DATA_COMPONENT_REGISTRY.registerComponentType("is_recording") {
-			it.persistent(BooleanComponent.CODEC).networkSynchronized(BooleanComponent.STREAM_CODEC)
-		}
+	val IS_RECORDING_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<Boolean>> =
+		register("is_recording", Codec.BOOL, ByteBufCodecs.BOOL)
 
 	val SONG_UUID_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<UuidComponent>> =
-		DATA_COMPONENT_REGISTRY.registerComponentType("song_uuid") {
-			it.persistent(UuidComponent.CODEC).networkSynchronized(UuidComponent.STREAM_CODEC)
-		}
+		register("song_uuid", UuidComponent.CODEC, UuidComponent.STREAM_CODEC)
 
 	val COMPOSER_SONG_COMPONENT: DeferredHolder<DataComponentType<*>, DataComponentType<ComposerSongComponent>> =
-		DATA_COMPONENT_REGISTRY.registerComponentType("composer_song") {
-			it.persistent(ComposerSongComponent.CODEC).networkSynchronized(ComposerSongComponent.STREAM_CODEC)
+		register("composer_song", ComposerSongComponent.CODEC, ComposerSongComponent.STREAM_CODEC)
+
+	private fun <T> register(
+		name: String,
+		codec: Codec<T>,
+		streamCodec: StreamCodec<out ByteBuf, T>
+	): DeferredHolder<DataComponentType<*>, DataComponentType<T>> {
+		return DATA_COMPONENT_REGISTRY.registerComponentType(name) {
+			it.persistent(codec).networkSynchronized(streamCodec)
 		}
+	}
 
 }

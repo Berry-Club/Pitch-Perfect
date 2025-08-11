@@ -2,9 +2,6 @@ package dev.aaronhowser.mods.pitchperfect.item
 
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
-import dev.aaronhowser.mods.pitchperfect.event.OtherEvents
-import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.BooleanComponent.Companion.isTrue
 import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
@@ -42,7 +39,7 @@ class SheetMusicItem : Item(
 			if (isRecording(stack)) {
 				stopRecording(stack, player)
 			} else {
-				stack.set(ModDataComponents.IS_RECORDING_COMPONENT, BooleanComponent(true))
+				stack.set(ModDataComponents.IS_RECORDING_COMPONENT, true)
 				stack.remove(ModDataComponents.SONG_UUID_COMPONENT)
 			}
 		}
@@ -72,7 +69,7 @@ class SheetMusicItem : Item(
 		}
 
 		fun isRecording(stack: ItemStack): Boolean {
-			return stack.get(ModDataComponents.IS_RECORDING_COMPONENT).isTrue
+			return stack.getOrDefault(ModDataComponents.IS_RECORDING_COMPONENT, false)
 		}
 	}
 
