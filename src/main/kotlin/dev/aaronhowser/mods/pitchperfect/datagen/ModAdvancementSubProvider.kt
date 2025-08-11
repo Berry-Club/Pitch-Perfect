@@ -1,6 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.datagen
 
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModAdvancementLang
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
@@ -45,8 +47,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 			.parent(root)
 			.display(
 				Items.ZOMBIE_HEAD,
-				ModLanguageProvider.Advancement.HIT_MOB_TITLE.toComponent(),
-				ModLanguageProvider.Advancement.HIT_MOB_DESC.toComponent(),
+				ModAdvancementLang.HIT_MOB_TITLE.toComponent(),
+				ModAdvancementLang.HIT_MOB_DESC.toComponent(),
 				null,
 				AdvancementType.TASK,
 				true, true, false
@@ -63,8 +65,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 				.parent(root)
 				.display(
 					ModBlocks.COMPOSER.get(),
-					ModLanguageProvider.Advancement.MAKE_COMPOSER_TITLE.toComponent(),
-					ModLanguageProvider.Advancement.MAKE_COMPOSER_DESC.toComponent(),
+					ModAdvancementLang.MAKE_COMPOSER_TITLE.toComponent(),
+					ModAdvancementLang.MAKE_COMPOSER_DESC.toComponent(),
 					null,
 					AdvancementType.TASK,
 					true, true, false
@@ -81,8 +83,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 				.parent(makeComposer)
 				.display(
 					ModBlocks.CONDUCTOR.get(),
-					ModLanguageProvider.Advancement.MAKE_CONDUCTOR_TITLE.toComponent(),
-					ModLanguageProvider.Advancement.MAKE_CONDUCTOR_DESC.toComponent(),
+					ModAdvancementLang.MAKE_CONDUCTOR_TITLE.toComponent(),
+					ModAdvancementLang.MAKE_CONDUCTOR_DESC.toComponent(),
 					null,
 					AdvancementType.TASK,
 					true, true, false
@@ -98,8 +100,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 			.parent(makeConductor)
 			.display(
 				ModBlocks.CONDUCTOR.get(),
-				ModLanguageProvider.Advancement.CONDUCTOR_COMPLEX_TITLE.toComponent(),
-				ModLanguageProvider.Advancement.CONDUCTOR_COMPLEX_DESC.toComponent(),
+				ModAdvancementLang.CONDUCTOR_COMPLEX_TITLE.toComponent(),
+				ModAdvancementLang.CONDUCTOR_COMPLEX_DESC.toComponent(),
 				null,
 				AdvancementType.TASK,
 				true, true, false
@@ -116,8 +118,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 				.parent(root)
 				.display(
 					Items.ENCHANTING_TABLE,
-					ModLanguageProvider.Advancement.ENCHANT_INSTRUMENT_TITLE.toComponent(),
-					ModLanguageProvider.Advancement.ENCHANT_INSTRUMENT_DESC.toComponent(),
+					ModAdvancementLang.ENCHANT_INSTRUMENT_TITLE.toComponent(),
+					ModAdvancementLang.ENCHANT_INSTRUMENT_DESC.toComponent(),
 					null,
 					AdvancementType.TASK,
 					true, true, false
@@ -133,8 +135,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 			.parent(enchantInstrument)
 			.display(
 				Items.LIGHTNING_ROD,
-				ModLanguageProvider.Advancement.AND_HIS_MUSIC_TITLE.toComponent(),
-				ModLanguageProvider.Advancement.AND_HIS_MUSIC_DESC.toComponent(),
+				ModAdvancementLang.AND_HIS_MUSIC_TITLE.toComponent(),
+				ModAdvancementLang.AND_HIS_MUSIC_DESC.toComponent(),
 				null,
 				AdvancementType.TASK,
 				true, true, false
@@ -150,8 +152,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 			.parent(enchantInstrument)
 			.display(
 				Items.GOLDEN_APPLE,
-				ModLanguageProvider.Advancement.HEALING_BEAT_TITLE.toComponent(),
-				ModLanguageProvider.Advancement.HEALING_BEAT_DESC.toComponent(),
+				ModAdvancementLang.HEALING_BEAT_TITLE.toComponent(),
+				ModAdvancementLang.HEALING_BEAT_DESC.toComponent(),
 				null,
 				AdvancementType.TASK,
 				true, true, false
@@ -167,8 +169,8 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 			.parent(enchantInstrument)
 			.display(
 				Items.TNT,
-				ModLanguageProvider.Advancement.BWAAAP_TITLE.toComponent(),
-				ModLanguageProvider.Advancement.BWAAAP_DESC.toComponent(),
+				ModAdvancementLang.BWAAAP_TITLE.toComponent(),
+				ModAdvancementLang.BWAAAP_DESC.toComponent(),
 				null,
 				AdvancementType.TASK,
 				true, true, false
@@ -188,7 +190,7 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 				.display(
 					ModItems.BANJO.get(),
 					Component.literal("Pitch Perfect"),
-					ModLanguageProvider.Advancement.ROOT_DESC.toComponent(),
+					ModAdvancementLang.ROOT_DESC.toComponent(),
 					ResourceLocation.withDefaultNamespace("textures/block/note_block.png"),
 					AdvancementType.TASK,
 					true,

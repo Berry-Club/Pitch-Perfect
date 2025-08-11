@@ -1,7 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.item
 
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.SongRecorder
@@ -55,7 +56,7 @@ class SheetMusicItem : Item(
 
 			if (!addSongResult.success) {
 				player.sendSystemMessage(
-					ModLanguageProvider.Message.SHEET_MUSIC_FAIL_DUPLICATE
+					ModMessageLang.SHEET_MUSIC_FAIL_DUPLICATE
 						.toComponent(addSongResult.songInfo.getComponent())
 				)
 				return

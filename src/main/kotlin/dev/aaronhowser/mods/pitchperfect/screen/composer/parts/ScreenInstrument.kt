@@ -1,8 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
 import com.mojang.serialization.Codec
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.chat.Component
@@ -10,106 +9,105 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import net.neoforged.neoforge.registries.DeferredItem
 
 enum class ScreenInstrument(
 	val image: ResourceLocation,
 	val noteBlockInstrument: NoteBlockInstrument,
-	val displayName: Component
+	val deferredItem: DeferredItem<*>
 ) {
 	BANJO(
 		ScreenTextures.Sprite.Instrument.BANJO,
 		NoteBlockInstrument.BANJO,
-		ModLanguageProvider.Item.BANJO.toComponent()
+		ModItems.BANJO
 	),
 	BASS(
 		ScreenTextures.Sprite.Instrument.BASS,
 		NoteBlockInstrument.BASS,
-		ModLanguageProvider.Item.BASS.toComponent()
+		ModItems.BASS
 	),
 	BASS_DRUM(
 		ScreenTextures.Sprite.Instrument.BASS_DRUM,
 		NoteBlockInstrument.BASEDRUM,
-		ModLanguageProvider.Item.BASS_DRUM.toComponent()
+		ModItems.BASS_DRUM
 	),
 	BIT(
 		ScreenTextures.Sprite.Instrument.BIT,
 		NoteBlockInstrument.BIT,
-		ModLanguageProvider.Item.BIT.toComponent()
+		ModItems.BIT
 	),
 	CHIMES(
 		ScreenTextures.Sprite.Instrument.CHIMES,
 		NoteBlockInstrument.CHIME,
-		ModLanguageProvider.Item.CHIMES.toComponent()
+		ModItems.CHIMES
 	),
 	COW_BELL(
 		ScreenTextures.Sprite.Instrument.COW_BELL,
 		NoteBlockInstrument.COW_BELL,
-		ModLanguageProvider.Item.COW_BELL.toComponent()
+		ModItems.COW_BELL
 	),
 	DIDGERIDOO(
 		ScreenTextures.Sprite.Instrument.DIDGERIDOO,
 		NoteBlockInstrument.DIDGERIDOO,
-		ModLanguageProvider.Item.DIDGERIDOO.toComponent()
+		ModItems.DIDGERIDOO
 	),
 	ELECTRIC_PIANO(
 		ScreenTextures.Sprite.Instrument.ELECTRIC_PIANO,
 		NoteBlockInstrument.PLING,
-		ModLanguageProvider.Item.ELECTRIC_PIANO.toComponent()
+		ModItems.ELECTRIC_PIANO
 	),
 	FLUTE(
 		ScreenTextures.Sprite.Instrument.FLUTE,
 		NoteBlockInstrument.FLUTE,
-		ModLanguageProvider.Item.FLUTE.toComponent()
+		ModItems.FLUTE
 	),
 	GLOCKENSPIEL(
 		ScreenTextures.Sprite.Instrument.GLOCKENSPIEL,
 		NoteBlockInstrument.BELL,
-		ModLanguageProvider.Item.GLOCKENSPIEL.toComponent()
+		ModItems.GLOCKENSPIEL
 	),
 	GUITAR(
 		ScreenTextures.Sprite.Instrument.GUITAR,
 		NoteBlockInstrument.GUITAR,
-		ModLanguageProvider.Item.GUITAR.toComponent()
+		ModItems.GUITAR
 	),
 	HARP(
 		ScreenTextures.Sprite.Instrument.HARP,
 		NoteBlockInstrument.HARP,
-		ModLanguageProvider.Item.HARP.toComponent()
+		ModItems.HARP
 	),
 	SNARE_DRUM(
 		ScreenTextures.Sprite.Instrument.SNARE_DRUM,
 		NoteBlockInstrument.SNARE,
-		ModLanguageProvider.Item.SNARE_DRUM.toComponent()
+		ModItems.SNARE_DRUM
 	),
 	STICKS(
 		ScreenTextures.Sprite.Instrument.STICKS,
 		NoteBlockInstrument.HAT,
-		ModLanguageProvider.Item.STICKS.toComponent()
+		ModItems.STICKS
 	),
 	VIBRAPHONE(
 		ScreenTextures.Sprite.Instrument.VIBRAPHONE,
 		NoteBlockInstrument.IRON_XYLOPHONE,
-		ModLanguageProvider.Item.VIBRAPHONE.toComponent()
+		ModItems.VIBRAPHONE
 	),
 	XYLOPHONE(
 		ScreenTextures.Sprite.Instrument.XYLOPHONE,
 		NoteBlockInstrument.XYLOPHONE,
-		ModLanguageProvider.Item.XYLOPHONE.toComponent()
+		ModItems.XYLOPHONE
 	);
+
+	val displayName: Component by lazy {
+		deferredItem.get().defaultInstance.displayName
+	}
 
 	companion object {
 
 		val CODEC: Codec<ScreenInstrument> =
-			Codec.STRING.xmap(
-				{ value -> valueOf(value) },
-				{ value -> value.name }
-			)
+			Codec.STRING.xmap(::valueOf, ScreenInstrument::name)
 
 		val STREAM_CODEC: StreamCodec<ByteBuf, ScreenInstrument> =
-			ByteBufCodecs.STRING_UTF8.map(
-				{ value -> valueOf(value) },
-				{ value -> value.name }
-			)
+			ByteBufCodecs.STRING_UTF8.map(::valueOf, ScreenInstrument::name)
 
 	}
 }

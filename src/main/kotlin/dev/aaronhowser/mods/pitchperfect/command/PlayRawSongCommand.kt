@@ -3,8 +3,9 @@ package dev.aaronhowser.mods.pitchperfect.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.commands.CommandSourceStack
@@ -36,7 +37,7 @@ object PlayRawSongCommand {
 
 			if (song == null) {
 				player.sendSystemMessage(
-					ModLanguageProvider.Message.SONG_RAW_FAIL_TO_PARSE.toComponent(songString),
+					ModMessageLang.SONG_RAW_FAIL_TO_PARSE.toComponent(songString),
 					false
 				)
 				return 0

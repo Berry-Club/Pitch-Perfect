@@ -1,8 +1,10 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModTooltipLang
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ComposerPasteSongPacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
@@ -41,7 +43,7 @@ class ComposerControls(
 		composerScreen.minecraft.keyboardHandler.clipboard = song.toString()
 
 		composerScreen.minecraft.player?.sendSystemMessage(
-			ModLanguageProvider.Message.SONG_COPIED.toComponent()
+			ModMessageLang.SONG_COPIED.toComponent()
 		)
 
 		PitchPerfect.LOGGER.info("Copied song to clipboard!")
@@ -54,7 +56,7 @@ class ComposerControls(
 
 		if (song == null) {
 			composerScreen.minecraft.player?.sendSystemMessage(
-				ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE.toComponent(clipboard)
+				ModMessageLang.SONG_PASTE_FAIL_TO_PARSE.toComponent(clipboard)
 			)
 			return
 		}
@@ -69,7 +71,7 @@ class ComposerControls(
 		)
 
 		composerScreen.minecraft.player?.sendSystemMessage(
-			ModLanguageProvider.Message.SONG_PASTED.toComponent()
+			ModMessageLang.SONG_PASTED.toComponent()
 		)
 
 		PitchPerfect.LOGGER.info("Pasted song from clipboard!")
@@ -116,11 +118,11 @@ class ComposerControls(
 			composerScreen.timeline.topPos - 20,
 			72,
 			14,
-			ModLanguageProvider.Tooltip.JUMP_TO_BEAT.toComponent()
+			ModTooltipLang.JUMP_TO_BEAT.toComponent()
 		)
 
 		jumpToBeatBox.setMaxLength(9)
-		jumpToBeatBox.setHint(ModLanguageProvider.Tooltip.JUMP_TO_BEAT.toComponent())
+		jumpToBeatBox.setHint(ModTooltipLang.JUMP_TO_BEAT.toComponent())
 		jumpToBeatBox.setResponder(::setBoxValue)
 
 		playButton = addIconButton(
@@ -129,7 +131,7 @@ class ComposerControls(
 			16,
 			16,
 			ScreenTextures.Sprite.Control.PLAY,
-			ModLanguageProvider.Tooltip.PLAY.toComponent()
+			ModTooltipLang.PLAY.toComponent()
 		) { startPlaying() }
 
 		stopButton = addIconButton(
@@ -138,7 +140,7 @@ class ComposerControls(
 			16,
 			16,
 			ScreenTextures.Sprite.Control.STOP,
-			ModLanguageProvider.Tooltip.STOP.toComponent()
+			ModTooltipLang.STOP.toComponent()
 		) { stopPlaying() }
 
 		copyButton = addIconButton(
@@ -147,7 +149,7 @@ class ComposerControls(
 			16,
 			16,
 			ScreenTextures.Sprite.Control.COPY,
-			ModLanguageProvider.Tooltip.COPY.toComponent()
+			ModTooltipLang.COPY.toComponent()
 		) { copySong() }
 
 		pasteButton = addIconButton(
@@ -156,7 +158,7 @@ class ComposerControls(
 			16,
 			16,
 			ScreenTextures.Sprite.Control.PASTE,
-			ModLanguageProvider.Tooltip.PASTE.toComponent()
+			ModTooltipLang.PASTE.toComponent()
 		) { pasteSong() }
 
 		composerScreen.addRenderableWidgets(playButton, stopButton, copyButton, pasteButton, jumpToBeatBox)

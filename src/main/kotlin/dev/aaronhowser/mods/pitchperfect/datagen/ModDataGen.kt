@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.datagen
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.loot.ModBlockLootTableSubProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.model.ModBlockStateProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.model.ModItemModelProvider

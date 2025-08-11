@@ -1,8 +1,9 @@
 package dev.aaronhowser.mods.pitchperfect.packet.client_to_server
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
 import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
@@ -29,7 +30,7 @@ class ComposerPasteSongPacket(
 			val song = Song.fromString(songString)
 			if (song == null) {
 				context.player().sendSystemMessage(
-					ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE
+					ModMessageLang.SONG_PASTE_FAIL_TO_PARSE
 						.toComponent(songString)
 				)
 				return@enqueueWork

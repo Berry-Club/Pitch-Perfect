@@ -3,8 +3,9 @@ package dev.aaronhowser.mods.pitchperfect.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.SongPasteCommandResponsePacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SongPasteCommandRequestPacket
@@ -37,7 +38,7 @@ object PasteSongCommand {
 		val song = Song.fromString(packet.clipboard)
 
 		if (song == null) {
-			player.sendSystemMessage(ModLanguageProvider.Message.SONG_PASTE_FAIL_TO_PARSE.toComponent(packet.clipboard))
+			player.sendSystemMessage(ModMessageLang.SONG_PASTE_FAIL_TO_PARSE.toComponent(packet.clipboard))
 			return
 		}
 
@@ -53,14 +54,14 @@ object PasteSongCommand {
 		val result = songSavedData.addSongInfo(songInfo)
 
 		val component = if (result.success) {
-			ModLanguageProvider.Message.SONG_PASTE_ADDED
+			ModMessageLang.SONG_PASTE_ADDED
 				.toComponent(title)
 				.withStyle {
 					it
 						.withHoverEvent(
 							HoverEvent(
 								HoverEvent.Action.SHOW_TEXT,
-								ModLanguageProvider.Message.CLICK_COPY_SONG_UUID.toComponent(song.uuid.toString())
+								ModMessageLang.CLICK_COPY_SONG_UUID.toComponent(song.uuid.toString())
 							)
 						)
 						.withClickEvent(
@@ -71,7 +72,7 @@ object PasteSongCommand {
 						)
 				}
 		} else {
-			ModLanguageProvider.Message.SONG_PASTE_FAIL_DUPLICATE.toComponent(title)
+			ModMessageLang.SONG_PASTE_FAIL_DUPLICATE.toComponent(title)
 				.append(result.songInfo.getComponent())
 		}
 

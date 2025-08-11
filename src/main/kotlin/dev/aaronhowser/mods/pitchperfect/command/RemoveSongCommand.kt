@@ -2,8 +2,9 @@ package dev.aaronhowser.mods.pitchperfect.command
 
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.song.data.SongSavedData.Companion.songData
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -33,7 +34,7 @@ object RemoveSongCommand {
 		songSavedData.removeSongInfo(uuid)
 
 		player.sendSystemMessage(
-			ModLanguageProvider.Message.SONG_REMOVED.toComponent(
+			ModMessageLang.SONG_REMOVED.toComponent(
 				songInfo.title
 			)
 		)

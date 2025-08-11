@@ -1,7 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline
 
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
-import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModTooltipLang
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.ClickComposerCellPacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
@@ -69,14 +70,14 @@ data class TimelineCell(
 		get() {
 			val components = mutableListOf<MutableComponent>()
 
-			val delayComponent = ModLanguageProvider.Tooltip.DELAY
+			val delayComponent = ModTooltipLang.DELAY
 				.toComponent()
 				.withStyle(ChatFormatting.GRAY)
 				.append(
 					Component.literal("$delay").withStyle(ChatFormatting.WHITE)
 				)
 
-			val pitchComponent = ModLanguageProvider.Tooltip.PITCH
+			val pitchComponent = ModTooltipLang.PITCH
 				.toComponent()
 				.withStyle(ChatFormatting.GRAY)
 				.append(
@@ -87,7 +88,7 @@ data class TimelineCell(
 			components.add(pitchComponent)
 
 			if (sounds.isNotEmpty()) {
-				val listStartComponent = ModLanguageProvider.Tooltip.SOUNDS_LIST_START
+				val listStartComponent = ModTooltipLang.SOUNDS_LIST_START
 					.toComponent().withStyle(ChatFormatting.GRAY)
 				components.add(listStartComponent)
 
