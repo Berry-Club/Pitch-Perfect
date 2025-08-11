@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
-import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModTooltipLang

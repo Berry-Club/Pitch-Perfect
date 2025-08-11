@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.datagen
 
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModAdvancementLang
-import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks

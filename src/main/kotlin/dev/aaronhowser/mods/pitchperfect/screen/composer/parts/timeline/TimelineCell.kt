@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline
 
-import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModTooltipLang
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
