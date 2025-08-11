@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.pitchperfect.item
 
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
-import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.SongRecorder
@@ -64,7 +63,7 @@ class SheetMusicItem : Item(
 
 			itemStack.set(
 				ModDataComponents.SONG_UUID_COMPONENT,
-				UuidComponent(addSongResult.songInfo.song.uuid)
+				addSongResult.songInfo.song.uuid
 			)
 		}
 

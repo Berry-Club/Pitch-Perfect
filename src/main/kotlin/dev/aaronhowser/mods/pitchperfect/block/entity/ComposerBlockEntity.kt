@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
-import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
@@ -68,7 +67,7 @@ class ComposerBlockEntity(
 
 		pComponents.set(
 			ModDataComponents.SONG_UUID_COMPONENT,
-			UuidComponent(composerSongUuid)
+			composerSongUuid
 		)
 	}
 

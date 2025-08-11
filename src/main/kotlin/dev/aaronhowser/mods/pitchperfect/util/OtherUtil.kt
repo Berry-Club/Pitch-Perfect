@@ -1,7 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect.util
 
+import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.AABB
@@ -34,5 +38,15 @@ object OtherUtil {
 	fun CompoundTag.getUuidOrNull(key: String): UUID? {
 		return if (this.hasUUID(key)) this.getUUID(key) else null
 	}
+
+	val UUID_CODEC: Codec<UUID> = Codec.STRING.xmap(
+		UUID::fromString,
+		UUID::toString
+	)
+
+	val UUID_STREAM_CODEC: StreamCodec<ByteBuf, UUID> = ByteBufCodecs.STRING_UTF8.map(
+		UUID::fromString,
+		UUID::toString
+	)
 
 }

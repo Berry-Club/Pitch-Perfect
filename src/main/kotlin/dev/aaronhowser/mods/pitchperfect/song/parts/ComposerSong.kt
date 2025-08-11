@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.aaronhowser.mods.pitchperfect.item.component.UuidComponent
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.Holder
 import net.minecraft.nbt.CompoundTag
@@ -27,7 +27,7 @@ class ComposerSong(
 		val CODEC: Codec<ComposerSong> =
 			RecordCodecBuilder.create {
 				it.group(
-					UuidComponent.UUID_CODEC
+					OtherUtil.UUID_CODEC
 						.fieldOf("uuid")
 						.forGetter(ComposerSong::uuid),
 					Song.CODEC
@@ -41,7 +41,7 @@ class ComposerSong(
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSong> =
 			StreamCodec.composite(
-				UuidComponent.UUID_STREAM_CODEC, ComposerSong::uuid,
+				OtherUtil.UUID_STREAM_CODEC, ComposerSong::uuid,
 				Song.STREAM_CODEC, ComposerSong::song,
 				Author.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSong::authors,
 				::ComposerSong

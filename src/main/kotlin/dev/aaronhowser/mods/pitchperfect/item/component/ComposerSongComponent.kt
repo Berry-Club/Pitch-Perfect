@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.song.parts.Author
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -19,7 +20,7 @@ data class ComposerSongComponent(
 		val CODEC: Codec<ComposerSongComponent> =
 			RecordCodecBuilder.create { instance ->
 				instance.group(
-					UuidComponent.UUID_CODEC
+					OtherUtil.UUID_CODEC
 						.fieldOf("composer_song_uuid")
 						.forGetter(ComposerSongComponent::composerSongUuid),
 					Author.CODEC.listOf()
@@ -33,7 +34,7 @@ data class ComposerSongComponent(
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSongComponent> =
 			StreamCodec.composite(
-				UuidComponent.UUID_STREAM_CODEC, ComposerSongComponent::composerSongUuid,
+				OtherUtil.UUID_STREAM_CODEC, ComposerSongComponent::composerSongUuid,
 				Author.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSongComponent::authors,
 				ScreenInstrument.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSongComponent::instruments,
 				::ComposerSongComponent
