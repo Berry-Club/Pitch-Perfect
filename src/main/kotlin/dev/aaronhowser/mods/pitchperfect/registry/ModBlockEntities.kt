@@ -4,7 +4,9 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.block.entity.ConductorBlockEntity
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import java.util.function.Supplier
@@ -15,19 +17,22 @@ object ModBlockEntities {
 		DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, PitchPerfect.ID)
 
 	val COMPOSER: DeferredHolder<BlockEntityType<*>, BlockEntityType<ComposerBlockEntity>> =
-		BLOCK_ENTITY_REGISTRY.register("composer", Supplier {
-			BlockEntityType.Builder.of(
-				{ pos, state -> ComposerBlockEntity(pos, state) },
-				ModBlocks.COMPOSER.get()
-			).build(null)
-		})
+		register("composer", ::ComposerBlockEntity, ModBlocks.COMPOSER)
 
 	val CONDUCTOR: DeferredHolder<BlockEntityType<*>, BlockEntityType<ConductorBlockEntity>> =
-		BLOCK_ENTITY_REGISTRY.register("conductor", Supplier {
+		register("conductor", ::ConductorBlockEntity, ModBlocks.CONDUCTOR)
+
+	private fun <T : BlockEntity> register(
+		name: String,
+		builder: BlockEntityType.BlockEntitySupplier<out T>,
+		vararg validBlocks: DeferredBlock<*>
+	): DeferredHolder<BlockEntityType<*>, BlockEntityType<T>> {
+		return BLOCK_ENTITY_REGISTRY.register(name, Supplier {
 			BlockEntityType.Builder.of(
-				{ pos, state -> ConductorBlockEntity(pos, state) },
-				ModBlocks.CONDUCTOR.get()
+				builder,
+				*validBlocks.map(DeferredBlock<*>::get).toTypedArray()
 			).build(null)
 		})
+	}
 
 }
