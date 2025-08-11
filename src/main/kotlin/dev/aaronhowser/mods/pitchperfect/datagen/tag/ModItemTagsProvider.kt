@@ -21,14 +21,29 @@ class ModItemTagsProvider(
 ) : ItemTagsProvider(pOutput, pLookupProvider, pBlockTags, PitchPerfect.ID, existingFileHelper) {
 
 	companion object {
-		val INSTRUMENTS_TAG: TagKey<Item> = TagKey.create(Registries.ITEM, OtherUtil.modResource("instruments"))
+		val INSTRUMENTS: TagKey<Item> = TagKey.create(Registries.ITEM, OtherUtil.modResource("instruments"))
 	}
 
 	override fun addTags(pProvider: HolderLookup.Provider) {
-
-		this.tag(INSTRUMENTS_TAG)
-			.add(*ModItems.instruments.map { it.get() }.toTypedArray())
-
+		this.tag(INSTRUMENTS)
+			.add(
+				ModItems.BANJO.get(),
+				ModItems.BASS_DRUM.get(),
+				ModItems.BASS.get(),
+				ModItems.BIT.get(),
+				ModItems.CHIMES.get(),
+				ModItems.COW_BELL.get(),
+				ModItems.DIDGERIDOO.get(),
+				ModItems.ELECTRIC_PIANO.get(),
+				ModItems.FLUTE.get(),
+				ModItems.GLOCKENSPIEL.get(),
+				ModItems.GUITAR.get(),
+				ModItems.HARP.get(),
+				ModItems.SNARE_DRUM.get(),
+				ModItems.STICKS.get(),
+				ModItems.VIBRAPHONE.get(),
+				ModItems.XYLOPHONE.get()
+			)
 	}
 
 }

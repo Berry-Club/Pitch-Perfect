@@ -17,37 +17,37 @@ object ModItems {
 		DeferredRegister.createItems(PitchPerfect.ID)
 
 	val BANJO: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("banjo") { InstrumentItem(NoteBlockInstrument.BANJO, "a") }
+		registerInstrument("banjo", NoteBlockInstrument.BANJO, "a")
 	val BASS: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("bass") { InstrumentItem(NoteBlockInstrument.BASS, "b") }
+		registerInstrument("bass", NoteBlockInstrument.BASS, "b")
 	val BASS_DRUM: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("bass_drum") { InstrumentItem(NoteBlockInstrument.BASEDRUM, "c") }
+		registerInstrument("bass_drum", NoteBlockInstrument.BASEDRUM, "c")
 	val BIT: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("bit") { InstrumentItem(NoteBlockInstrument.BIT, "d") }
+		registerInstrument("bit", NoteBlockInstrument.BIT, "d")
 	val CHIMES: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("chimes") { InstrumentItem(NoteBlockInstrument.CHIME, "e") }
+		registerInstrument("chimes", NoteBlockInstrument.CHIME, "e")
 	val COW_BELL: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("cow_bell") { InstrumentItem(NoteBlockInstrument.COW_BELL, "f") }
+		registerInstrument("cow_bell", NoteBlockInstrument.COW_BELL, "f")
 	val DIDGERIDOO: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("didgeridoo") { InstrumentItem(NoteBlockInstrument.DIDGERIDOO, "g") }
+		registerInstrument("didgeridoo", NoteBlockInstrument.DIDGERIDOO, "g")
 	val ELECTRIC_PIANO: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("electric_piano") { InstrumentItem(NoteBlockInstrument.PLING, "h") }
+		registerInstrument("electric_piano", NoteBlockInstrument.PLING, "h")
 	val FLUTE: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("flute") { InstrumentItem(NoteBlockInstrument.FLUTE, "i") }
+		registerInstrument("flute", NoteBlockInstrument.FLUTE, "i")
 	val GLOCKENSPIEL: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("glockenspiel") { InstrumentItem(NoteBlockInstrument.BELL, "j") }
+		registerInstrument("glockenspiel", NoteBlockInstrument.BELL, "j")
 	val GUITAR: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("guitar") { InstrumentItem(NoteBlockInstrument.GUITAR, "k") }
+		registerInstrument("guitar", NoteBlockInstrument.GUITAR, "k")
 	val HARP: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("harp") { InstrumentItem(NoteBlockInstrument.HARP, "l") }
+		registerInstrument("harp", NoteBlockInstrument.HARP, "l")
 	val SNARE_DRUM: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("snare_drum") { InstrumentItem(NoteBlockInstrument.SNARE, "m") }
+		registerInstrument("snare_drum", NoteBlockInstrument.SNARE, "m")
 	val STICKS: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("sticks") { InstrumentItem(NoteBlockInstrument.HAT, "n") }
+		registerInstrument("sticks", NoteBlockInstrument.HAT, "n")
 	val VIBRAPHONE: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("vibraphone") { InstrumentItem(NoteBlockInstrument.IRON_XYLOPHONE, "o") }
+		registerInstrument("vibraphone", NoteBlockInstrument.IRON_XYLOPHONE, "o")
 	val XYLOPHONE: DeferredItem<InstrumentItem> =
-		ITEM_REGISTRY.registerItem("xylophone") { InstrumentItem(NoteBlockInstrument.XYLOPHONE, "p") }
+		registerInstrument("xylophone", NoteBlockInstrument.XYLOPHONE, "p")
 
 	val MUSIC_SHEET: DeferredItem<SheetMusicItem> =
 		ITEM_REGISTRY.registerItem("sheet_music") { SheetMusicItem() }
@@ -58,27 +58,18 @@ object ModItems {
 	//TODO: headphones, maybe make it just render on any player who's in the composer gui
 	//TODO: Zune
 
-	val instruments = mutableListOf(
-		BANJO,
-		BASS_DRUM,
-		BASS,
-		BIT,
-		CHIMES,
-		COW_BELL,
-		DIDGERIDOO,
-		ELECTRIC_PIANO,
-		FLUTE,
-		GLOCKENSPIEL,
-		GUITAR,
-		HARP,
-		SNARE_DRUM,
-		STICKS,
-		VIBRAPHONE,
-		XYLOPHONE
-	)
-
 	fun getFromSoundHolder(soundHolder: Holder<SoundEvent>): DeferredItem<InstrumentItem>? {
+		val instruments = ITEM_REGISTRY.entries.filterIsInstance<DeferredItem<InstrumentItem>>()
 		return instruments.find { it.get().instrument == soundHolder.value() }
 	}
+
+	fun registerInstrument(
+		name: String,
+		instrument: NoteBlockInstrument,
+		fontString: String
+	): DeferredItem<InstrumentItem> {
+		return ITEM_REGISTRY.registerItem(name) { InstrumentItem(instrument, fontString) }
+	}
+
 
 }

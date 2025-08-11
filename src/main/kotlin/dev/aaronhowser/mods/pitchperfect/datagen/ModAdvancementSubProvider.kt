@@ -1,12 +1,14 @@
 package dev.aaronhowser.mods.pitchperfect.datagen
 
 import dev.aaronhowser.mods.pitchperfect.datagen.ModLanguageProvider.Companion.toComponent
+import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.advancements.*
 import net.minecraft.advancements.critereon.ImpossibleTrigger
 import net.minecraft.advancements.critereon.InventoryChangeTrigger
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.core.HolderLookup
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -37,7 +39,7 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 		this.saver = saver
 		this.existingFileHelper = existingFileHelper
 
-		val root = makeRoot()
+		val root = makeRoot(registries)
 
 		Advancement.Builder.advancement()
 			.parent(root)
@@ -180,12 +182,12 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 
 	}
 
-	private fun makeRoot(): AdvancementHolder {
+	private fun makeRoot(registries: HolderLookup.Provider): AdvancementHolder {
 		val rootBuilder =
 			Advancement.Builder.advancement()
 				.display(
 					ModItems.BANJO.get(),
-					Component.literal("Pitch Perfect        "),
+					Component.literal("Pitch Perfect"),
 					ModLanguageProvider.Advancement.ROOT_DESC.toComponent(),
 					ResourceLocation.withDefaultNamespace("textures/block/note_block.png"),
 					AdvancementType.TASK,
@@ -195,12 +197,14 @@ class ModAdvancementSubProvider : AdvancementProvider.AdvancementGenerator {
 				)
 				.requirements(AdvancementRequirements.Strategy.OR)
 
-		for (instrumentItem in ModItems.instruments) {
-			rootBuilder.addCriterion(
-				"has_${instrumentItem.id.path}",
-				InventoryChangeTrigger.TriggerInstance.hasItems(instrumentItem.get())
+		rootBuilder.addCriterion(
+			"has_instrument",
+			InventoryChangeTrigger.TriggerInstance.hasItems(
+				ItemPredicate.Builder.item()
+					.of(ModItemTagsProvider.INSTRUMENTS)
+					.build()
 			)
-		}
+		)
 
 		return rootBuilder
 			.build(guide("root"))
