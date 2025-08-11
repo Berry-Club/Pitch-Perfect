@@ -5,7 +5,6 @@ import dev.aaronhowser.mods.pitchperfect.config.CommonConfig
 import dev.aaronhowser.mods.pitchperfect.enchantment.BwaaapEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.HealingBeatEnchantment
 import dev.aaronhowser.mods.pitchperfect.enchantment.ModEnchantments
-import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
@@ -39,7 +38,7 @@ class InstrumentItem(
 ) : Item(
 	Properties()
 		.durability(100)
-		.component(ModDataComponents.SOUND_EVENT_COMPONENT, SoundEventComponent(instrument))
+		.component(ModDataComponents.SOUND_EVENT_COMPONENT, instrument)
 		.attributes(
 			ItemAttributeModifiers.builder()
 				.add(
@@ -113,7 +112,7 @@ class InstrumentItem(
 		level: Level,
 		interactionHand: InteractionHand
 	) {
-		val sound = SoundEventComponent.getSoundEvent(itemStack) ?: return
+		val sound = itemStack.get(ModDataComponents.SOUND_EVENT_COMPONENT) ?: return
 
 		val lookVector = player.lookAngle
 		val pitch = lookVector.y.toFloat().map(-1f, 1f, 0.5f, 2f)
@@ -151,7 +150,7 @@ class InstrumentItem(
 	override fun onLeftClickEntity(stack: ItemStack, player: Player, entity: Entity): Boolean {
 		if (entity.level().isClientSide) return false
 
-		val sound = SoundEventComponent.getSoundEvent(stack) ?: return false
+		val sound = stack.get(ModDataComponents.SOUND_EVENT_COMPONENT) ?: return false
 
 		val particleAmountLowerBound = CommonConfig.MIN_ATTACK_PARTICLES.get()
 		val particleAmountUpperBound = CommonConfig.MAX_ATTACK_PARTICLES.get()

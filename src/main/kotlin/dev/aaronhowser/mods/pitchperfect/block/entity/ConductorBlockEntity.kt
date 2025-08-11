@@ -2,11 +2,11 @@ package dev.aaronhowser.mods.pitchperfect.block.entity
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.block.ConductorBlock
-import dev.aaronhowser.mods.pitchperfect.item.component.SoundEventComponent
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
+import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.ModServerScheduler
@@ -143,7 +143,7 @@ class ConductorBlockEntity(
 		for (armorStand in armorStands) {
 			val heldItem = armorStand.mainHandItem
 
-			val itemSound = SoundEventComponent.getSoundEvent(heldItem) ?: continue
+			val itemSound = heldItem.get(ModDataComponents.SOUND_EVENT_COMPONENT) ?: continue
 
 			val armorStandsWithInstrument = nearbyArmorStands.getOrPut(itemSound) { emptyList() }.toMutableList()
 			armorStandsWithInstrument.add(armorStand)
