@@ -4,8 +4,10 @@ import dev.aaronhowser.mods.pitchperfect.config.ServerConfig
 import dev.aaronhowser.mods.pitchperfect.datagen.tag.ModEntityTypeTagsProvider
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
+import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.Monster
@@ -15,7 +17,7 @@ import net.minecraft.world.item.ItemStack
 object HealingBeatEnchantment {
 
 	fun trigger(user: LivingEntity, itemstack: ItemStack) {
-		HealingBeatPulse(user, itemstack)
+		HealingBeatPulse(user, itemstack).pulse()
 	}
 
 	private class HealingBeatPulse(
@@ -23,19 +25,15 @@ object HealingBeatEnchantment {
 		private val itemStack: ItemStack
 	) {
 
-		val soundEvent = SoundEventComponent.getSoundEvent(itemStack)
-		val mobsToHeal by lazy { findMobsToHeal() }
+		val soundEvent: SoundEvent? = itemStack.get(ModDataComponents.SOUND_EVENT)
+		val mobsToHeal: List<LivingEntity> by lazy { findMobsToHeal() }
 
-		init {
-			pulse()
-		}
-
-		private fun pulse() {
+		fun pulse() {
 			if (user.level().isClientSide) return
 			if (mobsToHeal.isEmpty()) return
 			if (soundEvent == null) return
 
-			mobsToHeal.forEach { heal(it) }
+			mobsToHeal.forEach(::heal)
 
 			if (user is Player) {
 				user.cooldowns.addCooldown(
