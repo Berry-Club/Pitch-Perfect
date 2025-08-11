@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.decoration.ArmorStand
-import net.minecraft.world.entity.player.Player
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.RegisterCommandsEvent
@@ -45,7 +44,7 @@ object OtherEvents {
 		val armorStandItem = armorStand.mainHandItem
 		if (armorStandItem.isEmpty) {
 			val playerItem = player.getItemInHand(event.hand)
-			if (!playerItem.has(ModDataComponents.SOUND_EVENT_COMPONENT)) return
+			if (!playerItem.has(ModDataComponents.SOUND_EVENT)) return
 
 			armorStand.disabledSlots = -1
 			armorStand.isShowArms = true
@@ -53,7 +52,7 @@ object OtherEvents {
 			armorStand.setItemInHand(InteractionHand.MAIN_HAND, playerItem.copy())
 			playerItem.shrink(1)
 		} else {
-			if (!armorStandItem.has(ModDataComponents.SOUND_EVENT_COMPONENT)) return
+			if (!armorStandItem.has(ModDataComponents.SOUND_EVENT)) return
 
 			player.addItem(armorStandItem.copy())
 			armorStandItem.shrink(1)

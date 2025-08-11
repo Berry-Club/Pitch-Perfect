@@ -38,7 +38,7 @@ class InstrumentItem(
 ) : Item(
 	Properties()
 		.durability(100)
-		.component(ModDataComponents.SOUND_EVENT_COMPONENT, instrument)
+		.component(ModDataComponents.SOUND_EVENT, instrument)
 		.attributes(
 			ItemAttributeModifiers.builder()
 				.add(
@@ -112,7 +112,7 @@ class InstrumentItem(
 		level: Level,
 		interactionHand: InteractionHand
 	) {
-		val sound = itemStack.get(ModDataComponents.SOUND_EVENT_COMPONENT) ?: return
+		val sound = itemStack.get(ModDataComponents.SOUND_EVENT) ?: return
 
 		val lookVector = player.lookAngle
 		val pitch = lookVector.y.toFloat().map(-1f, 1f, 0.5f, 2f)
@@ -150,7 +150,7 @@ class InstrumentItem(
 	override fun onLeftClickEntity(stack: ItemStack, player: Player, entity: Entity): Boolean {
 		if (entity.level().isClientSide) return false
 
-		val sound = stack.get(ModDataComponents.SOUND_EVENT_COMPONENT) ?: return false
+		val sound = stack.get(ModDataComponents.SOUND_EVENT) ?: return false
 
 		val particleAmountLowerBound = CommonConfig.MIN_ATTACK_PARTICLES.get()
 		val particleAmountUpperBound = CommonConfig.MAX_ATTACK_PARTICLES.get()

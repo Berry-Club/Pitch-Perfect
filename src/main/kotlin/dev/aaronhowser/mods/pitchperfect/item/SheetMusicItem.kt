@@ -38,13 +38,13 @@ class SheetMusicItem : Item(
 			if (isRecording(stack)) {
 				stopRecording(stack, player)
 			} else {
-				stack.set(ModDataComponents.IS_RECORDING_COMPONENT, true)
-				stack.remove(ModDataComponents.SONG_UUID_COMPONENT)
+				stack.set(ModDataComponents.IS_RECORDING, true)
+				stack.remove(ModDataComponents.SONG_UUID)
 			}
 		}
 
 		private fun stopRecording(itemStack: ItemStack, player: ServerPlayer) {
-			itemStack.remove(ModDataComponents.IS_RECORDING_COMPONENT)
+			itemStack.remove(ModDataComponents.IS_RECORDING)
 
 			val songBuilder = SongRecorder.SONG_RECORDERS[player] ?: return
 			SongRecorder.SONG_RECORDERS.remove(player)
@@ -62,13 +62,13 @@ class SheetMusicItem : Item(
 			}
 
 			itemStack.set(
-				ModDataComponents.SONG_UUID_COMPONENT,
+				ModDataComponents.SONG_UUID,
 				addSongResult.songInfo.song.uuid
 			)
 		}
 
 		fun isRecording(stack: ItemStack): Boolean {
-			return stack.getOrDefault(ModDataComponents.IS_RECORDING_COMPONENT, false)
+			return stack.getOrDefault(ModDataComponents.IS_RECORDING, false)
 		}
 	}
 

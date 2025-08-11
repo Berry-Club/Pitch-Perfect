@@ -156,7 +156,7 @@ class ComposerBlock(
 	) {
 		super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack)
 
-		pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT) ?: return
+		pStack.get(ModDataComponents.COMPOSER_SONG) ?: return
 		pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
 
 //        blockEntity.composerSongUuid = songComponent.composerSongUuid
@@ -191,7 +191,7 @@ class ComposerBlock(
 		super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
 		val instrumentsComponent = Component.empty()
 
-		val instruments = pStack.get(ModDataComponents.COMPOSER_SONG_COMPONENT)?.instruments ?: return
+		val instruments = pStack.get(ModDataComponents.COMPOSER_SONG)?.instruments ?: return
 		for (screenInstrument in instruments) {
 			val instrumentItem = ModItems.getFromSoundHolder(screenInstrument.noteBlockInstrument.soundEvent)
 

@@ -143,7 +143,7 @@ class ConductorBlockEntity(
 		for (armorStand in armorStands) {
 			val heldItem = armorStand.mainHandItem
 
-			val itemSound = heldItem.get(ModDataComponents.SOUND_EVENT_COMPONENT) ?: continue
+			val itemSound = heldItem.get(ModDataComponents.SOUND_EVENT) ?: continue
 
 			val armorStandsWithInstrument = nearbyArmorStands.getOrPut(itemSound) { emptyList() }.toMutableList()
 			armorStandsWithInstrument.add(armorStand)

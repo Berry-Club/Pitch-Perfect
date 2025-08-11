@@ -66,7 +66,7 @@ class ComposerBlockEntity(
 		super.collectImplicitComponents(pComponents)
 
 		pComponents.set(
-			ModDataComponents.SONG_UUID_COMPONENT,
+			ModDataComponents.SONG_UUID,
 			composerSongUuid
 		)
 	}
