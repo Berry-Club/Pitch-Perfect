@@ -4,7 +4,6 @@ import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
-import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
@@ -27,7 +26,7 @@ class ComposerPasteSongPacket(
 		context.enqueueWork {
 			val player = context.player()
 
-			val song = SongBuilder.fromString(songString)
+			val song = Song.fromString(songString)
 			if (song == null) {
 				context.player().sendSystemMessage(
 					ModMessageLang.SONG_PASTE_FAIL_TO_PARSE

@@ -6,7 +6,6 @@ import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
-import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
@@ -170,7 +169,7 @@ data class SongInfo(
 				authors.add(author)
 			}
 
-			val song = SongBuilder.fromString(tag.getString(SONG))
+			val song = Song.fromString(tag.getString(SONG))
 
 			if (song == null) {
 				PitchPerfect.LOGGER.error("Failed to parse song from tag: $tag")

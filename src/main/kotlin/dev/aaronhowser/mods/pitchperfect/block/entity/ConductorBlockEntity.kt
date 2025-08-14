@@ -8,7 +8,6 @@ import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlocks
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
-import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.ModServerScheduler
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.component1
@@ -126,7 +125,7 @@ class ConductorBlockEntity(
 		val blockItem = itemHandler.getStackInSlot(0)
 		if (blockItem.item != ModItems.SHEET_MUSIC.get()) return
 
-		val song = SongBuilder.fromFile(FMLPaths.CONFIGDIR.get().resolve("song.txt"))
+		val song = Song.fromFile(FMLPaths.CONFIGDIR.get().resolve("song.txt"))
 		this.song = song
 
 		startPlaying()

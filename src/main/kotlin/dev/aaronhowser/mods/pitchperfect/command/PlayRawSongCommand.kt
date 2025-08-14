@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
-import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.commands.CommandSourceStack
@@ -31,7 +30,7 @@ object PlayRawSongCommand {
 	private fun playSong(context: CommandContext<CommandSourceStack>): Int {
 		try {
 			val songString = StringArgumentType.getString(context, SONG_ARGUMENT)
-			val song = SongBuilder.fromString(songString)
+			val song = Song.fromString(songString)
 
 			val player = context.source.entity as? ServerPlayer ?: return 0
 

@@ -4,7 +4,6 @@ import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
-import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
@@ -42,7 +41,7 @@ class ClickComposerCellPacket(
 			val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
 
 			val note = Note.getFromPitch(pitch)
-			val soundHolder = SongBuilder.getSoundHolder(selectedInstrument)
+			val soundHolder = Song.getSoundHolder(selectedInstrument)
 
 			composerSong.apply {
 				if (leftClick) {

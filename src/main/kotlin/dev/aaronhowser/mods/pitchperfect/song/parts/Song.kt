@@ -91,6 +91,18 @@ data class Song(
 			return result.result().getOrNull()
 		}
 
+		fun fromFile(path: Path): Song? {
+			try {
+				val string = Files.readString(path)
+				val song = fromString(string)
+
+				return song
+			} catch (e: Exception) {
+				e.printStackTrace()
+				return null
+			}
+		}
+
 		fun getSoundString(sound: Holder<SoundEvent>): String {
 			val instrument: NoteBlockInstrument? = SOUND_TO_INSTRUMENT[sound.key]
 

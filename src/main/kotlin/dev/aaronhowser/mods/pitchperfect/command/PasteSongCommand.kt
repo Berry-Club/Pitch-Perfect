@@ -8,7 +8,6 @@ import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.SongPasteCommandResponsePacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SongPasteCommandRequestPacket
-import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.data.SongSavedData.Companion.songData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
@@ -35,7 +34,7 @@ object PasteSongCommand {
 
 	fun receivePacket(packet: SongPasteCommandResponsePacket, context: IPayloadContext) {
 		val player = context.player() as ServerPlayer
-		val song = SongBuilder.fromString(packet.clipboard)
+		val song = Song.fromString(packet.clipboard)
 
 		if (song == null) {
 			player.sendSystemMessage(ModMessageLang.SONG_PASTE_FAIL_TO_PARSE.toComponent(packet.clipboard))

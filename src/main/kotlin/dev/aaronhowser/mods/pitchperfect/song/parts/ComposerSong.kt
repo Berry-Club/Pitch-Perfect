@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.Holder
@@ -56,7 +55,7 @@ class ComposerSong(
 			val uuid = tag.getUuidOrNull(UUID_NBT) ?: return null
 
 			val songString = tag.getString(SONG_NBT)
-			val song = SongBuilder.fromString(songString) ?: return null
+			val song = Song.fromString(songString) ?: return null
 
 			val authors = mutableListOf<Author>()
 			val tagAuthors = tag.getList(AUTHORS_NBT, ListTag.TAG_COMPOUND.toInt())
