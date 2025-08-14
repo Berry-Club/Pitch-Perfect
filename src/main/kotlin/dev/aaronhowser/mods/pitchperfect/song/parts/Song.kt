@@ -4,12 +4,15 @@ import com.google.gson.JsonParser
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import net.minecraft.core.Holder
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.neoforged.fml.loading.FMLPaths
@@ -110,6 +113,21 @@ data class Song(
 				sound.key!!.location().toString()
 			} else {
 				instrument.serializedName
+			}
+		}
+
+		fun getSoundHolder(instrumentName: String): Holder<SoundEvent> {
+			val instrument: NoteBlockInstrument? = ID_TO_INSTRUMENT[instrumentName]
+
+			return if (instrument == null) {
+				BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(
+					ResourceKey.create(
+						Registries.SOUND_EVENT,
+						ResourceLocation.parse(instrumentName)
+					)
+				)
+			} else {
+				instrument.soundEvent
 			}
 		}
 
