@@ -33,8 +33,7 @@ class SheetMusicItem : Item(
 			return InteractionResultHolder.success(stack)
 		}
 
-		val song =
-			Song.fromFile(Song.defaultFile) ?: return InteractionResultHolder.fail(stack)
+		val song = Song.fromFile(Song.defaultFile) ?: return InteractionResultHolder.fail(stack)
 		playSong(song, pPlayer)
 
 		return InteractionResultHolder.success(stack)
