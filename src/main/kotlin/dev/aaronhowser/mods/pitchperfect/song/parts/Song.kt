@@ -1,16 +1,13 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
-import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
+import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import net.minecraft.core.Holder
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.neoforged.fml.loading.FMLPaths
@@ -53,7 +50,7 @@ data class Song(
 		val CODEC: Codec<Song> = Codec.STRING.flatXmap(
 			{ string: String ->
 				try {
-					return@flatXmap DataResult.success(fromString(string))
+					return@flatXmap DataResult.success(SongBuilder.fromString(string))
 				} catch (exception: Exception) {
 					return@flatXmap DataResult.error { "Failed to parse song: " + exception.message }
 				}
@@ -77,88 +74,6 @@ data class Song(
 				sound.key!!.location().toString()
 			} else {
 				instrument.serializedName
-			}
-		}
-
-		fun getSoundHolder(instrumentName: String): Holder<SoundEvent> {
-			val instrument: NoteBlockInstrument? = ID_TO_INSTRUMENT[instrumentName]
-
-			return if (instrument == null) {
-				BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(
-					ResourceKey.create(
-						Registries.SOUND_EVENT,
-						ResourceLocation.parse(instrumentName)
-					)
-				)
-			} else {
-				instrument.soundEvent
-			}
-		}
-
-		fun fromString(string: String): Song? {
-			return fromStringReader(StringReader(string))
-		}
-
-		fun fromStringReader(reader: StringReader): Song? {
-			try {
-				val beats: HashMap<Holder<SoundEvent>, List<Beat>> = HashMap()
-
-				reader.skipWhitespace()
-				reader.expect('{')
-				reader.skipWhitespace()
-
-				while (reader.canRead() && reader.peek() != '}') {
-					val instrumentName: String = reader.readStringUntil('=')
-					val sound = getSoundHolder(instrumentName)
-
-					reader.skipWhitespace()
-
-					val beatList = ArrayList<Beat>()
-
-					if (reader.canRead() && reader.peek() == '[') {
-						reader.skip()
-						while (reader.canRead() && reader.peek() != ']') {
-							beatList.add(Beat.parse(reader))
-
-							while (reader.canRead() && reader.peek() == ',') {
-								reader.skip()
-								reader.skipWhitespace()
-							}
-						}
-
-						reader.expect(']')
-					} else if (reader.canRead()) {
-						beatList.add(Beat.parse(reader))
-					}
-
-					if (beatList.isNotEmpty()) {
-						beats[sound] = beatList
-					}
-
-					while (reader.canRead() && reader.peek() == ',') {
-						reader.skip()
-						reader.skipWhitespace()
-					}
-				}
-
-				reader.expect('}')
-				return Song(beats)
-			} catch (e: Exception) {
-				e.printStackTrace()
-				return null
-			}
-		}
-
-		fun fromFile(path: Path): Song? {
-			try {
-
-				val string = Files.readString(path)
-				val song = fromString(string)
-
-				return song
-			} catch (e: Exception) {
-				e.printStackTrace()
-				return null
 			}
 		}
 

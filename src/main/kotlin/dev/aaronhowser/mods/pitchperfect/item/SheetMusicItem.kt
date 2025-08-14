@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.item
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
+import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.SongPlayer
 import dev.aaronhowser.mods.pitchperfect.song.SongRecorder
 import dev.aaronhowser.mods.pitchperfect.song.data.SongSavedData.Companion.songData
@@ -33,7 +34,7 @@ class SheetMusicItem : Item(
 			return InteractionResultHolder.success(stack)
 		}
 
-		val song = Song.fromFile(Song.defaultFile) ?: return InteractionResultHolder.fail(stack)
+		val song = SongBuilder.fromFile(Song.defaultFile) ?: return InteractionResultHolder.fail(stack)
 		playSong(song, pPlayer)
 
 		return InteractionResultHolder.success(stack)

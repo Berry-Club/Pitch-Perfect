@@ -10,6 +10,7 @@ import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentCompo
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.timeline.Timeline
+import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.components.Button
@@ -51,7 +52,7 @@ class ComposerControls(
 
 	fun pasteSong() {
 		val clipboard = composerScreen.minecraft.keyboardHandler.clipboard
-		val song = Song.fromString(clipboard)
+		val song = SongBuilder.fromString(clipboard)
 
 		if (song == null) {
 			composerScreen.minecraft.player?.sendSystemMessage(
