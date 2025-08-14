@@ -43,7 +43,7 @@ class ConductorBlockEntity(
 		}
 
 		override fun isItemValid(slot: Int, stack: ItemStack): Boolean {
-			return stack.item == ModItems.MUSIC_SHEET.get()
+			return stack.item == ModItems.SHEET_MUSIC.get()
 		}
 	}
 
@@ -123,7 +123,7 @@ class ConductorBlockEntity(
 
 	fun redstonePulseReceived() {
 		val blockItem = itemHandler.getStackInSlot(0)
-		if (blockItem.item != ModItems.MUSIC_SHEET.get()) return
+		if (blockItem.item != ModItems.SHEET_MUSIC.get()) return
 
 		val song = Song.fromFile(FMLPaths.CONFIGDIR.get().resolve("song.txt"))
 		this.song = song

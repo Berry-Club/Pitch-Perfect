@@ -49,8 +49,8 @@ object ModItems {
 	val XYLOPHONE: DeferredItem<InstrumentItem> =
 		registerInstrument("xylophone", NoteBlockInstrument.XYLOPHONE, "p")
 
-	val MUSIC_SHEET: DeferredItem<SheetMusicItem> =
-		register("music_sheet", ::SheetMusicItem)
+	val SHEET_MUSIC: DeferredItem<SheetMusicItem> =
+		register("sheet_music", ::SheetMusicItem)
 
 	@Suppress("unused")
 	val CONDUCTOR_BLOCK_ITEM: DeferredItem<DoubleHighBlockItem> =

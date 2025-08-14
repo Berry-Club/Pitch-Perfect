@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "pitchperfect:item/music_sheet"
+    "layer0": "pitchperfect:item/sheet_music"
   }
 }

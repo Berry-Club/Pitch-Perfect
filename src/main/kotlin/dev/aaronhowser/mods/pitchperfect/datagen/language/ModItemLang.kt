@@ -20,6 +20,6 @@ object ModItemLang {
 		provider.addItem(ModItems.STICKS, "Drum Sticks")
 		provider.addItem(ModItems.VIBRAPHONE, "Vibraphone")
 		provider.addItem(ModItems.XYLOPHONE, "Xylophone")
-		provider.addItem(ModItems.MUSIC_SHEET, "Sheet Music")
+		provider.addItem(ModItems.SHEET_MUSIC, "Sheet Music")
 	}
 }
