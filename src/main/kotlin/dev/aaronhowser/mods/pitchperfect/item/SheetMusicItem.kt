@@ -21,6 +21,29 @@ class SheetMusicItem : Item(
 		.stacksTo(1)
 ) {
 
+	//TODO: When used on a Composer, it should open a menu asking you to title the song, and then saves the song and sets the Sheet Music to it
+
+	override fun use(pLevel: Level, pPlayer: Player, pUsedHand: InteractionHand): InteractionResultHolder<ItemStack> {
+		val stack = pPlayer.getItemInHand(pUsedHand)
+
+		if (pPlayer !is ServerPlayer) return InteractionResultHolder.pass(stack)
+
+		if (pPlayer.isShiftKeyDown) {
+			toggleRecording(stack, pPlayer)
+			return InteractionResultHolder.success(stack)
+		}
+
+		val song =
+			Song.fromFile(Song.defaultFile) ?: return InteractionResultHolder.fail(stack)
+		playSong(song, pPlayer)
+
+		return InteractionResultHolder.success(stack)
+	}
+
+	override fun isFoil(pStack: ItemStack): Boolean {
+		return isRecording(pStack)
+	}
+
 	companion object {
 
 		fun playSong(song: Song, player: Player) {
@@ -70,29 +93,6 @@ class SheetMusicItem : Item(
 		fun isRecording(stack: ItemStack): Boolean {
 			return stack.getOrDefault(ModDataComponents.IS_RECORDING, false)
 		}
-	}
-
-	//TODO: When used on a Composer, it should open a menu asking you to title the song, and then saves the song and sets the Sheet Music to it
-
-	override fun use(pLevel: Level, pPlayer: Player, pUsedHand: InteractionHand): InteractionResultHolder<ItemStack> {
-		val stack = pPlayer.getItemInHand(pUsedHand)
-
-		if (pPlayer !is ServerPlayer) return InteractionResultHolder.pass(stack)
-
-		if (pPlayer.isShiftKeyDown) {
-			toggleRecording(stack, pPlayer)
-			return InteractionResultHolder.success(stack)
-		}
-
-		val song =
-			Song.fromFile(Song.defaultFile) ?: return InteractionResultHolder.fail(stack)
-		playSong(song, pPlayer)
-
-		return InteractionResultHolder.success(stack)
-	}
-
-	override fun isFoil(pStack: ItemStack): Boolean {
-		return isRecording(pStack)
 	}
 
 }
