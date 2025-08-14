@@ -1,7 +1,11 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
+import com.google.gson.JsonParser
 import com.mojang.serialization.Codec
+import com.mojang.serialization.JsonOps
 import net.minecraft.core.Holder
+import net.minecraft.nbt.NbtOps
+import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -12,6 +16,7 @@ import net.neoforged.fml.loading.FMLPaths
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Each song has a list of instruments, each with a list of Beats.
@@ -28,6 +33,20 @@ data class Song(
 	val soundHolders: Set<Holder<SoundEvent>> = beats.keys
 
 	val uuid: UUID = UUID.nameUUIDFromBytes(toString().toByteArray())
+
+	override fun toString(): String {
+		val result = CODEC.encodeStart(JsonOps.INSTANCE, this)
+		return result.result().getOrNull().toString()
+	}
+
+	fun saveToPath(path: Path) {
+		try {
+			val string = toString()
+			Files.write(path, string.toByteArray())
+		} catch (e: Exception) {
+			e.printStackTrace()
+		}
+	}
 
 	companion object {
 		val defaultFile = FMLPaths.CONFIGDIR.get().resolve("song.txt")
@@ -61,6 +80,17 @@ data class Song(
 				Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
 			).map(::Song, Song::beats)
 
+		fun fromTag(tag: Tag): Song? {
+			val result = CODEC.parse(NbtOps.INSTANCE, tag)
+			return result.result().getOrNull()
+		}
+
+		fun fromString(string: String): Song? {
+			val json = JsonParser.parseString(string)
+			val result = CODEC.parse(JsonOps.INSTANCE, json)
+			return result.result().getOrNull()
+		}
+
 		fun getSoundString(sound: Holder<SoundEvent>): String {
 			val instrument: NoteBlockInstrument? = SOUND_TO_INSTRUMENT[sound.key]
 
@@ -71,51 +101,6 @@ data class Song(
 			}
 		}
 
-	}
-
-	override fun toString(): String {
-		val stringBuilder = StringBuilder()
-		stringBuilder.append('{')
-
-		var first = true
-
-		for ((sound, beats) in beats.entries) {
-
-			if (first) {
-				first = false
-			} else {
-				stringBuilder.append(',')
-			}
-
-			val soundString = getSoundString(sound)
-			stringBuilder.append(soundString)
-
-			stringBuilder.append('=')
-
-			stringBuilder.append('[')
-
-			for (i in beats.indices) {
-				if (i != 0) {
-					stringBuilder.append(',')
-				}
-
-				stringBuilder.append(beats[i])
-			}
-
-			stringBuilder.append(']')
-		}
-
-		stringBuilder.append('}')
-		return stringBuilder.toString()
-	}
-
-	fun saveToPath(path: Path) {
-		try {
-			val string = toString()
-			Files.write(path, string.toByteArray())
-		} catch (e: Exception) {
-			e.printStackTrace()
-		}
 	}
 
 }
