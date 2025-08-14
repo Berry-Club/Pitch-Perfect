@@ -13,6 +13,30 @@ data class Beat(
 	val notes: List<Note>
 ) {
 
+	override fun toString(): String {
+		val stringBuilder = StringBuilder()
+
+		if (notes.size == 1) {
+			stringBuilder.append(notes.first().serializedName)
+		} else {
+			stringBuilder.append('[')
+
+			for (i in notes.indices) {
+				if (i != 0) {
+					stringBuilder.append(',')
+				}
+
+				stringBuilder.append(notes[i].serializedName)
+			}
+
+			stringBuilder.append(']')
+		}
+
+		stringBuilder.append('@')
+		stringBuilder.append(at)
+		return stringBuilder.toString()
+	}
+
 	companion object {
 		val STREAM_CODEC: StreamCodec<ByteBuf, Beat> = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, Beat::at,
@@ -49,29 +73,5 @@ data class Beat(
 
 			return Beat(max(0, at), notes.toList())
 		}
-	}
-
-	override fun toString(): String {
-		val stringBuilder = StringBuilder()
-
-		if (notes.size == 1) {
-			stringBuilder.append(notes.first().serializedName)
-		} else {
-			stringBuilder.append('[')
-
-			for (i in notes.indices) {
-				if (i != 0) {
-					stringBuilder.append(',')
-				}
-
-				stringBuilder.append(notes[i].serializedName)
-			}
-
-			stringBuilder.append(']')
-		}
-
-		stringBuilder.append('@')
-		stringBuilder.append(at)
-		return stringBuilder.toString()
 	}
 }

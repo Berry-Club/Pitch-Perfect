@@ -34,7 +34,7 @@ object SongBuilder {
 
 	fun fromStringReader(reader: StringReader): Song? {
 		try {
-			val beats = mutableMapOf<Holder<SoundEvent>, List<Beat>>()
+			val beats = HashMap<Holder<SoundEvent>, List<Beat>>()
 
 			reader.skipWhitespace()
 			reader.expect('{')
@@ -42,10 +42,10 @@ object SongBuilder {
 
 			while (reader.canRead() && reader.peek() != '}') {
 				readInstrument(reader, beats)
+				skipCommas(reader)
 			}
 
 			reader.expect('}')
-
 			return Song(beats)
 		} catch (e: Exception) {
 			e.printStackTrace()
@@ -58,22 +58,41 @@ object SongBuilder {
 		beats: MutableMap<Holder<SoundEvent>, List<Beat>>
 	) {
 		val instrumentName = reader.readStringUntil('=')
-		val soundHolder = getSoundHolder(instrumentName)
+		val sound = getSoundHolder(instrumentName)
 
+		reader.skipWhitespace()
+
+		val beatList = readBeats(reader)
+
+		if (beatList.isNotEmpty()) {
+			beats[sound] = beatList
+		}
 	}
 
-	private fun readBeats(reader: StringReader) {
+	private fun readBeats(reader: StringReader): MutableList<Beat> {
 		val beatList = mutableListOf<Beat>()
 
 		if (reader.canRead() && reader.peek() == '[') {
 			reader.skip()
 
 			while (reader.canRead() && reader.peek() != ']') {
-				val beat = Beat.parse(reader)
+				beatList.add(Beat.parse(reader))
+				skipCommas(reader)
 			}
 
+			reader.expect(']')
+		} else if (reader.canRead()) {
+			beatList.add(Beat.parse(reader))
 		}
 
+		return beatList
+	}
+
+	private fun skipCommas(reader: StringReader) {
+		while (reader.canRead() && reader.peek() == ',') {
+			reader.skip()
+			reader.skipWhitespace()
+		}
 	}
 
 	fun getSoundHolder(instrumentName: String): Holder<SoundEvent> {
