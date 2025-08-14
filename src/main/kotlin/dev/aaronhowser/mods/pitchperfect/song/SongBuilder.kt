@@ -76,13 +76,13 @@ object SongBuilder {
 			reader.skip()
 
 			while (reader.canRead() && reader.peek() != ']') {
-				beatList.add(Beat.parse(reader))
+				beatList.add(Beat.fromStringReader(reader))
 				skipCommas(reader)
 			}
 
 			reader.expect(']')
 		} else if (reader.canRead()) {
-			beatList.add(Beat.parse(reader))
+			beatList.add(Beat.fromStringReader(reader))
 		}
 
 		return beatList

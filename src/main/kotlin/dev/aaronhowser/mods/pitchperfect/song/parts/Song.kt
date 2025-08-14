@@ -1,8 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
-import com.mojang.serialization.DataResult
-import dev.aaronhowser.mods.pitchperfect.song.SongBuilder
 import net.minecraft.core.Holder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
@@ -15,6 +13,11 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 
+/**
+ * Each song has a list of instruments, each with a list of Beats.
+ *
+ * A Beat is a timestamp and a list of Notes to play at that time.
+ */
 
 data class Song(
 	val beats: Map<Holder<SoundEvent>, List<Beat>>
@@ -47,25 +50,16 @@ data class Song(
 			return HashMap(size)
 		}
 
-		val CODEC: Codec<Song> = Codec.STRING.flatXmap(
-			{ string: String ->
-				try {
-					return@flatXmap DataResult.success(SongBuilder.fromString(string))
-				} catch (exception: Exception) {
-					return@flatXmap DataResult.error { "Failed to parse song: " + exception.message }
-				}
-			},
-			{ song: Song ->
-				DataResult.success(
-					song.toString()
-				)
-			})
+		val CODEC: Codec<Song> =
+			Codec.unboundedMap(SoundEvent.CODEC, Beat.CODEC.listOf())
+				.xmap(::Song, Song::beats)
 
-		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Song> = ByteBufCodecs.map(
-			Song::beatMap,
-			SoundEvent.STREAM_CODEC,
-			Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
-		).map(::Song, Song::beats)
+		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Song> =
+			ByteBufCodecs.map(
+				Song::beatMap,
+				SoundEvent.STREAM_CODEC,
+				Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
+			).map(::Song, Song::beats)
 
 		fun getSoundString(sound: Holder<SoundEvent>): String {
 			val instrument: NoteBlockInstrument? = SOUND_TO_INSTRUMENT[sound.key]

@@ -11,9 +11,6 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.Mth
 import net.minecraft.util.StringRepresentable
-import java.util.*
-import java.util.function.Function
-import java.util.stream.Collectors
 import kotlin.math.pow
 
 
@@ -84,15 +81,15 @@ enum class Note(
 	}
 
 	companion object {
-		val VALUES: Array<Note> = entries.toTypedArray()
-		val MAP: Map<String, Note> = Arrays.stream(VALUES).collect(
-			Collectors.toMap(
-				{ it.serializedName }, Function.identity()
+
+		val CODEC: StringRepresentable.EnumCodec<Note> =
+			StringRepresentable.fromEnum { entries.toTypedArray() }
+
+		val STREAM_CODEC: StreamCodec<ByteBuf, Note> =
+			ByteBufCodecs.idMapper(
+				{ entries[it] },
+				{ it.ordinal }
 			)
-		)
-		val STREAM_CODEC: StreamCodec<ByteBuf, Note> = ByteBufCodecs.idMapper(
-			{ b: Int -> VALUES[b] },
-			{ obj: Note -> obj.ordinal })
 
 		private val INVALID_NOTE = SimpleCommandExceptionType(LiteralMessage("Invalid note"))
 		private val INVALID_OCTAVE = SimpleCommandExceptionType(LiteralMessage("Invalid octave"))
@@ -102,30 +99,29 @@ enum class Note(
 		fun parse(reader: StringReader): Note {
 			reader.skipWhitespace()
 
-			val stringBuilder = StringBuilder(3)
-
 			val firstChar = reader.read()
-
 			if (firstChar !in 'A'..'G') {
 				throw INVALID_NOTE.createWithContext(reader)
 			}
 
-			stringBuilder.append(firstChar)
-
-			if (reader.peek() == '#') {
+			val accidental = if (reader.peek() == '#') {
 				reader.skip()
-				stringBuilder.append('#')
+				"#"
+			} else {
+				""
 			}
 
 			val octave = reader.read()
-
 			if (octave !in '3'..'5') {
 				throw INVALID_OCTAVE.createWithContext(reader)
 			}
 
-			stringBuilder.append(octave)
+			val noteName = "$firstChar$accidental$octave"
+			val note = entries.firstOrNull { it.displayName == noteName }
 
-			val note = MAP[stringBuilder.toString()] ?: throw NOTE_NOT_FOUND.createWithContext(reader)
+			if (note == null) {
+				throw NOTE_NOT_FOUND.createWithContext(reader)
+			}
 
 			return note
 		}
@@ -134,10 +130,10 @@ enum class Note(
 		 * Gets the Note from SoundEvent pitch
 		 */
 		fun getFromPitch(pitch: Float): Note {
-			val note = VALUES.firstOrNull { it.getGoodPitch() == pitch }
+			val note = entries.firstOrNull { it.getGoodPitch() == pitch }
 
 			if (note == null) {
-				val closestNote = VALUES.minByOrNull {
+				val closestNote = entries.minByOrNull {
 					Mth.abs(it.getGoodPitch() - pitch)
 				}
 
@@ -158,7 +154,7 @@ enum class Note(
 		 */
 		fun getFromPitch(pitch: Int): Note {
 			require(pitch in 0..24) { "Pitch must be between 0 and 24, was instead $pitch" }
-			return VALUES[pitch]
+			return entries[pitch]
 		}
 
 	}

@@ -1,7 +1,8 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.brigadier.StringReader
-import com.mojang.brigadier.exceptions.CommandSyntaxException
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -38,14 +39,26 @@ data class Beat(
 	}
 
 	companion object {
+
+		val CODEC: Codec<Beat> =
+			RecordCodecBuilder.create { instance ->
+				instance.group(
+					Codec.INT
+						.fieldOf("at")
+						.forGetter(Beat::at),
+					Note.CODEC.listOf()
+						.fieldOf("notes")
+						.forGetter(Beat::notes),
+				).apply(instance, ::Beat)
+			}
+
 		val STREAM_CODEC: StreamCodec<ByteBuf, Beat> = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, Beat::at,
 			Note.STREAM_CODEC.apply(ByteBufCodecs.list()), Beat::notes,
 			::Beat
 		)
 
-		@Throws(CommandSyntaxException::class)
-		fun parse(reader: StringReader): Beat {
+		fun fromStringReader(reader: StringReader): Beat {
 			reader.skipWhitespace()
 
 			val notes: MutableList<Note> = mutableListOf()
