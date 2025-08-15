@@ -12,8 +12,8 @@ data class Beat(
 ) {
 
 	/**
-	 * - Beat(5, C4]) -> "C4@5"
-	 * - Beat(10, [C4,E4,G4]) -> "[C4,E4,G4]@10"
+	 * - Beat(5, C4) -> "C4@5"
+	 * - Beat(10, {C4,E4,G4}) -> "[C4,E4,G4]@10"
 	 */
 	override fun toString(): String {
 		val notesString = if (notes.size == 1) {
