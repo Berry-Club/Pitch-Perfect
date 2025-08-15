@@ -16,9 +16,26 @@ class ModLanguageProvider(output: PackOutput) : LanguageProvider(output, PitchPe
 		val FONT = OtherUtil.modResource("icons")
 		private val STYLE = Style.EMPTY.withFont(FONT).withColor(ChatFormatting.WHITE)
 
+		const val BANJO = 'a'
+		const val BASS = 'b'
+		const val BASS_DRUM = 'c'
+		const val BIT = 'd'
+		const val CHIMES = 'e'
+		const val COW_BELL = 'f'
+		const val DIDGERIDOO = 'g'
+		const val ELECTRIC_PIANO = 'h'
+		const val FLUTE = 'i'
+		const val GLOCKENSPIEL = 'j'
+		const val GUITAR = 'k'
+		const val HARP = 'l'
+		const val SNARE_DRUM = 'm'
+		const val STICKS = 'n'
+		const val VIBRAPHONE = 'o'
+		const val XYLOPHONE = 'p'
+
 		fun getIcon(instrumentItem: InstrumentItem): MutableComponent {
-			val fontString = instrumentItem.fontString
-			return Component.literal(fontString).setStyle(STYLE)
+			val fontString = instrumentItem.fontChar
+			return Component.literal(fontString.toString()).setStyle(STYLE)
 		}
 	}
 

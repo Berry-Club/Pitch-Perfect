@@ -33,7 +33,7 @@ import kotlin.random.Random
 
 class InstrumentItem(
 	val instrument: SoundEvent,
-	val fontString: String
+	val fontChar: Char
 ) : Item(
 	Properties()
 		.durability(100)
@@ -55,13 +55,13 @@ class InstrumentItem(
 
 	constructor(
 		noteBlockInstrument: NoteBlockInstrument,
-		fontString: String
-	) : this(noteBlockInstrument.soundEvent.value(), fontString)
+		fontChar: Char
+	) : this(noteBlockInstrument.soundEvent.value(), fontChar)
 
 	constructor(
 		holder: Holder<SoundEvent>,
-		fontString: String
-	) : this(holder.value(), fontString)
+		fontChar: Char
+	) : this(holder.value(), fontChar)
 
 	companion object {
 

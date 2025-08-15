@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.registry
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.item.SheetMusicItem
 import net.minecraft.core.Holder
@@ -17,37 +18,37 @@ object ModItems {
 		DeferredRegister.createItems(PitchPerfect.ID)
 
 	val BANJO: DeferredItem<InstrumentItem> =
-		registerInstrument("banjo", NoteBlockInstrument.BANJO, "a")
+		registerInstrument("banjo", NoteBlockInstrument.BANJO, ModLanguageProvider.FontIcon.BANJO)
 	val BASS: DeferredItem<InstrumentItem> =
-		registerInstrument("bass", NoteBlockInstrument.BASS, "b")
+		registerInstrument("bass", NoteBlockInstrument.BASS, ModLanguageProvider.FontIcon.BASS)
 	val BASS_DRUM: DeferredItem<InstrumentItem> =
-		registerInstrument("bass_drum", NoteBlockInstrument.BASEDRUM, "c")
+		registerInstrument("bass_drum", NoteBlockInstrument.BASEDRUM, ModLanguageProvider.FontIcon.BASS_DRUM)
 	val BIT: DeferredItem<InstrumentItem> =
-		registerInstrument("bit", NoteBlockInstrument.BIT, "d")
+		registerInstrument("bit", NoteBlockInstrument.BIT, ModLanguageProvider.FontIcon.BIT)
 	val CHIMES: DeferredItem<InstrumentItem> =
-		registerInstrument("chimes", NoteBlockInstrument.CHIME, "e")
+		registerInstrument("chimes", NoteBlockInstrument.CHIME, ModLanguageProvider.FontIcon.CHIMES)
 	val COW_BELL: DeferredItem<InstrumentItem> =
-		registerInstrument("cow_bell", NoteBlockInstrument.COW_BELL, "f")
+		registerInstrument("cow_bell", NoteBlockInstrument.COW_BELL, ModLanguageProvider.FontIcon.COW_BELL)
 	val DIDGERIDOO: DeferredItem<InstrumentItem> =
-		registerInstrument("didgeridoo", NoteBlockInstrument.DIDGERIDOO, "g")
+		registerInstrument("didgeridoo", NoteBlockInstrument.DIDGERIDOO, ModLanguageProvider.FontIcon.DIDGERIDOO)
 	val ELECTRIC_PIANO: DeferredItem<InstrumentItem> =
-		registerInstrument("electric_piano", NoteBlockInstrument.PLING, "h")
+		registerInstrument("electric_piano", NoteBlockInstrument.PLING, ModLanguageProvider.FontIcon.ELECTRIC_PIANO)
 	val FLUTE: DeferredItem<InstrumentItem> =
-		registerInstrument("flute", NoteBlockInstrument.FLUTE, "i")
+		registerInstrument("flute", NoteBlockInstrument.FLUTE, ModLanguageProvider.FontIcon.FLUTE)
 	val GLOCKENSPIEL: DeferredItem<InstrumentItem> =
-		registerInstrument("glockenspiel", NoteBlockInstrument.BELL, "j")
+		registerInstrument("glockenspiel", NoteBlockInstrument.BELL, ModLanguageProvider.FontIcon.GLOCKENSPIEL)
 	val GUITAR: DeferredItem<InstrumentItem> =
-		registerInstrument("guitar", NoteBlockInstrument.GUITAR, "k")
+		registerInstrument("guitar", NoteBlockInstrument.GUITAR, ModLanguageProvider.FontIcon.GUITAR)
 	val HARP: DeferredItem<InstrumentItem> =
-		registerInstrument("harp", NoteBlockInstrument.HARP, "l")
+		registerInstrument("harp", NoteBlockInstrument.HARP, ModLanguageProvider.FontIcon.HARP)
 	val SNARE_DRUM: DeferredItem<InstrumentItem> =
-		registerInstrument("snare_drum", NoteBlockInstrument.SNARE, "m")
+		registerInstrument("snare_drum", NoteBlockInstrument.SNARE, ModLanguageProvider.FontIcon.SNARE_DRUM)
 	val STICKS: DeferredItem<InstrumentItem> =
-		registerInstrument("sticks", NoteBlockInstrument.HAT, "n")
+		registerInstrument("sticks", NoteBlockInstrument.HAT, ModLanguageProvider.FontIcon.STICKS)
 	val VIBRAPHONE: DeferredItem<InstrumentItem> =
-		registerInstrument("vibraphone", NoteBlockInstrument.IRON_XYLOPHONE, "o")
+		registerInstrument("vibraphone", NoteBlockInstrument.IRON_XYLOPHONE, ModLanguageProvider.FontIcon.VIBRAPHONE)
 	val XYLOPHONE: DeferredItem<InstrumentItem> =
-		registerInstrument("xylophone", NoteBlockInstrument.XYLOPHONE, "p")
+		registerInstrument("xylophone", NoteBlockInstrument.XYLOPHONE, ModLanguageProvider.FontIcon.XYLOPHONE)
 
 	val SHEET_MUSIC: DeferredItem<SheetMusicItem> =
 		register("sheet_music", ::SheetMusicItem)
@@ -74,9 +75,9 @@ object ModItems {
 	fun registerInstrument(
 		name: String,
 		instrument: NoteBlockInstrument,
-		fontString: String
+		fontChar: Char
 	): DeferredItem<InstrumentItem> {
-		return register(name) { InstrumentItem(instrument, fontString) }
+		return register(name) { InstrumentItem(instrument, fontChar) }
 	}
 
 
