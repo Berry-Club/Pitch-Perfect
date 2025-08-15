@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.Holder
@@ -71,7 +72,8 @@ class ComposerSong(
 	fun addBeat(
 		delay: Int,
 		note: Note,
-		instrument: Holder<SoundEvent>
+		instrument: Holder<SoundEvent>,
+		savedData: ComposerSongSavedData?
 	) {
 		val updatedBeats = song.beats.toMutableMap()
 
@@ -84,12 +86,15 @@ class ComposerSong(
 
 		val newSong = song.copy(beats = updatedBeats)
 		song = newSong
+
+		savedData?.setDirty()
 	}
 
 	fun removeBeat(
 		delay: Int,
 		note: Note,
-		instrument: Holder<SoundEvent>
+		instrument: Holder<SoundEvent>,
+		savedData: ComposerSongSavedData?
 	) {
 		val updatedBeats = song.beats.toMutableMap()
 
@@ -110,6 +115,8 @@ class ComposerSong(
 
 		val newSong = song.copy(beats = updatedBeats)
 		song = newSong
+
+		savedData?.setDirty()
 	}
 
 	fun getSoundsAt(

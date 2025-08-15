@@ -43,9 +43,9 @@ class ClickComposerCellPacket(
 		val soundHolder = Song.getSoundHolder(selectedInstrument)
 
 		if (leftClick) {
-			composerSong.addBeat(delay, note, soundHolder)
+			composerSong.addBeat(delay, note, soundHolder, composerSongSavedData)
 		} else {
-			composerSong.removeBeat(delay, note, soundHolder)
+			composerSong.removeBeat(delay, note, soundHolder, composerSongSavedData)
 		}
 
 		composerSong.addAuthor(player)

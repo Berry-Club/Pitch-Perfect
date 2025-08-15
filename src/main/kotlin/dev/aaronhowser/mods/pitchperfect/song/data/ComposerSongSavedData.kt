@@ -61,7 +61,7 @@ class ComposerSongSavedData : SavedData() {
 			}
 
 			return level.dataStorage.computeIfAbsent(
-				Factory(::ComposerSongSavedData, Companion::load),
+				Factory(::ComposerSongSavedData, ::load),
 				"pitchperfect"
 			)
 		}
