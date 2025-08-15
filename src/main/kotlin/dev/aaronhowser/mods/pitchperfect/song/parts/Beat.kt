@@ -1,12 +1,9 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
-import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import kotlin.math.max
 
 
 data class Beat(
@@ -14,77 +11,59 @@ data class Beat(
 	val notes: List<Note>
 ) {
 
+	/**
+	 * - Beat(5, C4]) -> "C4@5"
+	 * - Beat(10, [C4,E4,G4]) -> "[C4,E4,G4]@10"
+	 */
 	override fun toString(): String {
-		val stringBuilder = StringBuilder()
-
-		if (notes.size == 1) {
-			stringBuilder.append(notes.first().serializedName)
+		val notesString = if (notes.size == 1) {
+			notes.first().serializedName
 		} else {
-			stringBuilder.append('[')
-
-			for (i in notes.indices) {
-				if (i != 0) {
-					stringBuilder.append(',')
-				}
-
-				stringBuilder.append(notes[i].serializedName)
-			}
-
-			stringBuilder.append(']')
+			notes.joinToString(
+				separator = ",",
+				prefix = "[",
+				postfix = "]",
+				transform = { it.serializedName }
+			)
 		}
 
-		stringBuilder.append('@')
-		stringBuilder.append(at)
-		return stringBuilder.toString()
+		return "$notesString@$at"
 	}
 
 	companion object {
 
 		val CODEC: Codec<Beat> =
-			RecordCodecBuilder.create { instance ->
-				instance.group(
-					Codec.INT
-						.fieldOf("at")
-						.forGetter(Beat::at),
-					Note.CODEC.listOf()
-						.fieldOf("notes")
-						.forGetter(Beat::notes),
-				).apply(instance, ::Beat)
+			Codec.STRING.xmap(
+				::fromString,
+				Beat::toString
+			)
+
+		private fun fromString(string: String): Beat {
+			val atIndex = string.lastIndexOf('@')
+			require(atIndex != -1) { "Invalid beat string: $string" }
+
+			val notePart = string.take(atIndex)
+			val at = string.substring(atIndex + 1).toIntOrNull()
+			require(at != null && at >= 0) { "Invalid beat time: ${string.substring(atIndex + 1)}" }
+
+			val notes = if (notePart.startsWith('[') && notePart.endsWith(']')) {
+				val noteStrings = notePart
+					.drop(1)
+					.dropLast(1)
+					.split(',')
+
+				noteStrings.map(Note::fromString)
+			} else {
+				listOf(Note.fromString(notePart))
 			}
+
+			return Beat(at, notes)
+		}
 
 		val STREAM_CODEC: StreamCodec<ByteBuf, Beat> = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, Beat::at,
 			Note.STREAM_CODEC.apply(ByteBufCodecs.list()), Beat::notes,
 			::Beat
 		)
-
-		fun fromStringReader(reader: StringReader): Beat {
-			reader.skipWhitespace()
-
-			val notes: MutableList<Note> = mutableListOf()
-
-			if (reader.peek() == '[') {
-				reader.skip()
-				reader.skipWhitespace()
-
-				while (reader.canRead() && reader.peek() != ']') {
-					notes.add(Note.parse(reader))
-
-					while (reader.canRead() && reader.peek() == ',') {
-						reader.skip()
-						reader.skipWhitespace()
-					}
-				}
-
-				reader.expect(']')
-			} else {
-				notes.add(Note.parse(reader))
-			}
-
-			reader.expect('@')
-			val at: Int = reader.readInt()
-
-			return Beat(max(0, at), notes.toList())
-		}
 	}
 }

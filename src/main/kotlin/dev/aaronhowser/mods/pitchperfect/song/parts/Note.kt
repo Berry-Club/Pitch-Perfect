@@ -1,8 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.song.parts
 
 import com.mojang.brigadier.LiteralMessage
-import com.mojang.brigadier.StringReader
-import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
 import dev.aaronhowser.mods.pitchperfect.config.ClientConfig
@@ -95,35 +93,8 @@ enum class Note(
 		private val INVALID_OCTAVE = SimpleCommandExceptionType(LiteralMessage("Invalid octave"))
 		private val NOTE_NOT_FOUND = SimpleCommandExceptionType(LiteralMessage("Note not found"))
 
-		@Throws(CommandSyntaxException::class)
-		fun parse(reader: StringReader): Note {
-			reader.skipWhitespace()
-
-			val firstChar = reader.read()
-			if (firstChar !in 'A'..'G') {
-				throw INVALID_NOTE.createWithContext(reader)
-			}
-
-			val accidental = if (reader.peek() == '#') {
-				reader.skip()
-				"#"
-			} else {
-				""
-			}
-
-			val octave = reader.read()
-			if (octave !in '3'..'5') {
-				throw INVALID_OCTAVE.createWithContext(reader)
-			}
-
-			val noteName = "$firstChar$accidental$octave"
-			val note = entries.firstOrNull { it.displayName == noteName }
-
-			if (note == null) {
-				throw NOTE_NOT_FOUND.createWithContext(reader)
-			}
-
-			return note
+		fun fromString(name: String): Note {
+			return entries.firstOrNull { it.displayName == name } ?: throw INVALID_NOTE.create()
 		}
 
 		/**
