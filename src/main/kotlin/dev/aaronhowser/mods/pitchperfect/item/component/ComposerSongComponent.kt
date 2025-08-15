@@ -13,7 +13,6 @@ import java.util.*
 
 data class ComposerSongComponent(
 	val composerSongUuid: UUID,
-	val authors: List<Component>,
 	val instruments: List<ScreenInstrument>
 ) {
 
@@ -24,9 +23,6 @@ data class ComposerSongComponent(
 					OtherUtil.UUID_CODEC
 						.fieldOf("composer_song_uuid")
 						.forGetter(ComposerSongComponent::composerSongUuid),
-					ComponentSerialization.CODEC.listOf()
-						.fieldOf("authors")
-						.forGetter(ComposerSongComponent::authors),
 					ScreenInstrument.CODEC.listOf()
 						.fieldOf("instruments")
 						.forGetter(ComposerSongComponent::instruments)
@@ -36,7 +32,6 @@ data class ComposerSongComponent(
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSongComponent> =
 			StreamCodec.composite(
 				OtherUtil.UUID_STREAM_CODEC, ComposerSongComponent::composerSongUuid,
-				ComponentSerialization.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSongComponent::authors,
 				ScreenInstrument.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSongComponent::instruments,
 				::ComposerSongComponent
 			)

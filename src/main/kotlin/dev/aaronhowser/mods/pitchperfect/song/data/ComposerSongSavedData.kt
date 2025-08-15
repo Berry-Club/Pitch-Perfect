@@ -20,6 +20,10 @@ class ComposerSongSavedData : SavedData() {
 		return composerSongs.computeIfAbsent(uuid) { ComposerSong(uuid, Song()) }
 	}
 
+	fun getSong(uuid: UUID): ComposerSong? {
+		return composerSongs[uuid]
+	}
+
 	override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
 		val songListTag = pTag.getList(COMPOSER_SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 

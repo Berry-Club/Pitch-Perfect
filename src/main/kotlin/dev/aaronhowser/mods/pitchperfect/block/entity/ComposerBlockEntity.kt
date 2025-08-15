@@ -1,7 +1,10 @@
 package dev.aaronhowser.mods.pitchperfect.block.entity
 
+import dev.aaronhowser.mods.pitchperfect.item.component.ComposerSongComponent
 import dev.aaronhowser.mods.pitchperfect.registry.ModBlockEntities
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
+import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil.getUuidOrNull
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -10,6 +13,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import java.util.*
@@ -53,7 +57,19 @@ class ComposerBlockEntity(
 
 	override fun collectImplicitComponents(pComponents: DataComponentMap.Builder) {
 		super.collectImplicitComponents(pComponents)
-		pComponents.set(ModDataComponents.SONG_UUID, composerSongUuid)
+
+		val level = level
+		if (level is ServerLevel) {
+			val composerSongSavedData = ComposerSongSavedData.get(level)
+			val composerSong = composerSongSavedData.getSong(composerSongUuid)
+			if (composerSong != null) {
+				val sounds = composerSong.song.soundHolders
+				val instruments = sounds.mapNotNull(ScreenInstrument::fromSound)
+
+				val composerSongComponent = ComposerSongComponent(composerSongUuid, instruments)
+				pComponents.set(ModDataComponents.COMPOSER_SONG, composerSongComponent)
+			}
+		}
 	}
 
 	companion object {
