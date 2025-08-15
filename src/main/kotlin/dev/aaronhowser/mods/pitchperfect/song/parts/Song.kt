@@ -21,7 +21,7 @@ import java.nio.file.Path
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
-typealias SerializableSong = Map<ResourceLocation, List<Beat>>
+typealias SerializableSong = Map<String, List<Beat>>
 
 /**
  * Each song has a list of instruments, each with a list of Beats.
@@ -75,17 +75,18 @@ data class Song(
 		}
 
 		val CODEC: Codec<Song> =
-			Codec.unboundedMap(ResourceLocation.CODEC, Beat.CODEC.listOf())
+			Codec.unboundedMap(Codec.STRING, Beat.CODEC.listOf())
 				.xmap(
 					::fromRlMap,
 					::toRlMap
 				)
 
 		private fun toRlMap(song: Song): SerializableSong {
-			val result = mutableMapOf<ResourceLocation, List<Beat>>()
+			val result = mutableMapOf<String, List<Beat>>()
 
 			for ((holder, beats) in song.beats) {
-				result[holder.value().location] = beats
+				val name = getSoundString(holder)
+				result[name] = beats
 			}
 
 			return result
@@ -94,10 +95,9 @@ data class Song(
 		private fun fromRlMap(map: SerializableSong): Song {
 			val result = mutableMapOf<Holder<SoundEvent>, List<Beat>>()
 
-			for ((location, beats) in map) {
-				val rk = ResourceKey.create(Registries.SOUND_EVENT, location)
-				val holder = BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(rk)
-				result[holder] = beats
+			for ((locationString, beats) in map) {
+				val soundHolder = getSoundHolder(locationString)
+				result[soundHolder] = beats
 			}
 
 			return Song(result)
@@ -137,7 +137,7 @@ data class Song(
 			val instrument: NoteBlockInstrument? = SOUND_TO_INSTRUMENT[sound.key]
 
 			return if (instrument == null) {
-				sound.key!!.location().toString()
+				sound.value().location.toString()
 			} else {
 				instrument.serializedName
 			}
