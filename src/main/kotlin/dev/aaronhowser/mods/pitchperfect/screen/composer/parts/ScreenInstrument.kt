@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.screen.composer.parts
 
 import com.mojang.serialization.Codec
+import dev.aaronhowser.mods.pitchperfect.item.InstrumentItem
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.base.ScreenTextures
 import io.netty.buffer.ByteBuf
@@ -16,7 +17,7 @@ import net.neoforged.neoforge.registries.DeferredItem
 enum class ScreenInstrument(
 	val image: ResourceLocation,
 	val noteBlockInstrument: NoteBlockInstrument,
-	val deferredItem: DeferredItem<*>
+	val deferredItem: DeferredItem<InstrumentItem>
 ) {
 	BANJO(
 		ScreenTextures.Sprite.Instrument.BANJO,

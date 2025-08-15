@@ -6,7 +6,6 @@ import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
-import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData
 import net.minecraft.client.Minecraft
@@ -153,7 +152,7 @@ class ComposerBlock : Block(
 		val songComponent = pStack.get(ModDataComponents.COMPOSER_SONG) ?: return
 		val be = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
 
-        be.composerSongUuid = songComponent.composerSongUuid
+		be.composerSongUuid = songComponent.composerSongUuid
 	}
 
 	override fun onRemove(
@@ -181,22 +180,20 @@ class ComposerBlock : Block(
 		pTooltipFlag: TooltipFlag
 	) {
 		super.appendHoverText(pStack, pContext, pTooltipComponents, pTooltipFlag)
-		val instrumentsComponent = Component.empty()
 
-		val instruments = pStack.get(ModDataComponents.COMPOSER_SONG)?.instruments ?: return
-		for (screenInstrument in instruments) {
-			val instrumentItem = ModItems.getFromSoundHolder(screenInstrument.noteBlockInstrument.soundEvent)
+		val instrumentCounts = pStack.get(ModDataComponents.COMPOSER_SONG)?.instrumentCounts ?: return
 
-			val instrumentComponent = if (instrumentItem != null) {
-				ModLanguageProvider.FontIcon.getIcon(instrumentItem.get())
-			} else {
-				Component.literal(screenInstrument.noteBlockInstrument.soundEvent.key.toString())
-			}
+		for ((instrument, count) in instrumentCounts) {
+			val component = Component.empty()
 
-			instrumentsComponent.append(instrumentComponent)
+			val item = instrument.deferredItem.get()
+			val icon = ModLanguageProvider.FontIcon.getIcon(item)
+			component.append(icon)
+			component.append("x$count")
+
+			pTooltipComponents.add(component)
 		}
 
-		pTooltipComponents.add(instrumentsComponent)
 	}
 
 	companion object {

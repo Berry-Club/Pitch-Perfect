@@ -5,15 +5,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.pitchperfect.screen.composer.parts.ScreenInstrument
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import java.util.*
 
 data class ComposerSongComponent(
 	val composerSongUuid: UUID,
-	val instruments: List<ScreenInstrument>
+	val instrumentCounts: Map<ScreenInstrument, Int>
 ) {
 
 	companion object {
@@ -23,16 +21,20 @@ data class ComposerSongComponent(
 					OtherUtil.UUID_CODEC
 						.fieldOf("composer_song_uuid")
 						.forGetter(ComposerSongComponent::composerSongUuid),
-					ScreenInstrument.CODEC.listOf()
-						.fieldOf("instruments")
-						.forGetter(ComposerSongComponent::instruments)
+					Codec.unboundedMap(ScreenInstrument.CODEC, Codec.INT)
+						.fieldOf("instrument_counts")
+						.forGetter(ComposerSongComponent::instrumentCounts)
 				).apply(instance, ::ComposerSongComponent)
 			}
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComposerSongComponent> =
 			StreamCodec.composite(
 				OtherUtil.UUID_STREAM_CODEC, ComposerSongComponent::composerSongUuid,
-				ScreenInstrument.STREAM_CODEC.apply(ByteBufCodecs.list()), ComposerSongComponent::instruments,
+				ByteBufCodecs.map(
+					OtherUtil::weirdMapFunctionThingy,
+					ScreenInstrument.STREAM_CODEC,
+					ByteBufCodecs.VAR_INT
+				), ComposerSongComponent::instrumentCounts,
 				::ComposerSongComponent
 			)
 	}

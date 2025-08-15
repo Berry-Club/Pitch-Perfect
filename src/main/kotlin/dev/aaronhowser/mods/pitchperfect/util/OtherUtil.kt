@@ -59,4 +59,8 @@ object OtherUtil {
 	operator fun Vec3.component2(): Double = y
 	operator fun Vec3.component3(): Double = z
 
+	fun <K, V> weirdMapFunctionThingy(size: Int): Map<K, V> {
+		return HashMap(size)
+	}
+
 }

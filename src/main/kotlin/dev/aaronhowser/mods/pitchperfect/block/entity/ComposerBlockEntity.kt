@@ -63,10 +63,11 @@ class ComposerBlockEntity(
 			val composerSongSavedData = ComposerSongSavedData.get(level)
 			val composerSong = composerSongSavedData.getSong(composerSongUuid)
 			if (composerSong != null) {
-				val sounds = composerSong.song.soundHolders
-				val instruments = sounds.mapNotNull(ScreenInstrument::fromSound)
+				val beats = composerSong.song.beats
+				val instruments = beats.keys.mapNotNull(ScreenInstrument::fromSound)
+				val instrumentCounts = instruments.associateWith { instrument -> beats[instrument.noteBlockInstrument.soundEvent]?.size ?: 0 }
 
-				val composerSongComponent = ComposerSongComponent(composerSongUuid, instruments)
+				val composerSongComponent = ComposerSongComponent(composerSongUuid, instrumentCounts)
 				pComponents.set(ModDataComponents.COMPOSER_SONG, composerSongComponent)
 			}
 		}

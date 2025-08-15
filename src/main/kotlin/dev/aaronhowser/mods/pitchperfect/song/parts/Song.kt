@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.song.parts
 import com.google.gson.JsonParser
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
+import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -69,11 +70,6 @@ data class Song(
 			}
 		}
 
-		// What the hell does this even do Lat
-		private fun <K, V> whyTfDoesThisExist(size: Int): Map<K, V> {
-			return HashMap(size)
-		}
-
 		val CODEC: Codec<Song> =
 			Codec.unboundedMap(Codec.STRING, Beat.CODEC.listOf())
 				.xmap(
@@ -105,7 +101,7 @@ data class Song(
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Song> =
 			ByteBufCodecs.map(
-				Song::whyTfDoesThisExist,
+				OtherUtil::weirdMapFunctionThingy,
 				SoundEvent.STREAM_CODEC,
 				Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
 			).map(::Song, Song::beats)
