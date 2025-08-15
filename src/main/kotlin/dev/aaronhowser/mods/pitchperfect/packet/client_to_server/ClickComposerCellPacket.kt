@@ -43,15 +43,13 @@ class ClickComposerCellPacket(
 			val note = Note.getFromPitch(pitch)
 			val soundHolder = Song.getSoundHolder(selectedInstrument)
 
-			composerSong.apply {
-				if (leftClick) {
-					addBeat(delay, note, soundHolder)
-				} else {
-					removeBeat(delay, note, soundHolder)
-				}
-
-				addAuthor(player)
+			if (leftClick) {
+				composerSong.addBeat(delay, note, soundHolder)
+			} else {
+				composerSong.removeBeat(delay, note, soundHolder)
 			}
+
+			composerSong.addAuthor(player)
 
 			ModPacketHandler.messagePlayer(player as ServerPlayer, SetCurrentComposerSongPacket(composerSong))
 		}

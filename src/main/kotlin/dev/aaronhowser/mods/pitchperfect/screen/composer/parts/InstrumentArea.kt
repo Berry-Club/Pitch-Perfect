@@ -80,10 +80,10 @@ class InstrumentArea(
 			image,
 			onPress,
 			null
-		).apply {
-			this.x = x
-			this.y = y
-		}
+		)
+
+		button.x = x
+		button.y = y
 
 		buttons.add(button)
 

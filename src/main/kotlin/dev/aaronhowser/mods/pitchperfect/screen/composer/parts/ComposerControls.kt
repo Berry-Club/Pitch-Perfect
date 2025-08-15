@@ -103,10 +103,9 @@ class ComposerControls(
 				.sprite(image, 16, 16)
 				.size(width, height)
 				.build()
-				.apply {
-					this.x = x
-					this.y = y
-				}
+
+			button.x = x
+			button.y = y
 
 			return button
 		}
