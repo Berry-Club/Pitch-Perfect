@@ -68,7 +68,7 @@ data class Song(
 		}
 
 		// What the hell does this even do Lat
-		private fun <K, V> beatMap(size: Int): Map<K, V> {
+		private fun <K, V> whyTfDoesThisExist(size: Int): Map<K, V> {
 			return HashMap(size)
 		}
 
@@ -78,7 +78,7 @@ data class Song(
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Song> =
 			ByteBufCodecs.map(
-				Song::beatMap,
+				Song::whyTfDoesThisExist,
 				SoundEvent.STREAM_CODEC,
 				Beat.STREAM_CODEC.apply(ByteBufCodecs.list())
 			).map(::Song, Song::beats)
