@@ -73,8 +73,18 @@ data class Song(
 		}
 
 		val CODEC: Codec<Song> =
-			Codec.unboundedMap(SoundEvent.CODEC, Beat.CODEC.listOf())
-				.xmap(::Song, Song::beats)
+			Codec.unboundedMap(ResourceLocation.CODEC, Beat.CODEC.listOf())
+				.xmap(
+					{ map ->
+						Song(map.mapKeys {
+							val rk = ResourceKey.create(Registries.SOUND_EVENT, it.key)
+							BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(rk)
+						})
+					},
+					{ song ->
+						song.beats.mapKeys { it.key.value().location }
+					}
+				)
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Song> =
 			ByteBufCodecs.map(
