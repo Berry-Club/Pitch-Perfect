@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.NoteBlock
 import net.neoforged.neoforge.event.level.NoteBlockEvent
 import java.nio.file.Path
 
-//TODO: Move this to SongInProgress
 class SongRecorder(
 	private val startingTick: Long
 ) {

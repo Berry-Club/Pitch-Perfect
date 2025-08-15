@@ -91,7 +91,7 @@ class ComposerControls(
 
 	private fun createWidgets() {
 
-		fun addIconButton(
+		fun makeIconButton(
 			x: Int, y: Int,
 			width: Int, height: Int,
 			image: ResourceLocation,
@@ -123,16 +123,16 @@ class ComposerControls(
 		jumpToBeatBox.setHint(ModTooltipLang.JUMP_TO_BEAT.toComponent())
 		jumpToBeatBox.setResponder(::setBoxValue)
 
-		playButton = addIconButton(
+		playButton = makeIconButton(
 			composerScreen.timeline.leftPos + jumpToBeatBox.width + 5,
 			composerScreen.timeline.topPos - 22,
 			16,
 			16,
 			ScreenTextures.Sprite.Control.PLAY,
-			ModTooltipLang.PLAY.toComponent()
+			ModTooltipLang.PLAY.toComponent(),
 		) { startPlaying() }
 
-		stopButton = addIconButton(
+		stopButton = makeIconButton(
 			composerScreen.timeline.leftPos + jumpToBeatBox.width + 5 + 16 + 5,
 			composerScreen.timeline.topPos - 22,
 			16,
@@ -141,7 +141,7 @@ class ComposerControls(
 			ModTooltipLang.STOP.toComponent()
 		) { stopPlaying() }
 
-		copyButton = addIconButton(
+		copyButton = makeIconButton(
 			composerScreen.timeline.leftPos + jumpToBeatBox.width + 5 + (16 + 5) * 2,
 			composerScreen.timeline.topPos - 22,
 			16,
@@ -150,7 +150,7 @@ class ComposerControls(
 			ModTooltipLang.COPY.toComponent()
 		) { copySong() }
 
-		pasteButton = addIconButton(
+		pasteButton = makeIconButton(
 			composerScreen.timeline.leftPos + jumpToBeatBox.width + 5 + (16 + 5) * 3,
 			composerScreen.timeline.topPos - 22,
 			16,
