@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentCompo
 import dev.aaronhowser.mods.pitchperfect.registry.ModDataComponents
 import dev.aaronhowser.mods.pitchperfect.registry.ModItems
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
-import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
@@ -89,7 +89,7 @@ class ComposerBlock : Block(
 			}
 
 			is ServerPlayer -> {
-				val composerSongSavedData = pPlayer.server.composerSongSavedData
+				val composerSongSavedData = ComposerSongSavedData.get(pPlayer.serverLevel())
 
 				val composerSongUuid = blockEntity.composerSongUuid
 				val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)

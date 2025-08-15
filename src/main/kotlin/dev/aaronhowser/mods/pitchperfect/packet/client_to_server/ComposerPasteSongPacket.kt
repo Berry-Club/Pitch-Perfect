@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
-import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import io.netty.buffer.ByteBuf
@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
@@ -24,7 +25,7 @@ class ComposerPasteSongPacket(
 
 	override fun receiveMessage(context: IPayloadContext) {
 		context.enqueueWork {
-			val player = context.player()
+			val player = context.player() as? ServerPlayer ?: return@enqueueWork
 
 			val song = Song.fromString(songString)
 			if (song == null) {
@@ -43,7 +44,7 @@ class ComposerPasteSongPacket(
 
 			val composerSongUuid = composerBlockEntity.composerSongUuid
 
-			val composerSongSavedData = player.server!!.composerSongSavedData
+			val composerSongSavedData = ComposerSongSavedData.get(player.serverLevel())
 			val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
 
 			composerSong.song = song
