@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.packet.client_to_server
 
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
-import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacket
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
 import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData
@@ -23,36 +23,34 @@ class ClickComposerCellPacket(
 	val leftClick: Boolean,
 	val selectedInstrument: String,
 	val blockPos: BlockPos
-) : IModPacket {
+) : ModPacket() {
 
-	override fun receiveMessage(context: IPayloadContext) {
-		context.enqueueWork {
-			val player = context.player() as? ServerPlayer ?: return@enqueueWork
+	override fun handleOnServer(context: IPayloadContext) {
+		val player = context.player() as? ServerPlayer ?: return
 
-			val composerBlockEntity = player.level().getBlockEntity(blockPos) as? ComposerBlockEntity
-				?: return@enqueueWork
+		val composerBlockEntity = player.level().getBlockEntity(blockPos) as? ComposerBlockEntity
+			?: return
 
-			val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
-			if (!player.canInteractWithBlock(blockPos, playerReach)) return@enqueueWork
+		val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
+		if (!player.canInteractWithBlock(blockPos, playerReach)) return
 
-			val composerSongUuid = composerBlockEntity.composerSongUuid
+		val composerSongUuid = composerBlockEntity.composerSongUuid
 
-			val composerSongSavedData = ComposerSongSavedData.get(player.serverLevel())
-			val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+		val composerSongSavedData = ComposerSongSavedData.get(player.serverLevel())
+		val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
 
-			val note = Note.getFromPitch(pitch)
-			val soundHolder = Song.getSoundHolder(selectedInstrument)
+		val note = Note.getFromPitch(pitch)
+		val soundHolder = Song.getSoundHolder(selectedInstrument)
 
-			if (leftClick) {
-				composerSong.addBeat(delay, note, soundHolder)
-			} else {
-				composerSong.removeBeat(delay, note, soundHolder)
-			}
-
-			composerSong.addAuthor(player)
-
-			ModPacketHandler.messagePlayer(player, SetCurrentComposerSongPacket(composerSong))
+		if (leftClick) {
+			composerSong.addBeat(delay, note, soundHolder)
+		} else {
+			composerSong.removeBeat(delay, note, soundHolder)
 		}
+
+		composerSong.addAuthor(player)
+
+		ModPacketHandler.messagePlayer(player, SetCurrentComposerSongPacket(composerSong))
 	}
 
 	override fun type(): CustomPacketPayload.Type<ClickComposerCellPacket> {

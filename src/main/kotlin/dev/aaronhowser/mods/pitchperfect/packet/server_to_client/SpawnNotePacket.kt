@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.packet.server_to_client
 
-import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacket
 import dev.aaronhowser.mods.pitchperfect.util.ClientUtil
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import io.netty.buffer.ByteBuf
@@ -17,19 +17,17 @@ data class SpawnNotePacket(
 	val y: Double,
 	val z: Double,
 	val hasBwaaap: Boolean = false
-) : IModPacket {
+) : ModPacket() {
 
-	override fun receiveMessage(context: IPayloadContext) {
-		context.enqueueWork {
-			ClientUtil.playNote(
-				soundResourceLocation,
-				pitch,
-				x,
-				y,
-				z,
-				hasBwaaap
-			)
-		}
+	override fun handleOnClient(context: IPayloadContext) {
+		ClientUtil.playNote(
+			soundResourceLocation,
+			pitch,
+			x,
+			y,
+			z,
+			hasBwaaap
+		)
 	}
 
 	override fun type(): CustomPacketPayload.Type<SpawnNotePacket> = TYPE

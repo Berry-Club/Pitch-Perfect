@@ -3,20 +3,11 @@ package dev.aaronhowser.mods.pitchperfect.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
-import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
-import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.SongPasteCommandResponsePacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SongPasteCommandRequestPacket
-import dev.aaronhowser.mods.pitchperfect.song.data.SongSavedData
-import dev.aaronhowser.mods.pitchperfect.song.parts.Song
-import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-import net.minecraft.network.chat.ClickEvent
-import net.minecraft.network.chat.HoverEvent
 import net.minecraft.server.level.ServerPlayer
-import net.neoforged.neoforge.network.handling.IPayloadContext
 
 object PasteSongCommand {
 
@@ -30,53 +21,6 @@ object PasteSongCommand {
 					.argument(TITLE_ARGUMENT, StringArgumentType.string())
 					.executes(::sendPastePacket)
 			)
-	}
-
-	fun receivePacket(packet: SongPasteCommandResponsePacket, context: IPayloadContext) {
-		val player = context.player() as ServerPlayer
-		val song = Song.fromString(packet.clipboard)
-
-		if (song == null) {
-			player.sendSystemMessage(ModMessageLang.SONG_PASTE_FAIL_TO_PARSE.toComponent(packet.clipboard))
-			return
-		}
-
-		val title = packet.title
-
-		val songInfo = SongInfo(
-			packet.title,
-			player,
-			song
-		)
-
-		val songSavedData = SongSavedData.get(player.serverLevel())
-		val result = songSavedData.addSongInfo(songInfo)
-
-		val component = if (result.success) {
-			ModMessageLang.SONG_PASTE_ADDED
-				.toComponent(title)
-				.withStyle {
-					it
-						.withHoverEvent(
-							HoverEvent(
-								HoverEvent.Action.SHOW_TEXT,
-								ModMessageLang.CLICK_COPY_SONG_UUID.toComponent(song.uuid.toString())
-							)
-						)
-						.withClickEvent(
-							ClickEvent(
-								ClickEvent.Action.COPY_TO_CLIPBOARD,
-								songInfo.song.uuid.toString()
-							)
-						)
-				}
-		} else {
-			ModMessageLang.SONG_PASTE_FAIL_DUPLICATE.toComponent(title)
-				.append(result.songInfo.getComponent())
-		}
-
-		player.sendSystemMessage(component)
-
 	}
 
 	private fun sendPastePacket(context: CommandContext<CommandSourceStack>): Int {

@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.pitchperfect.packet.client_to_server
 import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Companion.toComponent
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
-import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacket
 import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
@@ -19,36 +19,34 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 class ComposerPasteSongPacket(
 	val songString: String,
 	val composerPos: BlockPos
-) : IModPacket {
+) : ModPacket() {
 
 	constructor(song: Song, composerPos: BlockPos) : this(song.toString(), composerPos)
 
-	override fun receiveMessage(context: IPayloadContext) {
-		context.enqueueWork {
-			val player = context.player() as? ServerPlayer ?: return@enqueueWork
+	override fun handleOnServer(context: IPayloadContext) {
+		val player = context.player() as? ServerPlayer ?: return
 
-			val song = Song.fromString(songString)
-			if (song == null) {
-				context.player().sendSystemMessage(
-					ModMessageLang.SONG_PASTE_FAIL_TO_PARSE
-						.toComponent(songString)
-				)
-				return@enqueueWork
-			}
-
-			val composerBlockEntity = player.level().getBlockEntity(composerPos) as? ComposerBlockEntity
-				?: return@enqueueWork
-
-			val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
-			if (!player.canInteractWithBlock(composerPos, playerReach)) return@enqueueWork
-
-			val composerSongUuid = composerBlockEntity.composerSongUuid
-
-			val composerSongSavedData = ComposerSongSavedData.get(player.serverLevel())
-			val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
-
-			composerSong.song = song
+		val song = Song.fromString(songString)
+		if (song == null) {
+			player.sendSystemMessage(
+				ModMessageLang.SONG_PASTE_FAIL_TO_PARSE
+					.toComponent(songString)
+			)
+			return
 		}
+
+		val composerBlockEntity = player.level().getBlockEntity(composerPos) as? ComposerBlockEntity
+			?: return
+
+		val playerReach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)
+		if (!player.canInteractWithBlock(composerPos, playerReach)) return
+
+		val composerSongUuid = composerBlockEntity.composerSongUuid
+
+		val composerSongSavedData = ComposerSongSavedData.get(player.serverLevel())
+		val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
+
+		composerSong.song = song
 	}
 
 	override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> {

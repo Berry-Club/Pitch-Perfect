@@ -7,12 +7,16 @@ import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentCompo
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SongPasteCommandRequestPacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnElectricLinePacket
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SpawnNotePacket
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.network.PacketDistributor
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler
+import net.neoforged.neoforge.network.registration.PayloadRegistrar
 
 object ModPacketHandler {
 
@@ -20,73 +24,51 @@ object ModPacketHandler {
 
 		val registrar = event.registrar("1")
 
-		registrar.playToClient(
+		toClient(
+			registrar,
 			SpawnNotePacket.TYPE,
-			SpawnNotePacket.STREAM_CODEC,
-			DirectionalPayloadHandler(
-				{ packet, context -> packet.receiveMessage(context) },
-				{ packet, context -> packet.receiveMessage(context) }
-			)
+			SpawnNotePacket.STREAM_CODEC
 		)
 
-		registrar.playToClient(
+		toClient(
+			registrar,
 			SpawnElectricLinePacket.TYPE,
-			SpawnElectricLinePacket.STREAM_CODEC,
-			DirectionalPayloadHandler(
-				{ packet, context -> packet.receiveMessage(context) },
-				{ packet, context -> packet.receiveMessage(context) }
-			)
+			SpawnElectricLinePacket.STREAM_CODEC
 		)
 
-		registrar.playToServer(
+		toServer(
+			registrar,
 			ClickComposerCellPacket.TYPE,
-			ClickComposerCellPacket.STREAM_CODEC,
-			DirectionalPayloadHandler(
-				{ packet, context -> packet.receiveMessage(context) },
-				{ packet, context -> packet.receiveMessage(context) }
-			)
+			ClickComposerCellPacket.STREAM_CODEC
 		)
 
-		registrar.playToServer(
+		toServer(
+			registrar,
 			ComposerPasteSongPacket.TYPE,
-			ComposerPasteSongPacket.STREAM_CODEC,
-			DirectionalPayloadHandler(
-				{ packet, context -> packet.receiveMessage(context) },
-				{ packet, context -> packet.receiveMessage(context) }
-			)
+			ComposerPasteSongPacket.STREAM_CODEC
 		)
 
-		registrar.playToClient(
+		toClient(
+			registrar,
 			SongPasteCommandRequestPacket.TYPE,
-			SongPasteCommandRequestPacket.STREAM_CODEC,
-			DirectionalPayloadHandler(
-				{ packet, context -> packet.receiveMessage(context) },
-				{ packet, context -> packet.receiveMessage(context) }
-			)
+			SongPasteCommandRequestPacket.STREAM_CODEC
 		)
 
-		registrar.playToServer(
+		toServer(
+			registrar,
 			SongPasteCommandResponsePacket.TYPE,
-			SongPasteCommandResponsePacket.STREAM_CODEC,
-			DirectionalPayloadHandler(
-				{ packet, context -> packet.receiveMessage(context) },
-				{ packet, context -> packet.receiveMessage(context) }
-			)
+			SongPasteCommandResponsePacket.STREAM_CODEC
 		)
 
-		registrar.playToClient(
+		toClient(
+			registrar,
 			SetCurrentComposerSongPacket.TYPE,
-			SetCurrentComposerSongPacket.STREAM_CODEC,
-			DirectionalPayloadHandler(
-				{ packet, context -> packet.receiveMessage(context) },
-				{ packet, context -> packet.receiveMessage(context) }
-			)
+			SetCurrentComposerSongPacket.STREAM_CODEC
 		)
 
 	}
 
-
-	fun messageNearbyPlayers(packet: IModPacket, serverLevel: ServerLevel, origin: Vec3, radius: Double) {
+	fun messageNearbyPlayers(packet: ModPacket, serverLevel: ServerLevel, origin: Vec3, radius: Double) {
 		for (player in serverLevel.players()) {
 			val distance = player.distanceToSqr(origin.x(), origin.y(), origin.z())
 			if (distance < radius * radius) {
@@ -95,16 +77,38 @@ object ModPacketHandler {
 		}
 	}
 
-	fun messagePlayer(player: ServerPlayer, packet: IModPacket) {
+	fun messagePlayer(player: ServerPlayer, packet: ModPacket) {
 		PacketDistributor.sendToPlayer(player, packet)
 	}
 
-	fun messageAllPlayers(packet: IModPacket) {
+	fun messageAllPlayers(packet: ModPacket) {
 		PacketDistributor.sendToAllPlayers(packet)
 	}
 
-	fun messageServer(packet: IModPacket) {
+	fun messageServer(packet: ModPacket) {
 		PacketDistributor.sendToServer(packet)
+	}
+
+	private fun <T : ModPacket> toClient(
+		registrar: PayloadRegistrar,
+		packetType: CustomPacketPayload.Type<T>,
+		streamCodec: StreamCodec<in RegistryFriendlyByteBuf, T>,
+	) {
+		registrar.playToClient(
+			packetType,
+			streamCodec
+		) { packet, context -> packet.receiveOnClient(context) }
+	}
+
+	private fun <T : ModPacket> toServer(
+		registrar: PayloadRegistrar,
+		packetType: CustomPacketPayload.Type<T>,
+		streamCodec: StreamCodec<in RegistryFriendlyByteBuf, T>
+	) {
+		registrar.playToServer(
+			packetType,
+			streamCodec
+		) { packet, context -> packet.receiveOnServer(context) }
 	}
 
 }

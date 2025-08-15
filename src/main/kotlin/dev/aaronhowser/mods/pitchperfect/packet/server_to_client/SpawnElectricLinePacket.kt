@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.pitchperfect.packet.server_to_client
 
 import dev.aaronhowser.mods.pitchperfect.enchantment.AndHisMusicWasElectricEnchantment
-import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacket
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
@@ -13,16 +13,14 @@ class SpawnElectricLinePacket(
 	val start: DoublePos,
 	val end: DoublePos,
 	val int: Int
-) : IModPacket {
+) : ModPacket() {
 
-	override fun receiveMessage(context: IPayloadContext) {
-		context.enqueueWork {
-			AndHisMusicWasElectricEnchantment.ElectricLine(
-				start.x, start.y, start.z,
-				end.x, end.y, end.z,
-				int
-			)
-		}
+	override fun handleOnClient(context: IPayloadContext) {
+		AndHisMusicWasElectricEnchantment.ElectricLine(
+			start.x, start.y, start.z,
+			end.x, end.y, end.z,
+			int
+		)
 	}
 
 	override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> {

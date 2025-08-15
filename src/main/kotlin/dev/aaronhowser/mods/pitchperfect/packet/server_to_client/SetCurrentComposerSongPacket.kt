@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.packet.server_to_client
 
-import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacket
 import dev.aaronhowser.mods.pitchperfect.song.parts.ComposerSong
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -10,11 +10,10 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 
 class SetCurrentComposerSongPacket(
 	private val composerSong: ComposerSong
-) : IModPacket {
-	override fun receiveMessage(context: IPayloadContext) {
-		context.enqueueWork {
-			currentComposerSong = composerSong
-		}
+) : ModPacket() {
+
+	override fun handleOnClient(context: IPayloadContext) {
+		currentComposerSong = composerSong
 	}
 
 	override fun type(): CustomPacketPayload.Type<SetCurrentComposerSongPacket> {
@@ -28,6 +27,7 @@ class SetCurrentComposerSongPacket(
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SetCurrentComposerSongPacket> =
 			ComposerSong.STREAM_CODEC.map(::SetCurrentComposerSongPacket, SetCurrentComposerSongPacket::composerSong)
 
+		//TODO: This fucking sucks
 		var currentComposerSong: ComposerSong? = null
 			private set
 

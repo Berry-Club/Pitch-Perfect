@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.pitchperfect.packet.server_to_client
 
-import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
+import dev.aaronhowser.mods.pitchperfect.packet.ModPacket
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.client_to_server.SongPasteCommandResponsePacket
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
@@ -13,15 +13,14 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 
 class SongPasteCommandRequestPacket(
 	val title: String
-) : IModPacket {
-	override fun receiveMessage(context: IPayloadContext) {
-		context.enqueueWork {
-			val clipboard = Minecraft.getInstance().keyboardHandler.clipboard
+) : ModPacket() {
 
-			ModPacketHandler.messageServer(
-				SongPasteCommandResponsePacket(title, clipboard)
-			)
-		}
+	override fun handleOnClient(context: IPayloadContext) {
+		val clipboard = Minecraft.getInstance().keyboardHandler.clipboard
+
+		ModPacketHandler.messageServer(
+			SongPasteCommandResponsePacket(title, clipboard)
+		)
 	}
 
 	override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> {
