@@ -21,8 +21,6 @@ class ComposerSong(
 	val authors: MutableList<Author>
 ) {
 
-	constructor() : this(UUID.randomUUID(), Song(), mutableListOf())
-
 	companion object {
 		val CODEC: Codec<ComposerSong> =
 			RecordCodecBuilder.create {

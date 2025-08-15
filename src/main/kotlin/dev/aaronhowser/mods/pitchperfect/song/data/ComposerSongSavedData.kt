@@ -15,6 +15,22 @@ class ComposerSongSavedData : SavedData() {
 
 	private val composerSongs: MutableMap<UUID, ComposerSong> = mutableMapOf()
 
+	fun getOrCreateSong(uuid: UUID): ComposerSong {
+		return composerSongs.computeIfAbsent(uuid) { ComposerSong(uuid, Song(), mutableListOf()) }
+	}
+
+	override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
+		val songListTag = pTag.getList(COMPOSER_SONGS_TAG, Tag.TAG_COMPOUND.toInt())
+
+		for (songInfo in composerSongs.values) {
+			songListTag.add(songInfo.toTag())
+		}
+
+		pTag.put(COMPOSER_SONGS_TAG, songListTag)
+
+		return pTag
+	}
+
 	companion object {
 		private const val COMPOSER_SONGS_TAG = "composer_songs"
 
@@ -40,34 +56,15 @@ class ComposerSongSavedData : SavedData() {
 		}
 
 		fun get(level: ServerLevel): ComposerSongSavedData {
-			require(level == level.server.overworld()) { "SongSavedData can only be accessed on the overworld" }
+			if (level != level.server.overworld()) {
+				return get(level.server.overworld())
+			}
 
 			return level.dataStorage.computeIfAbsent(
 				Factory(::ComposerSongSavedData, Companion::load),
 				"pitchperfect"
 			)
 		}
-
-		val ServerLevel.composerSongSavedData: ComposerSongSavedData
-			get() = get(this.server.overworld())
-		val MinecraftServer.composerSongSavedData: ComposerSongSavedData
-			get() = get(this.overworld())
-	}
-
-	fun getOrCreateSong(uuid: UUID): ComposerSong {
-		return composerSongs.computeIfAbsent(uuid) { ComposerSong(uuid, Song(), mutableListOf()) }
-	}
-
-	override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
-		val songListTag = pTag.getList(COMPOSER_SONGS_TAG, Tag.TAG_COMPOUND.toInt())
-
-		for (songInfo in composerSongs.values) {
-			songListTag.add(songInfo.toTag())
-		}
-
-		pTag.put(COMPOSER_SONGS_TAG, songListTag)
-
-		return pTag
 	}
 
 }

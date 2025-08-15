@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.pitchperfect.block.entity.ComposerBlockEntity
 import dev.aaronhowser.mods.pitchperfect.packet.IModPacket
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacketHandler
 import dev.aaronhowser.mods.pitchperfect.packet.server_to_client.SetCurrentComposerSongPacket
-import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData.Companion.composerSongSavedData
+import dev.aaronhowser.mods.pitchperfect.song.data.ComposerSongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Note
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
@@ -27,7 +27,7 @@ class ClickComposerCellPacket(
 
 	override fun receiveMessage(context: IPayloadContext) {
 		context.enqueueWork {
-			val player = context.player()
+			val player = context.player() as? ServerPlayer ?: return@enqueueWork
 
 			val composerBlockEntity = player.level().getBlockEntity(blockPos) as? ComposerBlockEntity
 				?: return@enqueueWork
@@ -37,7 +37,7 @@ class ClickComposerCellPacket(
 
 			val composerSongUuid = composerBlockEntity.composerSongUuid
 
-			val composerSongSavedData = player.server!!.composerSongSavedData
+			val composerSongSavedData = ComposerSongSavedData.get(player.serverLevel())
 			val composerSong = composerSongSavedData.getOrCreateSong(composerSongUuid)
 
 			val note = Note.getFromPitch(pitch)
@@ -51,7 +51,7 @@ class ClickComposerCellPacket(
 
 			composerSong.addAuthor(player)
 
-			ModPacketHandler.messagePlayer(player as ServerPlayer, SetCurrentComposerSongPacket(composerSong))
+			ModPacketHandler.messagePlayer(player, SetCurrentComposerSongPacket(composerSong))
 		}
 	}
 
