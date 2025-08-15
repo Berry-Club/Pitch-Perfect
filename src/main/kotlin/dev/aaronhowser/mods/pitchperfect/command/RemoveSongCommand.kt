@@ -29,8 +29,8 @@ object RemoveSongCommand {
 		val songSavedData = SongSavedData.get(player.serverLevel())
 
 		val uuid = UuidArgument.getUuid(context, SONG_ARGUMENT)
-		val songInfo = songSavedData.getSongInfo(uuid) ?: return 0
-		songSavedData.removeSongInfo(uuid)
+		val songInfo = songSavedData.getSavedSong(uuid) ?: return 0
+		songSavedData.removedSavedSong(uuid)
 
 		player.sendSystemMessage(
 			ModMessageLang.SONG_REMOVED.toComponent(

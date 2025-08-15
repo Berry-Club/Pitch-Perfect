@@ -48,8 +48,6 @@ class ClickComposerCellPacket(
 			composerSong.removeBeat(delay, note, soundHolder, composerSongSavedData)
 		}
 
-		composerSong.addAuthor(player)
-
 		ModPacketHandler.messagePlayer(player, SetCurrentComposerSongPacket(composerSong))
 	}
 

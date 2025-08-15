@@ -19,9 +19,7 @@ class ComposerBlockEntity(
 	pBlockState: BlockState
 ) : BlockEntity(ModBlockEntities.COMPOSER.get(), pPos, pBlockState) {
 
-	// Defaults to a new random one, but if it's actually loading from NBT it'll be overwritten
 	var composerSongUuid: UUID = UUID.randomUUID()
-		private set
 
 	override fun loadAdditional(pTag: CompoundTag, pRegistries: HolderLookup.Provider) {
 		super.loadAdditional(pTag, pRegistries)

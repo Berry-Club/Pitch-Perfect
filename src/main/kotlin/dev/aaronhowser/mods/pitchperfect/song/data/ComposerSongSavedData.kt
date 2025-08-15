@@ -5,25 +5,32 @@ import dev.aaronhowser.mods.pitchperfect.song.parts.ComposerSong
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
-import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.saveddata.SavedData
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 class ComposerSongSavedData : SavedData() {
 
 	private val composerSongs: MutableMap<UUID, ComposerSong> = mutableMapOf()
 
 	fun getOrCreateSong(uuid: UUID): ComposerSong {
-		return composerSongs.computeIfAbsent(uuid) { ComposerSong(uuid, Song(), mutableListOf()) }
+		return composerSongs.computeIfAbsent(uuid) { ComposerSong(uuid, Song()) }
 	}
 
 	override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
 		val songListTag = pTag.getList(COMPOSER_SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
-		for (songInfo in composerSongs.values) {
-			songListTag.add(songInfo.toTag())
+		for (composerSong in composerSongs.values) {
+			val tag = ComposerSong.CODEC
+				.encodeStart(NbtOps.INSTANCE, composerSong)
+				.result()
+				.getOrNull()
+				?: continue
+
+			songListTag.add(tag)
 		}
 
 		pTag.put(COMPOSER_SONGS_TAG, songListTag)
@@ -42,7 +49,10 @@ class ComposerSongSavedData : SavedData() {
 
 			for (i in composerSongListTag.indices) {
 				val composerSongTag = composerSongListTag[i] as CompoundTag
-				val composerSong = ComposerSong.fromCompoundTag(composerSongTag)
+				val composerSong = ComposerSong.CODEC
+					.parse(NbtOps.INSTANCE, composerSongTag)
+					.result()
+					.getOrNull()
 
 				if (composerSong == null) {
 					PitchPerfect.LOGGER.error("Failed to load song from tag: $composerSongTag")
@@ -62,7 +72,7 @@ class ComposerSongSavedData : SavedData() {
 
 			return level.dataStorage.computeIfAbsent(
 				Factory(::ComposerSongSavedData, ::load),
-				"pitchperfect"
+				"pp_composer_songs"
 			)
 		}
 	}

@@ -1,84 +1,80 @@
 package dev.aaronhowser.mods.pitchperfect.song.data
 
 import dev.aaronhowser.mods.pitchperfect.PitchPerfect
+import dev.aaronhowser.mods.pitchperfect.song.parts.SavedSong
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
-import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.saveddata.SavedData
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 class SongSavedData : SavedData() {
 
-	private val songs: MutableMap<UUID, SongInfo> = mutableMapOf()
+	private val savedSongs: MutableMap<UUID, SavedSong> = mutableMapOf()
 
 	data class AddSongResult(
-		val songInfo: SongInfo,
+		val savedSong: SavedSong,
 		val success: Boolean
 	)
 
 	fun addSongInfo(song: Song, title: String, author: Player): AddSongResult {
-		val songInfo = SongInfo(
+		val savedSong = SavedSong(
 			title,
 			author,
 			song
 		)
 
-		return addSongInfo(songInfo)
+		return addSongInfo(savedSong)
 	}
 
-	fun addSongInfo(songInfo: SongInfo): AddSongResult {
-		val existingSong = songs[songInfo.song.uuid]
+	fun addSongInfo(savedSong: SavedSong): AddSongResult {
+		val existingSong = savedSongs[savedSong.song.uuid]
 
 		if (existingSong == null) {
-			songs[songInfo.song.uuid] = songInfo
+			savedSongs[savedSong.song.uuid] = savedSong
 			setDirty()
-			return AddSongResult(songInfo, true)
+			return AddSongResult(savedSong, true)
 		} else {
-			PitchPerfect.LOGGER.error("Attempted to add a song that already exists! $songInfo")
+			PitchPerfect.LOGGER.error("Attempted to add a song that already exists! $savedSong")
 			return AddSongResult(existingSong, false)
 		}
 	}
 
-	fun removeSongInfo(uuid: UUID) {
-		val song = songs.getOrDefault(uuid, null) ?: return
-		removeSongInfo(song)
+	fun removedSavedSong(uuid: UUID) {
+		val song = savedSongs.getOrDefault(uuid, null) ?: return
+		removedSavedSong(song)
 	}
 
-	fun removeSongInfo(song: SongInfo) {
-		songs.remove(song.song.uuid)
+	fun removedSavedSong(song: SavedSong) {
+		savedSongs.remove(song.song.uuid)
 		setDirty()
 	}
 
-	fun getSongInfo(uuid: UUID): SongInfo? {
-		return songs.getOrDefault(uuid, null)
+	fun getSavedSong(uuid: UUID): SavedSong? {
+		return savedSongs.getOrDefault(uuid, null)
 	}
 
-	fun getSongInfos(): List<SongInfo> {
-		return songs.values.toList()
-	}
-
-	fun getSongInfosBy(author: Player): List<SongInfo> {
-		return getSongInfosBy(author.uuid)
-	}
-
-	fun getSongInfosBy(author: UUID): List<SongInfo> {
-		return songs.values.filter { songInfo -> songInfo.authors.any { it.uuid == author } }
-	}
-
-	fun getSongInfosGroupedByAuthor(): List<SongInfo> {
-		val compareBy: Comparator<SongInfo> = compareBy(SongInfo::title)
-		return songs.values.sortedWith(compareBy)
+	fun getSavedSongsGroupedByAuthor(): List<SavedSong> {
+		val compareBy: Comparator<SavedSong> = compareBy(SavedSong::title)
+		return savedSongs.values.sortedWith(compareBy)
 	}
 
 	override fun save(pTag: CompoundTag, pRegistries: HolderLookup.Provider): CompoundTag {
 		val songListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
-		for (songInfo in songs.values) {
-			songListTag.add(songInfo.toTag())
+		for (songInfo in savedSongs.values) {
+			val tag = SavedSong.CODEC
+				.encodeStart(NbtOps.INSTANCE, songInfo)
+				.result()
+				.getOrNull()
+				?: continue
+
+			songListTag.add(tag)
 		}
 
 		pTag.put(SONGS_TAG, songListTag)
@@ -91,20 +87,23 @@ class SongSavedData : SavedData() {
 
 		private fun load(pTag: CompoundTag, provider: HolderLookup.Provider): SongSavedData {
 			val songData = SongSavedData()
-			songData.songs.clear()
+			songData.savedSongs.clear()
 
-			val songInfoListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
+			val savedSongsListTag = pTag.getList(SONGS_TAG, Tag.TAG_COMPOUND.toInt())
 
-			for (i in songInfoListTag.indices) {
-				val songInfoTag = songInfoListTag[i] as CompoundTag
-				val songInfo = SongInfo.fromCompoundTag(songInfoTag)
+			for (i in savedSongsListTag.indices) {
+				val savedSongTag = savedSongsListTag[i]
+				val savedSong = SavedSong.CODEC
+					.parse(NbtOps.INSTANCE, savedSongTag)
+					.result()
+					.getOrNull()
 
-				if (songInfo == null) {
-					PitchPerfect.LOGGER.error("Failed to load song from tag: $songInfoTag")
+				if (savedSong == null) {
+					PitchPerfect.LOGGER.error("Failed to load song from tag: $savedSongTag")
 					continue
 				}
 
-				songData.songs[songInfo.song.uuid] = songInfo
+				songData.savedSongs[savedSong.song.uuid] = savedSong
 			}
 
 			return songData
@@ -117,7 +116,7 @@ class SongSavedData : SavedData() {
 
 			return level.dataStorage.computeIfAbsent(
 				Factory(::SongSavedData, Companion::load),
-				"pitchperfect"
+				"pp_saved_songs"
 			)
 		}
 	}

@@ -5,7 +5,7 @@ import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.pitchperfect.packet.ModPacket
 import dev.aaronhowser.mods.pitchperfect.song.data.SongSavedData
 import dev.aaronhowser.mods.pitchperfect.song.parts.Song
-import dev.aaronhowser.mods.pitchperfect.song.parts.SongInfo
+import dev.aaronhowser.mods.pitchperfect.song.parts.SavedSong
 import dev.aaronhowser.mods.pitchperfect.util.OtherUtil
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.chat.ClickEvent
@@ -30,14 +30,14 @@ class SongPasteCommandResponsePacket(
 			return
 		}
 
-		val songInfo = SongInfo(
+		val savedSong = SavedSong(
 			title,
 			player,
 			song
 		)
 
 		val songSavedData = SongSavedData.get(player.serverLevel())
-		val result = songSavedData.addSongInfo(songInfo)
+		val result = songSavedData.addSongInfo(savedSong)
 
 		val component = if (result.success) {
 			ModMessageLang.SONG_PASTE_ADDED
@@ -53,13 +53,13 @@ class SongPasteCommandResponsePacket(
 						.withClickEvent(
 							ClickEvent(
 								ClickEvent.Action.COPY_TO_CLIPBOARD,
-								songInfo.song.uuid.toString()
+								savedSong.song.uuid.toString()
 							)
 						)
 				}
 		} else {
 			ModMessageLang.SONG_PASTE_FAIL_DUPLICATE.toComponent(title)
-				.append(result.songInfo.getComponent())
+				.append(result.savedSong.getComponent())
 		}
 
 		player.sendSystemMessage(component)

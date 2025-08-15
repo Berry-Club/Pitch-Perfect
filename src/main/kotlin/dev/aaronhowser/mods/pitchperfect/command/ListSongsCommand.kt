@@ -21,7 +21,7 @@ object ListSongsCommand {
 		val player = context.source.entity as? ServerPlayer ?: return 0
 
 		val songSavedData = SongSavedData.get(player.serverLevel())
-		val songs = songSavedData.getSongInfosGroupedByAuthor()
+		val songs = songSavedData.getSavedSongsGroupedByAuthor()
 
 		player.sendSystemMessage(ModMessageLang.SONGS_LIST.toComponent())
 		for (songInfo in songs) {

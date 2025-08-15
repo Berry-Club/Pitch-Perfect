@@ -150,12 +150,10 @@ class ComposerBlock : Block(
 	) {
 		super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack)
 
-		pStack.get(ModDataComponents.COMPOSER_SONG) ?: return
-		pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
+		val songComponent = pStack.get(ModDataComponents.COMPOSER_SONG) ?: return
+		val be = pLevel.getBlockEntity(pPos) as? ComposerBlockEntity ?: return
 
-//        blockEntity.composerSongUuid = songComponent.composerSongUuid
-//
-//        blockEntity.setSong(songComponent.composerSong)
+        be.composerSongUuid = songComponent.composerSongUuid
 	}
 
 	override fun onRemove(

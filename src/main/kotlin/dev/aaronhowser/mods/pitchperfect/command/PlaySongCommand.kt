@@ -31,7 +31,7 @@ object PlaySongCommand {
 			val player = context.source.entity as? ServerPlayer ?: return 0
 
 			val songSavedData = SongSavedData.get(player.serverLevel())
-			val songInfo = songSavedData.getSongInfo(songUuid) ?: return 0
+			val songInfo = songSavedData.getSavedSong(songUuid) ?: return 0
 
 			val songPlayer = SongPlayer(player.level() as ServerLevel, songInfo.song) { player.eyePosition }
 

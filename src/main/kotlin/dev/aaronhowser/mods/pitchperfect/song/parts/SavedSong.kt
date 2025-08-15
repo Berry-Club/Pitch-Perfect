@@ -8,18 +8,18 @@ import dev.aaronhowser.mods.pitchperfect.datagen.language.ModLanguageProvider.Co
 import dev.aaronhowser.mods.pitchperfect.datagen.language.ModMessageLang
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.player.Player
 
-data class SongInfo(
+data class SavedSong(
 	val title: String,
-	val authors: List<Author>,
+	val author: Component,
 	val song: Song
 ) {
 
@@ -27,27 +27,7 @@ data class SongInfo(
 		title: String,
 		player: Player,
 		song: Song
-	) : this(title, listOf(Author(player)), song)
-
-	fun toTag(): Tag {
-		val compoundTag = CompoundTag()
-		compoundTag.putString(TITLE, title)
-
-		val tagAuthors = compoundTag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
-
-		for (author in authors) {
-			val authorTag = CompoundTag()
-			authorTag.putUUID(AUTHOR_UUID, author.uuid)
-			authorTag.putString(AUTHOR_NAME, author.name)
-			tagAuthors.add(authorTag)
-		}
-
-		compoundTag.put(AUTHORS, tagAuthors)
-
-		compoundTag.putString(SONG, song.toString())
-
-		return compoundTag
-	}
+	) : this(title, player.name, song)
 
 	fun getComponent(): Component {
 		val uuidComponent = ModLanguageProvider.Misc.SONG_UUID.toComponent()
@@ -67,10 +47,7 @@ data class SongInfo(
 					)
 			}
 
-		val authorsHoverComponent = Component.empty()
-		for (author in authors) {
-			authorsHoverComponent.append(Component.literal(author.name))
-		}
+		val authorsHoverComponent = author
 
 		val authorsComponent = ModLanguageProvider.Misc.SONG_AUTHORS.toComponent()
 			.withStyle {
@@ -84,7 +61,7 @@ data class SongInfo(
 
 		var songString = song.toString()
 		if (songString.length > 500) {
-			songString = songString.substring(0, 500) + "..."
+			songString = songString.take(500) + "..."
 		}
 
 		val songDataComponent = ModLanguageProvider.Misc.SONG_RAW.toComponent()
@@ -133,51 +110,28 @@ data class SongInfo(
 	}
 
 	companion object {
-
-		private const val TITLE = "title"
-		private const val AUTHORS = "authors"
-		private const val AUTHOR_UUID = "uuid"
-		private const val AUTHOR_NAME = "name"
-		private const val SONG = "song"
-
-		val CODEC: Codec<SongInfo> =
+		val CODEC: Codec<SavedSong> =
 			RecordCodecBuilder.create { instance ->
 				instance.group(
-					Codec.STRING.fieldOf(TITLE).forGetter(SongInfo::title),
-					Author.CODEC.listOf().fieldOf(AUTHORS).forGetter(SongInfo::authors),
-					Song.CODEC.fieldOf(SONG).forGetter(SongInfo::song)
-				).apply(instance, ::SongInfo)
+					Codec.STRING
+						.fieldOf("title:")
+						.forGetter(SavedSong::title),
+					ComponentSerialization.CODEC
+						.fieldOf("author")
+						.forGetter(SavedSong::author),
+					Song.CODEC
+						.fieldOf("song")
+						.forGetter(SavedSong::song)
+				).apply(instance, ::SavedSong)
 			}
 
-		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SongInfo> =
+		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SavedSong> =
 			StreamCodec.composite(
-				ByteBufCodecs.STRING_UTF8, SongInfo::title,
-				Author.STREAM_CODEC.apply(ByteBufCodecs.list()), SongInfo::authors,
-				Song.STREAM_CODEC, SongInfo::song,
-				::SongInfo
+				ByteBufCodecs.STRING_UTF8, SavedSong::title,
+				ComponentSerialization.STREAM_CODEC, SavedSong::author,
+				Song.STREAM_CODEC, SavedSong::song,
+				::SavedSong
 			)
-
-		fun fromCompoundTag(tag: CompoundTag): SongInfo? {
-			val title = tag.getString(TITLE)
-
-			val authors = mutableListOf<Author>()
-			val tagAuthors = tag.getList(AUTHORS, ListTag.TAG_COMPOUND.toInt())
-			for (authorTag in tagAuthors) {
-				val authorCompoundTag = authorTag as? CompoundTag ?: continue
-
-				val author = Author.fromCompoundTag(authorCompoundTag) ?: continue
-				authors.add(author)
-			}
-
-			val song = Song.fromString(tag.getString(SONG))
-
-			if (song == null) {
-				PitchPerfect.LOGGER.error("Failed to parse song from tag: $tag")
-				return null
-			}
-
-			return SongInfo(title, authors, song)
-		}
 	}
 
 }

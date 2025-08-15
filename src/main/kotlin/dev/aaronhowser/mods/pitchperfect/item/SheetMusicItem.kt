@@ -78,14 +78,14 @@ class SheetMusicItem : Item(
 			if (!addSongResult.success) {
 				player.sendSystemMessage(
 					ModMessageLang.SHEET_MUSIC_FAIL_DUPLICATE
-						.toComponent(addSongResult.songInfo.getComponent())
+						.toComponent(addSongResult.savedSong.getComponent())
 				)
 				return
 			}
 
 			itemStack.set(
 				ModDataComponents.SONG_UUID,
-				addSongResult.songInfo.song.uuid
+				addSongResult.savedSong.song.uuid
 			)
 		}
 
