@@ -21,6 +21,8 @@ import java.nio.file.Path
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
+typealias SerializableSong = Map<ResourceLocation, List<Beat>>
+
 /**
  * Each song has a list of instruments, each with a list of Beats.
  *
@@ -75,16 +77,31 @@ data class Song(
 		val CODEC: Codec<Song> =
 			Codec.unboundedMap(ResourceLocation.CODEC, Beat.CODEC.listOf())
 				.xmap(
-					{ map ->
-						Song(map.mapKeys {
-							val rk = ResourceKey.create(Registries.SOUND_EVENT, it.key)
-							BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(rk)
-						})
-					},
-					{ song ->
-						song.beats.mapKeys { it.key.value().location }
-					}
+					::fromRlMap,
+					::toRlMap
 				)
+
+		private fun toRlMap(song: Song): SerializableSong {
+			val result = mutableMapOf<ResourceLocation, List<Beat>>()
+
+			for ((holder, beats) in song.beats) {
+				result[holder.value().location] = beats
+			}
+
+			return result
+		}
+
+		private fun fromRlMap(map: SerializableSong): Song {
+			val result = mutableMapOf<Holder<SoundEvent>, List<Beat>>()
+
+			for ((location, beats) in map) {
+				val rk = ResourceKey.create(Registries.SOUND_EVENT, location)
+				val holder = BuiltInRegistries.SOUND_EVENT.getHolderOrThrow(rk)
+				result[holder] = beats
+			}
+
+			return Song(result)
+		}
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Song> =
 			ByteBufCodecs.map(
