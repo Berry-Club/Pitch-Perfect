@@ -26,6 +26,31 @@ class InstrumentArea(
 
 		val buttonSize = 20
 
+		fun addIconButton(
+			x: Int, y: Int,
+			width: Int, height: Int,
+			image: ResourceLocation,
+			messageOn: Component,
+			messageOff: Component = messageOn,
+			onPress: (Button) -> Unit = {}
+		) {
+			val button = ToggleButton(
+				width, height,
+				messageOn, messageOff,
+				16, 16,
+				image,
+				onPress,
+				null
+			)
+
+			button.x = x
+			button.y = y
+
+			buttons.add(button)
+
+			composerScreen.addRenderableWidgets(button)
+		}
+
 		var isLeft = true
 		for (i in ScreenInstrument.entries.indices) {
 			val instrument = ScreenInstrument.entries[i]
@@ -63,31 +88,6 @@ class InstrumentArea(
 		for (button in buttons) {
 			button.toggledOn = button.message == composerScreen.selectedInstrument?.displayName
 		}
-	}
-
-	private fun addIconButton(
-		x: Int, y: Int,
-		width: Int, height: Int,
-		image: ResourceLocation,
-		messageOn: Component,
-		messageOff: Component = messageOn,
-		onPress: (Button) -> Unit = {}
-	) {
-		val button = ToggleButton(
-			width, height,
-			messageOn, messageOff,
-			16, 16,
-			image,
-			onPress,
-			null
-		)
-
-		button.x = x
-		button.y = y
-
-		buttons.add(button)
-
-		composerScreen.addRenderableWidgets(button)
 	}
 
 	fun render(pGuiGraphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
