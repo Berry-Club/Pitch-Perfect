@@ -4,9 +4,6 @@ import dev.aaronhowser.mods.pitchperfect.screen.base.ToggleButton
 import dev.aaronhowser.mods.pitchperfect.screen.composer.ComposerScreen
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.Button
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 
 class InstrumentArea(
 	private val composerScreen: ComposerScreen,
@@ -23,35 +20,9 @@ class InstrumentArea(
 		buttons.clear()
 
 		var y = composerScreen.timeline.topPos
-
 		val buttonSize = 20
-
-		fun addIconButton(
-			x: Int, y: Int,
-			width: Int, height: Int,
-			image: ResourceLocation,
-			messageOn: Component,
-			messageOff: Component = messageOn,
-			onPress: (Button) -> Unit = {}
-		) {
-			val button = ToggleButton(
-				width, height,
-				messageOn, messageOff,
-				16, 16,
-				image,
-				onPress,
-				null
-			)
-
-			button.x = x
-			button.y = y
-
-			buttons.add(button)
-
-			composerScreen.addRenderableWidgets(button)
-		}
-
 		var isLeft = true
+
 		for (i in ScreenInstrument.entries.indices) {
 			val instrument = ScreenInstrument.entries[i]
 
@@ -61,25 +32,31 @@ class InstrumentArea(
 				composerScreen.timeline.rightPos + 5 + buttonSize + 2
 			}
 
-			addIconButton(
-				x, y,
+			val button = ToggleButton(
 				buttonSize, buttonSize,
+				instrument.displayName, instrument.displayName,
+				16, 16,
 				instrument.image,
-				instrument.displayName,
-			) {
-				composerScreen.selectedInstrument = if (composerScreen.selectedInstrument === instrument) {
-					null
-				} else {
-					instrument
-				}
+				{ btn ->
+					composerScreen.selectedInstrument = if (composerScreen.selectedInstrument === instrument) {
+						null
+					} else {
+						instrument
+					}
+					deselectAllOthers()
+				},
+				null
+			)
 
-				deselectAllOthers()
-			}
+			button.x = x
+			button.y = y
+
+			buttons.add(button)
+			composerScreen.addRenderableWidgets(button)
 
 			if (!isLeft) {
 				y += buttonSize + 2
 			}
-
 			isLeft = !isLeft
 		}
 	}
